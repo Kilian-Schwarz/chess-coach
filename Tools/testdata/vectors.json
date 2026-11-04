@@ -2372,12 +2372,12 @@
    {
     "piece": "N",
     "square": "g1",
-    "text": "Move the knight to g1."
+    "text": "Move the knight on g1."
    },
    {
     "piece": "q",
     "square": "d8",
-    "text": "Move the queen to d8."
+    "text": "Move the queen on d8."
    }
   ],
   "note": "Theme order: mate, captureGain, fork, check, parryThreat, castle, develop, kingActivate, pawnMove, improvePiece"

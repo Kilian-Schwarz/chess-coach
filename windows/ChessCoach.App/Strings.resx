@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Player</value></data>
   <data name="player.partner" xml:space="preserve"><value>Partner</value></data>
   <data name="update.openPage" xml:space="preserve"><value>Version {0} is available. Open the download page?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>Your last move</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Moves missed – the next move will be rated again</value></data>
 </root>

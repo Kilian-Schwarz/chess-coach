@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Active ton roi.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Un coup de pion convient bien ici.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Améliore ta pire pièce.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Déplace le roi en {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Déplace la dame en {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Déplace la tour en {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Déplace le fou en {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Déplace le cavalier en {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Déplace le pion en {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Joue le roi qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Joue la dame qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Joue la tour qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Joue le fou qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Joue le cavalier qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Joue le pion qui se trouve en {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} peut mater l'adversaire.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} peut prendre une pièce adverse et gagner du matériel.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} peut attaquer deux pièces adverses à la fois en un seul coup.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Un coup de pion améliore ici ta position : il gagne de l'espace ou ouvre des lignes pour tes pièces.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} n'est pas idéalement placé. Trouve une case où cette pièce est plus utile.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Meilleur coup : {0} (évaluation {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>À retenir</value></data>
   <data name="threat.text" xml:space="preserve"><value>Menace : {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Menace : {0}, mat en {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Évaluation initiale en cours : partie {0} sur {1}</value></data>

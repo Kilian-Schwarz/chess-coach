@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using ChessCoach.Core;
 
@@ -145,8 +146,18 @@ public class LearningTests
         Assert.Equal(HintTheme.Mate, Hints.Theme(FenReader.Parse("6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1")!.Value.Placement, UciMove.Parse("a1a8")!.Value, PieceColor.White, null, true));
         Assert.Null(FenReader.Parse("x"));
         Assert.True(FenReader.Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")!.Value.Placement.IsStartPosition);
-        Assert.Equal("Move the knight to g1.", Hints.Stage2Text('N', "g1"));
-        Assert.Equal("Move the queen to d8.", Hints.Stage2Text('q', "d8"));
+        Assert.Equal("Move the knight on g1.", Hints.Stage2Text('N', "g1"));
+        Assert.Equal("Move the queen on d8.", Hints.Stage2Text('q', "d8"));
+        {
+            var (sp, side) = FenReader.Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")!.Value;
+            var res = new EngineResult(sp.Fen(side), "d2d4", new[] { new EngineLine("d2d4", 30, null, new[] { "d2d4" }) });
+            var h = Hints.Build(sp, side, res)!;
+            Assert.Equal("d2", h.Stage2Square);
+            Assert.Equal("Move the pawn on d2.", h.Stage2);
+            Assert.Equal("Zieh mit dem Bauern auf d2.", Hints.Stage2Text('P', "d2", new CultureInfo("de")));
+            Assert.Equal("Zieh mit der Dame auf d1.", Hints.Stage2Text('Q', "d1", new CultureInfo("de")));
+            Assert.DoesNotContain(new[] { h.Stage1, h.Stage2, h.Stage3Fallback }, t => t.Contains("d4"));
+        }
         Assert.True(Hints.RevealsTarget("Please go to f3", UciMove.Parse("g1f3")!.Value));
         Assert.False(Hints.RevealsTarget("Develop the knight", UciMove.Parse("g1f3")!.Value));
         foreach (var t in HintThemeExt.All) { Assert.NotEmpty(t.Stage1Text()); Assert.NotEmpty(Hints.Stage3Fallback(t, 'N')); }
@@ -325,6 +336,12 @@ public class LearningTests
         Assert.True(card.Length / 4 <= 60);
         foreach (var l in StyleLengthExt.All) foreach (var d in StyleDepthExt.All) foreach (var lv in PlayerLevelExt.All)
             Assert.True(Coach.StyleCard(new PlayerContext(lv, Skill.Threats, new[] { "Missed threat" }), new ExplanationStyle(l, d, true)).Length / 4 <= 90);
+        var de = new CultureInfo("de");
+        var german = Coach.StyleCard(new PlayerContext(PlayerLevel.Beginner, Skill.PieceSafety, new[] { "Hanging piece" }), new ExplanationStyle(StyleLength.Long, StyleDepth.Concrete, true), de);
+        Assert.Contains("king=König, queen=Dame, rook=Turm, bishop=Läufer, knight=Springer, pawn=Bauer", german);
+        Assert.Contains("label=Merksatz.", german);
+        Assert.True(german.Length / 4 <= 90);
+        Assert.DoesNotContain("Use exactly", Coach.StyleCard(new PlayerContext(PlayerLevel.Beginner), new ExplanationStyle(), CoreLocale.English));
         Assert.Contains("simple words", Coach.StyleCard(new PlayerContext(PlayerLevel.Beginner), new ExplanationStyle()));
         Assert.Contains("technical terms", Coach.StyleCard(new PlayerContext(PlayerLevel.Strong), new ExplanationStyle()));
         Assert.StartsWith("You are a patient chess coach", Prompts.System);

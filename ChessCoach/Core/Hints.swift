@@ -81,12 +81,12 @@ enum Hints {
 
     static func stage2Text(piece: Character, square: String, _ loc: Loc = .display) -> String {
         switch Character(piece.lowercased()) {
-        case "k": loc("hint.stage2.king", "Move the king to \(square).")
-        case "q": loc("hint.stage2.queen", "Move the queen to \(square).")
-        case "r": loc("hint.stage2.rook", "Move the rook to \(square).")
-        case "b": loc("hint.stage2.bishop", "Move the bishop to \(square).")
-        case "n": loc("hint.stage2.knight", "Move the knight to \(square).")
-        default: loc("hint.stage2.pawn", "Move the pawn to \(square).")
+        case "k": loc("hint.stage2.king", "Move the king on \(square).")
+        case "q": loc("hint.stage2.queen", "Move the queen on \(square).")
+        case "r": loc("hint.stage2.rook", "Move the rook on \(square).")
+        case "b": loc("hint.stage2.bishop", "Move the bishop on \(square).")
+        case "n": loc("hint.stage2.knight", "Move the knight on \(square).")
+        default: loc("hint.stage2.pawn", "Move the pawn on \(square).")
         }
     }
 

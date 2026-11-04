@@ -2325,6 +2325,95 @@
         }
       }
     },
+    "Better was: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Better was: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besser war: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor era: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mieux valait : %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meglio era: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "より良い手は：%@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "더 좋은 수는 %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beter was: %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lepiej było: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melhor era: %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Лучше было: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daha iyisi: %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Краще було: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更好的是：%@"
+          }
+        }
+      }
+    },
     "Better: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2487,6 +2576,95 @@
           "stringUnit": {
             "state": "translated",
             "value": "更好：%@(%@)"
+          }
+        }
+      }
+    },
+    "Black": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schwarz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Black"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Negras"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noirs"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nero"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "黒"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "흑"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwart"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Czarne"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pretas"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чёрные"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siyah"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чорні"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "黑方"
           }
         }
       }
@@ -2736,6 +2914,95 @@
           "stringUnit": {
             "state": "translated",
             "value": "检查更新 …"
+          }
+        }
+      }
+    },
+    "Checkmate": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schachmatt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checkmate"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaque mate"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec et mat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scacco matto"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チェックメイト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체크메이트"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schaakmat"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mat"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xeque-mate"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мат"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şah mat"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мат"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将死"
           }
         }
       }
@@ -8131,6 +8398,89 @@
           "stringUnit": {
             "state": "translated",
             "value": "着法"
+          }
+        }
+      }
+    },
+    "Moves missed – the next move will be rated again": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Züge verpasst – der nächste Zug wird wieder bewertet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jugadas perdidas: la próxima jugada se volverá a valorar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coups manqués : le prochain coup sera de nouveau évalué"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mosse perse: la prossima mossa verrà valutata di nuovo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手を見逃しました。次の手から再び評価します"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "놓친 수가 있습니다. 다음 수부터 다시 평가합니다"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zetten gemist: de volgende zet wordt weer beoordeeld"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pominięto ruchy – następny ruch zostanie znów oceniony"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jogadas perdidas: a próxima jogada voltará a ser avaliada"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ходы пропущены – следующий ход снова будет оценён"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamleler kaçırıldı: bir sonraki hamle yeniden değerlendirilecek"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ходи пропущено – наступний хід знову буде оцінено"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "错过了几步，下一步将重新评分"
           }
         }
       }
@@ -13945,6 +14295,95 @@
         }
       }
     },
+    "Stalemate": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stalemate"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahogado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stallo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステイルメイト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스테일메이트"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pat"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pat"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afogamento"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пат"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pat"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пат"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "逼和"
+          }
+        }
+      }
+    },
     "Stockfish does not start": {
       "extractionState": "manual",
       "localizations": {
@@ -15352,6 +15791,95 @@
           "stringUnit": {
             "state": "translated",
             "value": "服务器 URL 无效。"
+          }
+        }
+      }
+    },
+    "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Serveradresse beginnt mit http://. Dein Token würde unverschlüsselt gesendet. Nimm https://, wenn möglich."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La dirección del servidor empieza por http://. Tu token se enviaría sin cifrar. Usa https:// si puedes."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'adresse du serveur commence par http://. Votre jeton serait envoyé sans chiffrement. Utilisez https:// si possible."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'indirizzo del server inizia con http://. Il tuo token verrebbe inviato senza cifratura. Usa https:// se puoi."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サーバーのアドレスが http:// で始まっています。トークンは暗号化されずに送信されます。可能なら https:// を使ってください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "서버 주소가 http://로 시작합니다. 토큰이 암호화되지 않은 채 전송됩니다. 가능하면 https://를 사용하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het serveradres begint met http://. Je token wordt onversleuteld verzonden. Gebruik https:// als het kan."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adres serwera zaczyna się od http://. Twój token zostałby wysłany bez szyfrowania. Użyj https://, jeśli to możliwe."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O endereço do servidor começa com http://. Seu token seria enviado sem criptografia. Use https:// se puder."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адрес сервера начинается с http://. Ваш токен будет отправлен без шифрования. По возможности используйте https://."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunucu adresi http:// ile başlıyor. Jetonunuz şifrelenmeden gönderilir. Mümkünse https:// kullanın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адреса сервера починається з http://. Ваш токен буде надіслано без шифрування. Якщо можливо, використовуйте https://."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器地址以 http:// 开头。您的令牌将以未加密方式发送。如有可能，请使用 https://。"
           }
         }
       }
@@ -17099,6 +17627,95 @@
         }
       }
     },
+    "White": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiß"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "White"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blancas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blancs"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bianco"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "白"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wit"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Białe"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brancas"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Белые"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beyaz"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Білі"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "白方"
+          }
+        }
+      }
+    },
     "Winning chances for White": {
       "extractionState": "manual",
       "localizations": {
@@ -17842,6 +18459,89 @@
           "stringUnit": {
             "state": "translated",
             "value": "你使用了提示，因此该任务会按相同间隔再次出现。"
+          }
+        }
+      }
+    },
+    "Your last move": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein letzter Zug"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu última jugada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre dernier coup"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La tua ultima mossa"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの直前の手"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내 마지막 수"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jouw laatste zet"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój ostatni ruch"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua última jogada"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ваш последний ход"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son hamleniz"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ваш останній хід"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的上一步"
           }
         }
       }
@@ -19519,85 +20219,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh den Läufer nach %1$@."
+            "value": "Zieh mit dem Läufer auf %1$@."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move the bishop to %1$@."
+            "value": "Move the bishop on %1$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mueve el alfil a %1$@."
+            "value": "Mueve el alfil que está en %1$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez le fou en %1$@."
+            "value": "Jouez le fou qui se trouve en %1$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi l’alfiere in %1$@."
+            "value": "Muovi l’alfiere che si trova in %1$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ビショップを %1$@ へ動かします。"
+            "value": "%1$@ にあるビショップを動かします。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "비숍을 %1$@(으)로 옮기세요."
+            "value": "%1$@에 있는 비숍을 움직이세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet de loper naar %1$@."
+            "value": "Speel met de loper op %1$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przesuń gońca na %1$@."
+            "value": "Zagraj gońcem z pola %1$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mova o bispo para %1$@."
+            "value": "Mova o bispo que está em %1$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сходите слоном на %1$@."
+            "value": "Сходите слоном с %1$@."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Fili %1$@ karesine oynayın."
+            "value": "%1$@ karesindeki fili oynayın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ходіть слоном на %1$@."
+            "value": "Ходіть слоном з %1$@."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "把象走到 %1$@。"
+            "value": "走 %1$@ 上的象。"
           }
         }
       }
@@ -19608,85 +20308,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh den König nach %1$@."
+            "value": "Zieh mit dem König auf %1$@."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move the king to %1$@."
+            "value": "Move the king on %1$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mueve el rey a %1$@."
+            "value": "Mueve el rey que está en %1$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez le roi en %1$@."
+            "value": "Jouez le roi qui se trouve en %1$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi il re in %1$@."
+            "value": "Muovi il re che si trova in %1$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "キングを %1$@ へ動かします。"
+            "value": "%1$@ にあるキングを動かします。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "킹을 %1$@(으)로 옮기세요."
+            "value": "%1$@에 있는 킹을 움직이세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet de koning naar %1$@."
+            "value": "Speel met de koning op %1$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przesuń króla na %1$@."
+            "value": "Zagraj królem z pola %1$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mova o rei para %1$@."
+            "value": "Mova o rei que está em %1$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сходите королём на %1$@."
+            "value": "Сходите королём с %1$@."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Şahı %1$@ karesine oynayın."
+            "value": "%1$@ karesindeki şahı oynayın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ходіть королем на %1$@."
+            "value": "Ходіть королем з %1$@."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "把王走到 %1$@。"
+            "value": "走 %1$@ 上的王。"
           }
         }
       }
@@ -19697,85 +20397,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh den Springer nach %1$@."
+            "value": "Zieh mit dem Springer auf %1$@."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move the knight to %1$@."
+            "value": "Move the knight on %1$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mueve el caballo a %1$@."
+            "value": "Mueve el caballo que está en %1$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez le cavalier en %1$@."
+            "value": "Jouez le cavalier qui se trouve en %1$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi il cavallo in %1$@."
+            "value": "Muovi il cavallo che si trova in %1$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ナイトを %1$@ へ動かします。"
+            "value": "%1$@ にあるナイトを動かします。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "나이트를 %1$@(으)로 옮기세요."
+            "value": "%1$@에 있는 나이트를 움직이세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet het paard naar %1$@."
+            "value": "Speel met het paard op %1$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przesuń skoczka na %1$@."
+            "value": "Zagraj skoczkiem z pola %1$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mova o cavalo para %1$@."
+            "value": "Mova o cavalo que está em %1$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сходите конём на %1$@."
+            "value": "Сходите конём с %1$@."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Atı %1$@ karesine oynayın."
+            "value": "%1$@ karesindeki atı oynayın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ходіть конем на %1$@."
+            "value": "Ходіть конем з %1$@."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "把马走到 %1$@。"
+            "value": "走 %1$@ 上的马。"
           }
         }
       }
@@ -19786,85 +20486,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh den Bauern nach %1$@."
+            "value": "Zieh mit dem Bauern auf %1$@."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move the pawn to %1$@."
+            "value": "Move the pawn on %1$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mueve el peón a %1$@."
+            "value": "Mueve el peón que está en %1$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avancez le pion en %1$@."
+            "value": "Jouez le pion qui se trouve en %1$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi il pedone in %1$@."
+            "value": "Muovi il pedone che si trova in %1$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ポーンを %1$@ へ動かします。"
+            "value": "%1$@ にあるポーンを動かします。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "폰을 %1$@(으)로 옮기세요."
+            "value": "%1$@에 있는 폰을 움직이세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet de pion naar %1$@."
+            "value": "Speel met de pion op %1$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przesuń pionka na %1$@."
+            "value": "Zagraj pionkiem z pola %1$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mova o peão para %1$@."
+            "value": "Mova o peão que está em %1$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сходите пешкой на %1$@."
+            "value": "Сходите пешкой с %1$@."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Piyonu %1$@ karesine oynayın."
+            "value": "%1$@ karesindeki piyonu oynayın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ходіть пішаком на %1$@."
+            "value": "Ходіть пішаком з %1$@."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "把兵走到 %1$@。"
+            "value": "走 %1$@ 上的兵。"
           }
         }
       }
@@ -19875,85 +20575,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh die Dame nach %1$@."
+            "value": "Zieh mit der Dame auf %1$@."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move the queen to %1$@."
+            "value": "Move the queen on %1$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mueve la dama a %1$@."
+            "value": "Mueve la dama que está en %1$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez la dame en %1$@."
+            "value": "Jouez la dame qui se trouve en %1$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi la donna in %1$@."
+            "value": "Muovi la donna che si trova in %1$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "クイーンを %1$@ へ動かします。"
+            "value": "%1$@ にあるクイーンを動かします。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "퀸을 %1$@(으)로 옮기세요."
+            "value": "%1$@에 있는 퀸을 움직이세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet de dame naar %1$@."
+            "value": "Speel met de dame op %1$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przesuń hetmana na %1$@."
+            "value": "Zagraj hetmanem z pola %1$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mova a dama para %1$@."
+            "value": "Mova a dama que está em %1$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сходите ферзём на %1$@."
+            "value": "Сходите ферзём с %1$@."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vezirı %1$@ karesine oynayın."
+            "value": "%1$@ karesindeki veziri oynayın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ходіть ферзем на %1$@."
+            "value": "Ходіть ферзем з %1$@."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "把后走到 %1$@。"
+            "value": "走 %1$@ 上的后。"
           }
         }
       }
@@ -19964,85 +20664,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh den Turm nach %1$@."
+            "value": "Zieh mit dem Turm auf %1$@."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Move the rook to %1$@."
+            "value": "Move the rook on %1$@."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mueve la torre a %1$@."
+            "value": "Mueve la torre que está en %1$@."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Déplacez la tour en %1$@."
+            "value": "Jouez la tour qui se trouve en %1$@."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Muovi la torre in %1$@."
+            "value": "Muovi la torre che si trova in %1$@."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ルークを %1$@ へ動かします。"
+            "value": "%1$@ にあるルークを動かします。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "룩을 %1$@(으)로 옮기세요."
+            "value": "%1$@에 있는 룩을 움직이세요."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zet de toren naar %1$@."
+            "value": "Speel met de toren op %1$@."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Przesuń wieżę na %1$@."
+            "value": "Zagraj wieżą z pola %1$@."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mova a torre para %1$@."
+            "value": "Mova a torre que está em %1$@."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Сходите ладьёй на %1$@."
+            "value": "Сходите ладьёй с %1$@."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaleyi %1$@ karesine oynayın."
+            "value": "%1$@ karesindeki kaleyi oynayın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ходіть турою на %1$@."
+            "value": "Ходіть турою з %1$@."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "把车走到 %1$@。"
+            "value": "走 %1$@ 上的车。"
           }
         }
       }
@@ -20320,7 +21020,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ steht noch auf der Grundreihe. Bring sie auf ein aktives Feld, von dem aus sie mehr Felder kontrolliert."
+            "value": "%1$@ steht noch auf der Grundreihe. Bring diese Figur auf ein aktives Feld, von dem aus sie mehr Felder kontrolliert."
           }
         },
         "en": {
@@ -20498,7 +21198,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ steht nicht gut. Finde ein Feld, auf dem sie mehr bewirkt."
+            "value": "%1$@ steht nicht gut. Finde ein Feld, auf dem diese Figur mehr bewirkt."
           }
         },
         "en": {
@@ -21022,6 +21722,95 @@
           "stringUnit": {
             "state": "translated",
             "value": "最佳着法：%1$@(评估 %2$@)。"
+          }
+        }
+      }
+    },
+    "hint.takeawayLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merksatz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takeaway"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para recordar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À retenir"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da ricordare"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポイント"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "핵심"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onthoud"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wniosek"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lição"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вывод"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çıkarım"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Висновок"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要点"
           }
         }
       }
@@ -25921,7 +26710,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remis durch ungenügendes Material"
+            "value": "Remis wegen zu wenig Material"
           }
         },
         "en": {
@@ -26544,7 +27333,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "matt in %1$lld"
+            "value": "wird matt in %1$lld"
           }
         },
         "en": {
@@ -29196,451 +29985,6 @@
         }
       }
     },
-    "White": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weiß"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "White"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blancas"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blancs"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bianco"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "白"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "백"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wit"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Białe"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brancas"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Белые"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beyaz"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Білі"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "白方"
-          }
-        }
-      }
-    },
-    "Black": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schwarz"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Black"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Negras"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noirs"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nero"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "黒"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "흑"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zwart"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Czarne"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pretas"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чёрные"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Siyah"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чорні"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "黑方"
-          }
-        }
-      }
-    },
-    "Checkmate": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schachmatt"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Checkmate"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jaque mate"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Échec et mat"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Scacco matto"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "チェックメイト"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "체크메이트"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Schaakmat"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mat"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Xeque-mate"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мат"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Şah mat"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мат"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "将死"
-          }
-        }
-      }
-    },
-    "Stalemate": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patt"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stalemate"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ahogado"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pat"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stallo"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ステイルメイト"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "스테일메이트"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pat"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pat"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Afogamento"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пат"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pat"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пат"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "逼和"
-          }
-        }
-      }
-    },
-    "Better was: %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Better was: %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Besser war: %@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mejor era: %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mieux valait : %@"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meglio era: %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "より良い手は：%@"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "더 좋은 수는 %@"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beter was: %@"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lepiej było: %@"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Melhor era: %@"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Лучше было: %@"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daha iyisi: %@"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Краще було: %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "更好的是：%@"
-          }
-        }
-      }
-    },
     "−%lld cp": {
       "extractionState": "manual",
       "localizations": {
@@ -29726,95 +30070,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "−%lld cp"
-          }
-        }
-      }
-    },
-    "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Die Serveradresse beginnt mit http://. Dein Token würde unverschlüsselt gesendet. Nimm https://, wenn möglich."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La dirección del servidor empieza por http://. Tu token se enviaría sin cifrar. Usa https:// si puedes."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'adresse du serveur commence par http://. Votre jeton serait envoyé sans chiffrement. Utilisez https:// si possible."
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L'indirizzo del server inizia con http://. Il tuo token verrebbe inviato senza cifratura. Usa https:// se puoi."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "サーバーのアドレスが http:// で始まっています。トークンは暗号化されずに送信されます。可能なら https:// を使ってください。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "서버 주소가 http://로 시작합니다. 토큰이 암호화되지 않은 채 전송됩니다. 가능하면 https://를 사용하세요."
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Het serveradres begint met http://. Je token wordt onversleuteld verzonden. Gebruik https:// als het kan."
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adres serwera zaczyna się od http://. Twój token zostałby wysłany bez szyfrowania. Użyj https://, jeśli to możliwe."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O endereço do servidor começa com http://. Seu token seria enviado sem criptografia. Use https:// se puder."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Адрес сервера начинается с http://. Ваш токен будет отправлен без шифрования. По возможности используйте https://."
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sunucu adresi http:// ile başlıyor. Jetonunuz şifrelenmeden gönderilir. Mümkünse https:// kullanın."
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Адреса сервера починається з http://. Ваш токен буде надіслано без шифрування. Якщо можливо, використовуйте https://."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "服务器地址以 http:// 开头。您的令牌将以未加密方式发送。如有可能，请使用 https://。"
           }
         }
       }

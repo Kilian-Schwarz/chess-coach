@@ -96,10 +96,18 @@ public static class Coach
         if (style.Examples) card += ", example";
         card += ". " + (style.Tone == "auto" ? ToneInstruction(context) : $"Tone: {style.Tone}.");
         if (context.Focus is { } f2 && style.Length != StyleLength.Short) card += " " + Curriculum.FocusPromptHint(f2);
-        return card + " " + AnswerIn(answerCulture);
+        return card + " " + AnswerIn(answerCulture, style.Length == StyleLength.Long);
     }
 
-    private static string AnswerIn(CultureInfo? culture) => $"Answer in {CoreLocale.AnswerLanguage(culture)}.";
+    private static string AnswerIn(CultureInfo? culture, bool takeaway = false)
+    {
+        var text = $"Answer in {CoreLocale.AnswerLanguage(culture)}.";
+        if ((culture ?? CoreLocale.Culture).TwoLetterISOLanguageName == "en") return text;
+        var terms = PieceInfo.Kinds.Zip("kqrbnp", (kind, letter) => $"{kind}={PieceInfo.Name(letter, culture)}");
+        text += " Use exactly: " + string.Join(", ", terms);
+        if (takeaway) text += "; label=" + CoreLocale.Get("hint.takeawayLabel", culture);
+        return text + ".";
+    }
 
     private static List<string>? SuggestionFacts(Placement placement, PieceColor me, string fen, EngineResult result)
     {

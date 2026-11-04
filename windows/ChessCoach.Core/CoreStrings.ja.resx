@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>キングを活性化しましょう。</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>ここではポーンの動きが合っています。</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>いちばん悪い駒を改善しましょう。</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>キングを {0} に動かします。</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>クイーンを {0} に動かします。</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>ルークを {0} に動かします。</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>ビショップを {0} に動かします。</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>ナイトを {0} に動かします。</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>ポーンを {0} に動かします。</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>{0} にあるキングを動かします。</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>{0} にあるクイーンを動かします。</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>{0} にあるルークを動かします。</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>{0} にあるビショップを動かします。</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>{0} にあるナイトを動かします。</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>{0} にあるポーンを動かします。</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0}は相手をチェックメイトできます。</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}は相手の駒を取って駒得できます。</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0}は一手で相手の2つの駒を同時に攻撃できます。</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>ここではポーンの動きで局面が良くなります：スペースを得るか、駒のラインを開けます。</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}は理想的な位置ではありません。この駒がより働くマスを探しましょう。</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>最善手：{0}（評価 {1}）。</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>ポイント</value></data>
   <data name="threat.text" xml:space="preserve"><value>狙い：{0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>狙い：{0}、{1}手でメイト</value></data>
   <data name="profile.placement" xml:space="preserve"><value>レーティング判定中：{1}局中{0}局目</value></data>

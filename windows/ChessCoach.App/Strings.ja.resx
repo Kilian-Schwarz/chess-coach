@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>プレイヤー</value></data>
   <data name="player.partner" xml:space="preserve"><value>パートナー</value></data>
   <data name="update.openPage" xml:space="preserve"><value>バージョン {0} が利用できます。ダウンロードページを開きますか？</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>あなたの直前の手</value></data>
+  <data name="review.gap" xml:space="preserve"><value>手を見逃しました。次の手から再び評価します</value></data>
 </root>

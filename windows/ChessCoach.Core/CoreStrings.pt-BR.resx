@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Ative seu rei.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Um lance de peão cai bem aqui.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Melhore sua pior peça.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Mova o rei para {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Mova a dama para {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Mova a torre para {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Mova o bispo para {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Mova o cavalo para {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Mova o peão para {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Mova o rei que está em {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Mova a dama que está em {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Mova a torre que está em {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Mova o bispo que está em {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Mova o cavalo que está em {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Mova o peão que está em {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} pode dar mate no adversário.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} pode capturar uma peça adversária e ganhar material.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} pode atacar duas peças adversárias ao mesmo tempo com um só lance.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Um lance de peão melhora sua posição aqui: ganha espaço ou abre linhas para suas peças.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} não está bem posicionado. Procure uma casa em que essa peça seja mais útil.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Melhor lance: {0} (avaliação {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Lição</value></data>
   <data name="threat.text" xml:space="preserve"><value>Ameaça: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Ameaça: {0}, mate em {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Classificação em andamento: partida {0} de {1}</value></data>

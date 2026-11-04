@@ -13,6 +13,8 @@ public sealed record CoachCard(string Id, CardKind Kind, string Title)
     public string? Note { get; init; }
     public bool AllowFeedback { get; init; }
     public string? StyleKey { get; init; }
+    public int? ReviewPly { get; init; }
+    public string? StaleTitle { get; init; }
 
     public bool Equals(CoachCard? other) =>
         other is not null && Id == other.Id && Kind == other.Kind && Title == other.Title && Rating == other.Rating &&

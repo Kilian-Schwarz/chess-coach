@@ -28,8 +28,8 @@
   <data name="problem.opponentInCheck" xml:space="preserve"><value>Seite, die nicht am Zug ist, steht im Schach</value></data>
   <data name="result.checkmate" xml:space="preserve"><value>Schachmatt, {0} gewinnt</value></data>
   <data name="result.stalemate" xml:space="preserve"><value>Patt</value></data>
-  <data name="result.insufficientMaterial" xml:space="preserve"><value>Remis durch Material</value></data>
-  <data name="result.fiftyMoveRule" xml:space="preserve"><value>Remis nach 50 Zügen</value></data>
+  <data name="result.insufficientMaterial" xml:space="preserve"><value>Remis wegen zu wenig Material</value></data>
+  <data name="result.fiftyMoveRule" xml:space="preserve"><value>Remis nach der 50-Züge-Regel</value></data>
   <data name="score.checkmate" xml:space="preserve"><value>Schachmatt</value></data>
   <data name="score.stalemate" xml:space="preserve"><value>Patt</value></data>
   <data name="score.mateIn" xml:space="preserve"><value>Matt in {0}</value></data>
@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Aktiviere deinen König.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Ein Bauernzug passt hier gut.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbessere deine schlechteste Figur.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Bewege den König auf {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Bewege die Dame auf {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Bewege den Turm auf {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Bewege den Läufer auf {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Bewege den Springer auf {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Bewege den Bauern auf {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Zieh mit dem König auf {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Zieh mit der Dame auf {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Zieh mit dem Turm auf {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Zieh mit dem Läufer auf {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Zieh mit dem Springer auf {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Zieh mit dem Bauern auf {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kann den Gegner mattsetzen.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kann eine gegnerische Figur schlagen und dabei Material gewinnen.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kann in einem Zug zwei Figuren des Gegners gleichzeitig angreifen.</value></data>
@@ -111,8 +111,9 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Ein Bauernzug verbessert hier deine Stellung: Er gewinnt Raum oder öffnet Linien für deine Figuren.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} steht nicht ideal. Such ein Feld, auf dem diese Figur mehr bewirkt.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Bester Zug: {0} (Bewertung {1}).</value></data>
-  <data name="threat.text" xml:space="preserve"><value>Droht: {0}</value></data>
-  <data name="threat.mate" xml:space="preserve"><value>Droht: {0}, Matt in {1}</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Merksatz</value></data>
+  <data name="threat.text" xml:space="preserve"><value>Drohung: {0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>Drohung: {0}, Matt in {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Einstufung läuft: Partie {0} von {1}</value></data>
   <data name="profile.defaultName" xml:space="preserve"><value>Spieler</value></data>
   <data name="report.moveLabel" xml:space="preserve"><value>Zug {0}, {1}</value></data>

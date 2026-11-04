@@ -53,6 +53,18 @@ public sealed class Placement : IEquatable<Placement>
         return n;
     }
 
+    public int MissingPieces(Placement other)
+    {
+        int missing = 0;
+        for (int r = 0; r < 8; r++)
+            for (int f = 0; f < 8; f++)
+            {
+                if (other.Squares[r][f] is not { } o) { if (Squares[r][f] != null) missing++; continue; }
+                if (Squares[r][f] != o) return 0;
+            }
+        return missing;
+    }
+
     public int PieceCount
     {
         get { int n = 0; foreach (var row in Squares) foreach (var s in row) if (s != null) n++; return n; }

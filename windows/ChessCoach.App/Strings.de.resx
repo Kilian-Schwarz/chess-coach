@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Spieler</value></data>
   <data name="player.partner" xml:space="preserve"><value>Partner</value></data>
   <data name="update.openPage" xml:space="preserve"><value>Version {0} ist verfügbar. Die Download-Seite öffnen?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>Dein letzter Zug</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Züge verpasst – der nächste Zug wird wieder bewertet</value></data>
 </root>

@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Joueur</value></data>
   <data name="player.partner" xml:space="preserve"><value>Partenaire</value></data>
   <data name="update.openPage" xml:space="preserve"><value>La version {0} est disponible. Ouvrir la page de téléchargement ?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>Votre dernier coup</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Coups manqués : le prochain coup sera de nouveau évalué</value></data>
 </root>

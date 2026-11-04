@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Aktywizuj swojego króla.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Ruch pionem dobrze tu pasuje.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Popraw swoją najgorszą figurę.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Przesuń króla na {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Przesuń hetmana na {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Przesuń wieżę na {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Przesuń gońca na {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Przesuń skoczka na {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Przesuń pionka na {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Zagraj królem z pola {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Zagraj hetmanem z pola {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Zagraj wieżą z pola {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Zagraj gońcem z pola {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Zagraj skoczkiem z pola {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Zagraj pionkiem z pola {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} może zamatować przeciwnika.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} może zbić figurę przeciwnika i zyskać materiał.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} może jednym ruchem zaatakować dwie figury przeciwnika naraz.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Ruch pionem poprawia tu twoją pozycję: zdobywa przestrzeń lub otwiera linie dla twoich figur.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} nie stoi idealnie. Znajdź pole, na którym ta figura zrobi więcej.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Najlepszy ruch: {0} (ocena {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Wniosek</value></data>
   <data name="threat.text" xml:space="preserve"><value>Zagrożenie: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Zagrożenie: {0}, mat w {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Trwa wstępna ocena: partia {0} z {1}</value></data>

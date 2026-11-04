@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Гравець</value></data>
   <data name="player.partner" xml:space="preserve"><value>Партнер</value></data>
   <data name="update.openPage" xml:space="preserve"><value>Доступна версія {0}. Відкрити сторінку завантаження?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>Ваш останній хід</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Ходи пропущено – наступний хід знову буде оцінено</value></data>
 </root>

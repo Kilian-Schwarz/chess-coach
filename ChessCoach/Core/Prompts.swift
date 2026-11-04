@@ -14,7 +14,7 @@ extension Coach {
     Leave out what the facts do not support. Explain the idea behind the move, not every move one by one. \
     Name pieces and squares as in the facts, e.g. "Knight f3". Address the player as "you", with no heading and no bullet list. \
     The message ends with a style card: follow its length, depth, tone and language strictly and respect the word limit. \
-    Write a line "Takeaway: ..." only if the style card lists "takeaway".
+    Write a line "Takeaway: ..." only if the style card lists "takeaway", using the label given there.
     """
 
     static let hintSystemPrompt = """
@@ -58,7 +58,16 @@ extension Coach {
         if style.examples { card += ", example" }
         card += ". " + (style.tone == "auto" ? tone(for: context.level) : "Tone: \(style.tone).")
         if let f = context.focus, style.length != .short { card += " " + f.promptHint }
-        return card + " Answer in \(language)."
+        return card + " " + answerIn(language, takeaway: style.length == .long)
+    }
+
+    static func answerIn(_ language: String, takeaway: Bool = false, _ loc: Loc = .display) -> String {
+        var text = "Answer in \(language)."
+        guard language != "English" else { return text }
+        let terms = zip(["king", "queen", "rook", "bishop", "knight", "pawn"], "kqrbnp").map { "\($0)=\(PieceInfo.name($1, loc))" }
+        text += " Use exactly: " + terms.joined(separator: ", ")
+        if takeaway { text += "; label=\(loc("hint.takeawayLabel", "Takeaway"))" }
+        return text + "."
     }
 
     static func suggestionRequest(placement: Placement, player me: PieceColor, fen: String, result: EngineResult,
@@ -100,7 +109,7 @@ extension Coach {
     }
 
     static func hintRequest(_ hint: HintSet, context: PlayerContext, language: String = "English") -> ExplanationRequest {
-        ExplanationRequest(system: hintSystemPrompt, user: "\(hint.stage3Prompt)\n\(tone(for: context.level)) Answer in \(language).", maxTokens: 80)
+        ExplanationRequest(system: hintSystemPrompt, user: "\(hint.stage3Prompt)\n\(tone(for: context.level)) \(answerIn(language))", maxTokens: 80)
     }
 
     static func questionRequest(placement: Placement, toMove: PieceColor, question: String, score: String? = nil, bestMove: String? = nil,
@@ -119,7 +128,7 @@ extension Coach {
             let hanging = placement.hangingPieces(of: c, .facts)
             if !hanging.isEmpty { facts.append("Unprotected or threatened for \(c.title(.facts)): \(hanging.joined(separator: "; "))") }
         }
-        return ExplanationRequest(system: questionSystemPrompt, user: facts.joined(separator: "\n") + "\n\nPlayer's question: \(question)\nAnswer in \(language).", maxTokens: 260)
+        return ExplanationRequest(system: questionSystemPrompt, user: facts.joined(separator: "\n") + "\n\nPlayer's question: \(question)\n\(answerIn(language))", maxTokens: 260)
     }
 
     private static func request(_ facts: [String], ask: String, context: PlayerContext, style: ExplanationStyle, language: String) -> ExplanationRequest {

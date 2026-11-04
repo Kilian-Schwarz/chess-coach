@@ -8,7 +8,7 @@ public static class Prompts
         "Leave out what the facts do not support. Explain the idea behind the move, not every move one by one. " +
         "Name pieces and squares as in the facts, e.g. \"Knight f3\". Address the player as \"you\", with no heading and no bullet list. " +
         "The message ends with a style card: follow its length, depth, tone and language strictly and respect the word limit. " +
-        "Write a line \"Takeaway: ...\" only if the style card lists \"takeaway\".";
+        "Write a line \"Takeaway: ...\" only if the style card lists \"takeaway\", using the label given there.";
 
     public const string HintSystem =
         "You are a patient chess coach. The player asked for a hint, not for the solution. " +

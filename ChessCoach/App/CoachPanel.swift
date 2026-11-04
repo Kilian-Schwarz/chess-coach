@@ -15,6 +15,9 @@ struct CoachCard: Equatable, Identifiable {
     var style: ExplanationStyle?
     var profileId: String?
     var feedback: ExplanationFeedback?
+    var reviewPly: Int?
+    var reviewSan: String?
+    var staleTitle: String?
 }
 
 struct PanelAction: Identifiable {
@@ -53,6 +56,7 @@ final class CoachPanelController {
     private var collapseObserver: Any?
     private var applyingFrame = false
     private var lastBoard: CGRect?
+    private var placed: (board: CGRect, collapsed: Bool)?
     let model = CoachPanelModel()
 
     func show(nextTo board: CGRect, cards: [CoachCard]) {
@@ -60,7 +64,10 @@ final class CoachPanelController {
         lastBoard = board
         let panel = self.panel ?? makePanel()
         self.panel = panel
-        place(panel, board: board)
+        if !panel.isVisible || placed?.board != board || placed?.collapsed != model.collapsed {
+            place(panel, board: board)
+            placed = (board, model.collapsed)
+        }
         if !panel.isVisible { panel.orderFrontRegardless() }
     }
 
@@ -117,7 +124,7 @@ final class CoachPanelController {
 
     func resetPosition() {
         UserDefaults.standard.removeObject(forKey: "panelPositions")
-        if let panel, let b = lastBoard { place(panel, board: b) }
+        if let panel, let b = lastBoard { place(panel, board: b); placed = (b, model.collapsed) }
     }
 
     private func makePanel() -> NSPanel {

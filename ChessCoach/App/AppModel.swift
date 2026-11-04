@@ -66,6 +66,11 @@ final class AppModel: ObservableObject {
     var pausedShown = false
     var tracked: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect)?
     var lastChecksum: UInt64?
+    var boardStabilizer = RectStabilizer()
+    var regionMisses = 0
+    var confirmSoon = false
+    var reviewSeq = 0
+    var pendingReview: (moves: [PlayedMove], marked: Set<String>)?
     var cachedLocated: Located?
     var lastScreen: [[Character?]]?
     var lastChangeAt = Date()
@@ -211,6 +216,8 @@ final class AppModel: ObservableObject {
     func resetTracking() {
         pendingScreen = nil
         stablePlacement = nil
+        pendingReview = nil
+        boardStabilizer.reset()
         autoWhiteAtBottom = nil
         cancelAllTasks()
         reviewCard = nil
@@ -242,7 +249,9 @@ final class AppModel: ObservableObject {
 
     func updatePanelCards() {
         guard let rect = lastBoardRect, isActive else { return }
-        let cards = [reportCard, reviewCard, threatCard, suggestionCard, answerCard].compactMap { $0 }
+        let review = displayedReviewCard()
+        let reviewIsOld = review.map { $0.reviewPly != nil && $0.reviewPly! < record.moves.count } ?? false
+        let cards = (reviewIsOld ? [reportCard, suggestionCard, threatCard, answerCard, review] : [reportCard, review, threatCard, suggestionCard, answerCard]).compactMap { $0 }
         if cards.isEmpty { panel.hide() } else { panel.show(nextTo: rect, cards: cards) }
     }
 

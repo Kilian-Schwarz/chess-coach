@@ -17,6 +17,21 @@ extension AppModel {
             break
         }
         syncEntries()
+        if let c = reviewCard, let ply = c.reviewPly,
+           !(record.moves.indices.contains(ply - 1) && c.id == "\(record.moves[ply - 1].fenBefore)|\(record.moves[ply - 1].uci)") {
+            reviewSeq += 1
+            tasks[.review]?.cancel()
+            jobs[.review] = nil
+            reviewCard = nil
+        }
+        if update.gap, reviewMoves {
+            reviewSeq += 1
+            tasks[.review]?.cancel()
+            jobs[.review] = nil
+            reviewCard = CoachCard(id: "gap|\(reviewSeq)", kind: .review,
+                                   title: String(localized: "Moves missed – the next move will be rated again"))
+        }
+        updatePanelCards()
         openingLine = openingName()
         updateInfoLines()
         if entries.contains(where: { !($0.triedBefore && $0.triedAfter) }) { startWorker() }
@@ -160,21 +175,58 @@ extension AppModel {
         }, failed: { [weak self] _ in self?.summaryDraft[report.id] = nil })
     }
 
-    func reviewOwnMove(_ played: PlayedMove, me: PieceColor) async {
+    func inRecord(_ p: PlayedMove) -> Bool { record.moves.contains { $0.fenBefore == p.fenBefore && $0.uci == p.uci } }
+
+    func displayedReviewCard() -> CoachCard? {
+        guard var c = reviewCard else { return nil }
+        if let ply = c.reviewPly, ply < record.moves.count, let t = c.staleTitle { c.title = t }
+        return c
+    }
+
+    func startReview(_ moves: [PlayedMove], me: PieceColor) {
+        reviewSeq += 1
+        let seq = reviewSeq
+        Task { [weak self] in
+            for m in moves { await self?.reviewOwnMove(m, me: me, seq: seq) }
+        }
+    }
+
+    func reviewOwnMove(_ played: PlayedMove, me: PieceColor, seq: Int) async {
+        let started = Date()
         let pid = profileId(for: played.mover, me: me)
         guard played.before.board.problem(sideToMove: played.mover) == nil,
-              let before = await analysis(played.fenBefore) else { return }
+              let before = await analysis(played.fenBefore, ms: 300) else { return }
         var after: EngineResult?
         if played.after.result == nil, played.after.board.problem(sideToMove: played.after.turn) == nil {
-            after = await analysis(played.fenAfter)
+            after = await analysis(played.fenAfter, ms: 300)
         }
+        guard inRecord(played) else { return }
         let id = played.fenBefore + played.uci
-        let firstTime = entries.first { $0.id == id }.map { !$0.processed } ?? false
-        setEntry(id) { $0.before = before; $0.after = after ?? $0.after; $0.triedBefore = true; $0.triedAfter = true; $0.processed = true }
         let review = Coach.review(before: played.before.board, played: played.move, after: played.after.board,
                                   by: played.mover, beforeResult: before, afterResult: after)
+        let cardId = "\(played.fenBefore)|\(played.uci)"
+        let who = playerName(played.mover, me: me)
+        if reviewMoves, seq == reviewSeq {
+            var lines = [String(localized: "Played: \(review.playedText) (\(review.playedScore.text()))")]
+            if review.rating != .best, let bestText = review.bestText {
+                lines.append(String(localized: "Better: \(bestText) (\(before.scoreText))"))
+            }
+            let rating = review.rating.title()
+            let san = played.sanDisplay
+            let mine = String(localized: "Your move")
+            var card = CoachCard(id: cardId, kind: .review, title: "\(duoTraining ? who : mine) (\(san)): \(rating)",
+                                 rating: review.rating, lines: lines)
+            card.reviewPly = (record.moves.firstIndex { $0.fenBefore == played.fenBefore && $0.uci == played.uci } ?? -1) + 1
+            card.reviewSan = san
+            if !duoTraining { card.staleTitle = "\(String(localized: "Your last move")) (\(san)): \(rating)" }
+            reviewCard = card
+            Log.write("Review shown for \(played.san) \(Int(Date().timeIntervalSince(started) * 1000)) ms after the move was confirmed")
+        }
         var nullResult: EngineResult?
-        if let nullFen = Threats.nullMoveFEN(played.before) { nullResult = await analysis(nullFen, ms: 300) }
+        if let nullFen = Threats.nullMoveFEN(played.before) { nullResult = await analysis(nullFen, ms: 300, priority: false) }
+        guard inRecord(played) else { return }
+        let firstTime = entries.first { $0.id == id }.map { !$0.processed } ?? false
+        setEntry(id) { $0.before = before; $0.after = after ?? $0.after; $0.triedBefore = true; $0.triedAfter = true; $0.processed = true }
         let outcome = MoveAnalyzer.analyze(MoveAnalysisInput(review: review, beforeResult: before, afterResult: after,
                                                              threatResult: nullResult, moveNumber: played.moveNumber))
         if let pid, firstTime {
@@ -187,16 +239,7 @@ extension AppModel {
             }
             updateInfoLines()
         }
-        guard reviewMoves else { return }
-        let who = playerName(played.mover, me: me)
-        var lines = [String(localized: "Played: \(review.playedText) (\(review.playedScore.text()))")]
-        if review.rating != .best, let bestText = review.bestText {
-            lines.append(String(localized: "Better: \(bestText) (\(before.scoreText))"))
-        }
-        let cardId = "\(played.fenBefore)|\(played.uci)"
-        reviewCard = CoachCard(id: cardId, kind: .review,
-                               title: "\(duoTraining ? who : String(localized: "Your move")): \(review.rating.title())",
-                               rating: review.rating, lines: lines)
+        guard reviewMoves, seq == reviewSeq, reviewCard?.id == cardId else { return }
         let positions = [played.before, played.after]
         let pvs = before.lines.map(\.pv) + (after?.lines.map(\.pv) ?? [])
         startExplanation(.review, ExplainJob(

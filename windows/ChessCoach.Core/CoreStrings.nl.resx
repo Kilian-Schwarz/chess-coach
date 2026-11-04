@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activeer je koning.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Een pionzet past hier goed.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbeter je slechtste stuk.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Verplaats de koning naar {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Verplaats de dame naar {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Verplaats de toren naar {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Verplaats de loper naar {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Verplaats het paard naar {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Verplaats de pion naar {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Speel met de koning op {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Speel met de dame op {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Speel met de toren op {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Speel met de loper op {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Speel met het paard op {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Speel met de pion op {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kan de tegenstander mat zetten.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kan een stuk van de tegenstander slaan en zo materiaal winnen.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kan in één zet twee stukken van de tegenstander tegelijk aanvallen.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Een pionzet verbetert hier je stelling: hij wint ruimte of opent lijnen voor je stukken.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} staat niet ideaal. Zoek een veld waar dit stuk meer doet.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Beste zet: {0} (beoordeling {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Onthoud</value></data>
   <data name="threat.text" xml:space="preserve"><value>Dreigt: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Dreigt: {0}, mat in {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Inschaling bezig: partij {0} van {1}</value></data>

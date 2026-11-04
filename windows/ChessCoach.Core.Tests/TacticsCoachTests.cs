@@ -118,7 +118,7 @@ public class TacticsCoachTests
         Assert.Equal(Prompts.System, request.System);
         Assert.Contains("Rating: Inaccuracy (loss against the best move: 1.1 pawns).", request.User);
         Assert.Contains("Better was: Pawn e2–e4 (evaluation: +0.3).", request.User);
-        Assert.EndsWith("Answer in German.", request.User);
+        Assert.Contains("Answer in German. Use exactly: king=König", request.User);
         Assert.Equal(220, request.MaxTokens);
 
         var sp = Coach.SuggestionRequest(before, PieceColor.White, before.Fen(PieceColor.White), beforeRes, ctx, new ExplanationStyle())!.User;

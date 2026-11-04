@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activa a tu rey.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Una jugada de peón encaja bien aquí.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Mejora tu peor pieza.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Mueve el rey a {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Mueve la dama a {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Mueve la torre a {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Mueve el alfil a {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Mueve el caballo a {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Mueve el peón a {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Mueve el rey que está en {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Mueve la dama que está en {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Mueve la torre que está en {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Mueve el alfil que está en {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Mueve el caballo que está en {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Mueve el peón que está en {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} puede dar mate al rival.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} puede capturar una pieza rival y ganar material.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} puede atacar dos piezas rivales a la vez en una sola jugada.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Una jugada de peón mejora aquí tu posición: gana espacio o abre líneas para tus piezas.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} no está bien colocado. Busca una casilla donde esta pieza sea más útil.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Mejor jugada: {0} (evaluación {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Para recordar</value></data>
   <data name="threat.text" xml:space="preserve"><value>Amenaza: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Amenaza: {0}, mate en {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Clasificación en curso: partida {0} de {1}</value></data>

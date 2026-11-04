@@ -30,6 +30,9 @@ struct GameUpdate {
     var sideToMove: PieceColor { position.turn }
     var result: GameResult?
     var estimated: Bool
+    var reviewable: [PlayedMove] = []
+    var gap = false
+    var log: [String] = []
     var lastMove: PlayedMove? { newMoves.last }
     var isGameOver: Bool {
         switch result { case .checkmate?, .stalemate?: return true; default: return false }
@@ -61,13 +64,13 @@ struct GameRecord {
             }
             if !moves.isEmpty { earlierSegments.append(moves) }
             reset(to: .start, estimated: false)
-            return makeUpdate(.newGame, [])
+            return makeUpdate(.newGame, [], log: ["New game: start position"])
         }
 
         guard let cur = current else {
             let pos = estimate(placement, previous: nil, whiteAtBottom: whiteAtBottom, hint: hintedMover)
             reset(to: pos, estimated: true)
-            return makeUpdate(.firstSight, [])
+            return makeUpdate(.firstSight, [], log: ["First sight: \(pos.fen), side to move guessed"])
         }
 
         if cur.board == placement {
@@ -75,13 +78,14 @@ struct GameRecord {
                 var p = cur
                 p.turn = h.opposite
                 startPosition = p; current = p
+                return makeUpdate(.unchanged, [], log: ["Side override: last-move marker says \(h.opposite) to move"])
             }
             return makeUpdate(.unchanged, [])
         }
 
         if let found = explain(from: cur, to: placement, hint: hintedMover) {
-            append(found)
-            return makeUpdate(.moves, found)
+            append(found.moves)
+            return makeUpdate(.moves, found.moves, reviewable: found.unique ? found.moves : [], log: [moveLog(found)])
         }
         if isEstimatedStart, moves.isEmpty {
             var flipped = cur
@@ -89,20 +93,32 @@ struct GameRecord {
             flipped.enPassantFile = nil
             if let found = explain(from: flipped, to: placement, hint: hintedMover) {
                 startPosition = flipped; current = flipped
-                append(found)
-                return makeUpdate(.moves, found)
+                append(found.moves)
+                return makeUpdate(.moves, found.moves, log: ["Side override: \(flipped.turn) to move fits the move", moveLog(found)])
             }
         }
         let all = positions
         for i in stride(from: all.count - 2, through: max(0, all.count - 8), by: -1) where all[i].board == placement {
-            moves.removeLast(moves.count - i)
+            let dropped = moves.count - i
+            moves.removeLast(dropped)
             current = all[i]
-            return makeUpdate(.takeback, [])
+            return makeUpdate(.takeback, [], log: ["Take-back of \(dropped) ply: \(all[i].fen)"])
         }
-        if !moves.isEmpty { earlierSegments.append(moves) }
+        let missing = cur.board.missingPieces(in: placement)
+        if missing > 0, missing <= 2 {
+            return makeUpdate(.unchanged, [], log: ["Partial frame ignored: \(missing) piece(s) missing"])
+        }
+        let hadMoves = !moves.isEmpty
+        if hadMoves { earlierSegments.append(moves) }
         let pos = estimate(placement, previous: cur, whiteAtBottom: whiteAtBottom, hint: hintedMover)
         reset(to: pos, estimated: true)
-        return makeUpdate(.resync, [])
+        return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), new segment at \(pos.fen)"])
+    }
+
+    private func moveLog(_ found: (moves: [PlayedMove], unique: Bool)) -> String {
+        let sans = found.moves.map(\.san).joined(separator: " ")
+        let kind = found.moves.count == 1 ? "Move" : (found.unique ? "Moves (2 plies, missed scan)" : "Moves (2 plies, ambiguous, not rated)")
+        return "\(kind) \(sans) -> \(found.moves.last!.after.fen)"
     }
 
     mutating func clear() {
@@ -119,10 +135,11 @@ struct GameRecord {
         current = found.last!.after
     }
 
-    private func makeUpdate(_ change: GameUpdate.Change, _ new: [PlayedMove]) -> GameUpdate {
+    private func makeUpdate(_ change: GameUpdate.Change, _ new: [PlayedMove], reviewable: [PlayedMove] = [],
+                            gap: Bool = false, log: [String] = []) -> GameUpdate {
         let pos = current!
         return GameUpdate(change: change, newMoves: new, position: pos, result: pos.result,
-                          estimated: isEstimatedStart && moves.isEmpty)
+                          estimated: isEstimatedStart && moves.isEmpty, reviewable: reviewable, gap: gap, log: log)
     }
 
     private func estimate(_ placement: Placement, previous: ChessPosition?, whiteAtBottom: Bool, hint: PieceColor?) -> ChessPosition {
@@ -141,11 +158,11 @@ struct GameRecord {
                    before: pos, after: pos.applying(m), moveNumber: pos.fullmoveNumber)
     }
 
-    private func explain(from pos: ChessPosition, to placement: Placement, hint: PieceColor?) -> [PlayedMove]? {
+    private func explain(from pos: ChessPosition, to placement: Placement, hint: PieceColor?) -> (moves: [PlayedMove], unique: Bool)? {
         let first = pos.legalMoves()
         for m in first {
             let next = pos.applying(m)
-            if next.board == placement { return [played(m, in: pos)] }
+            if next.board == placement { return ([played(m, in: pos)], true) }
         }
         var candidates: [[PlayedMove]] = []
         for m in first {
@@ -155,8 +172,9 @@ struct GameRecord {
             }
         }
         guard !candidates.isEmpty else { return nil }
-        if candidates.count > 1, let h = hint, let match = candidates.first(where: { $0.last!.mover == h }) { return match }
-        return candidates[0]
+        let unique = Set(candidates.map { $0.map(\.uci).joined(separator: " ") }).count == 1
+        if candidates.count > 1, let h = hint, let match = candidates.first(where: { $0.last!.mover == h }) { return (match, unique) }
+        return (candidates[0], unique)
     }
 
     func pgn(white: String = "?", black: String = "?", event: String = "Chess Coach",

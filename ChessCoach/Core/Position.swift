@@ -33,6 +33,15 @@ struct Placement: Equatable {
     static func color(of p: Character) -> PieceColor { p.isUppercase ? .white : .black }
 
     func count(_ p: Character) -> Int { squares.joined().filter { $0 == p }.count }
+    func missingPieces(in other: Placement) -> Int {
+        var missing = 0
+        for r in 0..<8 { for f in 0..<8 {
+            guard let o = other.squares[r][f] else { if squares[r][f] != nil { missing += 1 }; continue }
+            if squares[r][f] != o { return 0 }
+        } }
+        return missing
+    }
+
     var pieceCount: Int { squares.joined().compactMap { $0 }.count }
 
     var isStartPosition: Bool {

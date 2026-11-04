@@ -15,6 +15,8 @@ internal sealed partial class AppModel
     }
 
     private TrackedBoard? _tracked;
+    private readonly RectStabilizer _stabilizer = new();
+    private int _regionMisses;
     private DateTime _lastFullSearch = DateTime.MinValue;
     private readonly BoardFingerprint _fp = new(), _lastFp = new();
     private bool _hasLastFp;
@@ -40,7 +42,7 @@ internal sealed partial class AppModel
         _pausedShown = true;
         _pausedStatus = true;
         HideAll();
-        _tracked = null; _cached = null; _hasLastFp = false;
+        _tracked = null; _cached = null; _hasLastFp = false; _stabilizer.Reset();
         SetStatus(Loc.T("status.paused", _session.Reason));
         Invalidate();
     }
@@ -60,27 +62,43 @@ internal sealed partial class AppModel
         if (_tracked is { } tr && (DateTime.UtcNow - _lastFullSearch).TotalSeconds < 5)
         {
             var monRect = new Rectangle(tr.Mon.X, tr.Mon.Y, tr.Mon.Width, tr.Mon.Height);
-            var region = Inflate(tr.Pixels, 0.1, monRect);
-            var outcome = await Task.Run(() => ScanRegion(tr, region, templates));
-            if (outcome != LocateOutcome.Lost) return outcome;
-            Log.Write("Board area lost, searching all screens");
+            string reason = "no capture";
+            foreach (var factor in new[] { 0.12, 0.3 })
+            {
+                var region = Inflate(tr.Pixels, factor, monRect);
+                var outcome = await Task.Run(() => ScanRegion(tr, region, templates, factor == 0.12));
+                if (outcome != LocateOutcome.Lost)
+                {
+                    if (outcome == LocateOutcome.Failed) reason = "region capture failed";
+                    else { _regionMisses = 0; return outcome; }
+                    break;
+                }
+                reason = $"no board in a {region.Width}x{region.Height} crop (margin {(int)(factor * 100)} %)";
+            }
+            _regionMisses++;
+            if (_regionMisses < 3 && _cached != null) return LocateOutcome.Unchanged;
+            Log.Write($"Board area lost, searching all screens: {reason}, {_regionMisses} misses in a row");
             _tracked = null;
         }
+        _regionMisses = 0;
         return await Task.Run(() => FullSearch(templates));
     }
 
-    private LocateOutcome ScanRegion(TrackedBoard tr, Rectangle region, PieceTemplates templates)
+    private LocateOutcome ScanRegion(TrackedBoard tr, Rectangle region, PieceTemplates templates, bool allowUnchanged)
     {
         var img = _capturer.CaptureWindow(ref region) ?? CaptureScreen(region.X, region.Y, region.Width, region.Height);
         if (img == null) return LocateOutcome.Failed;
         var expected = new BoardRect(tr.Board.X - region.X, tr.Board.Y - region.Y, tr.Board.Size);
         _fp.Compute(img, expected);
-        if (_hasLastFp && _cached != null && !_fp.Differs(_lastFp)) return LocateOutcome.Unchanged;
+        if (allowUnchanged && _hasLastFp && _cached != null && !_fp.Differs(_lastFp)) return LocateOutcome.Unchanged;
         var scan = BoardScanner.Scan(img, templates);
         if (scan == null) return LocateOutcome.Lost;
         var b = scan.Board;
-        _tracked = new TrackedBoard(tr.Mon, new BoardRect(region.X + b.X, region.Y + b.Y, b.Size));
-        _fp.Compute(img, b); _lastFp.CopyFrom(_fp); _hasLastFp = true;
+        var stable = _stabilizer.Accept(new BoardRect(region.X + b.X, region.Y + b.Y, b.Size));
+        if (stable.Changed) Log.Write($"Board moved or resized: {(int)stable.Rect.Size} px at {(int)stable.Rect.X},{(int)stable.Rect.Y}");
+        _tracked = new TrackedBoard(tr.Mon, stable.Rect);
+        _fp.Compute(img, new BoardRect(stable.Rect.X - region.X, stable.Rect.Y - region.Y, stable.Rect.Size));
+        _lastFp.CopyFrom(_fp); _hasLastFp = true;
         _cached = scan;
         return LocateOutcome.Changed;
     }
@@ -102,7 +120,10 @@ internal sealed partial class AppModel
                 var scan = BoardScanner.Scan(img, templates);
                 if (scan == null) continue;
                 var b = scan.Board;
-                _tracked = new TrackedBoard(m, new BoardRect(m.X + b.X, m.Y + b.Y, b.Size));
+                _stabilizer.Reset();
+                var stable = _stabilizer.Accept(new BoardRect(m.X + b.X, m.Y + b.Y, b.Size)).Rect;
+                _tracked = new TrackedBoard(m, stable);
+                Log.Write($"Board found on the full screen: {(int)stable.Size} px at {(int)stable.X},{(int)stable.Y}");
                 _fp.Compute(img, b); _lastFp.CopyFrom(_fp); _hasLastFp = true;
                 _cached = scan;
                 return LocateOutcome.Changed;
@@ -252,6 +273,7 @@ internal sealed partial class AppModel
             var marking = SideToMove.Detect(scan, whiteAtBottom, _templates);
             var previousUpdate = _update;
             var u = _record.Update(placement, whiteAtBottom, marking.Mover);
+            foreach (var line in u.Log) Log.Write(line);
             _stablePlacement = placement;
             _update = u;
             _sideToMove = u.SideToMove;
@@ -371,7 +393,7 @@ internal sealed partial class AppModel
         _reviewCard = null; _suggestionCard = null; _answerCard = null; _threat = null; _threatFen = null;
         _hint = null; _hintFen = null; _hintLevel = 0;
         _panel.HintLevel = 0; _panel.CanHint = false; _panel.CanExplain = false; _panel.IsAsking = false;
-        _cached = null; _hasLastFp = false;
+        _cached = null; _hasLastFp = false; _stabilizer.Reset();
         Invalidate();
     }
 }

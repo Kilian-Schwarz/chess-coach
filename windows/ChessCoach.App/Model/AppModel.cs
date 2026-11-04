@@ -239,7 +239,7 @@ internal sealed partial class AppModel
 
     private Rectangle Inflate(Rectangle r, double factor, Rectangle bounds)
     {
-        int mx = (int)(r.Width * factor), my = (int)(r.Height * factor);
+        int mx = Math.Max(40, (int)(r.Width * factor)), my = Math.Max(40, (int)(r.Height * factor));
         var x = Math.Max(bounds.Left, r.Left - mx);
         var y = Math.Max(bounds.Top, r.Top - my);
         var right = Math.Min(bounds.Right, r.Right + mx);

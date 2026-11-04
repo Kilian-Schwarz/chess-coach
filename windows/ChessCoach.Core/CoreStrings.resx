@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activate your king.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>A pawn move fits well here.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Improve your worst piece.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Move the king to {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Move the queen to {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Move the rook to {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Move the bishop to {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Move the knight to {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Move the pawn to {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Move the king on {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Move the queen on {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Move the rook on {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Move the bishop on {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Move the knight on {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Move the pawn on {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} can checkmate your opponent.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} can capture an enemy piece and win material.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} can attack two enemy pieces at once.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>A pawn move improves your position here: it gains space or opens lines for your pieces.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} is not placed well. Find a square where it does more.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Best move: {0} (evaluation {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Takeaway</value></data>
   <data name="threat.text" xml:space="preserve"><value>Threat: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Threat: {0}, mate in {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Placement in progress: game {0} of {1}</value></data>

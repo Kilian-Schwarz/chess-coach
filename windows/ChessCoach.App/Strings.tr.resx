@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Oyuncu</value></data>
   <data name="player.partner" xml:space="preserve"><value>Ortak</value></data>
   <data name="update.openPage" xml:space="preserve"><value>{0} sürümü mevcut. İndirme sayfası açılsın mı?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>Son hamleniz</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Hamleler kaçırıldı: bir sonraki hamle yeniden değerlendirilecek</value></data>
 </root>

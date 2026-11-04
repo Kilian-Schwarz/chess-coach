@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Giocatore</value></data>
   <data name="player.partner" xml:space="preserve"><value>Partner</value></data>
   <data name="update.openPage" xml:space="preserve"><value>È disponibile la versione {0}. Aprire la pagina di download?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>La tua ultima mossa</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Mosse perse: la prossima mossa verrà valutata di nuovo</value></data>
 </root>

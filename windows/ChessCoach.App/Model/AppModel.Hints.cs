@@ -19,25 +19,41 @@ internal sealed partial class AppModel
     private string? _threatFen;
     private Coach.ExplanationRequest? _lastReviewReq;
     private PlayedMove? _pendingReview;
+    private readonly HashSet<string> _rated = new();
+    private int _gapCounter;
     private bool _panelDirty;
     private EngineResult? _threatResult;
+
+    private static string MoveKey(PlayedMove pm) => $"{pm.FenBefore}|{pm.Uci}";
 
     private void OnPositionChanged(GameUpdate? previous, GameUpdate u, bool whiteAtBottom, PieceColor me)
     {
         _sideOverride = null;
-        if (u.Change == GameChange.NewGame) _reviewCard = null;
+        if (u.Change == GameChange.NewGame) { _reviewCard = null; _rated.Clear(); }
         _pendingReview = null;
-        foreach (var pm in u.NewMoves)
+        foreach (var pm in u.NewMoves) EnqueueForLearning(pm);
+        foreach (var pm in u.Reviewable)
         {
-            EnqueueForLearning(pm);
+            _rated.Add(MoveKey(pm));
             if (IsCoached(pm.Mover, me)) _pendingReview = pm;
+        }
+        var moves = _record.Moves;
+        if (_reviewCard is { ReviewPly: int ply } && !(ply >= 1 && ply <= moves.Count && MoveKey(moves[ply - 1]) == _reviewCard.Id))
+        {
+            _reviewCts?.Cancel();
+            _reviewCard = null;
+        }
+        if (u.Gap && Settings.ReviewMoves)
+        {
+            _reviewCts?.Cancel();
+            _reviewCard = new CoachCard("gap|" + ++_gapCounter, CardKind.Review, Loc.T("review.gap"));
         }
         LearningPositionChanged(previous, u, me);
     }
 
-    private string ReviewTitle(string who, MoveReview review)
+    private string ReviewTitle(string who, MoveReview review, string san)
     {
-        string rating = Loc.Rating(review.Rating);
+        string rating = $"{Loc.Rating(review.Rating)} ({san})";
         return Settings.DuoTraining ? Loc.T("review.titleWho", who, rating) : Loc.T("review.titleYou", rating);
     }
 
@@ -47,17 +63,24 @@ internal sealed partial class AppModel
         _pendingReview = null;
         if (pm == null || !Settings.ReviewMoves) return;
         if (pm.Before.Board.Problem(pm.Mover) != null) return;
-        var before = await _engine.AnalyzeAsync(pm.FenBefore, EffectiveThinkMs);
+        var before = await _engine.AnalyzeAsync(pm.FenBefore, 300);
         if (before == null) return;
         EngineResult? after = pm.After.Board.Problem(pm.Mover.Opposite()) == null
-            ? await _engine.AnalyzeAsync(pm.FenAfter, EffectiveThinkMs) : null;
+            ? await _engine.AnalyzeAsync(pm.FenAfter, 300) : null;
+        var recorded = _record.Moves;
+        int ply = -1;
+        for (int i = 0; i < recorded.Count; i++) if (MoveKey(recorded[i]) == MoveKey(pm)) ply = i + 1;
+        if (ply < 0) return;
         var review = Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after);
         string who = PlayerName(pm.Mover, me);
         var lines = new List<string> { Loc.T("review.played", review.PlayedText, review.PlayedScore) };
         if (review.Rating != MoveRating.Best && review.BestText != null) lines.Add(Loc.T("review.better", review.BestText, before.ScoreText));
         string id = $"{pm.FenBefore}|{pm.Uci}";
-        var card = new CoachCard(id, CardKind.Review, ReviewTitle(who, review))
-        { Rating = review.Rating, Lines = lines };
+        var card = new CoachCard(id, CardKind.Review, ReviewTitle(who, review, pm.SanDisplay))
+        {
+            Rating = review.Rating, Lines = lines, ReviewPly = ply,
+            StaleTitle = Settings.DuoTraining ? null : $"{Loc.T("review.titleLast")}: {Loc.Rating(review.Rating)} ({pm.SanDisplay})",
+        };
         if (!LlmConfigured)
         {
             _reviewCard = card with { Note = Loc.T("note.needLlm") };
@@ -341,10 +364,23 @@ internal sealed partial class AppModel
             _panelDirty = false;
             if (!IsActive || _boardRect.Width == 0) return;
             var cards = new List<CoachCard>(4);
-            if (_reviewCard != null) cards.Add(_reviewCard);
-            if (_threat is { } th && Settings.ShowThreats) cards.Add(new CoachCard("threat|" + th.Text, CardKind.Info, th.Text));
-            if (_suggestionCard != null) cards.Add(_suggestionCard);
-            if (_answerCard != null) cards.Add(_answerCard);
+            var review = _reviewCard;
+            bool reviewOld = review is { ReviewPly: int rp, StaleTitle: not null } && rp < _record.Moves.Count;
+            if (reviewOld) review = review! with { Title = review.StaleTitle! };
+            if (!reviewOld && review != null) cards.Add(review);
+            if (reviewOld)
+            {
+                if (_suggestionCard != null) cards.Add(_suggestionCard);
+                if (_threat is { } th0 && Settings.ShowThreats) cards.Add(new CoachCard("threat|" + th0.Text, CardKind.Info, th0.Text));
+                if (_answerCard != null) cards.Add(_answerCard);
+                cards.Add(review!);
+            }
+            else
+            {
+                if (_threat is { } th && Settings.ShowThreats) cards.Add(new CoachCard("threat|" + th.Text, CardKind.Info, th.Text));
+                if (_suggestionCard != null) cards.Add(_suggestionCard);
+                if (_answerCard != null) cards.Add(_answerCard);
+            }
             if (_hint == null && cards.Count == 0 && _update == null) { _panel.HidePanel(); return; }
             _panel.FocusText = PanelSubtitle();
             _panel.ShowNextTo(_boardRect, cards);

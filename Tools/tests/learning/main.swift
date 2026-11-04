@@ -134,7 +134,19 @@ do {
 }
 check(Hints.theme(placement: parse("6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1").placement, best: UCIMove("a1a8")!, player: .white, bestMate: true) == .mate, "mate")
 check(ChessPosition(fen: "x") == nil, "invalid FEN")
-check(Hints.stage2Text(piece: "N", square: "g1") == "Move the knight to g1." && Hints.stage2Text(piece: "q", square: "d8") == "Move the queen to d8.", "stage 2 text")
+check(Hints.stage2Text(piece: "N", square: "g1") == "Move the knight on g1." && Hints.stage2Text(piece: "q", square: "d8") == "Move the queen on d8.", "stage 2 text")
+do {
+    let (p, side) = parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+    let res = EngineResult(fen: p.fen(sideToMove: side), bestMove: "d2d4", lines: [EngineLine(move: "d2d4", scoreCP: 30, mateIn: nil, pv: ["d2d4"])])
+    if let h = Hints.build(placement: p, player: side, result: res) {
+        check(h.stage2Square == "d2" && h.stage2.contains("d2") && h.stage2 == "Move the pawn on d2.", "stage 2 names the from square: \(h.stage2)")
+        check(![h.stage1, h.stage2, h.stage3Fallback].contains { $0.contains("d4") }, "stages 1-3 hide the target square")
+    } else { check(false, "start position hint") }
+    let catalog = (try? JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: "ChessCoach/Resources/Localizable.xcstrings")))) as? [String: Any]
+    let units = ((catalog?["strings"] as? [String: Any])?["hint.stage2.pawn"] as? [String: Any])?["localizations"] as? [String: [String: Any]]
+    let de = (units?["de"]?["stringUnit"] as? [String: Any])?["value"] as? String
+    check(de?.replacingOccurrences(of: "%1$@", with: "d2") == "Zieh mit dem Bauern auf d2.", "German stage 2 text: \(de ?? "-")")
+}
 check(Hints.revealsTarget("Go to f3 please", move: UCIMove("g1f3")!) && !Hints.revealsTarget("Develop the knight", move: UCIMove("g1f3")!), "target check")
 for th in HintTheme.allCases {
     check(!th.stage1Text().isEmpty && !th.title().isEmpty && !Hints.stage3Fallback(theme: th, piece: "N").isEmpty, "texts \(th)")
@@ -356,7 +368,7 @@ func runEngine() async {
         check(rep.black.best >= 1 && rep.white.blunders + rep.white.mistakes >= 1, "ratings")
         check(rep.keyMoments.contains { $0.color == "w" }, "key moment for white")
         let rq = rep.summaryRequest(for: "w", context: PlayerContext(level: .beginner, focus: .pieceSafety), language: "German")
-        check(rq.user.contains("Accuracy") && rq.user.hasSuffix("Answer in German.") && rq.approxTokens < 700, "summary prompt")
+        check(rq.user.contains("Accuracy") && rq.user.contains("Answer in German. Use exactly:") && rq.approxTokens < 700, "summary prompt")
         check(rep.fallbackSummary(for: "w").hasPrefix("Accuracy "), "fallback summary")
     }
 }
@@ -449,9 +461,11 @@ do {
         worst = max(worst, c.count / 4)
     } } } }
     print("  longest style card about \(worst) tokens")
-    check(card.count / 4 <= 60 && worst <= 60, "style card at most 60 tokens (short \(card.count / 4), worst \(worst))")
+    check(card.count / 4 <= 60 && worst <= 90, "style card at most 60 tokens (90 with glossary) (short \(card.count / 4), worst \(worst))")
     check(Coach.styleCard(context: PlayerContext(level: .beginner, focus: nil), style: ExplanationStyle()).contains("simple words")
-          && Coach.styleCard(context: PlayerContext(level: .strong, focus: nil), style: ExplanationStyle(), language: "German").hasSuffix("technical terms fine. Answer in German."), "tone per level and language")
+          && Coach.styleCard(context: PlayerContext(level: .strong, focus: nil), style: ExplanationStyle(), language: "German").contains("technical terms fine. Answer in German. Use exactly: king=King"), "tone per level and language")
+    check(Coach.styleCard(context: PlayerContext(level: .beginner, focus: nil), style: ExplanationStyle(length: .long, depth: .principle), language: "German").contains("; label=Takeaway."), "takeaway label in glossary")
+    check(!Coach.styleCard(context: PlayerContext(level: .beginner, focus: nil), style: ExplanationStyle()).contains("Use exactly"), "no glossary in English")
     check(Coach.systemPrompt.hasPrefix("You are a patient chess coach for a hobby player. You receive facts computed by a chess engine."), "fixed system prompt")
     let p = parse(ChessPosition.startFEN).placement
     let r1 = MoveReview(before: p, played: UCIMove("e2e4")!, best: UCIMove("e2e4"), bestScore: .cp(30), playedScore: .cp(30),
@@ -459,14 +473,13 @@ do {
     let q1 = Coach.reviewRequest(r1, context: ctx, style: .init(length: .short), language: "German")
     let q2 = Coach.reviewRequest(r1, context: PlayerContext(level: .strong, focus: .tactics), style: .init(length: .long))
     check(q1.system == q2.system && q1.system == Coach.systemPrompt, "system prompt is identical for all players")
-    check(q1.user.hasSuffix("Style: short, principle, max 25 words. Tone: simple words, explain basics. Answer in German.")
-          || q1.user.hasSuffix("Answer in German."), "style card at the end")
+    check(q1.user.contains("Style: short, principle, max 25 words. Tone: simple words, explain basics. Answer in German. Use exactly: king="), "style card at the end")
     check(q1.maxTokens == 120 && q2.maxTokens == 400, "max_tokens passed through")
     let hint = HintSet(move: UCIMove("g1f3")!, theme: .develop, threat: nil, stage1: "", stage2Square: "g1", stage2: "", stage3Fallback: "", stage3Prompt: "facts", stage4: "")
     let hr = Coach.hintRequest(hint, context: ctx, language: "French")
-    check(hr.system == Coach.hintSystemPrompt && hr.user.hasSuffix("Answer in French.") && hr.maxTokens == 80, "hint request")
+    check(hr.system == Coach.hintSystemPrompt && hr.user.contains("Answer in French. Use exactly:") && hr.maxTokens == 80, "hint request")
     let qr = Coach.questionRequest(placement: p, toMove: .white, question: "Why castle?", language: "Spanish")
-    check(qr.system == Coach.questionSystemPrompt && qr.user.hasSuffix("Player's question: Why castle?\nAnswer in Spanish.") && qr.user.contains("White pieces: King e1, Queen d1, Rooks a1 h1"), "question request: \(qr.user)")
+    check(qr.system == Coach.questionSystemPrompt && qr.user.contains("Player's question: Why castle?\nAnswer in Spanish. Use exactly:") && qr.user.contains("White pieces: King e1, Queen d1, Rooks a1 h1"), "question request: \(qr.user)")
     check(Coach.cleanAnswer("<think>x</think> Hello") == "Hello" && Coach.cleanAnswer("a<think>b") == "a" && Coach.cleanAnswer("x</think>y") == "y", "think blocks removed")
 }
 

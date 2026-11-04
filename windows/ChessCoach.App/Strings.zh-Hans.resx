@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>棋手</value></data>
   <data name="player.partner" xml:space="preserve"><value>搭档</value></data>
   <data name="update.openPage" xml:space="preserve"><value>版本 {0} 可用。要打开下载页面吗？</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>你的上一步</value></data>
+  <data name="review.gap" xml:space="preserve"><value>错过了几步，下一步将重新评分</value></data>
 </root>

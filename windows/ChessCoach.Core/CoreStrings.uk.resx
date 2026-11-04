@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Активізуй короля.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Хід пішаком тут добре пасує.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Покращ свою найгіршу фігуру.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Піди короля на {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Піди ферзя на {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Піди туру на {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Піди слона на {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Піди коня на {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Піди пішака на {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Ходи королем з {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Ходи ферзем з {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Ходи турою з {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Ходи слоном з {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Ходи конем з {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Ходи пішаком з {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} може поставити мат супернику.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} може взяти фігуру суперника й виграти матеріал.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} може одним ходом атакувати одразу дві фігури суперника.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Хід пішаком покращує тут твою позицію: він здобуває простір або відкриває лінії для твоїх фігур.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} стоїть не найкраще. Знайди поле, де ця фігура буде кориснішою.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Найкращий хід: {0} (оцінка {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Висновок</value></data>
   <data name="threat.text" xml:space="preserve"><value>Загроза: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Загроза: {0}, мат у {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Визначення рівня: партія {0} з {1}</value></data>

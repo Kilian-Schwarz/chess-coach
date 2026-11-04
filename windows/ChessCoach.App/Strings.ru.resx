@@ -171,4 +171,6 @@
   <data name="player.default" xml:space="preserve"><value>Игрок</value></data>
   <data name="player.partner" xml:space="preserve"><value>Партнёр</value></data>
   <data name="update.openPage" xml:space="preserve"><value>Доступна версия {0}. Открыть страницу загрузки?</value></data>
+  <data name="review.titleLast" xml:space="preserve"><value>Ваш последний ход</value></data>
+  <data name="review.gap" xml:space="preserve"><value>Ходы пропущены – следующий ход снова будет оценён</value></data>
 </root>

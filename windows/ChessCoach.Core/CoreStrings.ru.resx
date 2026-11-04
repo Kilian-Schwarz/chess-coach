@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Активизируй короля.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Ход пешкой здесь хорошо подходит.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Улучши свою худшую фигуру.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Сходи короля на {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Сходи ферзя на {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Сходи ладью на {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Сходи слона на {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Сходи коня на {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Сходи пешку на {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Сходи королём с {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Сходи ферзём с {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Сходи ладьёй с {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Сходи слоном с {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Сходи конём с {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Сходи пешкой с {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} может поставить мат сопернику.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} может взять фигуру соперника и выиграть материал.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} может за один ход атаковать сразу две фигуры соперника.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Ход пешкой улучшает здесь твою позицию: он завоёвывает пространство или открывает линии для твоих фигур.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} стоит не лучшим образом. Найди поле, где эта фигура принесёт больше пользы.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Лучший ход: {0} (оценка {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Вывод</value></data>
   <data name="threat.text" xml:space="preserve"><value>Угроза: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Угроза: {0}, мат в {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Определение уровня: партия {0} из {1}</value></data>

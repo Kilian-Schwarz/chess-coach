@@ -245,7 +245,7 @@ internal sealed partial class AppModel
             before.Value, valueAfter, before.BestMove.Length > 0 ? before.BestMove : null));
 
         var me = _lastMe ?? PieceColor.White;
-        if (!IsCoached(pm.Mover, me) || ProfileFor(pm.Mover) is not { } prof) return;
+        if (!IsCoached(pm.Mover, me) || !_rated.Contains(MoveKey(pm)) || ProfileFor(pm.Mover) is not { } prof) return;
         var review = Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after);
         EngineResult? threatRes = null;
         if (Threats.NullMoveFen(pm.Before) is { } nf) threatRes = await _engine.AnalyzeAsync(nf, 300);

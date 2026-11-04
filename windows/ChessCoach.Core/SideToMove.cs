@@ -90,7 +90,7 @@ public static class SideToMove
                 result.Marked.Add(sq);
                 if (screen[r][c] is char p) { if (char.IsUpper(p)) anyWhite = true; else anyBlack = true; }
             }
-        if (result.Marked.Count is >= 1 and <= 4 && (anyWhite ^ anyBlack))
+        if ((result.Marked.Count is >= 2 and <= 4 || (result.Marked.Count == 1 && result.CheckSquares.Count > 0)) && (anyWhite ^ anyBlack))
             result.Mover = anyWhite ? PieceColor.White : PieceColor.Black;
         return result;
     }

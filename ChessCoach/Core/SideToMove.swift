@@ -57,7 +57,7 @@ enum SideToMove {
             if let p = screen[r][c] { colors.insert(p.isUppercase) }
         } }
         var mover: PieceColor?
-        if (1...4).contains(marked.count), colors.count == 1 { mover = colors.first! ? .white : .black }
+        if (2...4).contains(marked.count) || (marked.count == 1 && !checks.isEmpty), colors.count == 1 { mover = colors.first! ? .white : .black }
         return LastMoveMarking(marked: marked, checkSquares: checks, mover: mover)
     }
 

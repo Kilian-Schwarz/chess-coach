@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>激活你的王。</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>这里走兵很合适。</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>改善你最差的棋子。</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>把王走到 {0}。</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>把后走到 {0}。</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>把车走到 {0}。</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>把象走到 {0}。</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>把马走到 {0}。</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>把兵走到 {0}。</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>走 {0} 上的王。</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>走 {0} 上的后。</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>走 {0} 上的车。</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>走 {0} 上的象。</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>走 {0} 上的马。</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>走 {0} 上的兵。</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0}可以将杀对手。</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}可以吃掉对方一个棋子并赢子。</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0}可以一步同时攻击对方两个棋子。</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>这里走兵能改善你的局面：争取空间，或为你的棋子打开线路。</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}的位置不理想。找一个能让这个棋子发挥更大作用的格子。</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>最佳着法：{0}（评估 {1}）。</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>要点</value></data>
   <data name="threat.text" xml:space="preserve"><value>威胁：{0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>威胁：{0}，{1}步杀</value></data>
   <data name="profile.placement" xml:space="preserve"><value>定级进行中：第 {0} 局，共 {1} 局</value></data>

@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Şahını aktifleştir.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Burada bir piyon hamlesi iyi olur.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>En kötü taşını iyileştir.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>şahı {0} karesine oyna.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>veziri {0} karesine oyna.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>kaleyi {0} karesine oyna.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>fili {0} karesine oyna.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>atı {0} karesine oyna.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>piyonu {0} karesine oyna.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>{0} karesindeki şahı oyna.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>{0} karesindeki veziri oyna.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>{0} karesindeki kaleyi oyna.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>{0} karesindeki fili oyna.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>{0} karesindeki atı oyna.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>{0} karesindeki piyonu oyna.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} rakibe mat yapabilir.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} rakibin bir taşını alıp materyal kazanabilir.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} tek hamlede rakibin iki taşına aynı anda saldırabilir.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Burada bir piyon hamlesi konumunu iyileştirir: alan kazanır ya da taşların için hatlar açar.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} ideal yerde değil. Bu taşın daha etkili olacağı bir kare bul.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>En iyi hamle: {0} (değerlendirme {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Çıkarım</value></data>
   <data name="threat.text" xml:space="preserve"><value>Tehdit: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Tehdit: {0}, {1} hamlede mat</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Seviye belirleme sürüyor: oyun {0} / {1}</value></data>

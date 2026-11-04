@@ -5,6 +5,7 @@ import SwiftUI
 extension AppModel {
     func nextDelay() -> Duration {
         if activity.isPaused { return .milliseconds(1500) }
+        if confirmSoon, tracked != nil { return .milliseconds(200) }
         if tracked == nil {
             let lost = Date().timeIntervalSince(lostSince ?? Date())
             return .milliseconds(lost > 120 ? 4000 : lost > 30 ? 2000 : 1000)
@@ -17,30 +18,7 @@ extension AppModel {
     func locateBoard() async throws -> Located? {
         let currentTemplates = templates
         if let tr = tracked {
-            let m = tr.rect.width * 0.1
-            if let d = try await ScreenCapture.captureRegion(displayID: tr.displayID, frame: tr.frame,
-                                                             rect: tr.rect.insetBy(dx: -m, dy: -m)) {
-                let expected = BoardRect(x: tr.rect.minX - d.origin.x, y: tr.rect.minY - d.origin.y, size: tr.rect.width)
-                let sum = BoardChecksum.compute(d.image, board: expected)
-                if let sum, sum == lastChecksum, var cached = cachedLocated {
-                    cached.unchanged = true
-                    return cached
-                }
-                let img = d.image
-                let scan: ScanResult? = await Task.detached(priority: .userInitiated) {
-                    guard let rgb = RGBImage(cgImage: img) else { return nil }
-                    return BoardScanner.scan(rgb, templates: currentTemplates)
-                }.value
-                if let scan {
-                    let b = scan.board
-                    tracked = (tr.displayID, tr.frame, CGRect(x: d.origin.x + b.x, y: d.origin.y + b.y, width: b.size, height: b.size))
-                    lastChecksum = BoardChecksum.compute(d.image, board: b)
-                    let loc = Located(display: d, scan: scan, scale: 1, unchanged: false)
-                    cachedLocated = loc
-                    return loc
-                }
-                Log.write("Board area lost, searching the full screen")
-            }
+            if let loc = try await locateInRegion(tr, templates: currentTemplates) { return loc }
             tracked = nil
         }
 
@@ -53,12 +31,15 @@ extension AppModel {
             }
             return nil
         }.value
+        regionMisses = 0
         if let f = found {
             let b = f.scan.board
-            tracked = (f.display.displayID, f.display.frame,
-                       CGRect(x: b.x * f.scale, y: b.y * f.scale, width: b.size * f.scale, height: b.size * f.scale))
+            boardStabilizer.reset()
+            let stable = boardStabilizer.accept(BoardRect(x: b.x * f.scale, y: b.y * f.scale, size: b.size * f.scale)).rect
+            tracked = (f.display.displayID, f.display.frame, CGRect(x: stable.x, y: stable.y, width: stable.size, height: stable.size))
             lastChecksum = f.scale == 1 ? BoardChecksum.compute(f.display.image, board: b) : nil
             cachedLocated = f
+            Log.write("Board found on the full screen: \(Int(stable.size)) px at \(Int(stable.x)),\(Int(stable.y))")
         } else {
             tracked = nil
             cachedLocated = nil
@@ -67,12 +48,57 @@ extension AppModel {
         return found
     }
 
+    private func locateInRegion(_ tr: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect), templates currentTemplates: PieceTemplates) async throws -> Located? {
+        var reason = "no capture"
+        for factor in [0.12, 0.3] {
+            let m = max(tr.rect.width * factor, 40)
+            guard let d = try await ScreenCapture.captureRegion(displayID: tr.displayID, frame: tr.frame,
+                                                                rect: tr.rect.insetBy(dx: -m, dy: -m)) else {
+                reason = "region capture unavailable for \(Int(tr.rect.minX)),\(Int(tr.rect.minY)) \(Int(tr.rect.width)) px"
+                break
+            }
+            let expected = BoardRect(x: tr.rect.minX - d.origin.x, y: tr.rect.minY - d.origin.y, size: tr.rect.width)
+            let sum = BoardChecksum.compute(d.image, board: expected)
+            if factor == 0.12, let sum, sum == lastChecksum, var cached = cachedLocated {
+                cached.unchanged = true
+                regionMisses = 0
+                return cached
+            }
+            let img = d.image
+            let scan: ScanResult? = await Task.detached(priority: .userInitiated) {
+                guard let rgb = RGBImage(cgImage: img) else { return nil }
+                return BoardScanner.scan(rgb, templates: currentTemplates)
+            }.value
+            if let scan {
+                let b = scan.board
+                let stable = boardStabilizer.accept(BoardRect(x: d.origin.x + b.x, y: d.origin.y + b.y, size: b.size))
+                if stable.changed { Log.write("Board moved or resized: \(Int(stable.rect.size)) px at \(Int(stable.rect.x)),\(Int(stable.rect.y))") }
+                let r = stable.rect
+                tracked = (tr.displayID, tr.frame, CGRect(x: r.x, y: r.y, width: r.size, height: r.size))
+                lastChecksum = BoardChecksum.compute(d.image, board: BoardRect(x: r.x - d.origin.x, y: r.y - d.origin.y, size: r.size))
+                let loc = Located(display: d, scan: scan, scale: 1, unchanged: false)
+                cachedLocated = loc
+                regionMisses = 0
+                return loc
+            }
+            reason = "no board in a \(d.image.width)x\(d.image.height) crop (margin \(Int(factor * 100)) %)"
+        }
+        regionMisses += 1
+        if regionMisses < 3, var cached = cachedLocated {
+            cached.unchanged = true
+            return cached
+        }
+        Log.write("Board area lost, searching the full screen: \(reason), \(regionMisses) misses in a row")
+        return nil
+    }
+
     func tick() async {
         if activity.isPaused {
             if !pausedShown {
                 pausedShown = true
                 hideAll()
                 tracked = nil
+                boardStabilizer.reset()
                 dropCapture()
                 status = String(localized: "Paused (\(activity.reason))")
                 suggestion = nil
@@ -114,12 +140,15 @@ extension AppModel {
             return
         }
         lostSince = nil
-        if loc.unchanged && settled { return }
+        if loc.unchanged && settled && pendingReview == nil { return }
 
         let display = loc.display, scan = loc.scan, scale = loc.scale
         if lastScreen != scan.screen { lastScreen = scan.screen; lastChangeAt = Date() }
         lastDisplay = display.displayID
-        let boardRect = cocoaRect(for: scan.board, on: display, scale: scale)
+        let local = boardStabilizer.accept(BoardRect(x: display.origin.x + scan.board.x * scale, y: display.origin.y + scan.board.y * scale,
+                                                     size: scan.board.size * scale)).rect
+        let boardRect = cocoaRect(for: BoardRect(x: local.x - display.origin.x, y: local.y - display.origin.y, size: local.size),
+                                  on: display, scale: 1)
         lastBoardRect = boardRect
 
         if scan.looksLikeStart {
@@ -163,9 +192,11 @@ extension AppModel {
 
         guard pendingScreen == scan.screen else {
             pendingScreen = scan.screen
+            confirmSoon = tracked != nil
             dropCapture()
             return
         }
+        confirmSoon = false
 
         let whiteAtBottom: Bool
         switch side {
@@ -192,10 +223,25 @@ extension AppModel {
             questionTask?.cancel()
             ideaTask?.cancel()
             ideaFen = nil
+            let carried = pendingReview?.moves.filter { inRecord($0) } ?? []
+            pendingReview = nil
+            for line in update.log { Log.write(line) }
             handle(update)
-            for played in update.newMoves where isCoached(played.mover, me: me) {
-                await reviewOwnMove(played, me: me)
+            let coached = update.reviewable.filter { isCoached($0.mover, me: me) }
+            let carriedNow = carried.filter { inRecord($0) }
+            if !carriedNow.isEmpty { startReview(carriedNow, me: me) }
+            if !coached.isEmpty {
+                let marked = Set(marking.marked.map { UCIMove.squareName($0.file, $0.rank) })
+                if coached.allSatisfy({ marked.isSuperset(of: [String($0.uci.prefix(2)), String($0.uci.dropFirst(2).prefix(2))]) }) {
+                    startReview(coached, me: me)
+                } else {
+                    pendingReview = (coached, marked)
+                }
             }
+        } else if let pending = pendingReview {
+            pendingReview = nil
+            let still = pending.moves.filter { inRecord($0) }
+            if !still.isEmpty { startReview(still, me: me) }
         }
         guard var pos = record.current, isActive else { return }
 

@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Attiva il tuo re.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Una mossa di pedone va bene qui.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Migliora il tuo pezzo peggiore.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Sposta il re in {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Sposta la donna in {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Sposta la torre in {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Sposta l'alfiere in {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Sposta il cavallo in {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Sposta il pedone in {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Muovi il re che si trova in {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Muovi la donna che si trova in {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Muovi la torre che si trova in {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Muovi l’alfiere che si trova in {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Muovi il cavallo che si trova in {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Muovi il pedone che si trova in {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} può dare matto all'avversario.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} può catturare un pezzo avversario e guadagnare materiale.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} può attaccare due pezzi avversari contemporaneamente con una sola mossa.</value></data>
@@ -111,6 +111,7 @@
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Una mossa di pedone migliora qui la tua posizione: guadagna spazio o apre linee per i tuoi pezzi.</value></data>
   <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} non è messo bene. Cerca una casa in cui questo pezzo renda di più.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Mossa migliore: {0} (valutazione {1}).</value></data>
+  <data name="hint.takeawayLabel" xml:space="preserve"><value>Da ricordare</value></data>
   <data name="threat.text" xml:space="preserve"><value>Minaccia: {0}</value></data>
   <data name="threat.mate" xml:space="preserve"><value>Minaccia: {0}, matto in {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Valutazione iniziale in corso: partita {0} di {1}</value></data>
