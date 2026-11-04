@@ -19,6 +19,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install tools
         run: brew install xcodegen stockfish
+      - name: Install Pillow
+        run: python3 -m pip install --user --break-system-packages pillow
       - name: Core tests
         run: SKIP_LLM=1 Tools/run-tests.sh
       - name: Updater tests
