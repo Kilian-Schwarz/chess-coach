@@ -107,7 +107,6 @@ internal sealed class SettingsWindow : Window
 
         Content = new ScrollViewer { Content = root, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
         PreviewKeyDown += OnKey;
-        SourceInitialized += (_, _) => Native.ExcludeFromCapture(new WindowInteropHelper(this).Handle);
         Closing += (_, e) => { e.Cancel = true; Hide(); };
         model.StateChanged += () => Dispatcher.BeginInvoke(RefreshStatus);
         Reload();

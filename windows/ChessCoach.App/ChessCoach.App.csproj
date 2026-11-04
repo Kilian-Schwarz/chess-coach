@@ -15,7 +15,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <StartupObject>ChessCoach.App.Program</StartupObject>
     <SatelliteResourceLanguages>en;de;fr;es;it;pt-BR;nl;pl;tr;ru;uk;zh-Hans;ja;ko</SatelliteResourceLanguages>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <TieredPGO>false</TieredPGO>
     <ServerGarbageCollector>false</ServerGarbageCollector>
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>

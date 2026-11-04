@@ -4,6 +4,15 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-04
+
+### Fixed
+- Windows windows are no longer marked as protected content, which fixes the DRM warning (error S:102) on Shadow and other remote desktops.
+- The board is now read directly from its window, so the overlay and panel never appear in the capture.
+
+### Added
+- The piece set is learned from positions up to four plies after the start.
+
 ## [0.1.0] - 2026-11-04
 
 First public release.

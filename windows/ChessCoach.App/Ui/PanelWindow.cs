@@ -139,7 +139,6 @@ internal sealed class PanelWindow : Window
         {
             _hwnd = new WindowInteropHelper(this).Handle;
             Native.SetExStyle(_hwnd, Native.GetExStyle(_hwnd) | Native.WS_EX_TOOLWINDOW | Native.WS_EX_NOACTIVATE);
-            Native.ExcludeFromCapture(_hwnd);
         };
         ApplyCollapsedVisuals();
         UpdateButtons();

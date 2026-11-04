@@ -71,7 +71,7 @@ internal sealed partial class AppModel
 
     private LocateOutcome ScanRegion(TrackedBoard tr, Rectangle region, PieceTemplates templates)
     {
-        var img = _capturer.Capture(region.X, region.Y, region.Width, region.Height);
+        var img = _capturer.CaptureWindow(ref region) ?? CaptureScreen(region.X, region.Y, region.Width, region.Height);
         if (img == null) return LocateOutcome.Failed;
         var expected = new BoardRect(tr.Board.X - region.X, tr.Board.Y - region.Y, tr.Board.Size);
         _fp.Compute(img, expected);
@@ -91,21 +91,51 @@ internal sealed partial class AppModel
         if (_lastMonitorKey != null) mons = mons.OrderBy(m => m.Key == _lastMonitorKey ? 0 : 1).ToList();
         _lastFullSearch = DateTime.UtcNow;
         bool any = false;
-        foreach (var m in mons)
+        bool hidden = _ui.Invoke(HideForCapture);
+        try
         {
-            var img = _capturer.Capture(m.X, m.Y, m.Width, m.Height);
-            if (img == null) continue;
-            any = true;
-            var scan = BoardScanner.Scan(img, templates);
-            if (scan == null) continue;
-            var b = scan.Board;
-            _tracked = new TrackedBoard(m, new BoardRect(m.X + b.X, m.Y + b.Y, b.Size));
-            _fp.Compute(img, b); _lastFp.CopyFrom(_fp); _hasLastFp = true;
-            _cached = scan;
-            return LocateOutcome.Changed;
+            foreach (var m in mons)
+            {
+                var img = _capturer.Capture(m.X, m.Y, m.Width, m.Height);
+                if (img == null) continue;
+                any = true;
+                var scan = BoardScanner.Scan(img, templates);
+                if (scan == null) continue;
+                var b = scan.Board;
+                _tracked = new TrackedBoard(m, new BoardRect(m.X + b.X, m.Y + b.Y, b.Size));
+                _fp.Compute(img, b); _lastFp.CopyFrom(_fp); _hasLastFp = true;
+                _cached = scan;
+                return LocateOutcome.Changed;
+            }
         }
+        finally { if (hidden) _ui.Invoke(RestoreAfterCapture); }
         _tracked = null; _cached = null; _hasLastFp = false;
         return any ? LocateOutcome.Lost : LocateOutcome.Failed;
+    }
+
+    private bool _overlayHidden, _panelHidden;
+
+    private bool HideForCapture()
+    {
+        _overlayHidden = _overlay.IsVisible;
+        _panelHidden = _panel.IsVisible;
+        if (_overlayHidden) _overlay.Visibility = System.Windows.Visibility.Hidden;
+        if (_panelHidden) _panel.Visibility = System.Windows.Visibility.Hidden;
+        if (_overlayHidden || _panelHidden) Native.DwmFlush();
+        return _overlayHidden || _panelHidden;
+    }
+
+    private void RestoreAfterCapture()
+    {
+        if (_overlayHidden) _overlay.Visibility = System.Windows.Visibility.Visible;
+        if (_panelHidden) _panel.Visibility = System.Windows.Visibility.Visible;
+    }
+
+    private RgbImage? CaptureScreen(int x, int y, int w, int h)
+    {
+        bool hidden = _ui.Invoke(HideForCapture);
+        try { return _capturer.Capture(x, y, w, h); }
+        finally { if (hidden) _ui.Invoke(RestoreAfterCapture); }
     }
 
     private async Task TickAsync(CancellationToken ct)

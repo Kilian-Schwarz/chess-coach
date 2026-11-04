@@ -28,7 +28,6 @@ internal static class Kit
             Title = title, Width = width, Height = height, WindowStartupLocation = WindowStartupLocation.CenterScreen,
             FontFamily = new System.Windows.Media.FontFamily("Segoe UI"),
         };
-        w.SourceInitialized += (_, _) => Native.ExcludeFromCapture(new WindowInteropHelper(w).Handle);
         w.Closing += (_, e) => { e.Cancel = true; w.Hide(); };
         return w;
     }

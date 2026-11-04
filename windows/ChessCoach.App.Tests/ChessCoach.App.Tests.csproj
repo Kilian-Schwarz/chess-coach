@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ChessCoach.App\Platform\Updater.cs" Link="Updater.cs" />
+    <Compile Include="..\ChessCoach.App\Platform\CaptureMath.cs" Link="CaptureMath.cs" />
     <Compile Include="..\ChessCoach.App\Model\AppPaths.cs" Link="AppPaths.cs" />
   </ItemGroup>
 </Project>

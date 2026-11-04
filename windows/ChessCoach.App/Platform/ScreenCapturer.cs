@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Runtime.InteropServices;
 using ChessCoach.Core;
 
@@ -15,6 +16,14 @@ internal sealed class ScreenCapturer : IDisposable
     private int _capW, _capH;
     private readonly RgbImage?[] _images = new RgbImage?[3];
     private int _nextSlot;
+    private IntPtr _target;
+    private Rectangle _targetBounds;
+    private int _pointX, _pointY;
+    private bool _failLogged;
+    private readonly uint _ownPid = (uint)Environment.ProcessId;
+    private readonly Native.WindowEnumProc _enumProc;
+
+    public ScreenCapturer() { _enumProc = VisitWindow; }
 
     public static List<MonitorInfo> Monitors()
     {
@@ -71,10 +80,63 @@ internal sealed class ScreenCapturer : IDisposable
         return created;
     }
 
-    public unsafe RgbImage? Capture(int x, int y, int w, int h)
+    public RgbImage? Capture(int x, int y, int w, int h)
     {
         if (w < 16 || h < 16 || !Ensure(w, h)) return null;
         if (!Native.BitBlt(_memDc, 0, 0, w, h, _screenDc, x, y, Native.SRCCOPY | Native.CAPTUREBLT)) return null;
+        return ToImage(0, 0, w, h);
+    }
+
+    public RgbImage? CaptureWindow(ref Rectangle region)
+    {
+        if (!ResolveTarget(region)) return null;
+        Native.GetWindowRect(_target, out var wr);
+        var windowRect = Rectangle.FromLTRB(wr.Left, wr.Top, wr.Right, wr.Bottom);
+        var crop = CaptureMath.WindowCrop(region, windowRect, out var clipped);
+        if (crop.Width < 16 || crop.Height < 16 || !Ensure(windowRect.Width, windowRect.Height)) return null;
+        if (!Native.PrintWindow(_target, _memDc, Native.PW_RENDERFULLCONTENT)) return Fail("PrintWindow failed");
+        var img = ToImage(crop.X, crop.Y, crop.Width, crop.Height);
+        if (CaptureMath.IsUniform(img.Pixels, crop.Width * crop.Height)) return Fail("PrintWindow returned a blank image");
+        region = clipped;
+        return img;
+    }
+
+    private RgbImage? Fail(string reason)
+    {
+        if (!_failLogged) { _failLogged = true; Log.Write($"Window capture unavailable ({reason}), using screen capture"); }
+        return null;
+    }
+
+    private bool ResolveTarget(Rectangle region)
+    {
+        int cx = region.X + region.Width / 2, cy = region.Y + region.Height / 2;
+        if (_target != IntPtr.Zero && Native.IsWindow(_target) && Native.IsWindowVisible(_target) && !Native.IsIconic(_target) &&
+            FrameBounds(_target) is { } fb && fb == _targetBounds && fb.Contains(cx, cy)) return true;
+        _target = IntPtr.Zero;
+        _pointX = cx; _pointY = cy;
+        Native.EnumWindows(_enumProc, IntPtr.Zero);
+        return _target != IntPtr.Zero;
+    }
+
+    private bool VisitWindow(IntPtr hwnd, IntPtr data)
+    {
+        if (!Native.IsWindowVisible(hwnd) || Native.IsIconic(hwnd)) return true;
+        Native.GetWindowThreadProcessId(hwnd, out var pid);
+        if (pid == _ownPid) return true;
+        if (Native.DwmGetWindowAttribute(hwnd, Native.DWMWA_CLOAKED, out int cloaked, sizeof(int)) == 0 && cloaked != 0) return true;
+        if (FrameBounds(hwnd) is not { } fb || !fb.Contains(_pointX, _pointY)) return true;
+        _target = hwnd; _targetBounds = fb;
+        return false;
+    }
+
+    private static Rectangle? FrameBounds(IntPtr hwnd)
+    {
+        if (Native.DwmGetWindowAttribute(hwnd, Native.DWMWA_EXTENDED_FRAME_BOUNDS, out Native.RECT r, Marshal.SizeOf<Native.RECT>()) != 0) return null;
+        return Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
+    }
+
+    private unsafe RgbImage ToImage(int sx, int sy, int w, int h)
+    {
         var img = ImageFor(w, h);
         byte* src = (byte*)_bits;
         int stride = _capW * 4;
@@ -82,7 +144,7 @@ internal sealed class ScreenCapturer : IDisposable
         {
             for (int row = 0; row < h; row++)
             {
-                byte* s = src + (long)row * stride;
+                byte* s = src + (long)(sy + row) * stride + sx * 4;
                 byte* d = dstBase + (long)row * w * 4;
                 for (int col = 0; col < w; col++, s += 4, d += 4)
                 {

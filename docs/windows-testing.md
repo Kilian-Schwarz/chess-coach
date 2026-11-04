@@ -32,7 +32,9 @@ Please report what fails with the Windows version, the screen setup (monitors, s
 
 ## 5. Screen sharing
 
-Share your screen in Teams, Zoom or OBS. The frame and the panel must not appear in the shared picture. Chess Coach excludes only its own capture; it does not hide from anything else on purpose, so tell us if you see the opposite.
+Share your screen in Teams, Zoom or OBS. The frame and the panel now appear in the shared picture on purpose: no window hides itself from capture. Chess Coach reads the board window directly, so its own frame never ends up in what it analyses.
+
+Works on streamed and remote desktops (Shadow, Remote Desktop): open Settings and start a game. No protected-content or DRM message appears, and the overlay is visible in the stream. Also try a board in a browser, in a desktop app and on a second monitor; if the log says "Window capture unavailable", the app fell back to screen capture and the overlay flickers briefly on each scan.
 
 ## 6. Language
 

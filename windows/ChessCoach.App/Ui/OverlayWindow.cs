@@ -29,7 +29,6 @@ internal sealed class OverlayWindow : Window
             _hwnd = new WindowInteropHelper(this).Handle;
             Native.SetExStyle(_hwnd, Native.GetExStyle(_hwnd) | Native.WS_EX_LAYERED | Native.WS_EX_TRANSPARENT |
                 Native.WS_EX_TOOLWINDOW | Native.WS_EX_NOACTIVATE | Native.WS_EX_TOPMOST);
-            if (!Native.ExcludeFromCapture(_hwnd)) Log.Write("Overlay: SetWindowDisplayAffinity unavailable (needs Windows 10 2004 or later)");
         };
     }
 
