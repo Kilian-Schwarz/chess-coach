@@ -108,9 +108,32 @@ public class RecognitionTests
         var relearned = PieceTemplates.Relearned(scan.Features);
         Assert.NotNull(relearned);
         Assert.True(relearned!.Value.WhiteAtBottom);
+        Assert.Equal(PieceColor.White, relearned.Value.Position!.Turn);
+        Assert.Equal("rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR", relearned.Value.Position!.Board.Fen(PieceColor.White).Split(' ')[0]);
         Assert.False(relearned.Value.Templates.FitsBadly(scan.Features));
         var res = BoardScanner.Scan(img, relearned.Value.Templates)!;
         Assert.Equal("rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR", TestSupport.PlacementOf(res.Screen, true));
+    }
+
+    [Fact]
+    public void ThemeChangeIsRelearnedFromTheTrackedPosition()
+    {
+        var start = Path.Combine(TestSupport.Root, "intern", "fixtures", "chesscom_start_white.png");
+        var themed = Path.Combine(TestSupport.Root, "intern", "fixtures", "chesscom_theme_d4_nf6_white.png");
+        if (!File.Exists(start) || !File.Exists(themed)) return;
+        var (templates, _) = TestSupport.Learn(start);
+        var img = TestSupport.LoadPng(themed);
+        var scan = BoardScanner.Analyze(img, BoardDetector.Detect(img)!.Value, templates);
+        Assert.True(templates.FitsBadly(scan.Features));
+        var tracked = ChessPosition.FromFen("rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2")!;
+        var wrong = tracked.Board.Clone();
+        wrong.Squares[4][4] = 'p';
+        Assert.Null(new PieceTemplates().LearnKnown(scan.Features, wrong, true));
+        var learned = new PieceTemplates();
+        Assert.True(learned.LearnKnown(scan.Features, tracked.Board, null));
+        var res = BoardScanner.Scan(img, learned)!;
+        Assert.Equal("rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR", TestSupport.PlacementOf(res.Screen, true));
+        Assert.False(learned.FitsBadly(res.Features));
     }
 
     [Fact]

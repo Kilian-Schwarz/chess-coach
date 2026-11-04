@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Fair-play</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach sert à s'entraîner : parties contre des bots, parties non classées, échiquier physique et analyse. Utiliser ses suggestions dans des parties en ligne classées enfreint les règles de fair-play de chess.com et de Lichess et peut entraîner la fermeture de votre compte.</value></data>
   <data name="update.available" xml:space="preserve"><value>La version {0} est disponible. Choisis « Rechercher des mises à jour » dans le menu de la zone de notification pour l’installer.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach tourne dans la zone de notification. Ouvre un échiquier dans le navigateur, active « Actif » dans le menu et montre une fois la position de départ pour que l’app apprenne les pièces.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Réfléchissez un instant, puis appuyez à nouveau.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Aucune menace immédiate trouvée.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Plus</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Bienvenue dans Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach observe un échiquier sur votre écran et vous aide à progresser avec des indices, des évaluations de coups et un bilan après chaque partie. Tout est analysé sur ce PC.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Ouvrez un site ou une app d’échecs et lancez une partie.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Activez Chess Coach dans le menu de la zone de notification (« {0} »).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Affichez une fois la position de départ pour que l’app apprenne l’aspect de vos pièces. Si le jeu de pièces change, choisissez « Réapprendre les pièces ».</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach ne joue jamais à votre place. La langue et l’IA facultative pour les explications se trouvent dans Réglages.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Compris</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Activer</value></data>
+  <data name="training.after" xml:space="preserve"><value>Ensuite : {0}</value></data>
 </root>

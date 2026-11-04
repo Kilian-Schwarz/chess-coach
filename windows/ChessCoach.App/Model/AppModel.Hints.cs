@@ -1,4 +1,5 @@
 using System.Drawing;
+using ChessCoach.App.Platform;
 using ChessCoach.App.Ui;
 using ChessCoach.Core;
 
@@ -30,7 +31,12 @@ internal sealed partial class AppModel
     private void OnPositionChanged(GameUpdate? previous, GameUpdate u, bool whiteAtBottom, PieceColor me)
     {
         _sideOverride = null;
-        if (u.Change == GameChange.NewGame) _reviewCard = null;
+        if (u.Change == GameChange.NewGame) { _reviewCard = null; _overlayEnd = null; }
+        if (u.Change == GameChange.Moves && _overlayEnd is { } ended)
+        {
+            _overlayEnd = null;
+            if (u.NewMoves[0].FenBefore == ended.Fen) RetractEnd(ended, u.NewMoves.Count);
+        }
         if (u.Change == GameChange.Takeback) ReconcileBook();
         var moves = _record.Moves;
         if (_reviewCard is { ReviewPly: int ply } && !(ply >= 1 && ply <= moves.Count && MoveKey(moves[ply - 1]) == _reviewCard.Id))
@@ -63,14 +69,36 @@ internal sealed partial class AppModel
         ConfirmMoves(carried.Where(InRecord).ToList(), me);
         foreach (var pm in update.Reviewable) _reviewableKeys.Add(MoveKey(pm));
         var fresh = update.NewMoves.ToList();
+        _pendingFrames = 0;
         if (fresh.Count > 0)
         {
-            var marked = marking.Marked.Select(m => UciMove.SquareName(m.File, m.Rank)).ToHashSet();
-            var last = fresh[^1];
-            if (marked.Contains(last.Uci[..2]) && marked.Contains(last.Uci.Substring(2, 2))) ConfirmMoves(fresh, me);
+            if (ReviewConfirmation.IsConfirmed(Native.PrimaryButtonDown(), AllMarked(fresh, marking), 0)) ConfirmMoves(fresh, me);
             else _pendingMoves = fresh;
         }
         if (_pendingMoves.Count == 0) _reviewableKeys.Clear();
+    }
+
+    private int _pendingFrames;
+
+    private static bool AllMarked(List<PlayedMove> moves, LastMoveMarking marking)
+    {
+        var marked = marking.Marked.Select(m => UciMove.SquareName(m.File, m.Rank)).ToHashSet();
+        return moves.All(pm => marked.Contains(pm.Uci[..2]) && marked.Contains(pm.Uci.Substring(2, 2)));
+    }
+
+    private void ConfirmPending(LastMoveMarking marking, PieceColor me)
+    {
+        var still = _pendingMoves.Where(InRecord).ToList();
+        bool mouseDown = Native.PrimaryButtonDown();
+        _pendingFrames = ReviewConfirmation.NextFrames(_pendingFrames, mouseDown);
+        if (still.Count > 0 && !ReviewConfirmation.IsConfirmed(mouseDown, AllMarked(still, marking), _pendingFrames))
+        {
+            _pendingMoves = still;
+            return;
+        }
+        _pendingMoves = new();
+        ConfirmMoves(still, me);
+        _reviewableKeys.Clear();
     }
 
     private void ConfirmMoves(List<PlayedMove> moves, PieceColor me)
@@ -128,6 +156,7 @@ internal sealed partial class AppModel
         _reviewCts?.Cancel();
         var req = ReviewRequestFor(review, pm);
         _lastReviewReq = req;
+        _lastReviewSource = (review, pm);
         _reviewCts = ExplainReview(id, req);
     }
 
@@ -168,12 +197,23 @@ internal sealed partial class AppModel
 
     private string? _threatShownFen;
 
-    private bool ThreatVisible => Settings.ShowThreats && _threat != null
-        && (_threatShownFen == _hintFen || Curriculum.ShowThreatAutomatically(Active.GamesPlayed, Curriculum.Value(Active.Skills, Skill.Threats)));
+    private bool ThreatShown => Settings.ShowThreats && _hint is { } h
+        && (EffectiveShowBest || _hintLevel >= Curriculum.FirstHintLevel || _threatShownFen == _hintFen
+            || (ProfileFor(h.ToMove, h.Me) ?? Active).ShowsThreatAutomatically);
+
+    private bool ThreatVisible => _threat != null && ThreatShown;
+
+    private CoachCard? ThreatCard()
+    {
+        if (!ThreatShown) return null;
+        if (_threat is { } th) return new CoachCard("threat|" + th.Text, CardKind.Info, th.Text);
+        return _threatShownFen == _hintFen && _hintFen != null
+            ? new CoachCard("nothreat|" + _hintFen, CardKind.Info, Loc.T("threat.none")) : null;
+    }
 
     public void ShowThreat()
     {
-        if (!IsActive || _hint is not { } ctx || _threat == null) return;
+        if (!IsActive || _hint is not { } ctx) return;
         _threatShownFen = _hintFen;
         RenderHints(ctx);
         UpdatePanel();
@@ -182,6 +222,15 @@ internal sealed partial class AppModel
     public void NextHint()
     {
         if (!IsActive || _hint is not { } ctx || EffectiveShowBest || _hintLevel >= PanelWindow.HintMax) return;
+        double elapsed = (DateTime.UtcNow - _hintFirstSeen.GetValueOrDefault(ctx.Fen, DateTime.MinValue)).TotalSeconds;
+        var prof = ProfileFor(ctx.ToMove, ctx.Me) ?? Active;
+        if (Curriculum.NeedsThinkDelay(_hintLevel, elapsed, AdaptationFor(prof).ThinkSeconds, _hintNudged.Contains(ctx.Fen)))
+        {
+            _hintNudged.Add(ctx.Fen);
+            if (_suggestionCard != null) _suggestionCard = _suggestionCard with { Note = Loc.T("hint.thinkFirst") };
+            UpdatePanel();
+            return;
+        }
         _hintLevel++;
         _panel.HintLevel = _hintLevel;
         _lastChangeAt = DateTime.UtcNow;
@@ -189,9 +238,17 @@ internal sealed partial class AppModel
         RenderHints(ctx);
     }
 
+    private readonly Dictionary<string, DateTime> _hintFirstSeen = new();
+    private readonly HashSet<string> _hintNudged = new();
+
     private void RenderHints(HintContext ctx)
     {
         int level = EffectiveShowBest ? 4 : _hintLevel;
+        if (!_hintFirstSeen.ContainsKey(ctx.Fen))
+        {
+            if (_hintFirstSeen.Count > 200) { _hintFirstSeen.Clear(); _hintNudged.Clear(); }
+            _hintFirstSeen[ctx.Fen] = DateTime.UtcNow;
+        }
         var from = Placement.ScreenSquare(ctx.Move.FromFile, ctx.Move.FromRank, ctx.WhiteAtBottom);
         var to = Placement.ScreenSquare(ctx.Move.ToFile, ctx.Move.ToRank, ctx.WhiteAtBottom);
         string prefix = Settings.DuoTraining ? ctx.Who + ": " : "";
@@ -294,7 +351,11 @@ internal sealed partial class AppModel
         }
         _suggestionCard = card with { IsLoading = true };
         _suggestionCts?.Cancel();
-        _suggestionCts = Explain(req.System, req.User, req.MaxTokens, (text, done) =>
+        _suggestionCts = ExplainSuggestion(fen, req);
+    }
+
+    private CancellationTokenSource ExplainSuggestion(string fen, Coach.ExplanationRequest req) =>
+        Explain(req.System, req.User, req.MaxTokens, (text, done) =>
         {
             if (_suggestionCard?.Id != fen) return;
             _suggestionCard = _suggestionCard with { Text = text, IsLoading = !done, AllowFeedback = done, StyleKey = CurrentStyleKey };
@@ -305,6 +366,34 @@ internal sealed partial class AppModel
             _suggestionCard = _suggestionCard with { IsLoading = false, Note = msg };
             UpdatePanel();
         });
+
+    private (MoveReview Review, PlayedMove Move)? _lastReviewSource;
+
+    private void More(CoachCard card)
+    {
+        if (!IsActive || !LlmConfigured || card.StyleKey == null || !_styles.TryGetValue(card.StyleKey, out var style)) return;
+        if (style.Length.Longer() is not { } longer) return;
+        var prof = _lastStyleProfile ?? Active;
+        var length = (StyleLength)Math.Max((int)prof.Style.Length, (int)longer);
+        prof.RecordFeedback(ExplanationFeedback.TooShort, style);
+        SaveProfile(prof);
+        if (card.Kind == CardKind.Review && _reviewCard?.Id == card.Id && _lastReviewSource is { } src)
+        {
+            var req = ReviewRequestFor(src.Review, src.Move, length);
+            _lastReviewReq = req;
+            _reviewCard = _reviewCard with { Text = "", Note = null, IsLoading = true, AllowFeedback = false };
+            _reviewCts?.Cancel();
+            UpdatePanel();
+            _reviewCts = ExplainReview(card.Id, req);
+        }
+        else if (card.Kind == CardKind.Suggestion && _suggestionCard?.Id == card.Id && _hint is { } ctx)
+        {
+            if (SuggestionRequestFor(ctx, length) is not { } req) return;
+            _suggestionCard = _suggestionCard with { Text = "", Note = null, IsLoading = true, AllowFeedback = false };
+            _suggestionCts?.Cancel();
+            UpdatePanel();
+            _suggestionCts = ExplainSuggestion(card.Id, req);
+        }
     }
 
     private static List<string> Alternatives(EngineResult r, Placement placement)
@@ -353,7 +442,6 @@ internal sealed partial class AppModel
             UpdatePanel();
             return;
         }
-        RegisterQuestion();
         var color = _hint?.ToMove ?? _sideToMove ?? _lastMe ?? PieceColor.White;
         string? score = null, best = null;
         if (_hint is { } ctx)
@@ -421,19 +509,19 @@ internal sealed partial class AppModel
             if (reviewOld)
             {
                 if (_suggestionCard != null) cards.Add(_suggestionCard);
-                if (_threat is { } th0 && ThreatVisible) cards.Add(new CoachCard("threat|" + th0.Text, CardKind.Info, th0.Text));
+                if (ThreatCard() is { } tc0) cards.Add(tc0);
                 if (_answerCard != null) cards.Add(_answerCard);
                 cards.Add(review!);
             }
             else
             {
-                if (_threat is { } th && ThreatVisible) cards.Add(new CoachCard("threat|" + th.Text, CardKind.Info, th.Text));
+                if (ThreatCard() is { } tc) cards.Add(tc);
                 if (_suggestionCard != null) cards.Add(_suggestionCard);
                 if (_answerCard != null) cards.Add(_answerCard);
             }
             if (_hint == null && cards.Count == 0 && _update == null) { _panel.HidePanel(); return; }
             _panel.CanFinish = CanFinish;
-            _panel.CanShowThreat = _threat != null && Settings.ShowThreats && !ThreatVisible;
+            _panel.CanShowThreat = _hint != null && Settings.ShowThreats && !ThreatShown;
             _panel.FocusText = PanelSubtitle();
             _panel.ShowNextTo(_boardRect, cards);
         }, System.Windows.Threading.DispatcherPriority.Background);

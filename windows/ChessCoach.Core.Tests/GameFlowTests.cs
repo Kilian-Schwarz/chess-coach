@@ -62,6 +62,17 @@ public class GameFlowTests
     }
 
     [Fact]
+    public void CoverageConstantsMatchSharedVectors()
+    {
+        var cov = Flow.GetProperty("gameEnd").GetProperty("coverage");
+        Assert.Equal(BoardReadability.CoveredLimit, cov.GetProperty("coveredLimit").GetInt32());
+        Assert.Equal(BoardReadability.LuminanceShift, cov.GetProperty("deviation").GetDouble());
+        Assert.Equal(BoardReadability.Distance, cov.GetProperty("distance").GetDouble());
+        Assert.Equal(BoardReadability.RingTolerance, cov.GetProperty("ringTolerance").GetDouble());
+        Assert.Equal(BoardReadability.RingShare, cov.GetProperty("ringShare").GetDouble());
+    }
+
+    [Fact]
     public void GameEndObservations()
     {
         var ge = Flow.GetProperty("gameEnd");

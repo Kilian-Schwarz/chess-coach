@@ -86,6 +86,11 @@ final class LearningStore: ObservableObject {
         games.sort { $0.date > $1.date }
     }
 
+    func removeGame(id: String) {
+        storage.deleteGame(id: id)
+        games.removeAll { $0.id == id }
+    }
+
     func pgn(for game: GameReport) -> String? {
         let folder = storage.root.appendingPathComponent("games", isDirectory: true)
         let files = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)) ?? []

@@ -159,6 +159,29 @@ struct PieceTemplates: Codable {
         return found
     }
 
+    mutating func learnKnown(_ features: [[SquareFeature]], board: Placement, preferWhiteAtBottom: Bool?) -> Bool? {
+        let first = preferWhiteAtBottom ?? true
+        for whiteAtBottom in [first, !first] {
+            var white: [Double] = [], black: [Double] = []
+            var fits = true
+            for r in 0..<8 { for c in 0..<8 {
+                let (file, rank) = Placement.chessSquare(col: c, row: r, whiteAtBottom: whiteAtBottom)
+                let piece = board.squares[rank][file]
+                let occupied = features[r][c].fill > PieceTemplates.occupiedFill
+                if occupied != (piece != nil) { fits = false }
+                if let piece, occupied { if piece.isUppercase { white.append(features[r][c].meanLum) } else { black.append(features[r][c].meanLum) } }
+            } }
+            guard fits, !white.isEmpty, !black.isEmpty,
+                  white.reduce(0, +) / Double(white.count) > black.reduce(0, +) / Double(black.count) else { continue }
+            learn(features) { r, c in
+                let (file, rank) = Placement.chessSquare(col: c, row: r, whiteAtBottom: whiteAtBottom)
+                return board.squares[rank][file]
+            }
+            return whiteAtBottom
+        }
+        return nil
+    }
+
     private mutating func learn(_ features: [[SquareFeature]], label: (Int, Int) -> Character?) {
         var t: [String: [SquareFeature]] = [:]
         for r in 0..<8 {

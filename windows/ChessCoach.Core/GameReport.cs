@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ChessCoach.Core;
 
-public sealed record ReviewedMove(string Color, string Uci, string? San, string FenBefore, int ValueBefore, int ValueAfter, string? BestUci);
+public sealed record ReviewedMove(string Color, string Uci, string? San, string FenBefore, int ValueBefore, int ValueAfter, string? BestUci, int Hint = 0);
 
 public sealed class MoveRecord
 {
@@ -16,6 +16,7 @@ public sealed class MoveRecord
     public double WinAfter { get; set; }
     public int Loss { get; set; }
     public int RatedLoss { get; set; }
+    public int Hint { get; set; }
     public double Accuracy { get; set; }
 
     public string Rating { get; set; } = "";
@@ -34,6 +35,7 @@ public sealed class SideSummary
     public int Inaccuracies { get; set; }
     public int Mistakes { get; set; }
     public int Blunders { get; set; }
+    public double AssistedShare { get; set; }
 }
 
 public sealed class KeyMoment
@@ -66,12 +68,12 @@ public sealed class GameReport
     public string? EndReason { get; set; }
 
     public const int BookMoves = 6;
-    public const int EvalClamp = 600;
+    public const int EvalClamp = 600, AssistedHintLevel = 3;
 
     public SideSummary Side(string color) => color == "w" ? White : Black;
 
-    public static MoveRating RatingOf(int loss, string? bestUci, string uci) =>
-        MoveRatingExt.From(loss, bestUci != null && bestUci == uci);
+    public static MoveRating RatingOf(int valueBefore, int valueAfter, string? bestUci, string uci) =>
+        MoveRatingExt.From(valueBefore, valueAfter, bestUci != null && bestUci == uci);
 
     public static GameReport Build(IReadOnlyList<ReviewedMove> reviewed, string? id = null, DateTime? date = null,
         string? whiteProfileId = null, string? blackProfileId = null, string? opening = null)
@@ -92,13 +94,13 @@ public sealed class GameReport
             int loss = Core.Accuracy.CpLoss(m.ValueBefore, m.ValueAfter);
             int ratedLoss = Core.Accuracy.CpLoss(Math.Clamp(m.ValueBefore, -EvalClamp, EvalClamp), Math.Clamp(m.ValueAfter, -EvalClamp, EvalClamp));
             double acc = Core.Accuracy.MoveAccuracy(wb, wa);
-            var rating = RatingOf(loss, m.BestUci, m.Uci);
+            var rating = RatingOf(m.ValueBefore, m.ValueAfter, m.BestUci, m.Uci);
             string? san = m.San;
             if (san == null && mv != null && ChessPosition.FromFen(m.FenBefore) is { } cp) san = Core.San.Of(mv.Value, cp);
             records.Add(new MoveRecord
             {
                 Ply = i + 1, Color = m.Color, Uci = m.Uci, San = san, Text = text, WinBefore = wb, WinAfter = wa,
-                Loss = loss, RatedLoss = ratedLoss, Accuracy = acc, Rating = rating.Raw(), BestText = bestText,
+                Loss = loss, RatedLoss = ratedLoss, Hint = m.Hint, Accuracy = acc, Rating = rating.Raw(), BestText = bestText,
             });
             double drop = wb - wa;
             if (drop >= 10 && place != null && mv != null)
@@ -130,9 +132,11 @@ public sealed class GameReport
             var s = new SideSummary { Moves = mine.Count };
             s.Accuracy = Core.Accuracy.GameAccuracy(mine.Select(r => r.Accuracy).ToList());
             s.Acpl = Core.Accuracy.Acpl(mine.Select(r => r.Loss).ToList());
-            var rated = mine.Count > BookMoves + PlayerProfile.MinRatedMoves / 2 ? mine.Skip(BookMoves).ToList() : mine;
+            int skip = mine.Count > BookMoves + PlayerProfile.MinRatedMoves / 2 ? BookMoves : 0;
+            var rated = mine.Where(r => r.Hint < AssistedHintLevel).Skip(skip).ToList();
             s.RatedMoves = mine.Count;
-            s.Performance = mine.Count == 0 ? 0 : Core.Accuracy.PerformanceRating(Core.Accuracy.Acpl(rated.Select(r => r.RatedLoss).ToList()));
+            s.Performance = rated.Count == 0 ? 0 : Core.Accuracy.PerformanceRating(Core.Accuracy.Acpl(rated.Select(r => r.RatedLoss).ToList()));
+            s.AssistedShare = mine.Count == 0 ? 0 : mine.Sum(r => r.Hint >= AssistedHintLevel ? 1.0 : r.Hint > 0 ? 0.5 : 0) / mine.Count;
             foreach (var r in mine)
                 switch (MoveRatingExt.FromRaw(r.Rating))
                 {

@@ -90,6 +90,15 @@ public sealed class Storage
         return path;
     }
 
+    public void DeleteGame(string id)
+    {
+        var folder = Path.Combine(Root, "games");
+        if (!Directory.Exists(folder)) return;
+        foreach (var f in Directory.EnumerateFiles(folder))
+            if (Path.GetFileNameWithoutExtension(f).EndsWith("-" + id, StringComparison.Ordinal))
+                try { File.Delete(f); } catch (IOException) { }
+    }
+
     public List<GameReport> LoadGames(int limit = 50)
     {
         var folder = Path.Combine(Root, "games");

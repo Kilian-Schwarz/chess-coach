@@ -507,6 +507,11 @@ public class LearningTests
             Assert.Equal("2027-01-15-g1.json", Path.GetFileName(path));
             Assert.True(File.Exists(Path.ChangeExtension(path, ".pgn")));
             Assert.Equal(ChessCoachJson.Serialize(rep), ChessCoachJson.Serialize(store.LoadGames()[0]));
+            store.Save(GameReport.Build(Array.Empty<ReviewedMove>(), "g2", T0), "1. d4 *");
+            store.DeleteGame("g1");
+            Assert.False(File.Exists(path));
+            Assert.False(File.Exists(Path.ChangeExtension(path, ".pgn")));
+            Assert.Equal("g2", Assert.Single(store.LoadGames()).Id);
             Assert.EndsWith("ChessCoach", Storage.DefaultRoot);
         }
         finally { if (Directory.Exists(dir)) Directory.Delete(dir, true); }

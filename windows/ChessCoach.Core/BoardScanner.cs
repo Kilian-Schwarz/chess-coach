@@ -7,6 +7,32 @@ public sealed class ScanResult
 
     public char?[][] Screen { get; init; } = Array.Empty<char?[]>();
     public bool LooksLikeStart { get; init; }
+
+    public const int MaxUnclassified = 6;
+
+    public int UnclassifiedOccupied
+    {
+        get
+        {
+            int n = 0;
+            for (int r = 0; r < 8; r++)
+                for (int c = 0; c < 8; c++)
+                    if (Features[r][c].Fill > PieceTemplates.OccupiedFill && Screen[r][c] == null) n++;
+            return n;
+        }
+    }
+
+    public bool TooManyUnclassified => UnclassifiedOccupied > MaxUnclassified;
+}
+
+public static class ReviewConfirmation
+{
+    public const int StableFrames = 4;
+
+    public static int NextFrames(int frames, bool mouseDown) => mouseDown ? 0 : frames + 1;
+
+    public static bool IsConfirmed(bool mouseDown, bool allMarked, int frames) =>
+        !mouseDown && (allMarked || frames >= StableFrames);
 }
 
 public static class BoardScanner

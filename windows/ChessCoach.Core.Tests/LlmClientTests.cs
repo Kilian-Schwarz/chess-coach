@@ -98,7 +98,16 @@ public class LlmClientTests : IDisposable
     {
         LlmClient.Http = new HttpClient(new Handler(_ => Json("boom", HttpStatusCode.InternalServerError)));
         var e = await Assert.ThrowsAsync<LlmException>(() => LlmClient.ExplainAsync("http://x/v1", "", "m", "s", "u"));
-        Assert.Equal("Server returned error 500. boom", e.Message);
+        Assert.Equal("The server reported error 500.", e.Message);
+        Assert.DoesNotContain("boom", e.Message);
+    }
+
+    [Fact]
+    public async Task NotFoundHasItsOwnText()
+    {
+        LlmClient.Http = new HttpClient(new Handler(_ => Json("{}", HttpStatusCode.NotFound)));
+        var e = await Assert.ThrowsAsync<LlmException>(() => LlmClient.ExplainAsync("http://x/v1", "", "m", "s", "u"));
+        Assert.Equal("The server did not find the address or model (error 404).", e.Message);
     }
 
     static async Task<bool> LiveReachable()

@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Чесна гра</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach створено для тренування: партії проти ботів, партії без рейтингу, жива дошка й аналіз. Підказки в рейтингових онлайн-партіях порушують правила чесної гри chess.com та Lichess, і акаунт можуть заблокувати.</value></data>
   <data name="update.available" xml:space="preserve"><value>Доступна версія {0}. Щоб встановити, обери «Перевірити оновлення» у меню в треї.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach працює в треї. Відкрий шахівницю в браузері, увімкни «Увімкнено» у меню треї та один раз покажи початкову позицію, щоб застосунок вивчив фігури.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Подумайте хвилинку, потім натисніть ще раз.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Безпосередньої загрози не знайдено.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Докладніше</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Ласкаво просимо до Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach стежить за шаховою дошкою на екрані й допомагає вдосконалюватися: підказки, оцінки ходів і розбір після кожної партії. Увесь аналіз виконується на цьому ПК.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Відкрийте шаховий сайт або застосунок і почніть партію.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Увімкніть Chess Coach у меню значка в треї («{0}»).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Один раз покажіть початкову позицію, щоб застосунок запам’ятав вигляд ваших фігур. Якщо набір фігур зміниться, оберіть «Заново навчити фігури».</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach ніколи не робить хід за вас. Мову та необов’язковий ШІ для пояснень можна знайти в налаштуваннях.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Зрозуміло</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Увімкнути</value></data>
+  <data name="training.after" xml:space="preserve"><value>Потім: {0}</value></data>
 </root>

@@ -364,14 +364,22 @@ internal sealed class PanelWindow : Window
             var b = new Button { Content = text, Style = Theme.SmallButton, Margin = new Thickness(0, 0, 6, 0) };
             b.Click += (_, _) =>
             {
-                _votes[card.Id] = text;
-                if (_votes.Count > 60) _votes.Remove(_votes.Keys.First());
+                if (key != "more")
+                {
+                    _votes[card.Id] = text;
+                    if (_votes.Count > 60) _votes.Remove(_votes.Keys.First());
+                }
                 FeedbackGiven?.Invoke(card, key);
                 RebuildCards();
             };
             row.Children.Add(b);
         }
-        Add(Loc.T("feedback.long"), "long"); Add(Loc.T("feedback.short"), "short"); Add(Loc.T("feedback.helpful"), "helpful");
+        var length = ExplanationStyle.LengthFromKey(card.StyleKey);
+        bool styled = card.Kind is CardKind.Review or CardKind.Suggestion && length != null;
+        if (styled && length!.Value.Longer() != null) Add(Loc.T("feedback.more"), "more");
+        if (length == null || length.Value.Shorter() != null) Add(Loc.T("feedback.long"), "long");
+        if (!styled) Add(Loc.T("feedback.short"), "short");
+        Add(Loc.T("feedback.helpful"), "helpful");
         return row;
     }
 }

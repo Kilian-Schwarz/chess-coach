@@ -33,7 +33,8 @@ internal sealed partial class AppModel
             SetLift(null, null);
             return true;
         }
-        var unsafeSquares = lifted.UnsafeSquares(last);
+        bool faded = _hintLevel == 0 && (ProfileFor(last.Turn, me)?.SupportFaded ?? false);
+        var unsafeSquares = faded ? new() : lifted.UnsafeSquares(last);
         var marks = unsafeSquares
             .Select(u => Placement.ScreenSquare(u.File, u.Rank, whiteAtBottom))
             .Select(s => new OverlayState.Sq(s.Col, s.Row)).ToArray();

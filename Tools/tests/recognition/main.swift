@@ -164,6 +164,38 @@ func runRelearn(_ name: String, oldTheme: String, image: String, expected: Strin
     check(!templates.fitsBadly(res), "\(name): still a bad fit after relearning")
 }
 
+func runRelearnKnown() {
+    print("--- relearn from the tracked position")
+    let midFen = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R"
+    let themed = "\(boards)/themed_mid_white.png"
+    let script = "import sys; sys.path.insert(0, 'Tools'); import make_board as m; m.LIGHT=(240,217,181); m.DARK=(181,136,99); " +
+        "m.GLYPH_SOLID=dict(m.GLYPH_OUTLINE); m.render('\(midFen)', True, '\(themed)')"
+    let proc = Process()
+    proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+    proc.arguments = ["python3", "-c", script]
+    try! proc.run(); proc.waitUntilExit()
+    check(proc.terminationStatus == 0, "themed render failed")
+    let start = load("\(boards)/start_white.png")
+    guard let rect = BoardDetector.detect(start), let tracked = ChessPosition(fen: midFen + " w kq - 0 7") else { check(false, "relearn known: setup"); return }
+    var templates = PieceTemplates()
+    templates.learnStart(BoardScanner.analyze(start, board: rect, templates: templates).features)
+    let img = load(themed)
+    guard let scan = BoardScanner.scan(img, templates: templates) else { check(false, "relearn known: no board"); return }
+    check(templates.fitsBadly(scan), "relearn known: bad fit not detected, read \(placement(of: scan, whiteBottom: true))")
+    var wrong = tracked.board
+    wrong.squares[4][4] = nil
+    var t0 = PieceTemplates()
+    check(t0.learnKnown(scan.features, board: wrong, preferWhiteAtBottom: true) == nil, "relearn known: occupancy mismatch accepted")
+    var t = PieceTemplates()
+    check(t.learnKnown(scan.features, board: tracked.board, preferWhiteAtBottom: nil) == true, "relearn known: orientation")
+    guard let res = BoardScanner.scan(img, templates: t) else { return }
+    let got = placement(of: res, whiteBottom: true)
+    check(got == midFen, "relearn known: placement \(got)")
+    check(!t.fitsBadly(res), "relearn known: still a bad fit")
+}
+
+runRelearnKnown()
+
 let privateDir = "intern/fixtures"
 if FileManager.default.fileExists(atPath: privateDir) {
     runStartFixture("chess.com", image: "\(privateDir)/chesscom_start_white.png", whiteBottom: true)

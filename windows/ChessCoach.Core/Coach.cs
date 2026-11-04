@@ -24,14 +24,20 @@ public static class MoveRatingExt
 
     public static string Label(this MoveRating r, CultureInfo? culture = null) => CoreLocale.Get("rating." + r.Raw(), culture);
 
-    public static MoveRating From(int loss, bool wasBest)
+    public const double BestDrop = 2, InaccuracyDrop = 10, MistakeDrop = 20, BlunderDrop = 30;
+
+    public static MoveRating From(double winBefore, double winAfter, bool wasBest)
     {
-        if (wasBest || loss <= 15) return MoveRating.Best;
-        if (loss <= 60) return MoveRating.Good;
-        if (loss <= 130) return MoveRating.Inaccuracy;
-        if (loss <= 300) return MoveRating.Mistake;
+        double drop = winBefore - winAfter;
+        if (wasBest || drop <= BestDrop) return MoveRating.Best;
+        if (drop < InaccuracyDrop) return MoveRating.Good;
+        if (drop < MistakeDrop) return MoveRating.Inaccuracy;
+        if (drop < BlunderDrop) return MoveRating.Mistake;
         return MoveRating.Blunder;
     }
+
+    public static MoveRating From(int valueBefore, int valueAfter, bool wasBest) =>
+        From(Accuracy.WinChance(valueBefore), Accuracy.WinChance(valueAfter), wasBest);
 }
 
 public sealed record ReviewTexts(string Played, string? Best, string BestScore, string PlayedScore, string ReplyLine);
@@ -70,7 +76,7 @@ public static class Coach
             next.DescribeLine(pv, 4, culture));
         var ui = Texts(null);
         return new MoveReview(prev, played, ui.Played, best, ui.Best, ui.BestScore, ui.PlayedScore,
-            MoveRatingExt.From(loss, best?.Uci == played.Uci), loss, ui.ReplyLine, mover, Texts(CoreLocale.English));
+            MoveRatingExt.From(beforeResult.Value, playedValue, best?.Uci == played.Uci), loss, ui.ReplyLine, mover, Texts(CoreLocale.English));
     }
 
     public sealed record ExplanationRequest(string System, string User, int MaxTokens)

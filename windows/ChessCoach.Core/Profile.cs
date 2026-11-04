@@ -52,6 +52,8 @@ public sealed class PlayerProfile
     public string Focus { get => _focus ?? Curriculum.Focus(Skills).Raw(); set => _focus = value; }
     private string? _focus;
 
+    public string? PinnedFocus { get; set; }
+
     public double LearningSpeed { get; set; } = 1.0;
     public DateTime? LearningSpeedAdjustedAt { get; set; }
     public HintStats HintStats { get; set; } = new();
@@ -93,21 +95,26 @@ public sealed class PlayerProfile
 
     [JsonIgnore] public Skill FocusSkill => SkillExt.TryParse(Focus, out var s) ? s : Skill.PieceSafety;
 
-    public void Observe(Skill skill, double value)
+    [JsonIgnore] public bool ShowsThreatAutomatically => Curriculum.ShowThreatAutomatically(GamesPlayed, Curriculum.Value(Skills, Skill.Threats));
+
+    [JsonIgnore] public bool SupportFaded => Curriculum.SupportFaded(Skills, SkillCounts);
+
+    public void Observe(Skill skill, double value, double gainWeight = 1)
     {
         double v = Math.Min(1, Math.Max(0, value));
         double old = Skills.TryGetValue(skill.Raw(), out var o) ? o : 0.5;
         int n = SkillCounts.GetValueOrDefault(skill.Raw());
         double alpha = Math.Max(AlphaSkill, 1.0 / (n + 2));
+        if (v > old) alpha *= gainWeight;
         Skills[skill.Raw()] = (1 - alpha) * old + alpha * v;
         SkillCounts[skill.Raw()] = n + 1;
     }
 
     public bool HasEnoughData(Skill skill) => SkillCounts.GetValueOrDefault(skill.Raw()) >= MinSkillObservations;
 
-    public void Apply(MoveAnalysis analysis)
+    public void Apply(MoveAnalysis analysis, double gainWeight = 1)
     {
-        foreach (var o in analysis.Observations) Observe(o.Skill, o.Value);
+        foreach (var o in analysis.Observations) Observe(o.Skill, o.Value, gainWeight);
         if (analysis.MistakeType is { } m && analysis.Example is { } ex) RecordMistake(m, ex);
         UpdateFocus();
     }
@@ -139,8 +146,15 @@ public sealed class PlayerProfile
         HintStats.LevelUses[Math.Min(4, Math.Max(0, level))] += 1;
     }
 
+    public void PinFocus(Skill skill)
+    {
+        PinnedFocus = skill.Raw();
+        _focus = PinnedFocus;
+    }
+
     public void UpdateFocus()
     {
+        if (PinnedFocus != null) { _focus = PinnedFocus; return; }
         var candidate = Curriculum.Focus(Skills);
         if (_focus == null || !SkillExt.TryParse(_focus, out var current) || candidate == current) { _focus = candidate.Raw(); return; }
         bool earlier = Array.FindIndex(Curriculum.Path, x => x.Skill == candidate) < Array.FindIndex(Curriculum.Path, x => x.Skill == current);
@@ -170,10 +184,11 @@ public sealed class PlayerProfile
         }
     }
 
-    public double CompleteGame(double performance, DateTime? date = null, int ratedMoves = MinRatedMoves)
+    public double CompleteGame(double performance, DateTime? date = null, int ratedMoves = MinRatedMoves, double assistedShare = 0)
     {
         if (ratedMoves < MinRatedMoves) return Rating;
         GamesPlayed += 1;
+        PinnedFocus = null;
         if (IsPlacing)
         {
             PlacementGames += 1;
@@ -181,7 +196,12 @@ public sealed class PlayerProfile
                 .Append((Performance: performance, Weight: ratedMoves)).ToList();
             Rating = games.Sum(g => g.Performance * g.Weight) / games.Sum(g => g.Weight);
         }
-        else Rating += Accuracy.RatingDelta(Rating, performance, GamesPlayed);
+        else
+        {
+            double delta = Accuracy.RatingDelta(Rating, performance, GamesPlayed);
+            if (delta > 0) delta *= 1 - Math.Min(1, Math.Max(0, assistedShare));
+            Rating += delta;
+        }
         Level = PlayerLevelExt.FromRating(Rating);
         RatingHistory.Add(new RatingEntry { Date = date ?? DateTime.UtcNow, Rating = Rating, Performance = performance, Weight = ratedMoves });
         return Rating;

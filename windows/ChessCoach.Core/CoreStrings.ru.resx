@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>Твой конь</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Пешка</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>Твоя пешка</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>Короли распознаны неточно</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Короли распознаны неоднозначно. Сменился набор фигур? Меню: Заново обучить фигуры</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Обнаружена пешка на первой горизонтали</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Обнаружено слишком много пешек</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>Обнаружено слишком много белых фигур</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>Недопустимый URL сервера.</value></data>
   <data name="llm.denied" xml:space="preserve"><value>Доступ запрещён. Проверь токен.</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>Сервер сообщает об ошибке {0}. {1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Сервер сообщил об ошибке {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>По этому адресу список моделей не найден. Для Open WebUI введи, например, https://openwebui.example.com, для vLLM — http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Чтобы получать объяснения, выбери сервер и модель в настройках.</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>Осторожно: поле {1} не защищено (фигура: {0}).</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>Самая частая ошибка: {0} ({1}×). Пример: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>Хороших ходов подряд: {0}.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>К следующей партии: {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>Сервер не нашёл адрес или модель (ошибка 404).</value></data>
 </root>

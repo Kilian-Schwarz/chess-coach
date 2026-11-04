@@ -7,7 +7,8 @@ Please report what fails with the Windows version, the screen setup (monitors, s
 ## 1. Install and start
 
 - Unpack the ZIP to a folder you can write to, for example `%LOCALAPPDATA%\Programs\ChessCoach`, and start `ChessCoach.exe`. SmartScreen may warn about an unsigned file: choose More info, then Run anyway.
-- No window opens. A knight icon appears in the notification area, possibly under the hidden icons.
+- On the first start a welcome window explains four steps and offers "Got It" and "Switch On". It does not appear again. A knight icon appears in the notification area, possibly under the hidden icons.
+- Switching on for the first time shows a fair-play notice once. Enabling "Training for two" for the first time shows it once more.
 - Check the icon in light and in dark taskbar mode. Switch the Windows theme while the app runs; the icon should follow.
 
 ## 2. Find the board
@@ -20,14 +21,18 @@ Please report what fails with the Windows version, the screen setup (monitors, s
 ## 3. Hints and ratings
 
 - The panel appears next to the board. It can be dragged, collapsed and reset from the menu.
-- Press "Next hint" or Ctrl+Shift+F8 four times. You should see a topic, then a marked piece, then an idea, then an arrow with the move. Clicking the button must not steal keyboard focus from the browser.
+- Press "Next hint" or Ctrl+Shift+F8 four times. You should see a topic, then a marked piece, then an idea, then an arrow with the move. Clicking the button must not steal keyboard focus from the browser. If you press again within about 15 seconds of seeing a position, the card first says "Take a moment to think, then press again."; the next press goes through.
+- The threat arrow and card stay hidden until you press "Show threat" or a hint, except for new players (fewer than 3 games or a weak threat skill).
+- Moves made with hints count less for your skills and your rating; moves with the full solution do not count for your performance.
 - After you move, a rating card shows. With "Show threats" on, a red arrow marks what the opponent threatens.
 - Play to the end of a game, or choose "End game" in the menu. Open Evaluation and look for the accuracy, key moments and the PGN copy button.
+- When a site shows a game-over window over the board for 3 seconds, the recap opens by itself without taking keyboard focus. If you keep playing the same game afterwards, the recap closes again and the game stays one game.
+- If the app loses sight of the board for a moment and finds it again, earlier moves stay in the game; the PGN marks the gap with "{ moves missed }".
 
 ## 4. Learning windows
 
 - Player record: rating, skills, common mistakes, puzzle counts.
-- Training: solve a puzzle by click or drag, use the hints, ask for the solution.
+- Training: solve a puzzle by click or drag, use the hints, ask for the solution. After a wrong move the window shows the engine's answer ("After that move: …").
 - The first profile carries your Windows display name, or "Player" if Windows has none. Create a second profile and tick "Training for two" to check that both are tracked.
 
 ## 5. Screen sharing

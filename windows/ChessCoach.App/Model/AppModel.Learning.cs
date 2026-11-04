@@ -22,12 +22,17 @@ internal sealed partial class AppModel
     private string _pgnCache = "";
     private string? _openingName;
     private GameEnd? _pendingEnd;
+    private sealed record OverlayEndState(string ReportId, string Fen, GameBook Book, CancellationTokenSource Cts);
+    private OverlayEndState? _overlayEnd;
+    private CancellationTokenSource? _summaryCts;
+    private string? _continuedReportId;
+    private readonly HashSet<string> _countedGames = new();
     private HintSet? _hintSet;
     private string? _hintSetFen;
 
     public GameReport? LastReport { get; private set; }
     public event Action? ReportChanged;
-    public Action? OpenRecord, OpenTraining, OpenReport;
+    public Action? OpenRecord, OpenTraining, OpenReport, OpenReportQuietly, CloseReport;
     public string? RecapSelection { get; private set; }
     public int GamePlies => _book.Plies;
 
@@ -96,6 +101,9 @@ internal sealed partial class AppModel
         try { Storage.Save(p); } catch (Exception e) { Log.Write("Profile not saved: " + e.Message); }
     }
 
+    public Adaptation AdaptationFor(PlayerProfile p) =>
+        Curriculum.Adapt(p.Level, p.FocusSkill, p.Skills, PuzzleScheduler.RecentSuccessRate(PuzzlesFor(p.Id).Puzzles));
+
     private PlayerProfile? ProfileFor(PieceColor color) => ProfileFor(color, _lastMe ?? PieceColor.White);
 
     private PlayerProfile? ProfileFor(PieceColor color, PieceColor me) => color == me ? Active : Partner;
@@ -134,10 +142,11 @@ internal sealed partial class AppModel
         if (!_book.HintUsed.TryGetValue(ctx.Fen, out var old) || level > old) _book.HintUsed[ctx.Fen] = level;
     }
 
-    private ExplanationStyle PickStyle(PieceColor color)
+    private ExplanationStyle PickStyle(PieceColor color, StyleLength? length = null)
     {
         var prof = ProfileFor(color) ?? Active;
         var (style, _) = prof.NextExplanationStyle();
+        style = style with { Length = length ?? ExplanationStyle.FirstLength };
         _styles[style.Key] = style;
         _lastStyle = style;
         _lastStyleProfile = prof;
@@ -147,12 +156,12 @@ internal sealed partial class AppModel
 
     private string? CurrentStyleKey => _lastStyle?.Key;
 
-    private Coach.ExplanationRequest? SuggestionRequestFor(HintContext ctx) =>
-        Coach.SuggestionRequest(ctx.Placement, ctx.ToMove, ctx.Fen, ctx.Result, ContextFor(ctx.ToMove), PickStyle(ctx.ToMove));
+    private Coach.ExplanationRequest? SuggestionRequestFor(HintContext ctx, StyleLength? length = null) =>
+        Coach.SuggestionRequest(ctx.Placement, ctx.ToMove, ctx.Fen, ctx.Result, ContextFor(ctx.ToMove), PickStyle(ctx.ToMove, length));
 
-    private Coach.ExplanationRequest ReviewRequestFor(MoveReview review, PlayedMove pm)
+    private Coach.ExplanationRequest ReviewRequestFor(MoveReview review, PlayedMove pm, StyleLength? length = null)
     {
-        var style = PickStyle(pm.Mover);
+        var style = PickStyle(pm.Mover, length);
         _reviewStyleByFen[pm.FenBefore] = style;
         if (_reviewStyleByFen.Count > 40) _reviewStyleByFen.Clear();
         return Coach.ReviewRequest(review, ContextFor(pm.Mover), style);
@@ -169,12 +178,12 @@ internal sealed partial class AppModel
 
     private void OnFeedback(CoachCard card, string key)
     {
+        if (key == "more") { More(card); return; }
         var f = key switch { "long" => ExplanationFeedback.TooLong, "short" => ExplanationFeedback.TooShort, _ => ExplanationFeedback.Helpful };
         Feedback(f, card.StyleKey);
     }
 
     private void RegisterExplainAgain() => Feedback(ExplanationFeedback.AskedAgain, _lastStyle?.Key);
-    private void RegisterQuestion() => Feedback(ExplanationFeedback.AskedAgain, _lastStyle?.Key);
 
     private void OnPanelCollapsed(bool collapsed)
     {
@@ -253,7 +262,7 @@ internal sealed partial class AppModel
     public void SetFocus(Skill skill)
     {
         var prof = Active;
-        prof.Focus = skill.Raw();
+        prof.PinFocus(skill);
         SaveProfile(prof);
         Notify();
         UpdatePanel();
@@ -263,13 +272,25 @@ internal sealed partial class AppModel
     {
         if (Settings.FairPlayNoticeShown) return;
         Settings.FairPlayNoticeShown = true;
+        ShowFairPlayNotice();
+    }
+
+    private void ShowFairPlayNoticeForDuo()
+    {
+        if (!Settings.DuoTraining || Settings.FairPlayDuoShown) return;
+        Settings.FairPlayDuoShown = true;
+        ShowFairPlayNotice();
+    }
+
+    private void ShowFairPlayNotice()
+    {
         Settings.Save();
         System.Windows.MessageBox.Show(Loc.T("fairPlay.text"), Loc.T("fairPlay.title"), System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
     }
 
     private void ReconcileBook()
     {
-        var valid = _record.EarlierSegments.SelectMany(x => x).Concat(_record.Moves).Select(MoveKey).ToHashSet();
+        var valid = _record.Moves.Select(MoveKey).ToHashSet();
         _book.Retain(valid);
     }
 
@@ -292,23 +313,25 @@ internal sealed partial class AppModel
         if (after == null && !over) return;
         int valueAfter = after is { BestMove.Length: > 0 } ? -after.Value : (pm.After.IsCheck ? Accuracy.MateValue : 0);
         book.Reviewed.Add(new ReviewedMove(pm.Mover == PieceColor.White ? "w" : "b", pm.Uci, pm.San, pm.FenBefore,
-            before.Value, valueAfter, before.BestMove.Length > 0 ? before.BestMove : null));
+            before.Value, valueAfter, before.BestMove.Length > 0 ? before.BestMove : null,
+            book.HintUsed.GetValueOrDefault(pm.FenBefore)));
 
         if (!IsCoached(pm.Mover, me) || !book.Rated.Contains(MoveKey(pm)) || ProfileFor(pm.Mover, me) is not { } prof) return;
         if (Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after, pm.After.Result) is not { } review) return;
         EngineResult? threatRes = null;
         if (Threats.NullMoveFen(pm.Before) is { } nf) threatRes = await _engine.AnalyzeAsync(nf, ms, false);
         var analysis = MoveAnalyzer.Analyze(new MoveAnalysisInput(review, before, after, threatRes, pm.MoveNumber));
-        prof.Apply(analysis);
-        prof.RecordHintUse(book.HintUsed.GetValueOrDefault(pm.FenBefore));
+        int hint = book.HintUsed.GetValueOrDefault(pm.FenBefore);
+        prof.Apply(analysis, Curriculum.GainWeight(hint));
+        prof.RecordHintUse(hint);
         if (analysis.Theme is { } th && _reviewStyleByFen.TryGetValue(pm.FenBefore, out var st)) _themeStyle[th.Raw()] = st;
         var puzzle = Puzzle.Make(review, before, analysis.MistakeType, analysis.Theme, prof.Level);
         bool added = puzzle != null && PuzzlesFor(prof.Id).Add(puzzle);
-        if (added) SavePuzzles(prof.Id);
+        if (puzzle != null) SavePuzzles(prof.Id);
         if (analysis.MistakeType is { } mt)
         {
             if (!book.Mistakes.TryGetValue(pm.Mover, out var list)) book.Mistakes[pm.Mover] = list = new();
-            list.Add(new GameMistake(mt, analysis.Loss, analysis.Example ?? review.PlayedText, added ? puzzle!.Id : null));
+            list.Add(new GameMistake(mt, analysis.Loss, analysis.Example ?? review.PlayedText, added ? puzzle!.Id : null, MoveKey(pm)));
         }
         SaveProfile(prof);
         Notify();
@@ -316,6 +339,7 @@ internal sealed partial class AppModel
 
     private void FinishGame(GameEnd end)
     {
+        _overlayEnd = null;
         var book = _book;
         _book = new GameBook();
         var pgn = _pgnCache;
@@ -332,7 +356,8 @@ internal sealed partial class AppModel
         var me = _lastMe ?? PieceColor.White;
         var whiteProf = me == PieceColor.White ? Active : Partner;
         var blackProf = me == PieceColor.Black ? Active : Partner;
-        var report = GameReport.Build(book.Reviewed, null, DateTime.UtcNow, whiteProf?.Id, blackProf?.Id, opening);
+        var report = GameReport.Build(book.Reviewed, _continuedReportId, DateTime.UtcNow, whiteProf?.Id, blackProf?.Id, opening);
+        _continuedReportId = null;
         report.Result = end.Result;
         report.EndReason = end.ReasonKey;
         SaveReport(report, pgn);
@@ -340,8 +365,34 @@ internal sealed partial class AppModel
         RecapSelection = report.Id;
         _progress[report.Id] = new RecapProgress(report.Id, book.Reviewed.Count, book.Plies);
         ReportChanged?.Invoke();
-        if (Settings.OpenRecap && !end.Silent && end.Reason != GameEndReason.Overlay) OpenReport?.Invoke();
-        _ = CompleteRecapAsync(report, book, me, whiteProf, blackProf);
+        if (Settings.OpenRecap && !end.Silent)
+        {
+            if (end.Reason == GameEndReason.Manual) OpenReport?.Invoke(); else OpenReportQuietly?.Invoke();
+        }
+        var cts = CancellationTokenSource.CreateLinkedTokenSource(_recapCts.Token);
+        _overlayEnd = end.Reason == GameEndReason.Overlay ? new OverlayEndState(report.Id, _record.Current?.Fen ?? "", book, cts) : null;
+        _ = CompleteRecapAsync(report, book, me, whiteProf, blackProf, cts.Token);
+    }
+
+    private void RetractEnd(OverlayEndState ended, int newMoves)
+    {
+        Log.Write("Overlay end retracted: the game continues");
+        ended.Cts.Cancel();
+        _summaryCts?.Cancel();
+        _progress.Remove(ended.ReportId);
+        try { Storage.DeleteGame(ended.ReportId); } catch (Exception e) { Log.Write("Report not removed: " + e.Message); }
+        if (LastReport?.Id == ended.ReportId) LastReport = Storage.LoadGames(1).FirstOrDefault();
+        if (RecapSelection == ended.ReportId)
+        {
+            RecapSelection = null;
+            CloseReport?.Invoke();
+        }
+        if (_reviewCard?.Id == "report|" + ended.ReportId) _reviewCard = null;
+        _book = ended.Book;
+        _book.Requeue(_record.Moves.Take(_record.Moves.Count - newMoves));
+        _continuedReportId = ended.ReportId;
+        ReportChanged?.Invoke();
+        Notify();
     }
 
     private void SaveReport(GameReport report, string? pgn = null)
@@ -349,15 +400,16 @@ internal sealed partial class AppModel
         try { Storage.Save(report, pgn); } catch (Exception e) { Log.Write("Game not saved: " + e.Message); }
     }
 
-    private async Task CompleteRecapAsync(GameReport report, GameBook book, PieceColor me, PlayerProfile? whiteProf, PlayerProfile? blackProf)
+    private async Task CompleteRecapAsync(GameReport report, GameBook book, PieceColor me, PlayerProfile? whiteProf, PlayerProfile? blackProf, CancellationToken ct)
     {
         try
         {
             int total = book.Reviewed.Count + book.Queue.Count, sinceSave = 0;
             while (book.Queue.Count > 0)
             {
-                _recapCts.Token.ThrowIfCancellationRequested();
+                ct.ThrowIfCancellationRequested();
                 await AnalyzeMoveAsync(book, book.Queue.Dequeue(), me, 200);
+                ct.ThrowIfCancellationRequested();
                 _progress[report.Id] = new RecapProgress(report.Id, book.Reviewed.Count, total);
                 if (++sinceSave % 4 == 0 || book.Queue.Count == 0)
                 {
@@ -366,12 +418,14 @@ internal sealed partial class AppModel
                 }
                 ReportChanged?.Invoke();
             }
+            ct.ThrowIfCancellationRequested();
             report.Rebuild(book.Reviewed);
             _progress.Remove(report.Id);
             foreach (var (prof, c) in new[] { (whiteProf, "w"), (blackProf, "b") })
             {
                 if (prof == null) continue;
-                prof.CompleteGame(report.Side(c).Performance, null, report.Side(c).RatedMoves);
+                if (_countedGames.Add(report.Id + prof.Id))
+                    prof.CompleteGame(report.Side(c).Performance, null, report.Side(c).RatedMoves, report.Side(c).AssistedShare);
                 prof.AdjustLearningSpeed(PuzzlesFor(prof.Id).Puzzles);
                 SaveProfile(prof);
             }
@@ -387,6 +441,7 @@ internal sealed partial class AppModel
             };
             UpdatePanel();
             Notify();
+            ct.ThrowIfCancellationRequested();
             await StreamSummaryAsync(report, color, me);
         }
         catch (OperationCanceledException) { }
@@ -407,7 +462,7 @@ internal sealed partial class AppModel
         var req = report.SummaryRequest(color, ContextFor(me));
         report.Summary = "";
         ReportChanged?.Invoke();
-        Explain(req.System, req.User, req.MaxTokens, (text, finished) =>
+        _summaryCts = Explain(req.System, req.User, req.MaxTokens, (text, finished) =>
         {
             report.Summary = text;
             if (finished) { SaveReport(report); done.TrySetResult(); }

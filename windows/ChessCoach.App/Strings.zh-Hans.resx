@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>公平竞赛</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach 用于练习：与机器人对弈、不计分对局、实体棋盘和分析。在计分的在线对局中使用它的建议，违反 chess.com 和 Lichess 的公平竞赛规则，账号可能被封。</value></data>
   <data name="update.available" xml:space="preserve"><value>版本 {0} 已可用。请在托盘菜单中选择“检查更新”来安装。</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach 在托盘中运行。在浏览器中打开棋盘，在托盘菜单中开启“启用”，并展示一次初始局面，让应用学习棋子。</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>先想一想，再按一次。</value></data>
+  <data name="threat.none" xml:space="preserve"><value>没有发现迫在眉睫的威胁。</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>更多</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>欢迎使用 Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach 会识别屏幕上的棋盘，通过提示、走法评价和每局后的总结帮助你进步。所有分析都在这台 PC 上完成。</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>打开国际象棋网站或应用，开始一局棋。</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>在托盘菜单中开启 Chess Coach（“{0}”）。</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>先显示一次开局棋盘，让应用学会你的棋子外观。之后若棋子样式变化，请选择“重新学习棋子”。</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach 绝不会替你走棋。语言和用于讲解的可选 AI 在“设置”中。</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>知道了</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>开启</value></data>
+  <data name="training.after" xml:space="preserve"><value>之后：{0}</value></data>
 </root>

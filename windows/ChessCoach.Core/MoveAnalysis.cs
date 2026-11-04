@@ -30,6 +30,8 @@ public sealed class MoveAnalysis
 
 public static class MoveAnalyzer
 {
+    public const double PhaseDecidedBand = 45;
+
     public static GamePhase Phase(Placement p, int moveNumber)
     {
         if (p.PieceCount - 2 <= 12) return GamePhase.Endgame;
@@ -64,24 +66,25 @@ public static class MoveAnalyzer
         var hangingBefore = SquareKeys(r.Before.HangingPieces(me));
         var hangingAfter = SquareKeys(after.HangingPieces(me));
         bool newHanging = hangingAfter.Except(hangingBefore).Any();
-        bool leftHanging = loss >= 50 && newHanging;
-        obs.Add(new SkillObservation(Skill.PieceSafety, leftHanging ? 0 : 1));
+        if (hangingBefore.Count > 0 || hangingAfter.Count > 0)
+            obs.Add(new SkillObservation(Skill.PieceSafety, loss >= 50 && hangingAfter.Count > 0 ? 0 : 1));
 
         var threat = ThreatFact.Detect(r.Before, me, beforeValue, input.ThreatResult);
         if (threat != null) obs.Add(new SkillObservation(Skill.Threats, loss < 50 ? 1 : 0));
 
         var lines = input.BeforeResult.Lines;
-        bool tacticAvailable = lines.Count >= 2 && lines[0].Value - lines[1].Value >= 150;
+        bool tacticAvailable = lines.Count >= 2 && lines[0].Value - lines[1].Value >= 150 && !r.Before.IsInCheck(me);
         bool foundBest = r.Best?.Uci == r.Played.Uci;
         if (tacticAvailable) obs.Add(new SkillObservation(Skill.Tactics, foundBest ? 1 : 0));
 
         double accValue = acc / 100;
-        switch (ph)
-        {
-            case GamePhase.Opening: obs.Add(new SkillObservation(Skill.Opening, accValue)); break;
-            case GamePhase.Middlegame: obs.Add(new SkillObservation(Skill.Middlegame, accValue)); break;
-            default: obs.Add(new SkillObservation(Skill.Endgame, accValue)); break;
-        }
+        if (Math.Abs(Core.Accuracy.WinChance(beforeValue) - 50) <= PhaseDecidedBand)
+            switch (ph)
+            {
+                case GamePhase.Opening: obs.Add(new SkillObservation(Skill.Opening, accValue)); break;
+                case GamePhase.Middlegame: obs.Add(new SkillObservation(Skill.Middlegame, accValue)); break;
+                default: obs.Add(new SkillObservation(Skill.Endgame, accValue)); break;
+            }
 
         char? movedPiece = r.Before.Piece(r.Played.FromFile, r.Played.FromRank);
         char? kind = movedPiece is char mp ? char.ToLowerInvariant(mp) : null;
@@ -95,7 +98,7 @@ public static class MoveAnalyzer
         else if (allowsMate && loss >= 100) obs.Add(new SkillObservation(Skill.KingSafety, 0));
 
         MistakeType? mistake = null;
-        if (loss > 60)
+        if (loss > 60 && Core.Accuracy.WinChance(beforeValue) - Core.Accuracy.WinChance(beforeValue - loss) >= MoveRatingExt.InaccuracyDrop)
         {
             if (newHanging && loss >= 100) mistake = Core.MistakeType.HangingPiece;
             else if (threat != null && loss >= 50) mistake = Core.MistakeType.MissedThreat;

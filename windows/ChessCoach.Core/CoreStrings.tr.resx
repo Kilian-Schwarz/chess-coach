@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>Atın</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Piyon</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>Piyonun</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>Şahlar net olarak tanınamadı</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Şahlar net olarak tanınmadı. Taş seti değişti mi? Menü: Taşları yeniden öğren</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Son sırada piyon algılandı</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Çok fazla piyon algılandı</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>Çok fazla beyaz taş algılandı</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>Sunucu URL'si geçersiz.</value></data>
   <data name="llm.denied" xml:space="preserve"><value>Erişim reddedildi. Lütfen belirteci kontrol et.</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>Sunucu {0} hatası bildiriyor. {1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Sunucu {0} hatası bildirdi.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Bu adreste model listesi bulunamadı. Open WebUI için örneğin https://openwebui.example.com, vLLM için http://host:8000/v1 gir.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Açıklama almak için ayarlarda bir sunucu ve model seç.</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>Dikkat: {0}, {1} karesinde korumasız kalır.</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>En sık hata: {0} ({1}×). Örnek: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>Art arda {0} iyi hamle.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Sonraki oyun için: {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>Sunucu adresi veya modeli bulamadı (404 hatası).</value></data>
 </root>

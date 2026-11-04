@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Jogo limpo</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>O Chess Coach serve para treinar: partidas contra bots, partidas sem rating, tabuleiro físico e análise. Usar as sugestões em partidas online com rating viola as regras de jogo limpo do chess.com e do Lichess e pode levar ao bloqueio da sua conta.</value></data>
   <data name="update.available" xml:space="preserve"><value>A versão {0} está disponível. Escolha "Verificar atualizações" no menu da bandeja para instalar.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>O Chess Coach roda na bandeja. Abra um tabuleiro no navegador, ative "Ativo" no menu da bandeja e mostre uma vez a posição inicial para o app aprender as peças.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Pense um instante e pressione de novo.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Nenhuma ameaça imediata encontrada.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Mais</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Boas-vindas ao Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>O Chess Coach observa um tabuleiro de xadrez na sua tela e ajuda você a melhorar com dicas, avaliações de lances e um resumo após cada partida. Tudo é analisado neste PC.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Abra um site ou app de xadrez e comece uma partida.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Ative o Chess Coach no menu da bandeja (“{0}”).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Mostre a posição inicial uma vez para o app aprender como são suas peças. Se o conjunto de peças mudar, escolha “Reaprender as peças”.</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>O Chess Coach nunca joga por você. O idioma e a IA opcional para explicações ficam em Ajustes.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Entendi</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Ativar</value></data>
+  <data name="training.after" xml:space="preserve"><value>Depois: {0}</value></data>
 </root>

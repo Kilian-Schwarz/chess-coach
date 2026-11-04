@@ -60,8 +60,10 @@ public class TrackingTests
         Assert.Equal(GameChange.Resync, u.Change);
         Assert.True(u.Gap);
         Assert.Empty(u.Reviewable);
-        Assert.Empty(rec.Moves);
-        Assert.Single(rec.EarlierSegments);
+        Assert.Single(rec.Moves);
+        Assert.Equal(new[] { 1 }, rec.Breaks);
+        Assert.Equal(0, rec.SegmentMoves);
+        Assert.True(u.Estimated);
         Assert.StartsWith("Resync:", u.Log[0]);
     }
 
@@ -86,7 +88,7 @@ public class TrackingTests
         Assert.StartsWith("Partial frame ignored", u.Log[0]);
         Assert.Equal(4, rec.Moves.Count);
         Assert.Equal(GameChange.Unchanged, rec.Update(P(S4), true).Change);
-        Assert.Empty(rec.EarlierSegments);
+        Assert.Empty(rec.Breaks);
     }
 
     [Fact]

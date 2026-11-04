@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Juego limpio</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach está pensado para practicar: partidas contra bots, partidas sin puntuación, un tablero físico y análisis. Usar sus sugerencias en partidas online puntuadas infringe las normas de juego limpio de chess.com y Lichess y puede costarte la cuenta.</value></data>
   <data name="update.available" xml:space="preserve"><value>La versión {0} está disponible. Elige «Buscar actualizaciones» en el menú de la bandeja para instalarla.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach funciona en la bandeja. Abre un tablero en el navegador, activa «Activo» en el menú de la bandeja y muestra una vez la posición inicial para que la app aprenda las piezas.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Piénsalo un momento y vuelve a pulsar.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>No se ha encontrado ninguna amenaza inmediata.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Más</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Bienvenido a Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach observa un tablero de ajedrez en tu pantalla y te ayuda a mejorar con pistas, valoraciones de jugadas y un resumen tras cada partida. Todo se analiza en este PC.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Abre un sitio web o una app de ajedrez y empieza una partida.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Activa Chess Coach en el menú de la bandeja (“{0}”).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Muestra una posición inicial una vez para que la app aprenda cómo son tus piezas. Si el juego de piezas cambia, elige «Reaprender las piezas».</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach nunca juega por ti. El idioma y la IA opcional para las explicaciones están en Ajustes.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Entendido</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Activar</value></data>
+  <data name="training.after" xml:space="preserve"><value>Después: {0}</value></data>
 </root>

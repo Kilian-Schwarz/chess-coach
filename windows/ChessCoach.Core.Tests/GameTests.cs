@@ -80,11 +80,46 @@ public class GameTests
         var u = rec.Update(P(jump), true);
         Assert.True(u.Change == GameChange.Resync && u.Estimated);
         Assert.Contains(" kq ", u.Fen);
-        Assert.Single(rec.EarlierSegments);
+        Assert.Equal(new[] { 1 }, rec.Breaks);
+        Assert.Single(rec.Moves);
         u = rec.Update(P("r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 1 6"), true);
         Assert.True(u.Change == GameChange.Moves && u.LastMove?.San == "O-O" && u.Fen.StartsWith("r1bq1rk1/"));
+        Assert.Equal(2, rec.Moves.Count);
+        Assert.Equal(1, rec.SegmentMoves);
+        var pgn = rec.Pgn();
+        Assert.Contains("{ moves missed }", pgn);
+        Assert.Contains("1. e4", pgn);
         u = rec.Update(P(ChessPosition.StartFen), true);
         Assert.True(u.Change == GameChange.NewGame && rec.Moves.Count == 0 && !u.Estimated);
+    }
+
+    [Fact]
+    public void GarbageFrameStartsFreshSegmentAndRecoveryRestoresMoves()
+    {
+        var rec = new GameRecord();
+        rec.Update(P(ChessPosition.StartFen), true);
+        string fen = "";
+        foreach (var f in new[] { "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2" })
+        {
+            fen = f;
+            rec.Update(P(f), true);
+        }
+        var good = P(fen);
+        var u = rec.Update(new Placement(), true);
+        Assert.True(u.Change == GameChange.Resync && rec.Moves.Count == 0);
+        u = rec.Update(good, true);
+        Assert.True(rec.Moves.Count == 2 && u.Change != GameChange.NewGame);
+        u = rec.Update(P("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"), true);
+        Assert.True(u.Change == GameChange.Moves && rec.Moves.Count == 3);
+    }
+
+    [Fact]
+    public void ResyncContinuityRules()
+    {
+        var start = P(ChessPosition.StartFen);
+        Assert.True(ResyncContinuity.IsPlausible(start, start));
+        Assert.False(ResyncContinuity.IsPlausible(start, new Placement()));
+        Assert.False(ResyncContinuity.IsPlausible(P("4k3/8/8/8/8/8/8/4K3 w - - 0 1"), start));
     }
 
     [Fact]

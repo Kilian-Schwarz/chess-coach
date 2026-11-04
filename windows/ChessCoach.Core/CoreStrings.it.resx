@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>Il tuo cavallo</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Pedone</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>Il tuo pedone</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>Re non riconosciuti con chiarezza</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Re non riconosciuti chiaramente. Il set di pezzi è cambiato? Menu: Reimpara i pezzi</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Pedone rilevato sulla prima traversa</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Troppi pedoni rilevati</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>Troppi pezzi bianchi rilevati</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>L'URL del server non è valido.</value></data>
   <data name="llm.denied" xml:space="preserve"><value>Accesso negato. Controlla il token.</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>Il server segnala l'errore {0}. {1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Il server ha segnalato l’errore {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Nessun elenco di modelli trovato a questo indirizzo. Per Open WebUI inserisci ad es. https://openwebui.example.com, per vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Per ottenere spiegazioni, scegli un server e un modello nelle impostazioni.</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>Attenzione: {0} in {1} resterebbe senza difesa.</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>Errore più frequente: {0} ({1}×). Esempio: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} buone mosse di fila.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Per la prossima partita: {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>Il server non ha trovato l’indirizzo o il modello (errore 404).</value></data>
 </root>

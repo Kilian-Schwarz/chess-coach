@@ -10,18 +10,23 @@ public sealed record LlmModel(string Id, string Name);
 public sealed class LlmException : Exception
 {
     public enum Kind { BadUrl, Http, NoModels, NotConfigured }
+    public const int LoggedBodyLength = 160;
     public Kind Reason { get; }
     public int StatusCode { get; }
     public string Body { get; }
 
     public LlmException(Kind kind, int status = 0, string body = "") : base(Describe(kind, status, body))
-    { Reason = kind; StatusCode = status; Body = body; }
+    {
+        Reason = kind; StatusCode = status; Body = body;
+        if (kind == Kind.Http && body.Length > 0) Log.Write($"LLM error {status}: {(body.Length > LoggedBodyLength ? body[..LoggedBodyLength] : body)}");
+    }
 
     private static string Describe(Kind kind, int code, string body) => kind switch
     {
         Kind.BadUrl => CoreLocale.Get("llm.badUrl"),
         Kind.Http when code is 401 or 403 => CoreLocale.Get("llm.denied"),
-        Kind.Http => CoreLocale.Format("llm.httpError", null, code, body.Length > 160 ? body[..160] : body),
+        Kind.Http when code == 404 => CoreLocale.Get("llm.notFound"),
+        Kind.Http => CoreLocale.Format("llm.httpError", null, code),
         Kind.NoModels => CoreLocale.Get("llm.noModels"),
         _ => CoreLocale.Get("llm.notConfigured"),
     };

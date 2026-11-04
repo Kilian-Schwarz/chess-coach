@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>당신의 나이트</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>폰</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>당신의 폰</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>킹을 명확히 인식하지 못했습니다</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>킹을 명확히 인식하지 못함. 기물 세트가 바뀌었나요? 메뉴: 기물 다시 학습</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>맨 뒷줄에서 폰이 감지되었습니다</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>폰이 너무 많이 감지되었습니다</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>백 기물이 너무 많이 감지되었습니다</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>서버 URL이 올바르지 않습니다.</value></data>
   <data name="llm.denied" xml:space="preserve"><value>접근이 거부되었습니다. 토큰을 확인하세요.</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>서버가 오류 {0}을(를) 반환했습니다. {1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>서버가 오류 {0}을(를) 반환했습니다.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>이 주소에서 모델 목록을 찾을 수 없습니다. Open WebUI는 예를 들어 https://openwebui.example.com, vLLM은 http://host:8000/v1을 입력하세요.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>설명을 받으려면 설정에서 서버와 모델을 선택하세요.</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>주의: {1}의 {0}은(는) 보호받지 못합니다.</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>가장 잦은 실수: {0} ({1}회). 예: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>좋은 수가 {0}번 연속.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>다음 대국을 위해: {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>서버가 주소 또는 모델을 찾지 못했습니다(오류 404).</value></data>
 </root>

@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>Dein Springer</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Bauer</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>Dein Bauer</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>Könige nicht eindeutig erkannt</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Könige nicht eindeutig erkannt. Figurensatz gewechselt? Menü: Figuren neu einlernen</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Bauer auf der Grundreihe erkannt</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Zu viele Bauern erkannt</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>Zu viele weiße Figuren erkannt</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>0-0-0</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>Die Server-URL ist ungültig.</value></data>
   <data name="llm.denied" xml:space="preserve"><value>Zugriff verweigert. Bitte Token prüfen.</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>Server meldet Fehler {0}. {1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Der Server meldet Fehler {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Unter dieser Adresse wurde keine Modellliste gefunden. Für Open WebUI z. B. https://openwebui.example.com eintragen, für vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Für Erklärungen in den Einstellungen Server und Modell wählen.</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>Achtung: {0} auf {1} wäre ungedeckt.</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>Häufigster Fehler: {0} ({1}×). Beispiel: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} gute Züge in Folge.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Fürs nächste Spiel: {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>Der Server hat die Adresse oder das Modell nicht gefunden (Fehler 404).</value></data>
 </root>

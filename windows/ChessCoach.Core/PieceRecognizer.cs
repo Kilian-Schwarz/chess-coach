@@ -172,26 +172,40 @@ public sealed class PieceTemplates
         return true;
     }
 
-    public const double MaxUnfitShare = 0.25;
+    public const int MinFitSquares = 4;
 
     public bool FitsBadly(SquareFeature[][] features)
     {
+        if (IsEmpty) return false;
         int occupied = 0, unknown = 0;
-        foreach (var row in features)
-            foreach (var f in row)
+        var screen = new char?[8][];
+        for (int r = 0; r < 8; r++)
+        {
+            screen[r] = new char?[8];
+            for (int c = 0; c < 8; c++)
             {
+                var f = features[r][c];
                 if (!(f.Fill > OccupiedFill)) continue;
                 occupied++;
-                if (Classify(f) == null) unknown++;
+                screen[r][c] = Classify(f);
+                if (screen[r][c] == null) unknown++;
             }
-        return occupied > 0 && unknown > occupied * MaxUnfitShare;
+        }
+        if (occupied < MinFitSquares) return false;
+        if (unknown * 4 >= occupied) return true;
+        foreach (bool whiteAtBottom in new[] { true, false })
+        {
+            var board = new Placement(screen, whiteAtBottom);
+            if (board.Problem(PieceColor.White) == null || board.Problem(PieceColor.Black) == null) return false;
+        }
+        return true;
     }
 
-    public static (PieceTemplates Templates, bool WhiteAtBottom)? Relearned(SquareFeature[][] features)
+    public static (PieceTemplates Templates, bool WhiteAtBottom, ChessPosition? Position)? Relearned(SquareFeature[][] features)
     {
         var t = new PieceTemplates();
-        if (PieceTemplates.LooksLikeStart(features)) return (t, t.LearnStart(features));
-        return t.LearnEarly(features) is bool wb ? (t, wb) : null;
+        if (LooksLikeStart(features)) return (t, t.LearnStart(features), null);
+        return t.LearnEarlyPosition(features) is { } found ? (t, found.WhiteAtBottom, found.Position) : null;
     }
 
     public bool LearnStart(SquareFeature[][] features)
@@ -204,7 +218,36 @@ public sealed class PieceTemplates
         return whiteAtBottom;
     }
 
-    public bool? LearnEarly(SquareFeature[][] features)
+    public bool? LearnKnown(SquareFeature[][] features, Placement board, bool? preferWhiteAtBottom)
+    {
+        bool first = preferWhiteAtBottom ?? true;
+        foreach (bool whiteAtBottom in new[] { first, !first })
+        {
+            var white = new List<double>(); var black = new List<double>();
+            bool fits = true;
+            for (int r = 0; r < 8; r++)
+                for (int c = 0; c < 8; c++)
+                {
+                    var (file, rank) = Placement.ChessSquare(c, r, whiteAtBottom);
+                    var piece = board.Squares[rank][file];
+                    bool occupied = features[r][c].Fill > OccupiedFill;
+                    if (occupied != (piece != null)) fits = false;
+                    if (piece is char p && occupied) (char.IsUpper(p) ? white : black).Add(features[r][c].MeanLum);
+                }
+            if (!fits || white.Count == 0 || black.Count == 0 || white.Average() <= black.Average()) continue;
+            Learn(features, (r, c) =>
+            {
+                var (file, rank) = Placement.ChessSquare(c, r, whiteAtBottom);
+                return board.Squares[rank][file];
+            });
+            return whiteAtBottom;
+        }
+        return null;
+    }
+
+    public bool? LearnEarly(SquareFeature[][] features) => LearnEarlyPosition(features)?.WhiteAtBottom;
+
+    public (bool WhiteAtBottom, ChessPosition Position)? LearnEarlyPosition(SquareFeature[][] features)
     {
         var occupied = features.Select(row => row.Select(f => f.Fill > OccupiedFill).ToArray()).ToArray();
         var lums = features.SelectMany((row, r) => row.Where((_, c) => occupied[r][c]).Select(f => f.MeanLum)).ToList();
@@ -221,13 +264,14 @@ public sealed class PieceTemplates
         }
         double threshold = (lo + hi) / 2;
         var bright = features.Select(row => row.Select(f => f.MeanLum > threshold).ToArray()).ToArray();
-        if (EarlyStart.Match(occupied, bright) is not { } found) return null;
+        if (EarlyStart.MatchPosition(occupied, bright) is not { } found) return null;
+        var board = found.Position.Board;
         Learn(features, (r, c) =>
         {
             var (file, rank) = Placement.ChessSquare(c, r, found.WhiteAtBottom);
-            return found.Board.Squares[rank][file];
+            return board.Squares[rank][file];
         });
-        return found.WhiteAtBottom;
+        return found;
     }
 
     private void Learn(SquareFeature[][] features, Func<int, int, char?> label)

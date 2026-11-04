@@ -42,7 +42,7 @@ public class PositionTests
     }
 
     [Theory]
-    [InlineData("8/8/8/8/8/8/8/4K3", "Kings not clearly recognised")]
+    [InlineData("8/8/8/8/8/8/8/4K3", "Kings not clearly recognised. Did the piece set change? Menu: Relearn pieces")]
     [InlineData("4k3/8/8/8/8/8/8/P3K3", "Pawn on the back rank detected")]
     [InlineData("4k2p/8/8/8/8/8/8/4K3", "Pawn on the back rank detected")]
     [InlineData("4k3/pppppppp/p7/8/8/8/8/4K3", "Too many pawns detected")]

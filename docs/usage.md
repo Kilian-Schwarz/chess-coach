@@ -8,7 +8,7 @@ Windows: run `ChessCoach-<version>-setup.exe`. It installs to `%LOCALAPPDATA%\Pr
 
 ## Switch it on
 
-Click the knight icon (menu bar on macOS, notification area on Windows) and turn on "Active". The status line under it tells you what the app sees. Turning it off stops all capturing, timers and the engine; an inactive app uses no CPU.
+Click the knight icon (menu bar on macOS, notification area on Windows) and turn on "Active". On the first start a short welcome window (macOS) or a notification (Windows) explains the steps, and a fair-play notice appears once: hints in rated online games against people break the rules of most sites, so use the app for bots, unrated games, analysis and training. The status line under it tells you what the app sees. Turning it off stops all capturing, timers and the engine; an inactive app uses no CPU.
 
 Show a board on screen, preferably fully visible and not covered by other windows. The app looks at the whole screen every few seconds until it finds a board, then watches only that area.
 
@@ -16,7 +16,7 @@ If the board is not found, make the window larger, avoid heavy zoom, and check t
 
 ## Teach it your pieces
 
-Set up a new game so that the starting position is visible. The app learns the look of the pieces and squares from that image and shows "Pieces learned". It also detects which side is at the bottom. If you switch to a different piece set or board theme, choose "Relearn pieces" and start from a starting position again.
+Set up a new game so that the starting position is visible. The app learns the look of the pieces and squares from that image and shows "Pieces learned". It also detects which side is at the bottom. If you switch to a different piece set or board theme, the app notices when the pieces no longer fit. Within the first four moves it relearns them on its own; later in a game it relearns them from the position it was tracking, as long as the same squares are occupied. Otherwise choose "Relearn pieces" and start from a starting position again.
 
 Under "I play" you pick white, black or automatic. The side to move is normally read from the highlighted last move. If the app is wrong, use "Switch side to move" (macOS Control+Option+Command+T, Windows Ctrl+Shift+F9).
 
@@ -29,11 +29,13 @@ Hints come in four steps. Ask for the next one with the "Next hint" button in th
 3. Idea: one sentence from the AI (or built from facts without a server) that does not name the target square.
 4. Solution: arrow and explanation.
 
-The app records which step you needed for each move. The player file uses this, and the puzzle schedule does too.
+The first press always gives step 1. Before step 2 the app asks you to take a moment to think if you pressed too early (about 15 seconds, shorter or longer depending on your success rate). The app records which step you needed for each move. The player file uses this, and the puzzle schedule does too; moves played with help count for less in skills and rating.
 
 ## Threats
 
-When it is your move, the app also checks what the opponent would do if it were their move. A threat is reported when that costs you at least 1.5 pawns: a red arrow and a line such as "Threat: knight e5 takes queen d8". Switch it off with "Show threats".
+When it is your move, the app also checks what the opponent would do if it were their move. A threat is reported when that costs you at least 1.5 pawns: a red arrow and a line such as "Threat: knight e5 takes queen d8". Switch the feature off with "Show threats".
+
+To make you look first, the threat stays hidden until you ask: press "Show threat" in the panel (it says "No immediate threat found." when there is none), or ask for a hint. While you are new (fewer than three games) or still weak at spotting threats, it is shown on its own.
 
 ## Ratings
 
@@ -53,17 +55,17 @@ The profile at the bottom of the board is the active one. In two-person training
 
 ## Training
 
-"Training" opens a window with puzzles made from your own mistakes. Move by clicking or dragging. You get feedback, and the same hint steps are available. A solved puzzle comes back after 1, 3, 7, 16 and 35 days; a failed one starts over at one day. Using a hint repeats the box instead of advancing. The app watches your success rate: above about 85 percent it makes puzzles harder and spacing longer, below 70 percent it repeats more.
+"Training" opens a window with puzzles made from your own mistakes. Move by clicking or dragging. You get feedback, and the same hint steps are available. A solved puzzle comes back after 1, 3, 7, 16 and 35 days; a failed one starts over at one day. Using a hint repeats the box instead of advancing. "Train these puzzles" in the recap puts the puzzles from that game first in the next session, and the window updates at once if it is already open. The app watches your success rate: above about 85 percent it makes puzzles harder and spacing longer, below 70 percent it repeats more.
 
 ## Dragging hints
 
-When you lift a piece and have not put it down yet, the app does not count it as a move. With "Hints while dragging" on (default), the squares where the piece would be in danger are marked in red and one line in the panel says why, for example "Careful: Knight on e5 would be undefended." A square is marked when the piece would be attacked and undefended or attacked by a cheaper piece, or when the move leaves another of your pieces hanging. The best move is never revealed.
+When you lift a piece and have not put it down yet, the app does not count it as a move. With "Hints while dragging" on (default), the squares where the piece would be in danger are marked in red and one line in the panel says why, for example "Careful: Knight on e5 would be undefended." A square is marked when the piece would be attacked and undefended or attacked by a cheaper piece, or when the move leaves another of your pieces hanging. The best move is never revealed. Once you handle piece safety and threats reliably, the red marks fade out on their own; pressing a hint brings them back.
 
 ## Recap
 
 The app ends a game when it sees checkmate or stalemate, when a "game over" dialog covers the middle of the board for 3 seconds while the board frame stays in place, or when a new starting position appears. The last two need at least 6 half-moves. If the board disappears or another page replaces it (for example when you switch tabs), the game is only paused and continues when the board returns. After 10 minutes without a board the game is finished quietly; its recap is then available under "Last recap …" without opening by itself. The result is only recorded when it is certain (checkmate or stalemate); otherwise it stays unknown. You can also press "Finish game & show recap" in the panel or the menu.
 
-The recap window then opens by itself and comes to the front (switch this off with "Open recap after a game"). It shows accuracy, mistakes and key moments straight away. Moves that were not analysed yet are filled in in the background with a progress bar, and the AI summary follows as soon as it is written. "Last recap …" in the menu and the game list in the player file open past games again. Games are saved as JSON and PGN in the data folder.
+The recap window then opens by itself (switch this off with "Open recap after a game"). When the app ended the game on its own it appears without taking the focus from your browser; only "Finish game & show recap" brings it to the front. If a covered board turns out to be a dialog and the same game goes on, the end is taken back: the recap closes, its saved evaluation is deleted and the game continues as one game. It shows accuracy, mistakes and key moments straight away, followed by up to three takeaways (your most frequent mistake type, your best streak and your learning focus) with buttons to train those puzzles or to set the focus for the next game. Moves that were not analysed yet are filled in in the background with a progress bar, and the AI summary follows as soon as it is written. "Last recap …" in the menu and the game list in the player file open past games again. Games are saved as JSON and PGN in the data folder.
 
 ## Training with two people
 

@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Fair play</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach is meant for practice: games against bots, unrated games, a physical board and analysis. Using its suggestions in rated online games breaks the fair-play rules of chess.com and Lichess and can get your account closed.</value></data>
   <data name="update.available" xml:space="preserve"><value>Version {0} is available. Choose "Check for updates" in the tray menu to install it.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach runs in the tray. Open a chess board in your browser, switch on "Active" in the tray menu and show the starting position once so the app learns the pieces.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Take a moment to think, then press again.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>No immediate threat found.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>More</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Welcome to Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach watches a chessboard on your screen and helps you improve with hints, move ratings and a recap after each game. Everything is analysed on this PC.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Open a chess website or app and start a game.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Switch Chess Coach on in the tray menu (“{0}”).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Show a start position once so the app can learn how your pieces look. If the piece set changes later, choose “Relearn pieces”.</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach never plays a move for you. Language and the optional AI for explanations are in Settings.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Got It</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Switch On</value></data>
+  <data name="training.after" xml:space="preserve"><value>After that move: {0}</value></data>
 </root>

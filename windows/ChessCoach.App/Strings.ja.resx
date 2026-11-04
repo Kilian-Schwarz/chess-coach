@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>フェアプレー</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach は練習用です。ボット戦、レーティングなしの対局、実際の盤、分析に使ってください。レーティング対局のオンライン戦で提案を使うと、chess.com と Lichess のフェアプレー規定に違反し、アカウントが停止されることがあります。</value></data>
   <data name="update.available" xml:space="preserve"><value>バージョン {0} が利用できます。インストールするには、トレイメニューの「更新を確認」を選んでください。</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach はトレイで動作します。ブラウザでチェス盤を開き、トレイメニューの「有効」をオンにして、駒を覚えさせるために初期配置を一度表示してください。</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>少し考えてから、もう一度押してください。</value></data>
+  <data name="threat.none" xml:space="preserve"><value>差し迫った脅威は見つかりませんでした。</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>もっと見る</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Chess Coachへようこそ</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coachは画面上のチェス盤を見て、ヒント、指し手の評価、対局後の振り返りで上達を助けます。解析はすべてこのPC上で行われます。</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>チェスのサイトまたはアプリを開いて、対局を始めます。</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>通知領域のメニューでChess Coachをオンにします（「{0}」）。</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>最初に一度、初期配置を表示すると、アプリが駒の見た目を学習します。駒のデザインが変わったら「駒を学習し直す」を選んでください。</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coachが代わりに指すことはありません。言語や、解説用の任意のAIは設定にあります。</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>OK</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>オンにする</value></data>
+  <data name="training.after" xml:space="preserve"><value>その後: {0}</value></data>
 </root>

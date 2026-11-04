@@ -589,6 +589,10 @@ do {
     let url = try! store.save(game: rep, pgn: "1. e4 *")
     check(url.lastPathComponent == "2027-01-15-g1.json" && FileManager.default.fileExists(atPath: url.deletingPathExtension().appendingPathExtension("pgn").path), "game JSON and PGN")
     check(store.loadGames().first == rep, "game loads")
+    let other = GameReport.build(moves: [], id: "g2", date: t0)
+    try! store.save(game: other, pgn: "1. d4 *")
+    store.deleteGame(id: "g1")
+    check(store.loadGames().map(\.id) == ["g2"] && !FileManager.default.fileExists(atPath: url.deletingPathExtension().appendingPathExtension("pgn").path), "game deleted with its PGN, others kept")
     check(Storage.defaultRoot.path.hasSuffix("Application Support/ChessCoach"), "default path")
 }
 

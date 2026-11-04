@@ -8,6 +8,7 @@ extension AppModel {
             gameId = UUID().uuidString.lowercased()
             gameFinished = false
             countedProfiles = []
+            overlayEnd = nil
             usedHint = [:]
             gameMistakes = []
             threatRequested = []
@@ -16,6 +17,15 @@ extension AppModel {
             reviewCard = nil
             reportCard = nil
         case .moves:
+            if gameFinished, let ended = overlayEnd, ended.id == gameId {
+                overlayEnd = nil
+                if update.newMoves.first?.fenBefore == ended.fen {
+                    retractEnd(ended.id)
+                } else {
+                    gameId = UUID().uuidString.lowercased()
+                    countedProfiles = []
+                }
+            }
             gameFinished = false
         default:
             break
@@ -97,6 +107,24 @@ extension AppModel {
         }
     }
 
+    func retractEnd(_ id: String) {
+        Log.write("Overlay end retracted: the game continues")
+        completeTask?.cancel()
+        completeTask = nil
+        summaryTasks[id]?.cancel()
+        summaryTasks[id] = nil
+        summaryDraft[id] = nil
+        recapProgress = nil
+        reportCard = nil
+        store.removeGame(id: id)
+        if lastReport?.id == id { lastReport = store.games.first }
+        if recapSelection == id {
+            recapSelection = nil
+            closeWindow("report")
+        }
+        refreshActions()
+    }
+
     func endGameNow() { finishGame(GameEnd(reason: .manual, result: "*"), minPlies: 2) }
 
     func finishGame(_ end: GameEnd, minPlies: Int = GameEndDetector.minPlies, open: Bool = true) {
@@ -113,7 +141,8 @@ extension AppModel {
             pgn: record.pgn(white: store.profile(id: whiteProfile)?.name ?? "?", black: store.profile(id: blackProfile)?.name ?? "?",
                             opening: openingLine, result: final.knownResult ? final.result : nil),
             hints: usedHint, mistakes: gameMistakes)
-        Task { await complete(snapshot, open: open) }
+        overlayEnd = end.reason == .overlay ? (gameId, record.current?.fen ?? "") : nil
+        completeTask = Task { await complete(snapshot, open: open, activate: end.reason == .manual) }
     }
 
     func observeEnd(_ view: BoardView, result: GameResult? = nil, isStart: Bool = false) {
@@ -127,9 +156,9 @@ extension AppModel {
         return profileId(for: color, me: me)
     }
 
-    func showRecap(_ id: String? = nil) {
+    func showRecap(_ id: String? = nil, activate: Bool = true) {
         recapSelection = id ?? lastReport?.id ?? store.games.first?.id
-        open("report")
+        open("report", activate: activate)
     }
 
     func reviewedMove(_ e: MoveEntry, ply: Int, ms: Int?, hints: [String: Int] = [:]) async -> ReviewedMove? {
@@ -155,7 +184,7 @@ extension AppModel {
                             hint: hints[p.fenBefore])
     }
 
-    func complete(_ snap: GameSnapshot, open: Bool) async {
+    func complete(_ snap: GameSnapshot, open: Bool, activate: Bool) async {
         var reviewed: [ReviewedMove?] = []
         for (i, e) in snap.entries.enumerated() { reviewed.append(await reviewedMove(e, ply: i + 1, ms: nil, hints: snap.hints)) }
         func report() -> GameReport {
@@ -171,16 +200,18 @@ extension AppModel {
         }
         let missing = reviewed.indices.filter { reviewed[$0] == nil }
         var current = report()
+        guard !Task.isCancelled else { return }
         if !reviewed.allSatisfy({ $0 == nil }) {
             store.save(game: current, pgn: snap.pgn)
             lastReport = current
         }
         refreshActions()
-        if open && openRecap { showRecap(snap.id) }
+        if open && openRecap { showRecap(snap.id, activate: activate) }
         if !missing.isEmpty {
             recapProgress = RecapProgress(id: snap.id, done: 0, total: missing.count)
             for (n, i) in missing.enumerated() {
                 reviewed[i] = await reviewedMove(snap.entries[i], ply: i + 1, ms: 200, hints: snap.hints)
+                guard !Task.isCancelled else { return }
                 recapProgress = RecapProgress(id: snap.id, done: n + 1, total: missing.count)
                 if n % 4 == 3 || n == missing.count - 1 {
                     current = report()
@@ -190,7 +221,7 @@ extension AppModel {
             }
             recapProgress = nil
         }
-        guard !reviewed.allSatisfy({ $0 == nil }) else { return }
+        guard !Task.isCancelled, !reviewed.allSatisfy({ $0 == nil }) else { return }
         let final = report()
         for (color, pid) in [("w", snap.whiteProfile), ("b", snap.blackProfile)] {
             guard let pid, final.side(color).countsForRating, !countedProfiles.contains(snap.id + pid) else { continue }
@@ -226,7 +257,7 @@ extension AppModel {
             guard done else { return }
             self.summaryDraft[report.id] = nil
             guard !text.isEmpty else { return }
-            var updated = self.store.games.first { $0.id == report.id } ?? report
+            guard var updated = self.store.games.first(where: { $0.id == report.id }) else { return }
             updated.summary = text
             self.store.save(game: updated, pgn: self.store.pgn(for: updated))
             if self.lastReport?.id == updated.id { self.lastReport = updated }

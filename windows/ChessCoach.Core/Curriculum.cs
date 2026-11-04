@@ -72,7 +72,7 @@ public sealed record PathStage(int Number, Skill Skill)
     public string Summary(CultureInfo? culture = null) => CoreLocale.Get("skill." + Skill.Key() + ".summary", culture);
 }
 
-public sealed record Adaptation(int DefaultHintLevel, int NewPuzzlesPerDay);
+public sealed record Adaptation(int DefaultHintLevel, int NewPuzzlesPerDay, double ThinkSeconds);
 
 public static class Curriculum
 {
@@ -84,6 +84,19 @@ public static class Curriculum
         new(1, Skill.PieceSafety), new(2, Skill.Threats), new(3, Skill.Tactics), new(4, Skill.Opening),
         new(5, Skill.KingSafety), new(6, Skill.Endgame), new(7, Skill.Middlegame),
     };
+
+    public const int FirstHintLevel = 1;
+    public const double BaseThinkSeconds = 15, LowRateThinkSeconds = 8, HighRateThinkSeconds = 25;
+    public const double FadeSkill = 0.8;
+    public const int FadeObservations = 20;
+
+    public static bool NeedsThinkDelay(int level, double elapsed, double seconds, bool nudged) =>
+        level >= FirstHintLevel && !nudged && elapsed < seconds;
+
+    public static double GainWeight(int hintLevel) => hintLevel <= 0 ? 1 : hintLevel <= 2 ? 0.5 : 0;
+
+    public static bool SupportFaded(IReadOnlyDictionary<string, double> skills, IReadOnlyDictionary<string, int> counts) =>
+        new[] { Skill.Threats, Skill.PieceSafety }.All(s => Value(skills, s) >= FadeSkill && counts.GetValueOrDefault(s.Raw()) >= FadeObservations);
 
     public const int ThreatAutoGames = 3;
     public const double ThreatAutoSkill = 0.4;
@@ -120,11 +133,12 @@ public static class Curriculum
         int hint = level == PlayerLevel.Beginner ? 2 : 1;
         if (Value(skills, focus) < 0.4) hint += 1;
         int perDay = PuzzleScheduler.MaxNewPerDay;
+        double think = BaseThinkSeconds;
         if (successRate is double q)
         {
-            if (q > TargetHigh) hint -= 1;
-            else if (q < TargetLow) { hint += 1; perDay = PuzzleScheduler.MaxNewPerDay / 2; }
+            if (q > TargetHigh) { hint -= 1; think = HighRateThinkSeconds; }
+            else if (q < TargetLow) { hint += 1; perDay = PuzzleScheduler.MaxNewPerDay / 2; think = LowRateThinkSeconds; }
         }
-        return new Adaptation(Math.Min(2, Math.Max(1, hint)), perDay);
+        return new Adaptation(Math.Min(2, Math.Max(1, hint)), perDay, think);
     }
 }

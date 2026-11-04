@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Fair play</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach serve per allenarsi: partite contro bot, partite non classificate, scacchiera fisica e analisi. Usare i suoi suggerimenti in partite online classificate viola le regole di fair play di chess.com e Lichess e può costare l'account.</value></data>
   <data name="update.available" xml:space="preserve"><value>La versione {0} è disponibile. Scegli «Verifica aggiornamenti» nel menu della barra di sistema per installarla.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach funziona nella barra di sistema. Apri una scacchiera nel browser, attiva «Attivo» nel menu e mostra una volta la posizione iniziale, così l’app impara i pezzi.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Rifletti un momento, poi premi di nuovo.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Nessuna minaccia immediata trovata.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Di più</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Benvenuto in Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach osserva una scacchiera sullo schermo e ti aiuta a migliorare con suggerimenti, valutazioni delle mosse e un riepilogo dopo ogni partita. Tutto viene analizzato su questo PC.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Apri un sito o un’app di scacchi e inizia una partita.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Attiva Chess Coach dal menu nell’area di notifica (“{0}”).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Mostra una volta la posizione iniziale, così l’app impara l’aspetto dei tuoi pezzi. Se il set cambia, scegli «Reimpara i pezzi».</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach non muove mai al posto tuo. Lingua e IA opzionale per le spiegazioni si trovano in Impostazioni.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Capito</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Attiva</value></data>
+  <data name="training.after" xml:space="preserve"><value>Dopo: {0}</value></data>
 </root>

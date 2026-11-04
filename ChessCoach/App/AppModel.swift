@@ -106,7 +106,9 @@ final class AppModel: ObservableObject {
     var countedProfiles = Set<String>()
     var usedHint: [String: Int] = [:]
     var gameMistakes: [GameMistake] = []
-    var trainingPriority: [String] = []
+    @Published var trainingPriority: [String] = []
+    var overlayEnd: (id: String, fen: String)?
+    var completeTask: Task<Void, Never>?
     var threatRequested = Set<String>()
     var hintNudged = Set<String>()
     var hintFirstSeen: [String: Date] = [:]
@@ -263,6 +265,7 @@ final class AppModel: ObservableObject {
         entries = []
         sideOverride = nil
         gameFinished = false
+        overlayEnd = nil
         gameId = UUID().uuidString.lowercased()
         forgetHints()
         panel.model.canHint = false
@@ -297,8 +300,12 @@ final class AppModel: ObservableObject {
         panel.model.canHint = false
     }
 
-    func open(_ window: String) {
-        windowRequest = WindowRequest(id: window, serial: (windowRequest?.serial ?? 0) + 1)
+    func open(_ window: String, activate: Bool = true) {
+        windowRequest = WindowRequest(id: window, serial: (windowRequest?.serial ?? 0) + 1, activate: activate)
+    }
+
+    func closeWindow(_ window: String) {
+        NSApp.windows.first { $0.identifier?.rawValue.contains(window) == true }?.close()
     }
 
     func refreshActions() {

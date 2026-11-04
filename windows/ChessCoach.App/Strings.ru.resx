@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Честная игра</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach создан для тренировки: партии против ботов, партии без рейтинга, живая доска и анализ. Подсказки в рейтинговых онлайн-партиях нарушают правила честной игры chess.com и Lichess, и аккаунт могут заблокировать.</value></data>
   <data name="update.available" xml:space="preserve"><value>Доступна версия {0}. Чтобы установить, выбери «Проверить обновления» в меню в трее.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach работает в трее. Открой шахматную доску в браузере, включи «Включено» в меню трея и один раз покажи начальную позицию, чтобы приложение выучило фигуры.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Подумайте немного, затем нажмите ещё раз.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Непосредственной угрозы не найдено.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Подробнее</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Добро пожаловать в Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach следит за шахматной доской на экране и помогает расти: подсказки, оценки ходов и разбор после каждой партии. Весь анализ выполняется на этом ПК.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Откройте шахматный сайт или приложение и начните партию.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Включите Chess Coach в меню значка в трее («{0}»).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Один раз покажите начальную позицию, чтобы приложение запомнило вид ваших фигур. Если набор фигур сменится, выберите «Заново обучить фигуры».</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach никогда не ходит за вас. Язык и необязательный ИИ для объяснений находятся в настройках.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Понятно</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Включить</value></data>
+  <data name="training.after" xml:space="preserve"><value>Затем: {0}</value></data>
 </root>

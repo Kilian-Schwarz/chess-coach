@@ -38,6 +38,19 @@ internal sealed class ReportWindow
         Kit.Open(_window);
     }
 
+    public void ShowWithoutFocus()
+    {
+        Reload();
+        _window.ShowActivated = false;
+        _window.Show();
+        if (_window.WindowState == WindowState.Minimized) _window.WindowState = WindowState.Normal;
+        _window.Topmost = true;
+        _window.Topmost = false;
+        _window.ShowActivated = true;
+    }
+
+    public void Close() => _window.Hide();
+
     private void OnChanged()
     {
         if (!_window.IsVisible || _refreshQueued) return;

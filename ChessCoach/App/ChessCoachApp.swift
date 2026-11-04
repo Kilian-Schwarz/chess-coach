@@ -52,10 +52,11 @@ struct StatusLabel: View {
             .accessibilityLabel(model.isActive ? "Chess Coach active" : "Chess Coach off")
             .onChange(of: model.windowRequest) { _, request in
                 guard let request else { return }
-                NSApp.activate(ignoringOtherApps: true)
+                if request.activate { NSApp.activate(ignoringOtherApps: true) }
                 openWindow(id: request.id)
                 DispatchQueue.main.async {
-                    NSApp.windows.first { $0.identifier?.rawValue.contains(request.id) == true }?.makeKeyAndOrderFront(nil)
+                    let window = NSApp.windows.first { $0.identifier?.rawValue.contains(request.id) == true }
+                    if request.activate { window?.makeKeyAndOrderFront(nil) } else { window?.orderFrontRegardless() }
                 }
             }
     }

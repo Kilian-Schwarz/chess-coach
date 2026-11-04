@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Fair Play</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach ist zum Üben gedacht: Partien gegen Bots, ungewertete Partien, ein echtes Brett und Analyse. Wer die Vorschläge in gewerteten Online-Partien nutzt, verstößt gegen die Fair-Play-Regeln von chess.com und Lichess, und das Konto kann gesperrt werden.</value></data>
   <data name="update.available" xml:space="preserve"><value>Version {0} ist verfügbar. Wähle „Nach Updates suchen“ im Tray-Menü, um sie zu installieren.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach läuft im Tray. Öffne ein Schachbrett im Browser, schalte im Tray-Menü „Aktiv“ ein und zeig einmal die Grundstellung, damit die App die Figuren lernt.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Denk kurz nach, dann drück noch einmal.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Keine unmittelbare Drohung gefunden.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Mehr</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Willkommen bei Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach beobachtet ein Schachbrett auf deinem Bildschirm und hilft dir mit Hinweisen, Zugbewertungen und einer Auswertung nach jeder Partie. Alles wird auf diesem PC berechnet.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Öffne eine Schach-Website oder -App und starte eine Partie.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Schalte Chess Coach im Tray-Menü ein („{0}“).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Zeig einmal eine Startstellung, damit die App deine Figuren lernt. Ändert sich der Figurensatz später, wähle „Figuren neu einlernen“.</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach zieht nie für dich. Sprache und die optionale KI für Erklärungen findest du in den Einstellungen.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Verstanden</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Einschalten</value></data>
+  <data name="training.after" xml:space="preserve"><value>Danach: {0}</value></data>
 </root>

@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Fair play</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach służy do ćwiczeń: partii z botami, partii bez rankingu, prawdziwej szachownicy i analizy. Korzystanie z podpowiedzi w rankingowych partiach online łamie zasady fair play serwisów chess.com i Lichess i może skończyć się zablokowaniem konta.</value></data>
   <data name="update.available" xml:space="preserve"><value>Dostępna jest wersja {0}. Aby ją zainstalować, wybierz „Sprawdź aktualizacje” w menu w zasobniku.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach działa w zasobniku. Otwórz szachownicę w przeglądarce, włącz „Aktywny” w menu zasobnika i raz pokaż pozycję początkową, aby aplikacja nauczyła się figur.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Pomyśl chwilę, a potem naciśnij ponownie.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Nie znaleziono bezpośredniego zagrożenia.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Więcej</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Witaj w Chess Coach</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach obserwuje szachownicę na ekranie i pomaga ci się poprawiać dzięki wskazówkom, ocenom ruchów i podsumowaniu po każdej partii. Wszystko jest analizowane na tym PC.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Otwórz stronę lub aplikację szachową i zacznij partię.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Włącz Chess Coach w menu w obszarze powiadomień („{0}”).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Pokaż raz pozycję początkową, aby aplikacja nauczyła się wyglądu twoich figur. Gdy zestaw figur się zmieni, wybierz „Naucz figur od nowa”.</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach nigdy nie wykonuje ruchu za ciebie. Język i opcjonalną AI do wyjaśnień znajdziesz w Ustawieniach.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Rozumiem</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Włącz</value></data>
+  <data name="training.after" xml:space="preserve"><value>Potem: {0}</value></data>
 </root>

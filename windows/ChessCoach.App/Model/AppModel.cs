@@ -30,7 +30,35 @@ internal sealed partial class AppModel
 
     public bool IsActive { get; private set; }
     public string Status { get; private set; } = Loc.T("status.off");
-    public string LlmToken { get => _llmToken; set { _llmToken = value; Tokens.Save(value); } }
+    public string LlmToken
+    {
+        get => _llmToken;
+        set
+        {
+            if (value == _llmToken) return;
+            _llmToken = value;
+            ScheduleTokenSave();
+        }
+    }
+
+    private const int TokenSaveDebounceMs = 600;
+    private CancellationTokenSource? _tokenSave;
+
+    private void ScheduleTokenSave()
+    {
+        _tokenSave?.Cancel();
+        var cts = _tokenSave = new CancellationTokenSource();
+        _ = Task.Delay(TokenSaveDebounceMs, cts.Token).ContinueWith(
+            t => { if (!t.IsCanceled) Tokens.Save(_llmToken); }, TaskScheduler.Default);
+    }
+
+    private void FlushTokenSave()
+    {
+        if (_tokenSave == null) return;
+        _tokenSave.Cancel();
+        _tokenSave = null;
+        Tokens.Save(_llmToken);
+    }
     public bool LlmConfigured => Settings.LlmBase.Length > 0 && Settings.LlmModel.Length > 0;
     public string LlmStatus { get; set; } = "";
     public List<LlmModel> LlmModels { get; private set; } = new();
@@ -82,6 +110,7 @@ internal sealed partial class AppModel
     public void SettingsChanged()
     {
         Settings.Save();
+        ShowFairPlayNoticeForDuo();
         if (!Settings.DragHints) ClearLift();
         ClearAnalysisState();
     }
@@ -131,6 +160,7 @@ internal sealed partial class AppModel
     public void Shutdown()
     {
         if (IsActive) { SetActive(false); }
+        FlushTokenSave();
         _recapCts.Cancel();
         _hotKeys.Dispose();
         _capturer.Dispose();
@@ -166,18 +196,10 @@ internal sealed partial class AppModel
 
     private int NextDelay()
     {
-        if (_pausedShown) return 2000;
         if (_view == BoardSight.Covered && _book.Plies >= GameEndDetector.MinPlies) return 500;
-        if (_confirmSoon && _tracked != null) return 200;
-        if (_tracked == null)
-        {
-            double lost = (DateTime.UtcNow - (_lostSince ?? DateTime.UtcNow)).TotalSeconds;
-            return OnBattery() ? 10000 : lost > 300 ? 8000 : lost > 30 ? 2000 : 1000;
-        }
-        double calm = (DateTime.UtcNow - _lastChangeAt).TotalSeconds;
-        if (calm < 3) return 400;
-        int delay = calm > 120 ? 4000 : (int)Math.Min(1500, 400 + (calm - 3) / 12 * 1100);
-        return OnBattery() ? delay * 2 : delay;
+        return PollingSchedule.DelayMs(_pausedShown, _confirmSoon, _tracked != null,
+            (DateTime.UtcNow - (_lostSince ?? DateTime.UtcNow)).TotalSeconds,
+            (DateTime.UtcNow - _lastChangeAt).TotalSeconds, OnBattery());
     }
 
     private static bool OnBattery() =>
@@ -194,6 +216,7 @@ internal sealed partial class AppModel
 
     public async Task LoadModelsAsync(string url)
     {
+        FlushTokenSave();
         Settings.LlmUrl = url;
         LlmStatus = Loc.T("llm.connecting");
         Notify();
@@ -210,15 +233,19 @@ internal sealed partial class AppModel
         Notify();
     }
 
-    public async Task<int?> MoveLossAsync(string fen, string uci)
+    public sealed record MoveCheck(int Loss, string? Line);
+
+    public async Task<MoveCheck?> CheckMoveAsync(string fen, string uci)
     {
         if (ChessPosition.FromFen(fen) is not { } pos || UciMove.Parse(uci) is not { } move) return null;
         var before = await _engine.AnalyzeAsync(fen, 300, false);
         if (before == null) return null;
         var next = pos.Applying(move);
-        if (next.Result is { Kind: GameResultKind.Checkmate }) return 0;
+        if (next.Result is { Kind: GameResultKind.Checkmate }) return new MoveCheck(0, null);
         var after = await _engine.AnalyzeAsync(next.Fen, 300, false);
-        return after == null ? null : Math.Max(0, before.Value + after.Value);
+        if (after == null) return null;
+        string? line = after.Lines.Count > 0 && after.Lines[0].Pv.Count > 0 ? next.Board.DescribeLine(after.Lines[0].Pv, 4) : null;
+        return new MoveCheck(Math.Max(0, before.Value + after.Value), line);
     }
 
     public void SetModel(string id)

@@ -47,15 +47,39 @@ public sealed class GameUpdate
     public bool IsGameOver => Result is { Kind: GameResultKind.Checkmate or GameResultKind.Stalemate };
 }
 
+public static class ResyncContinuity
+{
+    public const int MaxLostPieces = 6;
+    public const int MaxChangedSquares = 16;
+
+    public static bool IsPlausible(Placement old, Placement next)
+    {
+        int lost = old.PieceCount - next.PieceCount;
+        if (lost < 0 || lost > MaxLostPieces) return false;
+        int changed = 0;
+        for (int r = 0; r < 8; r++)
+            for (int f = 0; f < 8; f++)
+                if (old.Squares[r][f] != next.Squares[r][f]) changed++;
+        return changed <= MaxChangedSquares;
+    }
+}
+
 public sealed class GameRecord
 {
+    private sealed record Stash(List<PlayedMove> Moves, List<int> Breaks, ChessPosition? Start,
+        ChessPosition? SegmentStart, bool Estimated, ChessPosition Current);
+
     public ChessPosition? StartPosition { get; private set; }
 
     public bool IsEstimatedStart { get; private set; }
     private readonly List<PlayedMove> _moves = new();
     public IReadOnlyList<PlayedMove> Moves => _moves;
 
-    public List<List<PlayedMove>> EarlierSegments { get; } = new();
+    private readonly List<int> _breaks = new();
+    public IReadOnlyList<int> Breaks => _breaks;
+    private ChessPosition? _segmentStart;
+    private Stash? _stash;
+    public int SegmentMoves => _moves.Count - (_breaks.Count > 0 ? _breaks[^1] : 0);
     public ChessPosition? Current { get; private set; }
 
     public DateTime StartedAt { get; private set; } = DateTime.UtcNow;
@@ -81,7 +105,6 @@ public sealed class GameRecord
         {
             if (Current is { } c0 && c0.Board.Equals(placement) && _moves.Count == 0 && !IsEstimatedStart)
                 return MakeUpdate(GameChange.Unchanged, none);
-            if (_moves.Count > 0) EarlierSegments.Add(new List<PlayedMove>(_moves));
             Reset(ChessPosition.Start, false);
             return MakeUpdate(GameChange.NewGame, none, log: new[] { "New game: start position" });
         }
@@ -95,11 +118,12 @@ public sealed class GameRecord
 
         if (cur.Board.Equals(placement))
         {
-            if (IsEstimatedStart && _moves.Count == 0 && hintedMover is { } h && cur.Turn != h.Opposite())
+            if (IsEstimatedStart && SegmentMoves == 0 && hintedMover is { } h && cur.Turn != h.Opposite())
             {
                 var p = cur.Clone();
                 p.Turn = h.Opposite();
-                StartPosition = p; Current = p;
+                if (_moves.Count == 0) StartPosition = p;
+                _segmentStart = p; Current = p;
                 return MakeUpdate(GameChange.Unchanged, none, log: new[] { $"Side override: last-move marker says {h.Opposite()} to move" });
             }
             return MakeUpdate(GameChange.Unchanged, none);
@@ -113,7 +137,7 @@ public sealed class GameRecord
                 reviewable: found.Value.Unique ? found.Value.Moves : none, log: new[] { MoveLog(found.Value) });
         }
 
-        if (IsEstimatedStart && _moves.Count == 0)
+        if (IsEstimatedStart && SegmentMoves == 0)
         {
             var flipped = cur.Clone();
             flipped.Turn = cur.Turn.Opposite();
@@ -121,32 +145,51 @@ public sealed class GameRecord
             found = Explain(flipped, placement, hintedMover);
             if (found != null)
             {
-                StartPosition = flipped; Current = flipped;
+                if (_moves.Count == 0) StartPosition = flipped;
+                _segmentStart = flipped; Current = flipped;
                 Append(found.Value.Moves);
                 return MakeUpdate(GameChange.Moves, found.Value.Moves,
                     log: new[] { $"Side override: {flipped.Turn} to move fits the move", MoveLog(found.Value) });
             }
         }
 
-        var all = Positions;
-        for (int i = all.Count - 2; i >= Math.Max(0, all.Count - 8); i--)
+        if (_segmentStart is { } first)
         {
-            if (!all[i].Board.Equals(placement)) continue;
-            int dropped = _moves.Count - i;
-            _moves.RemoveRange(i, dropped);
-            Current = all[i];
-            return MakeUpdate(GameChange.Takeback, none, log: new[] { $"Take-back of {dropped} ply: {all[i].Fen}" });
+            int baseIndex = _breaks.Count > 0 ? _breaks[^1] : 0;
+            var all = new List<ChessPosition> { first };
+            for (int k = baseIndex; k < _moves.Count; k++) all.Add(_moves[k].After);
+            for (int i = all.Count - 2; i >= Math.Max(0, all.Count - 8); i--)
+            {
+                if (!all[i].Board.Equals(placement)) continue;
+                int dropped = all.Count - 1 - i;
+                _moves.RemoveRange(_moves.Count - dropped, dropped);
+                Current = all[i];
+                return MakeUpdate(GameChange.Takeback, none, log: new[] { $"Take-back of {dropped} ply: {all[i].Fen}" });
+            }
         }
 
         int missing = cur.Board.MissingPieces(placement);
         if (missing is > 0 and <= 2)
             return MakeUpdate(GameChange.Unchanged, none, log: new[] { $"Partial frame ignored: {missing} piece(s) missing" });
 
-        if (_moves.Count > 0) EarlierSegments.Add(new List<PlayedMove>(_moves));
+        if (_moves.Count == 0 && _stash is { } s && ResyncContinuity.IsPlausible(s.Current.Board, placement))
+        {
+            Restore(s);
+            return Update(placement, whiteAtBottom, hintedMover);
+        }
         var est = Estimate(placement, cur, whiteAtBottom, hintedMover);
-        Reset(est, true);
+        if (_moves.Count > 0 && ResyncContinuity.IsPlausible(cur.Board, placement))
+        {
+            _breaks.Add(_moves.Count);
+            _segmentStart = est; Current = est; IsEstimatedStart = true;
+            return MakeUpdate(GameChange.Resync, none, gap: true,
+                log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, segment break at ply {_moves.Count}, now {est.Fen}" });
+        }
+        if (_moves.Count > 0)
+            _stash = new Stash(new List<PlayedMove>(_moves), new List<int>(_breaks), StartPosition, _segmentStart, IsEstimatedStart, cur);
+        Reset(est, true, keepStash: true);
         return MakeUpdate(GameChange.Resync, none, gap: true,
-            log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, new segment at {est.Fen}" });
+            log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, new game segment at {est.Fen}" });
     }
 
     private static string MoveLog((List<PlayedMove> Moves, bool Unique) found)
@@ -156,15 +199,32 @@ public sealed class GameRecord
         return $"{kind} {sans} -> {found.Moves[^1].After.Fen}";
     }
 
-    public void Clear()
+    public void Seed(ChessPosition pos)
     {
-        StartPosition = null; Current = null; _moves.Clear(); EarlierSegments.Clear(); IsEstimatedStart = false;
+        Clear();
+        Reset(pos, true);
     }
 
-    private void Reset(ChessPosition pos, bool estimated)
+    public void Clear()
     {
-        StartPosition = pos; Current = pos; _moves.Clear(); IsEstimatedStart = estimated;
+        StartPosition = null; _segmentStart = null; Current = null; _moves.Clear(); _breaks.Clear(); _stash = null;
+        IsEstimatedStart = false;
+    }
+
+    private void Reset(ChessPosition pos, bool estimated, bool keepStash = false)
+    {
+        StartPosition = pos; _segmentStart = pos; Current = pos; _moves.Clear(); _breaks.Clear();
+        IsEstimatedStart = estimated;
+        if (!keepStash) _stash = null;
         StartedAt = DateTime.UtcNow;
+    }
+
+    private void Restore(Stash s)
+    {
+        _moves.Clear(); _moves.AddRange(s.Moves);
+        _breaks.Clear(); _breaks.AddRange(s.Breaks);
+        StartPosition = s.Start; _segmentStart = s.SegmentStart; IsEstimatedStart = s.Estimated; Current = s.Current;
+        _stash = null;
     }
 
     private void Append(List<PlayedMove> found)
@@ -180,7 +240,7 @@ public sealed class GameRecord
         return new GameUpdate
         {
             Change = change, NewMoves = added, Position = pos, Result = pos.Result,
-            Estimated = IsEstimatedStart && _moves.Count == 0,
+            Estimated = IsEstimatedStart && SegmentMoves == 0,
             Reviewable = reviewable ?? Array.Empty<PlayedMove>(), Gap = gap, Log = log ?? Array.Empty<string>(),
         };
     }
@@ -241,8 +301,10 @@ public sealed class GameRecord
         for (int i = 0; i < _moves.Count; i++)
         {
             var m = _moves[i];
+            bool brk = _breaks.Contains(i);
+            if (brk) tokens.Add("{ moves missed }");
             if (m.Mover == PieceColor.White) tokens.Add($"{m.MoveNumber}.");
-            else if (i == 0) tokens.Add($"{m.MoveNumber}...");
+            else if (i == 0 || brk) tokens.Add($"{m.MoveNumber}...");
             tokens.Add(m.San);
         }
         tokens.Add(res);

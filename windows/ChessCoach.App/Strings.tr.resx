@@ -198,5 +198,16 @@
   <data name="fairPlay.title" xml:space="preserve"><value>Adil oyun</value></data>
   <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach pratik içindir: botlara karşı oyunlar, puansız oyunlar, gerçek tahta ve analiz. Önerilerini puanlı çevrim içi oyunlarda kullanmak chess.com ve Lichess adil oyun kurallarına aykırıdır ve hesabınızın kapatılmasına yol açabilir.</value></data>
   <data name="update.available" xml:space="preserve"><value>{0} sürümü hazır. Yüklemek için tepsi menüsünden "Güncellemeleri denetle" seçeneğini seç.</value></data>
-  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach tepside çalışır. Tarayıcıda bir satranç tahtası aç, tepsi menüsünde "Etkin" seçeneğini aç ve uygulamanın taşları öğrenmesi için başlangıç konumunu bir kez göster.</value></data>
+  <data name="hint.thinkFirst" xml:space="preserve"><value>Biraz düşün, sonra tekrar bas.</value></data>
+  <data name="threat.none" xml:space="preserve"><value>Acil bir tehdit bulunamadı.</value></data>
+  <data name="feedback.more" xml:space="preserve"><value>Daha fazla</value></data>
+  <data name="welcome.title" xml:space="preserve"><value>Chess Coach'a hoş geldiniz</value></data>
+  <data name="welcome.intro" xml:space="preserve"><value>Chess Coach ekranınızdaki satranç tahtasını izler; ipuçları, hamle değerlendirmeleri ve her partiden sonra bir özetle gelişmenize yardımcı olur. Tüm analiz bu PC'te yapılır.</value></data>
+  <data name="welcome.step1" xml:space="preserve"><value>Bir satranç sitesi veya uygulaması açın ve bir oyun başlatın.</value></data>
+  <data name="welcome.step2" xml:space="preserve"><value>Chess Coach'u bildirim alanı menüsünden açın (“{0}”).</value></data>
+  <data name="welcome.step3" xml:space="preserve"><value>Uygulamanın taşlarınızın görünümünü öğrenmesi için bir kez başlangıç konumunu gösterin. Taş seti değişirse “Taşları yeniden öğren” seçeneğini kullanın.</value></data>
+  <data name="welcome.step4" xml:space="preserve"><value>Chess Coach sizin yerinize asla hamle yapmaz. Dil ve açıklamalar için isteğe bağlı yapay zekâ Ayarlar'dadır.</value></data>
+  <data name="welcome.gotIt" xml:space="preserve"><value>Anladım</value></data>
+  <data name="welcome.switchOn" xml:space="preserve"><value>Aç</value></data>
+  <data name="training.after" xml:space="preserve"><value>Sonrasında: {0}</value></data>
 </root>

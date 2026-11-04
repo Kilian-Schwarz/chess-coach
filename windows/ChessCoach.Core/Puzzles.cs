@@ -90,7 +90,13 @@ public sealed class PuzzleSet
 
     public bool Add(Puzzle p)
     {
-        if (Puzzles.Any(x => x.Fen == p.Fen)) return false;
+        if (Puzzles.FirstOrDefault(x => x.Fen == p.Fen) is { } existing)
+        {
+            existing.Box = 1;
+            existing.Mastered = false;
+            existing.DueAt = p.DueAt;
+            return false;
+        }
         Puzzles.Add(p);
         return true;
     }

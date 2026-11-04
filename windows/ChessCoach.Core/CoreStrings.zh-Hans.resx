@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>你的马</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>兵</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>你的兵</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>未能清楚识别双方的王</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>未能明确识别双方的王。棋子样式有变化吗？菜单：重新学习棋子</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>在底线检测到兵</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>检测到的兵过多</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>检测到的白方棋子过多</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>服务器 URL 无效。</value></data>
   <data name="llm.denied" xml:space="preserve"><value>访问被拒绝。请检查令牌。</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>服务器返回错误 {0}。{1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>服务器报告错误 {0}。</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>在此地址未找到模型列表。Open WebUI 请填写例如 https://openwebui.example.com，vLLM 请填写 http://host:8000/v1。</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>要获得讲解，请在设置中选择服务器和模型。</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>注意：{0}走到{1}后将无人保护。</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>最常见的错误：{0}（{1} 次）。示例：{2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>连续 {0} 步好棋。</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>下一局：{0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>服务器未找到该地址或模型（错误 404）。</value></data>
 </root>

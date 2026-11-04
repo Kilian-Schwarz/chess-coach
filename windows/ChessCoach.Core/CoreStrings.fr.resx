@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>Ton cavalier</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Pion</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>Ton pion</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>Rois non reconnus clairement</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Rois non reconnus clairement. Le jeu de pièces a changé ? Menu : Réapprendre les pièces</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Pion détecté sur la première rangée</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Trop de pions détectés</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>Trop de pièces blanches détectées</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>L'URL du serveur n'est pas valide.</value></data>
   <data name="llm.denied" xml:space="preserve"><value>Accès refusé. Vérifie le jeton.</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>Le serveur signale l'erreur {0}. {1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Le serveur a signalé l’erreur {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Aucune liste de modèles trouvée à cette adresse. Pour Open WebUI, saisis p. ex. https://openwebui.example.com, pour vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Pour obtenir des explications, choisis un serveur et un modèle dans les réglages.</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>Attention : {0} en {1} serait sans défense.</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>Erreur la plus fréquente : {0} ({1}×). Exemple : {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} bons coups d'affilée.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Pour la prochaine partie : {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>Le serveur n’a trouvé ni l’adresse ni le modèle (erreur 404).</value></data>
 </root>

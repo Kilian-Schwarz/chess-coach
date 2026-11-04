@@ -74,6 +74,10 @@ public sealed record ExplanationStyle(StyleLength Length = StyleLength.Medium, S
     }
 
     public static readonly ExplanationStyle ShortPrinciple = new(StyleLength.Short, StyleDepth.Principle);
+    public const StyleLength FirstLength = StyleLength.Short;
+
+    public static StyleLength? LengthFromKey(string? key) =>
+        key?.Split('|')[0] switch { "short" => StyleLength.Short, "medium" => StyleLength.Medium, "long" => StyleLength.Long, _ => null };
 }
 
 public enum ExplanationFeedback { TooLong, TooShort, Helpful, AskedAgain, CollapsedImmediately }
@@ -94,6 +98,7 @@ public sealed class LearningStyle
     public const double Alpha = 0.25;
     public const double ExplorationRate = 0.10;
     public const double SwitchMargin = 0.05;
+    public const double ImplicitWeight = 0.2;
 
     public StyleLength Length { get; set; } = StyleLength.Medium;
     public StyleDepth Depth { get; set; } = StyleDepth.Principle;
@@ -139,7 +144,7 @@ public sealed class LearningStyle
             case ExplanationFeedback.TooLong:
             case ExplanationFeedback.CollapsedImmediately:
                 {
-                    double w = f == ExplanationFeedback.TooLong ? 1.0 : 0.5;
+                    double w = f == ExplanationFeedback.TooLong ? 1.0 : ImplicitWeight;
                     if (used.Length.Shorter() is { } s)
                     {
                         Nudge(used, 0, w);
@@ -150,7 +155,7 @@ public sealed class LearningStyle
             case ExplanationFeedback.TooShort:
             case ExplanationFeedback.AskedAgain:
                 {
-                    double w = f == ExplanationFeedback.TooShort ? 1.0 : 0.5;
+                    double w = f == ExplanationFeedback.TooShort ? 1.0 : ImplicitWeight;
                     if (used.Length.Longer() is { } l)
                     {
                         Nudge(used, 0, w);

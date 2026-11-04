@@ -200,6 +200,17 @@ extension AppModel {
         if !scan.looksLikeStart, relearnTried != scan.screen, templates.isEmpty || templates.fitsBadly(scan) {
             relearnTried = scan.screen
             var t = PieceTemplates()
+            if !templates.isEmpty, let tracked = record.current, let wb = t.learnKnown(scan.features, board: tracked.board, preferWhiteAtBottom: autoWhiteAtBottom) {
+                autoWhiteAtBottom = wb
+                templates = t
+                Self.saveTemplates(t)
+                pendingScreen = nil
+                stablePlacement = nil
+                dropCapture()
+                status = String(localized: "Pieces learned")
+                Log.write("Pieces relearned from the tracked position: \(tracked.fen)")
+                return
+            }
             if let found = t.learnEarlyPosition(scan.features) {
                 autoWhiteAtBottom = found.whiteAtBottom
                 templates = t

@@ -66,13 +66,17 @@ public class TacticsCoachTests
     [Fact]
     public void RatingThresholds()
     {
-        Assert.Equal(MoveRating.Best, MoveRatingExt.From(500, true));
-        Assert.Equal(MoveRating.Best, MoveRatingExt.From(15, false));
-        Assert.Equal(MoveRating.Good, MoveRatingExt.From(16, false));
-        Assert.Equal(MoveRating.Good, MoveRatingExt.From(60, false));
-        Assert.Equal(MoveRating.Inaccuracy, MoveRatingExt.From(130, false));
-        Assert.Equal(MoveRating.Mistake, MoveRatingExt.From(300, false));
-        Assert.Equal(MoveRating.Blunder, MoveRatingExt.From(301, false));
+        Assert.Equal(MoveRating.Best, MoveRatingExt.From(80.0, 10.0, true));
+        Assert.Equal(MoveRating.Best, MoveRatingExt.From(60.0, 58.0, false));
+        Assert.Equal(MoveRating.Good, MoveRatingExt.From(60.0, 57.9, false));
+        Assert.Equal(MoveRating.Good, MoveRatingExt.From(60.0, 50.1, false));
+        Assert.Equal(MoveRating.Inaccuracy, MoveRatingExt.From(60.0, 50.0, false));
+        Assert.Equal(MoveRating.Inaccuracy, MoveRatingExt.From(60.0, 40.1, false));
+        Assert.Equal(MoveRating.Mistake, MoveRatingExt.From(60.0, 40.0, false));
+        Assert.Equal(MoveRating.Mistake, MoveRatingExt.From(60.0, 30.1, false));
+        Assert.Equal(MoveRating.Blunder, MoveRatingExt.From(60.0, 30.0, false));
+        Assert.Equal(MoveRating.Good, MoveRatingExt.From(0, -50, false));
+        Assert.Equal(MoveRating.Blunder, MoveRatingExt.From(0, -900, false));
         Assert.Equal("Blunder", MoveRating.Blunder.Label());
     }
 

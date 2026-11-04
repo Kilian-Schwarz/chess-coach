@@ -19,7 +19,7 @@
   <data name="piece.knight.your" xml:space="preserve"><value>あなたのナイト</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>ポーン</value></data>
   <data name="piece.pawn.your" xml:space="preserve"><value>あなたのポーン</value></data>
-  <data name="problem.kings" xml:space="preserve"><value>キングを正しく認識できませんでした</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>キングを明確に認識できません。駒のデザインを変えましたか？メニュー：駒を学習し直す</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>最後列にポーンが検出されました</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>ポーンが多すぎます</value></data>
   <data name="problem.tooManyWhite" xml:space="preserve"><value>白の駒が多すぎます</value></data>
@@ -129,7 +129,7 @@
   <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
   <data name="llm.badUrl" xml:space="preserve"><value>サーバーのURLが無効です。</value></data>
   <data name="llm.denied" xml:space="preserve"><value>アクセスが拒否されました。トークンを確認してください。</value></data>
-  <data name="llm.httpError" xml:space="preserve"><value>サーバーがエラー {0} を返しました。{1}</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>サーバーがエラー {0} を返しました。</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>このアドレスにモデル一覧が見つかりません。Open WebUI なら例えば https://openwebui.example.com、vLLM なら http://host:8000/v1 を入力してください。</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>解説を表示するには、設定でサーバーとモデルを選んでください。</value></data>
   <data name="lift.undefended" xml:space="preserve"><value>注意：{1}の{0}は守られません。</value></data>
@@ -139,4 +139,5 @@
   <data name="takeaway.mistake" xml:space="preserve"><value>最も多いミス: {0}({1}回)。例: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>良い手が{0}手連続。</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>次の対局に向けて: {0}</value></data>
+  <data name="llm.notFound" xml:space="preserve"><value>サーバーがアドレスまたはモデルを見つけられませんでした（エラー 404）。</value></data>
 </root>

@@ -30,6 +30,8 @@ internal static class Program
         model.OpenRecord = () => (record ??= new RecordWindow(model)).Show();
         model.OpenTraining = () => (training ??= new TrainingWindow(model)).Show();
         model.OpenReport = () => (report ??= new ReportWindow(model)).Show();
+        model.OpenReportQuietly = () => (report ??= new ReportWindow(model)).ShowWithoutFocus();
+        model.CloseReport = () => report?.Close();
         tray.OpenRecord = model.OpenRecord;
         tray.OpenTraining = model.OpenTraining;
         tray.OpenReport = model.OpenReport;
@@ -55,7 +57,7 @@ internal static class Program
         {
             model.Settings.FirstRunShown = true;
             model.Settings.Save();
-            tray.Balloon(Loc.T("firstRun.text"));
+            new WelcomeWindow(model).Show();
         }
         app.Run();
     }

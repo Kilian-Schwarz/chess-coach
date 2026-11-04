@@ -85,6 +85,12 @@ final class Storage {
         return url
     }
 
+    func deleteGame(id: String) {
+        let folder = root.appendingPathComponent("games", isDirectory: true)
+        let files = (try? fm.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)) ?? []
+        for url in files where url.deletingPathExtension().lastPathComponent.hasSuffix("-\(id)") { try? fm.removeItem(at: url) }
+    }
+
     func loadGames(limit: Int = 50) -> [GameReport] {
         let folder = root.appendingPathComponent("games", isDirectory: true)
         let files = (try? fm.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)) ?? []

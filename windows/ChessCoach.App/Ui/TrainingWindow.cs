@@ -25,7 +25,9 @@ internal sealed class TrainingWindow
     private bool _recorded, _finished;
     private (int File, int Rank)? _selected;
     private int _lineIndex, _solved, _attempted;
-    private bool _busy, _whiteAtBottom = true;
+    private bool _busy, _whiteAtBottom = true, _nudged;
+    private DateTime _shownAt = DateTime.UtcNow;
+    private double _thinkSeconds = Curriculum.BaseThinkSeconds;
 
     public TrainingWindow(AppModel model)
     {
@@ -62,7 +64,8 @@ internal sealed class TrainingWindow
         _profile = _model.Active;
         var set = _model.PuzzlesFor(_profile.Id).Puzzles;
         var priority = _model.TakePriorityPuzzles();
-        var adaptation = Curriculum.Adapt(_profile.Level, _profile.FocusSkill, _profile.Skills, PuzzleScheduler.RecentSuccessRate(set));
+        var adaptation = _model.AdaptationFor(_profile);
+        _thinkSeconds = adaptation.ThinkSeconds;
         var first = priority.Select(id => set.FirstOrDefault(p => p.Id == id)).OfType<Puzzle>().ToList();
         _queue = first.Concat(PuzzleScheduler.TodaysSelection(set, _profile.FocusSkill, maxNew: adaptation.NewPuzzlesPerDay).Where(p => !first.Contains(p))).ToList();
         _index = -1; _solved = 0; _attempted = 0;
@@ -88,6 +91,7 @@ internal sealed class TrainingWindow
         _puzzle = _queue[_index];
         _position = ChessPosition.FromFen(_puzzle.Fen);
         _hintLevel = 0; _recorded = false; _finished = false; _selected = null; _lineIndex = 0; _busy = false;
+        _nudged = false; _shownAt = DateTime.UtcNow;
         if (_position == null) { Next(); return; }
         _whiteAtBottom = _position.Turn == PieceColor.White;
         _board.Set(_position.Board, _whiteAtBottom);
@@ -155,11 +159,17 @@ internal sealed class TrainingWindow
         string uci = move.Uci;
         bool correct = _lineIndex == 0 ? _puzzle!.Accepts(uci) : _puzzle!.BestLine.Count > _lineIndex && uci == _puzzle.BestLine[_lineIndex];
         Select(null);
-        if (!correct && !_recorded && await AlternativeHoldsAsync(uci)) correct = true;
+        string? line = null;
+        if (!correct)
+        {
+            var check = await CheckAsync(uci);
+            line = check?.Line;
+            if (check != null && _lineIndex == 0 && !_recorded && _puzzle!.TryAcceptAlternative(uci, check.Loss)) correct = true;
+        }
         if (!correct)
         {
             if (!_recorded) { _recorded = true; _attempted++; Record(false); ShowStats(); }
-            _info.Text = Loc.T("training.wrong");
+            _info.Text = line == null ? Loc.T("training.wrong") : Loc.T("training.wrong") + "\n" + Loc.T("training.after", line);
             return;
         }
         string described = _position!.Board.DescribeMove(move);
@@ -184,21 +194,21 @@ internal sealed class TrainingWindow
         }
         _finished = true;
         if (!_recorded) { _recorded = true; _attempted++; Record(true); }
-        _solved++;
+        if (_hintLevel == 0) _solved++;
         ShowStats();
         _info.Text = Loc.T("training.correct", described);
         SetButtons(false);
     }
 
-    private async Task<bool> AlternativeHoldsAsync(string uci)
+    private async Task<AppModel.MoveCheck?> CheckAsync(string uci)
     {
-        if (_lineIndex != 0 || _puzzle == null) return false;
+        if (_puzzle == null || _position == null) return null;
         var current = _puzzle;
         _busy = true;
         try
         {
-            if (await _model.MoveLossAsync(current.Fen, uci) is not int loss) return false;
-            return _puzzle == current && current.TryAcceptAlternative(uci, loss);
+            var check = await _model.CheckMoveAsync(_position.Fen, uci);
+            return _puzzle == current ? check : null;
         }
         finally { _busy = false; }
     }
@@ -216,6 +226,12 @@ internal sealed class TrainingWindow
     private void NextHint()
     {
         if (_puzzle == null || _position == null || _finished) return;
+        if (Curriculum.NeedsThinkDelay(_hintLevel, (DateTime.UtcNow - _shownAt).TotalSeconds, _thinkSeconds, _nudged))
+        {
+            _nudged = true;
+            _hint.Text = Loc.T("hint.thinkFirst");
+            return;
+        }
         _hintLevel = Math.Min(4, _hintLevel + 1);
         var best = UciMove.Parse(_puzzle.AcceptedMoves[0]);
         if (best is not { } m) return;

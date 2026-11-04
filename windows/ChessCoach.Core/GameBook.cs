@@ -1,8 +1,6 @@
-using ChessCoach.Core;
+namespace ChessCoach.Core;
 
-namespace ChessCoach.App.Model;
-
-internal sealed class GameBook
+public sealed class GameBook
 {
     public Queue<PlayedMove> Queue { get; } = new();
     public List<ReviewedMove> Reviewed { get; } = new();
@@ -29,7 +27,18 @@ internal sealed class GameBook
         Reviewed.RemoveAll(r => !valid.Contains(Key(r.FenBefore, r.Uci)));
         Rated.RemoveWhere(k => !valid.Contains(k));
         Seen.RemoveWhere(k => !valid.Contains(k));
+        foreach (var list in Mistakes.Values) list.RemoveAll(m => m.MoveKey != null && !valid.Contains(m.MoveKey));
+    }
+
+    public void Requeue(IEnumerable<PlayedMove> moves)
+    {
+        var done = Reviewed.Select(r => Key(r.FenBefore, r.Uci)).ToHashSet();
+        Queue.Clear();
+        foreach (var m in moves)
+        {
+            var key = Key(m.FenBefore, m.Uci);
+            Seen.Add(key);
+            if (!done.Contains(key)) Queue.Enqueue(m);
+        }
     }
 }
-
-public sealed record RecapProgress(string Id, int Done, int Total);

@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace ChessCoach.Core;
 
-public sealed record GameMistake(MistakeType Type, int Loss, string Example, string? PuzzleId);
+public sealed record GameMistake(MistakeType Type, int Loss, string Example, string? PuzzleId, string? MoveKey = null);
 
 public sealed class Takeaway
 {

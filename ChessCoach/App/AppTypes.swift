@@ -18,6 +18,7 @@ struct CachedAnalysis {
 struct WindowRequest: Equatable {
     let id: String
     let serial: Int
+    var activate = true
 }
 
 enum Slot { case review, suggestion }
