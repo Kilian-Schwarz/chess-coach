@@ -45,4 +45,6 @@ struct GameSnapshot {
     var whiteProfile: String?
     var blackProfile: String?
     var pgn: String
+    var hints: [String: Int] = [:]
+    var mistakes: [GameMistake] = []
 }

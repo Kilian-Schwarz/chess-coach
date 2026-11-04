@@ -6,6 +6,10 @@ struct ChessCoachApp: App {
     @StateObject private var model = AppModel()
     @StateObject private var updater = Updater()
 
+    init() {
+        DispatchQueue.main.async { MoveToApplications.offerIfNeeded() }
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuContent(model: model, store: model.store, updater: updater)
@@ -15,6 +19,13 @@ struct ChessCoachApp: App {
         .menuBarExtraStyle(.menu)
 
         Window("Training", id: "training") { TrainingView(app: model) }
+            .defaultSize(width: 1000, height: 700)
+            .windowResizability(.contentMinSize)
+            .defaultLaunchBehavior(.suppressed)
+            .restorationBehavior(.disabled)
+
+        Window("Welcome", id: "welcome") { WelcomeView(app: model) }
+            .windowResizability(.contentSize)
             .defaultLaunchBehavior(.suppressed)
             .restorationBehavior(.disabled)
 
@@ -72,6 +83,15 @@ struct MenuContent: View {
     @Environment(\.openSettings) private var openSettings
 
     var body: some View {
+        if let pending = updater.pending {
+            if pending.staged != nil {
+                Button("Restart to update to version \(pending.version)") { updater.applyPending() }
+            } else {
+                Button("Version \(pending.version) available …") { updater.applyPending() }
+            }
+            Divider()
+        }
+
         Toggle("Active", isOn: $model.isActive)
             .keyboardShortcut("s")
 
@@ -89,9 +109,9 @@ struct MenuContent: View {
         Divider()
 
         Button("Next hint") { model.nextHint() }
-            .keyboardShortcut("h", modifiers: [.option, .command])
+            .keyboardShortcut("h", modifiers: [.control, .option, .command])
         Button("Switch side to move") { model.toggleSideToMove() }
-            .keyboardShortcut("t", modifiers: [.option, .command])
+            .keyboardShortcut("t", modifiers: [.control, .option, .command])
         Button("Finish game & show recap") { model.endGameNow() }
             .disabled(model.movesInGame < 2)
 

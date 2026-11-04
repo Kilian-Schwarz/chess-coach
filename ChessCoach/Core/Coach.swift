@@ -3,12 +3,22 @@ import Foundation
 enum MoveRating: String {
     case best, good, inaccuracy, mistake, blunder
 
-    static func from(loss: Int, wasBest: Bool) -> MoveRating {
-        if wasBest || loss <= 15 { return .best }
-        if loss <= 60 { return .good }
-        if loss <= 130 { return .inaccuracy }
-        if loss <= 300 { return .mistake }
+    static let bestDrop = 2.0
+    static let inaccuracyDrop = 10.0
+    static let mistakeDrop = 20.0
+    static let blunderDrop = 30.0
+
+    static func from(winBefore: Double, winAfter: Double, wasBest: Bool) -> MoveRating {
+        let drop = winBefore - winAfter
+        if wasBest || drop <= bestDrop { return .best }
+        if drop < inaccuracyDrop { return .good }
+        if drop < mistakeDrop { return .inaccuracy }
+        if drop < blunderDrop { return .mistake }
         return .blunder
+    }
+
+    static func from(valueBefore: Int, valueAfter: Int, wasBest: Bool) -> MoveRating {
+        from(winBefore: Accuracy.winChance(cp: valueBefore), winAfter: Accuracy.winChance(cp: valueAfter), wasBest: wasBest)
     }
 
     func title(_ loc: Loc = .display) -> String {
@@ -53,20 +63,21 @@ struct MoveReview {
 
 enum Coach {
     static func review(before prev: Placement, played: UCIMove, after next: Placement, by mover: PieceColor,
-                       beforeResult before: EngineResult, afterResult after: EngineResult?) -> MoveReview {
+                       beforeResult before: EngineResult, afterResult after: EngineResult?, gameOver: Bool = false) -> MoveReview? {
         let playedValue: Int, playedScore: Score
         if let after, !after.bestMove.isEmpty {
             playedValue = -after.value
             playedScore = after.score.negated
-        } else if next.isInCheck(mover.opposite) {
-            playedValue = 10_000; playedScore = .checkmate
+        } else if after != nil || gameOver {
+            if next.isInCheck(mover.opposite) { playedValue = Accuracy.mateValue; playedScore = .checkmate }
+            else { playedValue = 0; playedScore = .stalemate }
         } else {
-            playedValue = 0; playedScore = .stalemate
+            return nil
         }
         let best = UCIMove(before.bestMove)
         let loss = max(0, before.value - playedValue)
         return MoveReview(before: prev, played: played, best: best, bestScore: before.score, playedScore: playedScore,
-                          rating: MoveRating.from(loss: loss, wasBest: best?.uci == played.uci), loss: loss,
+                          rating: MoveRating.from(valueBefore: before.value, valueAfter: playedValue, wasBest: best?.uci == played.uci), loss: loss,
                           replyMoves: after?.lines.first?.pv ?? [], player: mover)
     }
 
@@ -77,6 +88,11 @@ enum Coach {
             t.removeSubrange(start.lowerBound..<end)
         }
         if let end = t.range(of: "</think>") { t.removeSubrange(t.startIndex..<end.upperBound) }
+        let tag = "<think>"
+        for k in stride(from: tag.count - 1, through: 1, by: -1) where t.hasSuffix(String(tag.prefix(k))) {
+            t.removeLast(k)
+            break
+        }
         return t.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

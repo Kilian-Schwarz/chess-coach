@@ -8,10 +8,12 @@ struct ChessBoardView: View {
     var interactive = true
     var onMove: (UCIMove) -> Void = { _ in }
     var legal: (Int, Int, Int, Int) -> Bool = { _, _, _, _ in true }
+    var canSelect: (Int, Int) -> Bool = { _, _ in true }
 
     @State private var selected: (file: Int, rank: Int)?
     @State private var dragFrom: (file: Int, rank: Int)?
     @State private var dragPoint: CGPoint?
+    @State private var promotion: (from: (file: Int, rank: Int), to: (file: Int, rank: Int))?
 
     private let light = Color(red: 0.93, green: 0.88, blue: 0.78)
     private let dark = Color(red: 0.45, green: 0.58, blue: 0.40)
@@ -26,7 +28,7 @@ struct ChessBoardView: View {
                     let s = Placement.chessSquare(col: col, row: row, whiteAtBottom: whiteAtBottom)
                     Rectangle()
                         .fill((col + row) % 2 == 0 ? light : dark)
-                        .overlay(marker(s))
+                        .overlay(marker(s, sq))
                         .frame(width: sq, height: sq)
                         .offset(x: CGFloat(col) * sq, y: CGFloat(row) * sq)
                 }
@@ -48,10 +50,12 @@ struct ChessBoardView: View {
                         .position(pt)
                 }
                 coordinateLabels(sq)
+                if let pr = promotion { promotionPicker(pr, sq).frame(width: size, height: size) }
             }
-            .frame(width: size, height: size)
+            .frame(width: size, height: size, alignment: .topLeading)
+            .clipped()
             .contentShape(Rectangle())
-            .gesture(interactive ? drag(sq) : nil)
+            .gesture(interactive && promotion == nil ? drag(sq) : nil)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text("Chessboard"))
         }
@@ -64,13 +68,17 @@ struct ChessBoardView: View {
     }
 
     @ViewBuilder
-    private func marker(_ s: (file: Int, rank: Int)) -> some View {
+    private func marker(_ s: (file: Int, rank: Int), _ sq: CGFloat) -> some View {
         if let h = highlight, h == s {
             Color.yellow.opacity(0.45)
         } else if let sel = selected, sel == s {
             Color.yellow.opacity(0.5)
         } else if let sel = selected, legal(sel.file, sel.rank, s.file, s.rank) {
-            Circle().fill(Color.black.opacity(0.18)).padding(18)
+            if placement.squares[s.rank][s.file] == nil {
+                Circle().fill(Color.black.opacity(0.22)).frame(width: sq * 0.3, height: sq * 0.3)
+            } else {
+                Circle().stroke(Color.black.opacity(0.28), lineWidth: sq * 0.09).padding(sq * 0.05)
+            }
         }
     }
 
@@ -92,6 +100,25 @@ struct ChessBoardView: View {
         .allowsHitTesting(false)
     }
 
+    private func promotionPicker(_ pr: (from: (file: Int, rank: Int), to: (file: Int, rank: Int)), _ sq: CGFloat) -> some View {
+        let white = placement.squares[pr.from.rank][pr.from.file]?.isUppercase ?? true
+        return ZStack {
+            Color.black.opacity(0.4).onTapGesture { promotion = nil }
+            HStack(spacing: sq * 0.1) {
+                ForEach(Array("qrbn"), id: \.self) { c in
+                    Button {
+                        promotion = nil
+                        onMove(UCIMove(fromFile: pr.from.file, fromRank: pr.from.rank, toFile: pr.to.file, toRank: pr.to.rank, promotion: c))
+                    } label: {
+                        PieceGlyph(piece: white ? Character(c.uppercased()) : c, size: sq)
+                            .background(Color.white.opacity(0.85), in: RoundedRectangle(cornerRadius: 8))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
     private func square(at p: CGPoint, _ sq: CGFloat) -> (file: Int, rank: Int)? {
         let col = Int(p.x / sq), row = Int(p.y / sq)
         guard (0..<8).contains(col), (0..<8).contains(row), p.x >= 0, p.y >= 0 else { return nil }
@@ -105,7 +132,7 @@ struct ChessBoardView: View {
                     if dragFrom != nil { dragPoint = v.location }
                     return
                 }
-                if placement.squares[s.rank][s.file] != nil, hypot(v.translation.width, v.translation.height) > 4 {
+                if placement.squares[s.rank][s.file] != nil, canSelect(s.file, s.rank), hypot(v.translation.width, v.translation.height) > 4 {
                     dragFrom = s
                     dragPoint = v.location
                 }
@@ -121,22 +148,24 @@ struct ChessBoardView: View {
                 } else if let sel = selected {
                     if sel == end { selected = nil }
                     else if placement.squares[end.rank][end.file].map({ Placement.color(of: $0) }) == placement.squares[sel.rank][sel.file].map({ Placement.color(of: $0) }) {
-                        selected = end
+                        selected = canSelect(end.file, end.rank) ? end : nil
                     } else {
                         selected = nil
                         attempt(sel, end)
                     }
-                } else if let start, placement.squares[start.rank][start.file] != nil {
+                } else if let start, placement.squares[start.rank][start.file] != nil, canSelect(start.file, start.rank) {
                     selected = start
                 }
             }
     }
 
     private func attempt(_ from: (file: Int, rank: Int), _ to: (file: Int, rank: Int)) {
-        guard from != to else { return }
-        var promotion: Character?
-        if let p = placement.squares[from.rank][from.file], Character(p.lowercased()) == "p", to.rank == 0 || to.rank == 7 { promotion = "q" }
-        onMove(UCIMove(fromFile: from.file, fromRank: from.rank, toFile: to.file, toRank: to.rank, promotion: promotion))
+        guard from != to, legal(from.file, from.rank, to.file, to.rank) else { return }
+        if let p = placement.squares[from.rank][from.file], Character(p.lowercased()) == "p", to.rank == 0 || to.rank == 7 {
+            promotion = (from, to)
+            return
+        }
+        onMove(UCIMove(fromFile: from.file, fromRank: from.rank, toFile: to.file, toRank: to.rank, promotion: nil))
     }
 }
 

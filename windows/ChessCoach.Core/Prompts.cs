@@ -26,9 +26,9 @@ public static class Prompts
 
     public const string SummarySystem =
         "You are a patient chess coach. You receive the evaluation of a finished game, computed by a chess engine. " +
-        "The numbers and moves are correct: rely only on them and invent nothing. " +
-        "Write a short summary (2 to 3 sentences), then exactly three lessons as numbered lines, " +
-        "each naming a general principle the player can apply in the next game. Address the player as \"you\".";
+        "The numbers, moves and takeaways are correct: rely only on them and invent nothing. " +
+        "Write a short summary (2 to 3 sentences). Then write one numbered line per given takeaway, in your own words, " +
+        "without adding lessons of your own. If no takeaways are given, write only the summary. Address the player as \"you\".";
 
     public const string ToneBeginner = "Tone: simple words, explain basics.";
     public const string ToneIntermediate = "Tone: clear, friendly.";

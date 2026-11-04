@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Установка Chess Coach</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Удаление Chess Coach</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Установить Chess Coach {0}</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach устанавливается только для вашей учётной записи. Права администратора не нужны.</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} уже установлен и будет обновлён до версии {1}.</value></data>
+  <data name="installButton" xml:space="preserve"><value>Установить</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>Добавить ярлык на рабочий стол</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Установка Chess Coach …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>Подождите, пока копируются файлы.</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach установлен</value></data>
+  <data name="doneBody" xml:space="preserve"><value>Он есть в меню «Пуск». Приложение работает в области уведомлений рядом с часами.</value></data>
+  <data name="startButton" xml:space="preserve"><value>Запустить Chess Coach</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>Не удалось установить</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>Этот установочный файл неполный. Скачайте его снова.</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Удалить Chess Coach?</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach будет удалён с этого компьютера.</value></data>
+  <data name="removeButton" xml:space="preserve"><value>Удалить</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>Также удалить мои настройки, профили и историю партий</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Удаление Chess Coach …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach удалён</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Не удалось полностью удалить Chess Coach</value></data>
+</root>

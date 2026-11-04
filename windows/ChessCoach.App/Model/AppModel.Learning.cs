@@ -53,13 +53,7 @@ internal sealed partial class AppModel
 
     public PlayerProfile Active => Profiles.FirstOrDefault(p => p.Id == Settings.ActiveProfileId) ?? Profiles[0];
 
-    private static string DefaultProfileName()
-    {
-        var buffer = new System.Text.StringBuilder(256);
-        int size = buffer.Capacity;
-        if (Native.GetUserNameEx(3, buffer, ref size) && buffer.Length > 0) return buffer.ToString();
-        return Loc.T("player.default");
-    }
+    private static string DefaultProfileName() => Loc.T("player.default");
 
     public PlayerProfile? Partner
     {
@@ -189,6 +183,7 @@ internal sealed partial class AppModel
 
     public void PuzzleAttempted(PlayerProfile prof, Puzzle p, bool correct)
     {
+        if (p.Attempts.Count == 0 || p.Attempts[^1].Assisted) return;
         if (_themeStyle.TryGetValue(p.Theme, out var st)) prof.RecordPuzzleAfterExplanation(st, correct);
     }
 
@@ -203,8 +198,7 @@ internal sealed partial class AppModel
 
     private void EnqueueForLearning(PlayedMove pm)
     {
-        _book.Queue.Enqueue(pm);
-        _threatResult = null;
+        if (_book.Add(pm)) _threatResult = null;
     }
 
     private void LearningPositionChanged(GameUpdate? previous, GameUpdate u, PieceColor me)
@@ -238,6 +232,47 @@ internal sealed partial class AppModel
         Invalidate();
     }
 
+    private List<string> _priorityPuzzles = new();
+
+    public List<string> TakePriorityPuzzles()
+    {
+        var ids = _priorityPuzzles;
+        _priorityPuzzles = new();
+        return ids;
+    }
+
+    public void TrainTakeaways(GameReport report)
+    {
+        _priorityPuzzles = report.Takeaways.SelectMany(t => t.PuzzleIds).Distinct().ToList();
+        OpenTraining?.Invoke();
+    }
+
+    public Skill? TakeawayFocus(GameReport report) =>
+        report.Takeaways.Where(t => t.Kind != "positive").Select(t => SkillExt.TryParse(t.Skill ?? "", out var s) ? s : (Skill?)null).FirstOrDefault(s => s != null);
+
+    public void SetFocus(Skill skill)
+    {
+        var prof = Active;
+        prof.Focus = skill.Raw();
+        SaveProfile(prof);
+        Notify();
+        UpdatePanel();
+    }
+
+    private void ShowFairPlayNoticeOnce()
+    {
+        if (Settings.FairPlayNoticeShown) return;
+        Settings.FairPlayNoticeShown = true;
+        Settings.Save();
+        System.Windows.MessageBox.Show(Loc.T("fairPlay.text"), Loc.T("fairPlay.title"), System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+    }
+
+    private void ReconcileBook()
+    {
+        var valid = _record.EarlierSegments.SelectMany(x => x).Concat(_record.Moves).Select(MoveKey).ToHashSet();
+        _book.Retain(valid);
+    }
+
     public bool CanFinish => _book.Plies >= 2;
 
     private async Task BackgroundWorkAsync(CancellationToken ct)
@@ -254,12 +289,13 @@ internal sealed partial class AppModel
         if (before == null) return;
         bool over = pm.After.Result is { Kind: GameResultKind.Checkmate or GameResultKind.Stalemate };
         EngineResult? after = over ? null : await _engine.AnalyzeAsync(pm.FenAfter, ms, false);
+        if (after == null && !over) return;
         int valueAfter = after is { BestMove.Length: > 0 } ? -after.Value : (pm.After.IsCheck ? Accuracy.MateValue : 0);
         book.Reviewed.Add(new ReviewedMove(pm.Mover == PieceColor.White ? "w" : "b", pm.Uci, pm.San, pm.FenBefore,
             before.Value, valueAfter, before.BestMove.Length > 0 ? before.BestMove : null));
 
         if (!IsCoached(pm.Mover, me) || !book.Rated.Contains(MoveKey(pm)) || ProfileFor(pm.Mover, me) is not { } prof) return;
-        var review = Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after);
+        if (Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after, pm.After.Result) is not { } review) return;
         EngineResult? threatRes = null;
         if (Threats.NullMoveFen(pm.Before) is { } nf) threatRes = await _engine.AnalyzeAsync(nf, ms, false);
         var analysis = MoveAnalyzer.Analyze(new MoveAnalysisInput(review, before, after, threatRes, pm.MoveNumber));
@@ -267,7 +303,13 @@ internal sealed partial class AppModel
         prof.RecordHintUse(book.HintUsed.GetValueOrDefault(pm.FenBefore));
         if (analysis.Theme is { } th && _reviewStyleByFen.TryGetValue(pm.FenBefore, out var st)) _themeStyle[th.Raw()] = st;
         var puzzle = Puzzle.Make(review, before, analysis.MistakeType, analysis.Theme, prof.Level);
-        if (puzzle != null && PuzzlesFor(prof.Id).Add(puzzle)) SavePuzzles(prof.Id);
+        bool added = puzzle != null && PuzzlesFor(prof.Id).Add(puzzle);
+        if (added) SavePuzzles(prof.Id);
+        if (analysis.MistakeType is { } mt)
+        {
+            if (!book.Mistakes.TryGetValue(pm.Mover, out var list)) book.Mistakes[pm.Mover] = list = new();
+            list.Add(new GameMistake(mt, analysis.Loss, analysis.Example ?? review.PlayedText, added ? puzzle!.Id : null));
+        }
         SaveProfile(prof);
         Notify();
     }
@@ -278,7 +320,7 @@ internal sealed partial class AppModel
         _book = new GameBook();
         var pgn = _pgnCache;
         var opening = _openingName;
-        if (end.Reason is GameEndReason.Overlay or GameEndReason.BoardGone or GameEndReason.Manual)
+        if (end.Reason is GameEndReason.BoardGone or GameEndReason.Manual)
         {
             _record = new GameRecord(); _update = null; _stablePlacement = null; _pendingScreen = null;
             _cached = null; _hasLastFp = false; _pgnCache = ""; _openingName = null;
@@ -298,7 +340,7 @@ internal sealed partial class AppModel
         RecapSelection = report.Id;
         _progress[report.Id] = new RecapProgress(report.Id, book.Reviewed.Count, book.Plies);
         ReportChanged?.Invoke();
-        if (Settings.OpenRecap && !end.Silent) OpenReport?.Invoke();
+        if (Settings.OpenRecap && !end.Silent && end.Reason != GameEndReason.Overlay) OpenReport?.Invoke();
         _ = CompleteRecapAsync(report, book, me, whiteProf, blackProf);
     }
 
@@ -329,11 +371,13 @@ internal sealed partial class AppModel
             foreach (var (prof, c) in new[] { (whiteProf, "w"), (blackProf, "b") })
             {
                 if (prof == null) continue;
-                prof.CompleteGame(report.Side(c).Performance);
-                prof.LearningSpeed = PuzzleScheduler.AdjustedLearningSpeed(prof.LearningSpeed, PuzzlesFor(prof.Id).Puzzles);
+                prof.CompleteGame(report.Side(c).Performance, null, report.Side(c).RatedMoves);
+                prof.AdjustLearningSpeed(PuzzlesFor(prof.Id).Puzzles);
                 SaveProfile(prof);
             }
             string color = me == PieceColor.White ? "w" : "b";
+            report.Takeaways = Takeaway.Compute(book.Mistakes.GetValueOrDefault(me) ?? new(), report.Moves, color, Active.FocusSkill);
+            SaveReport(report);
             var mine = report.Side(color);
             _reviewCard = new CoachCard("report|" + report.Id, CardKind.Info, Loc.T("gameCard.title"))
             {

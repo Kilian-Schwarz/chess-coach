@@ -19,7 +19,11 @@ internal sealed class ScreenCapturer : IDisposable
     private IntPtr _target;
     private Rectangle _targetBounds;
     private int _pointX, _pointY;
-    private bool _failLogged;
+    private readonly object _sync = new();
+    private bool _disposed;
+    private IntPtr _failedTarget;
+    private DateTime _failedAt;
+    private static readonly TimeSpan RetryAfterFailure = TimeSpan.FromSeconds(30);
     private readonly uint _ownPid = (uint)Environment.ProcessId;
     private readonly Native.WindowEnumProc _enumProc;
 
@@ -82,14 +86,23 @@ internal sealed class ScreenCapturer : IDisposable
 
     public RgbImage? Capture(int x, int y, int w, int h)
     {
-        if (w < 16 || h < 16 || !Ensure(w, h)) return null;
-        if (!Native.BitBlt(_memDc, 0, 0, w, h, _screenDc, x, y, Native.SRCCOPY | Native.CAPTUREBLT)) return null;
-        return ToImage(0, 0, w, h);
+        lock (_sync)
+        {
+            if (_disposed || w < 16 || h < 16 || !Ensure(w, h)) return null;
+            if (!Native.BitBlt(_memDc, 0, 0, w, h, _screenDc, x, y, Native.SRCCOPY | Native.CAPTUREBLT)) return null;
+            return ToImage(0, 0, w, h);
+        }
     }
 
     public RgbImage? CaptureWindow(ref Rectangle region)
     {
+        lock (_sync) return _disposed ? null : CaptureWindowLocked(ref region);
+    }
+
+    private RgbImage? CaptureWindowLocked(ref Rectangle region)
+    {
         if (!ResolveTarget(region)) return null;
+        if (_target == _failedTarget && DateTime.UtcNow - _failedAt < RetryAfterFailure) return null;
         Native.GetWindowRect(_target, out var wr);
         var windowRect = Rectangle.FromLTRB(wr.Left, wr.Top, wr.Right, wr.Bottom);
         var crop = CaptureMath.WindowCrop(region, windowRect, out var clipped);
@@ -97,13 +110,16 @@ internal sealed class ScreenCapturer : IDisposable
         if (!Native.PrintWindow(_target, _memDc, Native.PW_RENDERFULLCONTENT)) return Fail("PrintWindow failed");
         var img = ToImage(crop.X, crop.Y, crop.Width, crop.Height);
         if (CaptureMath.IsUniform(img.Pixels, crop.Width * crop.Height)) return Fail("PrintWindow returned a blank image");
+        _failedTarget = IntPtr.Zero;
         region = clipped;
         return img;
     }
 
     private RgbImage? Fail(string reason)
     {
-        if (!_failLogged) { _failLogged = true; Log.Write($"Window capture unavailable ({reason}), using screen capture"); }
+        if (_failedTarget != _target) Log.Write($"Window capture unavailable ({reason}), using screen capture for this window");
+        _failedTarget = _target;
+        _failedAt = DateTime.UtcNow;
         return null;
     }
 
@@ -123,6 +139,7 @@ internal sealed class ScreenCapturer : IDisposable
         if (!Native.IsWindowVisible(hwnd) || Native.IsIconic(hwnd)) return true;
         Native.GetWindowThreadProcessId(hwnd, out var pid);
         if (pid == _ownPid) return true;
+        if ((Native.GetExStyle(hwnd) & (Native.WS_EX_TRANSPARENT | Native.WS_EX_NOACTIVATE | Native.WS_EX_TOOLWINDOW)) != 0) return true;
         if (Native.DwmGetWindowAttribute(hwnd, Native.DWMWA_CLOAKED, out int cloaked, sizeof(int)) == 0 && cloaked != 0) return true;
         if (FrameBounds(hwnd) is not { } fb || !fb.Contains(_pointX, _pointY)) return true;
         _target = hwnd; _targetBounds = fb;
@@ -157,8 +174,12 @@ internal sealed class ScreenCapturer : IDisposable
 
     public void Dispose()
     {
-        ReleaseBitmap();
-        if (_memDc != IntPtr.Zero) { Native.DeleteDC(_memDc); _memDc = IntPtr.Zero; }
-        if (_screenDc != IntPtr.Zero) { Native.ReleaseDC(IntPtr.Zero, _screenDc); _screenDc = IntPtr.Zero; }
+        lock (_sync)
+        {
+            _disposed = true;
+            ReleaseBitmap();
+            if (_memDc != IntPtr.Zero) { Native.DeleteDC(_memDc); _memDc = IntPtr.Zero; }
+            if (_screenDc != IntPtr.Zero) { Native.ReleaseDC(IntPtr.Zero, _screenDc); _screenDc = IntPtr.Zero; }
+        }
     }
 }

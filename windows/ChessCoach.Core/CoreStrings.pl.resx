@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Uwaga: pole {1} ({0}) jest atakowane przez słabszą figurę.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Uwaga: po ruchu {0} na {1} bez ochrony zostaje: {2} na {3}.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Uwaga: niebezpiecznych pól: {0} (figura: {1}), zaznaczone na czerwono.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>Najczęstszy błąd: {0} ({1}×). Przykład: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>{0} dobrych ruchów z rzędu.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>Na następną partię: {0}</value></data>
 </root>

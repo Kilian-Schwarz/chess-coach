@@ -50,7 +50,13 @@ final class Storage {
         let folder = root.appendingPathComponent("profiles", isDirectory: true)
         let files = (try? fm.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)) ?? []
         return files.filter { $0.pathExtension == "json" }
-            .compactMap { try? read(PlayerProfile.self, from: $0) }
+            .compactMap { url -> PlayerProfile? in
+                do { return try read(PlayerProfile.self, from: url) } catch {
+                    Log.write("Profile file unreadable, moved aside: \(url.lastPathComponent)")
+                    try? fm.moveItem(at: url, to: url.appendingPathExtension("corrupt"))
+                    return nil
+                }
+            }
             .sorted { $0.createdAt < $1.createdAt }
     }
 

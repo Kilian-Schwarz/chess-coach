@@ -1,5 +1,6 @@
 {
   "sourceLanguage": "en",
+  "version": "1.0",
   "strings": {
     "%.0f": {
       "extractionState": "manual",
@@ -2411,16 +2412,16 @@
     "Better was: %@": {
       "extractionState": "manual",
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Better was: %@"
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Besser war: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Better was: %@"
           }
         },
         "es": {
@@ -16379,16 +16380,16 @@
     "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can.": {
       "extractionState": "manual",
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can."
-          }
-        },
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Die Serveradresse beginnt mit http://. Dein Token würde unverschlüsselt gesendet. Nimm https://, wenn möglich."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can."
           }
         },
         "es": {
@@ -16461,89 +16462,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "服务器地址以 http:// 开头。您的令牌将以未加密方式发送。如有可能，请使用 https://。"
-          }
-        }
-      }
-    },
-    "The server reported error %lld. %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Der Server meldet Fehler %lld. %@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El servidor informó del error %lld. %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le serveur a signalé l’erreur %lld. %@"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il server ha segnalato l’errore %lld. %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "サーバーがエラー %lld を返しました。%@"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "서버가 오류 %lld을(를) 반환했습니다. %@"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "De server meldt fout %lld. %@"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Serwer zgłosił błąd %lld. %@"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O servidor informou o erro %lld. %@"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сервер сообщил об ошибке %lld. %@"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sunucu %lld hatası bildirdi. %@"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сервер повідомив про помилку %lld. %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "服务器报告错误 %lld。%@"
           }
         }
       }
@@ -16720,79 +16638,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denk selbst nach · ⌥⌘H für einen Hinweis"
+            "value": "Denk selbst nach · ⌃⌥⌘H für einen Hinweis"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Piensa tú mismo · ⌥⌘H para una pista"
+            "value": "Piensa tú mismo · ⌃⌥⌘H para una pista"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réfléchissez seul · ⌥⌘H pour un indice"
+            "value": "Réfléchissez seul · ⌃⌥⌘H pour un indice"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rifletti da solo · ⌥⌘H per un suggerimento"
+            "value": "Rifletti da solo · ⌃⌥⌘H per un suggerimento"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "まず自分で考えましょう · ヒントは ⌥⌘H"
+            "value": "まず自分で考えましょう · ヒントは ⌃⌥⌘H"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "먼저 직접 생각해 보세요 · 힌트는 ⌥⌘H"
+            "value": "먼저 직접 생각해 보세요 · 힌트는 ⌃⌥⌘H"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denk zelf na · ⌥⌘H voor een hint"
+            "value": "Denk zelf na · ⌃⌥⌘H voor een hint"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomyśl sam · ⌥⌘H – wskazówka"
+            "value": "Pomyśl sam · ⌃⌥⌘H – wskazówka"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pense por conta própria · ⌥⌘H para uma dica"
+            "value": "Pense por conta própria · ⌃⌥⌘H para uma dica"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подумайте сами · ⌥⌘H для подсказки"
+            "value": "Подумайте сами · ⌃⌥⌘H для подсказки"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kendiniz düşünün · ipucu için ⌥⌘H"
+            "value": "Kendiniz düşünün · ipucu için ⌃⌥⌘H"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подумайте самі · ⌥⌘H для підказки"
+            "value": "Подумайте самі · ⌃⌥⌘H для підказки"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "先自己想想 · ⌥⌘H 获取提示"
+            "value": "先自己想想 · ⌃⌥⌘H 获取提示"
           }
         }
       }
@@ -16803,79 +16721,79 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denk selbst nach. „Nächster Hinweis“ (⌥⌘H) verrät Schritt für Schritt mehr."
+            "value": "Denk selbst nach. „Nächster Hinweis“ (⌃⌥⌘H) verrät Schritt für Schritt mehr."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Piensa tú mismo. «Siguiente pista» (⌥⌘H) revela más paso a paso."
+            "value": "Piensa tú mismo. «Siguiente pista» (⌃⌥⌘H) revela más paso a paso."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réfléchissez seul. « Indice suivant » (⌥⌘H) en révèle plus, étape par étape."
+            "value": "Réfléchissez seul. « Indice suivant » (⌃⌥⌘H) en révèle plus, étape par étape."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rifletti da solo. «Prossimo suggerimento» (⌥⌘H) rivela di più passo dopo passo."
+            "value": "Rifletti da solo. «Prossimo suggerimento» (⌃⌥⌘H) rivela di più passo dopo passo."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "まず自分で考えましょう。「次のヒント」(⌥⌘H)で少しずつ詳しくなります。"
+            "value": "まず自分で考えましょう。「次のヒント」(⌃⌥⌘H)で少しずつ詳しくなります。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "먼저 직접 생각해 보세요. “다음 힌트”(⌥⌘H)를 누르면 단계별로 더 알려 줍니다."
+            "value": "먼저 직접 생각해 보세요. “다음 힌트”(⌃⌥⌘H)를 누르면 단계별로 더 알려 줍니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denk zelf na. „Volgende hint” (⌥⌘H) onthult stap voor stap meer."
+            "value": "Denk zelf na. „Volgende hint” (⌃⌥⌘H) onthult stap voor stap meer."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pomyśl sam. „Następna wskazówka” (⌥⌘H) odsłania więcej krok po kroku."
+            "value": "Pomyśl sam. „Następna wskazówka” (⌃⌥⌘H) odsłania więcej krok po kroku."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pense por conta própria. “Próxima dica” (⌥⌘H) revela mais, passo a passo."
+            "value": "Pense por conta própria. “Próxima dica” (⌃⌥⌘H) revela mais, passo a passo."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подумайте сами. «Следующая подсказка» (⌥⌘H) раскрывает больше шаг за шагом."
+            "value": "Подумайте сами. «Следующая подсказка» (⌃⌥⌘H) раскрывает больше шаг за шагом."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kendiniz düşünün. “Sonraki ipucu” (⌥⌘H) adım adım daha fazlasını gösterir."
+            "value": "Kendiniz düşünün. “Sonraki ipucu” (⌃⌥⌘H) adım adım daha fazlasını gösterir."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Подумайте самі. «Наступна підказка» (⌥⌘H) розкриває більше крок за кроком."
+            "value": "Подумайте самі. «Наступна підказка» (⌃⌥⌘H) розкриває більше крок за кроком."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "先自己想想。“下一条提示”(⌥⌘H)会一步步给出更多信息。"
+            "value": "先自己想想。“下一条提示”(⌃⌥⌘H)会一步步给出更多信息。"
           }
         }
       }
@@ -20800,7 +20718,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh mit dem Läufer auf %1$@."
+            "value": "Zieh den Läufer, der auf %1$@ steht."
           }
         },
         "en": {
@@ -20842,7 +20760,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speel met de loper op %1$@."
+            "value": "Verzet de loper die op %1$@ staat."
           }
         },
         "pl": {
@@ -20889,7 +20807,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh mit dem König auf %1$@."
+            "value": "Zieh den König, der auf %1$@ steht."
           }
         },
         "en": {
@@ -20931,7 +20849,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speel met de koning op %1$@."
+            "value": "Verzet de koning die op %1$@ staat."
           }
         },
         "pl": {
@@ -20978,7 +20896,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh mit dem Springer auf %1$@."
+            "value": "Zieh den Springer, der auf %1$@ steht."
           }
         },
         "en": {
@@ -21020,7 +20938,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speel met het paard op %1$@."
+            "value": "Verzet het paard dat op %1$@ staat."
           }
         },
         "pl": {
@@ -21067,7 +20985,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh mit dem Bauern auf %1$@."
+            "value": "Zieh den Bauern, der auf %1$@ steht."
           }
         },
         "en": {
@@ -21109,7 +21027,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speel met de pion op %1$@."
+            "value": "Verzet de pion die op %1$@ staat."
           }
         },
         "pl": {
@@ -21156,7 +21074,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh mit der Dame auf %1$@."
+            "value": "Zieh die Dame, die auf %1$@ steht."
           }
         },
         "en": {
@@ -21198,7 +21116,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speel met de dame op %1$@."
+            "value": "Verzet de dame die op %1$@ staat."
           }
         },
         "pl": {
@@ -21245,7 +21163,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zieh mit dem Turm auf %1$@."
+            "value": "Zieh den Turm, der auf %1$@ steht."
           }
         },
         "en": {
@@ -21287,7 +21205,7 @@
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speel met de toren op %1$@."
+            "value": "Verzet de toren die op %1$@ staat."
           }
         },
         "pl": {
@@ -25778,85 +25696,85 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Könige nicht eindeutig erkannt"
+            "value": "Könige nicht eindeutig erkannt. Figurensatz gewechselt? Menü: Figuren neu einlernen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kings not clearly recognised"
+            "value": "Kings not clearly recognised. Did the piece set change? Menu: Relearn pieces"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reyes no reconocidos con claridad"
+            "value": "Reyes no reconocidos con claridad. ¿Cambió el juego de piezas? Menú: Reaprender las piezas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rois non reconnus clairement"
+            "value": "Rois non reconnus clairement. Le jeu de pièces a changé ? Menu : Réapprendre les pièces"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Re non riconosciuti chiaramente"
+            "value": "Re non riconosciuti chiaramente. Il set di pezzi è cambiato? Menu: Reimpara i pezzi"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "キングを明確に認識できません"
+            "value": "キングを明確に認識できません。駒のデザインを変えましたか？メニュー：駒を学習し直す"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "킹을 명확히 인식하지 못함"
+            "value": "킹을 명확히 인식하지 못함. 기물 세트가 바뀌었나요? 메뉴: 기물 다시 학습"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Koningen niet duidelijk herkend"
+            "value": "Koningen niet duidelijk herkend. Andere stukkenset? Menu: Stukken opnieuw leren"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Króle nie zostały wyraźnie rozpoznane"
+            "value": "Króle nie zostały wyraźnie rozpoznane. Zmienił się zestaw figur? Menu: Naucz figur od nowa"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reis não reconhecidos com clareza"
+            "value": "Reis não reconhecidos com clareza. O conjunto de peças mudou? Menu: Reaprender as peças"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Короли распознаны неоднозначно"
+            "value": "Короли распознаны неоднозначно. Сменился набор фигур? Меню: Заново обучить фигуры"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Şahlar net olarak tanınmadı"
+            "value": "Şahlar net olarak tanınmadı. Taş seti değişti mi? Menü: Taşları yeniden öğren"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Королів розпізнано неоднозначно"
+            "value": "Королів розпізнано неоднозначно. Змінився набір фігур? Меню: Заново навчити фігури"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "未能明确识别双方的王"
+            "value": "未能明确识别双方的王。棋子样式有变化吗？菜单：重新学习棋子"
           }
         }
       }
@@ -31010,7 +30928,3339 @@
           }
         }
       }
+    },
+    "Click or drag a piece to play your move.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klicke oder ziehe eine Figur, um deinen Zug zu spielen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haz clic o arrastra una pieza para jugar tu movimiento."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clique ou faites glisser une pièce pour jouer votre coup."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fai clic o trascina un pezzo per giocare la tua mossa."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "駒をクリックまたはドラッグして指しましょう。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기물을 클릭하거나 끌어서 수를 두세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klik of sleep een stuk om je zet te spelen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kliknij lub przeciągnij bierkę, aby wykonać ruch."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clique ou arraste uma peça para jogar o seu lance."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на фигуру или перетащите её, чтобы сделать ход."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamlenizi oynamak için bir taşa tıklayın veya sürükleyin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Натисніть на фігуру або перетягніть її, щоб зробити хід."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击或拖动一枚棋子来走棋。"
+          }
+        }
+      }
+    },
+    "Not quite, try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht ganz, versuche es noch einmal."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No del todo, inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas tout à fait, réessayez."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non proprio, riprova."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "惜しい、もう一度どうぞ。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아쉬워요, 다시 시도해 보세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet helemaal, probeer het opnieuw."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie całkiem, spróbuj jeszcze raz."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quase, tente de novo."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не совсем, попробуйте ещё раз."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tam değil, tekrar deneyin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не зовсім, спробуйте ще раз."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不太对，再试一次。"
+          }
+        }
+      }
+    },
+    "Show solution": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lösung zeigen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar solución"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la solution"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra la soluzione"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解答を見る"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정답 보기"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oplossing tonen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokaż rozwiązanie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar solução"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать решение"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çözümü göster"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показати розв'язок"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示答案"
+          }
+        }
+      }
+    },
+    "Skip": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überspringen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salta"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スキップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "건너뛰기"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overslaan"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pomiń"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pular"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пропустить"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atla"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пропустити"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳过"
+          }
+        }
+      }
+    },
+    "Move Chess Coach to the Applications folder?": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach in den Ordner „Programme“ verschieben?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Mover Chess Coach a la carpeta Aplicaciones?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacer Chess Coach dans le dossier Applications ?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spostare Chess Coach nella cartella Applicazioni?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach を「アプリケーション」フォルダに移動しますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach를 응용 프로그램 폴더로 이동할까요?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach naar de map Programma’s verplaatsen?"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przenieść Chess Coach do folderu Programy?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover o Chess Coach para a pasta Aplicativos?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Переместить Chess Coach в папку «Программы»?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach Uygulamalar klasörüne taşınsın mı?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перемістити Chess Coach до папки «Програми»?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要将 Chess Coach 移到“应用程序”文件夹吗？"
+          }
+        }
+      }
+    },
+    "Chess Coach is running from outside the Applications folder. Moving it there keeps it in one place and lets it update itself.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach läuft nicht aus dem Ordner „Programme“. Dort liegt die App an einem festen Platz und kann sich selbst aktualisieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach se está ejecutando fuera de la carpeta Aplicaciones. Al moverlo allí queda en un solo lugar y puede actualizarse solo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach s’exécute depuis un autre dossier que Applications. Le déplacer au bon endroit le garde en un seul lieu et lui permet de se mettre à jour."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach è in esecuzione da fuori la cartella Applicazioni. Spostandolo lì resta in un posto solo e può aggiornarsi da solo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach は「アプリケーション」フォルダ以外の場所から実行されています。移動すると保管場所が一つにまとまり、自動で更新できるようになります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach가 응용 프로그램 폴더 밖에서 실행되고 있습니다. 그곳으로 옮기면 한곳에 보관되고 스스로 업데이트할 수 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach draait buiten de map Programma’s. Als je het daarheen verplaatst, staat het op één plek en kan het zichzelf bijwerken."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach działa spoza folderu Programy. Po przeniesieniu go tam aplikacja ma stałe miejsce i może sama się aktualizować."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Chess Coach está sendo executado fora da pasta Aplicativos. Movendo-o para lá, ele fica em um só lugar e pode se atualizar sozinho."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach запущен не из папки «Программы». Если переместить его туда, приложение будет лежать в одном месте и сможет обновляться само."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach, Uygulamalar klasörünün dışından çalışıyor. Oraya taşımak onu tek bir yerde tutar ve kendini güncellemesini sağlar."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach запущено не з папки «Програми». Якщо перемістити його туди, застосунок лежатиме в одному місці й зможе оновлюватися сам."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach 当前不在“应用程序”文件夹中运行。移到该文件夹后，它会固定在一个位置并可自动更新。"
+          }
+        }
+      }
+    },
+    "Move to Applications": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In „Programme“ bewegen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover a Aplicaciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacer vers Applications"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sposta in Applicazioni"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「アプリケーション」に移動"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "응용 프로그램으로 이동"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verplaats naar Programma’s"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przenieś do Programów"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mover para Aplicativos"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Переместить в «Программы»"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulamalar’a taşı"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перемістити до «Програм»"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "移到“应用程序”"
+          }
+        }
+      }
+    },
+    "Not now": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jetzt nicht"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahora no"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas maintenant"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non ora"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今はしない"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나중에"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niet nu"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie teraz"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora não"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не сейчас"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şimdi değil"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не зараз"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂不"
+          }
+        }
+      }
+    },
+    "Chess Coach could not be moved": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach konnte nicht verschoben werden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo mover Chess Coach"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach n’a pas pu être déplacé"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossibile spostare Chess Coach"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach を移動できませんでした"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach를 이동할 수 없습니다"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach kon niet worden verplaatst"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie udało się przenieść Chess Coach"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível mover o Chess Coach"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось переместить Chess Coach"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach taşınamadı"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не вдалося перемістити Chess Coach"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法移动 Chess Coach"
+          }
+        }
+      }
+    },
+    "Fair play": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fairplay"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair play"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juego limpio"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair-play"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair play"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フェアプレー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공정한 플레이"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair play"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fair play"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jogo limpo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Честная игра"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adil oyun"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чесна гра"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "公平竞赛"
+          }
+        }
+      }
+    },
+    "Using hints or engine suggestions in rated online games against humans breaks the rules of chess.com, Lichess and similar sites and can get your account banned. Use Chess Coach for games against bots, unrated games, analysis and training.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinweise oder Engine-Vorschläge in gewerteten Online-Partien gegen Menschen verstoßen gegen die Regeln von chess.com, Lichess und ähnlichen Seiten und können zur Sperrung deines Kontos führen. Nutze Chess Coach für Partien gegen Bots, ungewertete Partien, Analyse und Training."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Using hints or engine suggestions in rated online games against humans breaks the rules of chess.com, Lichess and similar sites and can get your account banned. Use Chess Coach for games against bots, unrated games, analysis and training."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar pistas o sugerencias del motor en partidas en línea con puntuación contra personas infringe las normas de chess.com, Lichess y sitios similares y puede llevar al bloqueo de tu cuenta. Usa Chess Coach para partidas contra bots, partidas sin puntuación, análisis y entrenamiento."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser des indices ou des suggestions du moteur dans des parties en ligne classées contre des humains enfreint les règles de chess.com, Lichess et des sites similaires et peut entraîner la suspension de votre compte. Utilisez Chess Coach pour les parties contre des bots, les parties non classées, l'analyse et l'entraînement."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usare suggerimenti o proposte del motore in partite online classificate contro persone viola le regole di chess.com, Lichess e siti simili e può portare alla sospensione dell'account. Usa Chess Coach per partite contro bot, partite non classificate, analisi e allenamento."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人間と対戦するレート付きオンライン対局でヒントやエンジンの提案を使うことは、chess.com、Lichess などのサイトの規約に違反し、アカウント停止の原因になります。Chess Coach は、ボットとの対局、レートなしの対局、分析、トレーニングに使ってください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사람과 두는 레이팅 온라인 대국에서 힌트나 엔진 제안을 사용하면 chess.com, Lichess 등의 규정을 위반하며 계정이 정지될 수 있습니다. Chess Coach는 봇과의 대국, 레이팅 없는 대국, 분석, 훈련에 사용하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hints of engine-suggesties gebruiken in online partijen met rating tegen mensen is in strijd met de regels van chess.com, Lichess en vergelijkbare sites en kan leiden tot blokkering van je account. Gebruik Chess Coach voor partijen tegen bots, partijen zonder rating, analyse en training."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Korzystanie z podpowiedzi lub sugestii silnika w rankingowych partiach online przeciwko ludziom łamie regulamin chess.com, Lichess i podobnych serwisów i może skutkować blokadą konta. Używaj Chess Coach do gier z botami, gier nierankingowych, analizy i treningu."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar dicas ou sugestões do motor em partidas online valendo rating contra pessoas viola as regras do chess.com, do Lichess e de sites semelhantes e pode levar ao bloqueio da sua conta. Use o Chess Coach para partidas contra bots, partidas sem rating, análise e treino."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Использование подсказок или советов движка в рейтинговых онлайн-партиях против людей нарушает правила chess.com, Lichess и похожих сайтов и может привести к блокировке аккаунта. Используйте Chess Coach для игры с ботами, партий без рейтинга, анализа и тренировки."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İnsanlara karşı puanlı çevrimiçi oyunlarda ipucu veya motor önerisi kullanmak chess.com, Lichess ve benzeri sitelerin kurallarını ihlal eder ve hesabınızın kapatılmasına yol açabilir. Chess Coach'u botlara karşı oyunlar, puansız oyunlar, analiz ve antrenman için kullanın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Використання підказок або порад рушія в рейтингових онлайн-партіях проти людей порушує правила chess.com, Lichess та подібних сайтів і може призвести до блокування акаунта. Використовуйте Chess Coach для ігор проти ботів, партій без рейтингу, аналізу й тренування."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在与真人的计分在线对局中使用提示或引擎建议，违反 chess.com、Lichess 等网站的规则，可能导致账号被封。请将 Chess Coach 用于对战机器人、不计分对局、分析和训练。"
+          }
+        }
+      }
+    },
+    "OK": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamam"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好"
+          }
+        }
+      }
+    },
+    "Take a moment to think, then press again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denk kurz nach, dann drück noch einmal."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a moment to think, then press again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piénsalo un momento y vuelve a pulsar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réfléchissez un instant, puis appuyez à nouveau."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rifletti un momento, poi premi di nuovo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "少し考えてから、もう一度押してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠시 생각한 뒤 다시 눌러 주세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denk even na en druk dan nog een keer."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pomyśl chwilę, a potem naciśnij ponownie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pense um instante e pressione de novo."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подумайте немного, затем нажмите ещё раз."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biraz düşün, sonra tekrar bas."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подумайте хвилинку, потім натисніть ще раз."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先想一想，再按一次。"
+          }
+        }
+      }
+    },
+    "No immediate threat found.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine unmittelbare Drohung gefunden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No immediate threat found."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se ha encontrado ninguna amenaza inmediata."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune menace immédiate trouvée."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nessuna minaccia immediata trovata."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "差し迫った脅威は見つかりませんでした。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당장의 위협은 찾지 못했습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geen directe dreiging gevonden."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nie znaleziono bezpośredniego zagrożenia."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma ameaça imediata encontrada."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Непосредственной угрозы не найдено."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acil bir tehdit bulunamadı."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Безпосередньої загрози не знайдено."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有发现迫在眉睫的威胁。"
+          }
+        }
+      }
+    },
+    "Before you move: what does your opponent threaten? Think for yourself. “Next hint” reveals more step by step.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vor dem Zug: Was droht dein Gegner? Denk selbst nach. „Nächster Hinweis“ verrät Schritt für Schritt mehr."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before you move: what does your opponent threaten? Think for yourself. “Next hint” reveals more step by step."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antes de mover: ¿qué amenaza tu rival? Piensa por ti mismo. «Siguiente pista» revela más paso a paso."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avant de jouer : que menace votre adversaire ? Réfléchissez d'abord. « Indice suivant » en révèle plus pas à pas."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prima di muovere: cosa minaccia l'avversario? Rifletti da solo. «Prossimo suggerimento» rivela di più passo dopo passo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "指す前に：相手は何を狙っていますか？まず自分で考えましょう。「次のヒント」で少しずつ見られます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두기 전에: 상대가 무엇을 노리고 있나요? 먼저 스스로 생각해 보세요. “다음 힌트”로 단계별로 더 볼 수 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voor je zet: wat dreigt je tegenstander? Denk zelf na. „Volgende hint” onthult stap voor stap meer."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zanim wykonasz ruch: co grozi ze strony przeciwnika? Pomyśl sam. „Następna podpowiedź” odsłania więcej krok po kroku."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antes de jogar: o que seu adversário ameaça? Pense por conta própria. “Próxima dica” revela mais passo a passo."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перед ходом: чем угрожает соперник? Подумайте сами. «Следующая подсказка» раскрывает больше шаг за шагом."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamleden önce: rakibin neyi tehdit ediyor? Kendin düşün. “Sonraki ipucu” adım adım daha fazlasını gösterir."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перед ходом: чим загрожує суперник? Подумайте самі. «Наступна підказка» відкриває більше крок за кроком."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "走子之前：对手在威胁什么？先自己想一想。“下一个提示”会逐步给出更多信息。"
+          }
+        }
+      }
+    },
+    "Show threat": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drohung zeigen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show threat"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar amenaza"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montrer la menace"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra minaccia"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "脅威を表示"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위협 보기"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dreiging tonen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokaż zagrożenie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar ameaça"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать угрозу"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tehdidi göster"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показати загрозу"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示威胁"
+          }
+        }
+      }
+    },
+    "More": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehr"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di più"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もっと見る"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "더 보기"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meer"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Więcej"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mais"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подробнее"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daha fazla"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Докладніше"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更多"
+          }
+        }
+      }
+    },
+    "Takeaways": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkenntnisse"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takeaways"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conclusiones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À retenir"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Punti chiave"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポイント"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "핵심 정리"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conclusies"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wnioski"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aprendizados"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выводы"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çıkarımlar"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Висновки"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要点"
+          }
+        }
+      }
+    },
+    "Train these puzzles": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Aufgaben trainieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Train these puzzles"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenar estos problemas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S'entraîner sur ces exercices"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allena questi esercizi"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これらの問題を練習"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 문제 훈련하기"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deze opgaven oefenen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trenuj te zadania"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treinar estes problemas"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренировать эти задачи"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu bulmacaları çalış"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тренувати ці задачі"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "练习这些题目"
+          }
+        }
+      }
+    },
+    "Set as focus": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Schwerpunkt setzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set as focus"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fijar como enfoque"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Définir comme objectif"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imposta come focus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重点に設定"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "집중 영역으로 설정"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instellen als focus"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ustaw jako cel"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Definir como foco"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сделать приоритетом"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Odak olarak ayarla"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зробити пріоритетом"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设为重点"
+          }
+        }
+      }
+    },
+    "Not enough data yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch zu wenige Daten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough data yet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún faltan datos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore assez de données"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dati ancora insufficienti"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "データがまだ足りません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 데이터가 부족합니다"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nog te weinig gegevens"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Za mało danych"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda faltam dados"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока недостаточно данных"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz yeterli veri yok"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поки що замало даних"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据尚不足"
+          }
+        }
+      }
+    },
+    "takeaway.mistake": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Häufigster Fehler: %1$@, %2$lld× in dieser Partie. Beispiel: %3$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most frequent mistake: %1$@, %2$lld× this game. Example: %3$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error más frecuente: %1$@, %2$lld× en esta partida. Ejemplo: %3$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur la plus fréquente : %1$@, %2$lld× dans cette partie. Exemple : %3$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore più frequente: %1$@, %2$lld× in questa partita. Esempio: %3$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も多いミス：%1$@、この対局で%2$lld回。例：%3$@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가장 잦은 실수: %1$@, 이번 대국에서 %2$lld회. 예: %3$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meest voorkomende fout: %1$@, %2$lld× in deze partij. Voorbeeld: %3$@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Najczęstszy błąd: %1$@, %2$lld× w tej partii. Przykład: %3$@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erro mais frequente: %1$@, %2$lld× nesta partida. Exemplo: %3$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Самая частая ошибка: %1$@, %2$lld× в этой партии. Пример: %3$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En sık hata: %1$@, bu oyunda %2$lld×. Örnek: %3$@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Найчастіша помилка: %1$@, %2$lld× у цій партії. Приклад: %3$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最常见的错误：%1$@，本局 %2$lld 次。例如：%3$@"
+          }
+        }
+      }
+    },
+    "takeaway.mistakeShort": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Häufigster Fehler: %1$@, %2$lld× in dieser Partie"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most frequent mistake: %1$@, %2$lld× this game"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error más frecuente: %1$@, %2$lld× en esta partida"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erreur la plus fréquente : %1$@, %2$lld× dans cette partie"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Errore più frequente: %1$@, %2$lld× in questa partita"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最も多いミス：%1$@、この対局で%2$lld回"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가장 잦은 실수: %1$@, 이번 대국에서 %2$lld회"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meest voorkomende fout: %1$@, %2$lld× in deze partij"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Najczęstszy błąd: %1$@, %2$lld× w tej partii"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erro mais frequente: %1$@, %2$lld× nesta partida"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Самая частая ошибка: %1$@, %2$lld× в этой партии"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En sık hata: %1$@, bu oyunda %2$lld×"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Найчастіша помилка: %1$@, %2$lld× у цій партії"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最常见的错误：%1$@，本局 %2$lld 次"
+          }
+        }
+      }
+    },
+    "takeaway.positive": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gut gemacht: %1$lld gute Züge in Folge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Well done: %1$lld good moves in a row"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bien hecho: %1$lld buenas jugadas seguidas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bien joué : %1$lld bons coups d'affilée"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ben fatto: %1$lld buone mosse di fila"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よくできました：良い手が%1$lld手連続"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잘했어요: 좋은 수 %1$lld번 연속"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goed gedaan: %1$lld goede zetten achter elkaar"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dobrze: %1$lld dobrych ruchów z rzędu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muito bem: %1$lld bons lances seguidos"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отлично: %1$lld хороших ходов подряд"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aferin: art arda %1$lld iyi hamle"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чудово: %1$lld хороших ходів поспіль"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "做得好：连续 %1$lld 步好棋"
+          }
+        }
+      }
+    },
+    "takeaway.habit": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewohnheit für die nächste Partie: %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habit for the next game: %1$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hábito para la próxima partida: %1$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habitude pour la prochaine partie : %1$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abitudine per la prossima partita: %1$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次の対局の習慣：%1$@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 대국을 위한 습관: %1$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewoonte voor de volgende partij: %1$@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nawyk na następną partię: %1$@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hábito para a próxima partida: %1$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Привычка на следующую партию: %1$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonraki oyun için alışkanlık: %1$@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Звичка на наступну партію: %1$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一局的习惯：%1$@"
+          }
+        }
+      }
+    },
+    "The server reported error %lld.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Server meldet Fehler %lld."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El servidor informó del error %lld."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le serveur a signalé l’erreur %lld."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il server ha segnalato l’errore %lld."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サーバーがエラー %lld を返しました。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "서버가 오류 %lld을(를) 반환했습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De server meldt fout %lld."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serwer zgłosił błąd %lld."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O servidor informou o erro %lld."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер сообщил об ошибке %lld."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunucu %lld hatası bildirdi."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер повідомив про помилку %lld."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器报告错误 %lld。"
+          }
+        }
+      }
+    },
+    "The server did not find the address or model (error 404).": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Server hat die Adresse oder das Modell nicht gefunden (Fehler 404)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El servidor no encontró la dirección o el modelo (error 404)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le serveur n’a trouvé ni l’adresse ni le modèle (erreur 404)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il server non ha trovato l’indirizzo o il modello (errore 404)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サーバーがアドレスまたはモデルを見つけられませんでした（エラー 404）。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "서버가 주소 또는 모델을 찾지 못했습니다(오류 404)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De server heeft het adres of het model niet gevonden (fout 404)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serwer nie znalazł adresu ani modelu (błąd 404)."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O servidor não encontrou o endereço ou o modelo (erro 404)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер не нашёл адрес или модель (ошибка 404)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunucu adresi veya modeli bulamadı (404 hatası)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сервер не знайшов адресу або модель (помилка 404)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器未找到该地址或模型（错误 404）。"
+          }
+        }
+      }
+    },
+    "Welcome to Chess Coach": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen bei Chess Coach"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenido a Chess Coach"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenue dans Chess Coach"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benvenuto in Chess Coach"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coachへようこそ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach에 오신 것을 환영합니다"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welkom bij Chess Coach"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Witaj w Chess Coach"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boas-vindas ao Chess Coach"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добро пожаловать в Chess Coach"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach'a hoş geldiniz"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ласкаво просимо до Chess Coach"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "欢迎使用 Chess Coach"
+          }
+        }
+      }
+    },
+    "Welcome": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienvenue"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benvenuto"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ようこそ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "환영합니다"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welkom"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Witaj"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boas-vindas"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добро пожаловать"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoş geldiniz"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ласкаво просимо"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "欢迎"
+          }
+        }
+      }
+    },
+    "Chess Coach watches a chessboard on your screen and helps you improve with hints, move ratings and a recap after each game. Everything is analysed on this Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach beobachtet ein Schachbrett auf deinem Bildschirm und hilft dir mit Hinweisen, Zugbewertungen und einer Auswertung nach jeder Partie. Alles wird auf diesem Mac berechnet."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach observa un tablero de ajedrez en tu pantalla y te ayuda a mejorar con pistas, valoraciones de jugadas y un resumen tras cada partida. Todo se analiza en este Mac."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach observe un échiquier sur votre écran et vous aide à progresser avec des indices, des évaluations de coups et un bilan après chaque partie. Tout est analysé sur ce Mac."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach osserva una scacchiera sullo schermo e ti aiuta a migliorare con suggerimenti, valutazioni delle mosse e un riepilogo dopo ogni partita. Tutto viene analizzato su questo Mac."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coachは画面上のチェス盤を見て、ヒント、指し手の評価、対局後の振り返りで上達を助けます。解析はすべてこのMac上で行われます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach는 화면의 체스판을 보고 힌트, 수 평가, 대국 후 요약으로 실력 향상을 도와줍니다. 모든 분석은 이 Mac에서 이루어집니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach kijkt naar een schaakbord op je scherm en helpt je beter te worden met hints, zetbeoordelingen en een terugblik na elke partij. Alles wordt op deze Mac geanalyseerd."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach obserwuje szachownicę na ekranie i pomaga ci się poprawiać dzięki wskazówkom, ocenom ruchów i podsumowaniu po każdej partii. Wszystko jest analizowane na tym Macu."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Chess Coach observa um tabuleiro de xadrez na sua tela e ajuda você a melhorar com dicas, avaliações de lances e um resumo após cada partida. Tudo é analisado neste Mac."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach следит за шахматной доской на экране и помогает расти: подсказки, оценки ходов и разбор после каждой партии. Весь анализ выполняется на этом Mac."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach ekranınızdaki satranç tahtasını izler; ipuçları, hamle değerlendirmeleri ve her partiden sonra bir özetle gelişmenize yardımcı olur. Tüm analiz bu Mac'te yapılır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach стежить за шаховою дошкою на екрані й допомагає вдосконалюватися: підказки, оцінки ходів і розбір після кожної партії. Увесь аналіз виконується на цьому Mac."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach 会识别屏幕上的棋盘，通过提示、走法评价和每局后的总结帮助你进步。所有分析都在这台 Mac 上完成。"
+          }
+        }
+      }
+    },
+    "Open a chess website or app and start a game.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne eine Schach-Website oder -App und starte eine Partie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre un sitio web o una app de ajedrez y empieza una partida."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez un site ou une app d’échecs et lancez une partie."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apri un sito o un’app di scacchi e inizia una partita."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チェスのサイトまたはアプリを開いて、対局を始めます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "체스 웹사이트나 앱을 열고 대국을 시작하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open een schaaksite of -app en begin een partij."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Otwórz stronę lub aplikację szachową i zacznij partię."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra um site ou app de xadrez e comece uma partida."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Откройте шахматный сайт или приложение и начните партию."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir satranç sitesi veya uygulaması açın ve bir oyun başlatın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Відкрийте шаховий сайт або застосунок і почніть партію."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开国际象棋网站或应用，开始一局棋。"
+          }
+        }
+      }
+    },
+    "Switch Chess Coach on and allow screen recording when macOS asks.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schalte Chess Coach ein und erlaube die Bildschirmaufnahme, wenn macOS fragt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activa Chess Coach y permite la grabación de pantalla cuando macOS lo pida."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez Chess Coach et autorisez l’enregistrement d’écran quand macOS le demande."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attiva Chess Coach e consenti la registrazione dello schermo quando macOS lo chiede."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coachをオンにして、macOSの確認が出たら画面収録を許可します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach를 켜고 macOS가 물으면 화면 녹화를 허용하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zet Chess Coach aan en sta schermopname toe wanneer macOS erom vraagt."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Włącz Chess Coach i zezwól na nagrywanie ekranu, gdy macOS o to zapyta."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ative o Chess Coach e permita a gravação de tela quando o macOS pedir."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включите Chess Coach и разрешите запись экрана, когда macOS спросит."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach'u açın ve macOS sorduğunda ekran kaydına izin verin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Увімкніть Chess Coach і дозвольте запис екрана, коли macOS запитає."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启 Chess Coach，并在 macOS 询问时允许屏幕录制。"
+          }
+        }
+      }
+    },
+    "Show a start position once so the app can learn how your pieces look. If the piece set changes later, choose “Relearn pieces”.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeig einmal eine Startstellung, damit die App deine Figuren lernt. Ändert sich der Figurensatz später, wähle „Figuren neu einlernen“."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muestra una posición inicial una vez para que la app aprenda cómo son tus piezas. Si el juego de piezas cambia, elige «Reaprender las piezas»."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affichez une fois la position de départ pour que l’app apprenne l’aspect de vos pièces. Si le jeu de pièces change, choisissez « Réapprendre les pièces »."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra una volta la posizione iniziale, così l’app impara l’aspetto dei tuoi pezzi. Se il set cambia, scegli «Reimpara i pezzi»."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初に一度、初期配置を表示すると、アプリが駒の見た目を学習します。駒のデザインが変わったら「駒を学習し直す」を選んでください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시작 배치를 한 번 보여 주면 앱이 기물 모양을 학습합니다. 기물 세트가 바뀌면 ‘기물 다시 학습’을 선택하세요."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toon één keer de beginstelling, zodat de app leert hoe je stukken eruitzien. Verandert de stukkenset later, kies dan “Stukken opnieuw leren”."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pokaż raz pozycję początkową, aby aplikacja nauczyła się wyglądu twoich figur. Gdy zestaw figur się zmieni, wybierz „Naucz figur od nowa”."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostre a posição inicial uma vez para o app aprender como são suas peças. Se o conjunto de peças mudar, escolha “Reaprender as peças”."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Один раз покажите начальную позицию, чтобы приложение запомнило вид ваших фигур. Если набор фигур сменится, выберите «Заново обучить фигуры»."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulamanın taşlarınızın görünümünü öğrenmesi için bir kez başlangıç konumunu gösterin. Taş seti değişirse “Taşları yeniden öğren” seçeneğini kullanın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Один раз покажіть початкову позицію, щоб застосунок запам’ятав вигляд ваших фігур. Якщо набір фігур зміниться, оберіть «Заново навчити фігури»."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先显示一次开局棋盘，让应用学会你的棋子外观。之后若棋子样式变化，请选择“重新学习棋子”。"
+          }
+        }
+      }
+    },
+    "Chess Coach never plays a move for you. Language and the optional AI for explanations are in Settings (⌘,).": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach zieht nie für dich. Sprache und die optionale KI für Erklärungen findest du in den Einstellungen (⌘,)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach nunca juega por ti. El idioma y la IA opcional para las explicaciones están en Ajustes (⌘,)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach ne joue jamais à votre place. La langue et l’IA facultative pour les explications se trouvent dans Réglages (⌘,)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach non muove mai al posto tuo. Lingua e IA opzionale per le spiegazioni si trovano in Impostazioni (⌘,)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coachが代わりに指すことはありません。言語や、解説用の任意のAIは設定（⌘,）にあります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach는 대신 수를 두지 않습니다. 언어와 설명용 선택 AI는 설정(⌘,)에 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach speelt nooit een zet voor je. Taal en de optionele AI voor uitleg vind je in Instellingen (⌘,)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach nigdy nie wykonuje ruchu za ciebie. Język i opcjonalną AI do wyjaśnień znajdziesz w Ustawieniach (⌘,)."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Chess Coach nunca joga por você. O idioma e a IA opcional para explicações ficam em Ajustes (⌘,)."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach никогда не ходит за вас. Язык и необязательный ИИ для объяснений находятся в настройках (⌘,)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach sizin yerinize asla hamle yapmaz. Dil ve açıklamalar için isteğe bağlı yapay zekâ Ayarlar'dadır (⌘,)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach ніколи не робить хід за вас. Мову та необов’язковий ШІ для пояснень можна знайти в налаштуваннях (⌘,)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess Coach 绝不会替你走棋。语言和用于讲解的可选 AI 在“设置”（⌘,）中。"
+          }
+        }
+      }
+    },
+    "Switch On": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einschalten"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attiva"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オンにする"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "켜기"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aanzetten"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Włącz"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ativar"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включить"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aç"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Увімкнути"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启"
+          }
+        }
+      }
+    },
+    "Got It": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verstanden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entendido"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compris"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capito"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begrepen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozumiem"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entendi"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Понятно"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anladım"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зрозуміло"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "知道了"
+          }
+        }
+      }
+    },
+    "Restart to update to version %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu starten für Version %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reiniciar para actualizar a la versión %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redémarrer pour passer à la version %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riavvia per aggiornare alla versione %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再起動してバージョン %@ に更新"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 시작하여 버전 %@(으)로 업데이트"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herstart voor versie %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uruchom ponownie, aby zaktualizować do wersji %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reiniciar para atualizar para a versão %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перезапустить для обновления до версии %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sürümüne güncellemek için yeniden başlat"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перезапустити для оновлення до версії %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重启以更新到版本 %@"
+          }
+        }
+      }
+    },
+    "Version %@ available …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@ verfügbar …"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versión %@ disponible …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@ disponible …"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versione %@ disponibile …"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バージョン %@ が利用可能 …"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버전 %@ 사용 가능 …"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versie %@ beschikbaar …"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dostępna wersja %@ …"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versão %@ disponível …"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступна версия %@ …"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sürümü mevcut …"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступна версія %@ …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本 %@ 可用 …"
+          }
+        }
+      }
+    },
+    "After that move: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danach: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Después: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ensuite : %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dopo: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その後: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "그 다음: %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daarna: %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potem: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Depois: %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Затем: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonrasında: %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Потім: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "之后：%@"
+          }
+        }
+      }
     }
-  },
-  "version": "1.0"
+  }
 }

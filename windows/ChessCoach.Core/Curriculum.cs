@@ -72,7 +72,7 @@ public sealed record PathStage(int Number, Skill Skill)
     public string Summary(CultureInfo? culture = null) => CoreLocale.Get("skill." + Skill.Key() + ".summary", culture);
 }
 
-public sealed record Adaptation(int DefaultHintLevel, int NewPuzzlesPerDay, int DifficultyBias, double IntervalFactor);
+public sealed record Adaptation(int DefaultHintLevel, int NewPuzzlesPerDay);
 
 public static class Curriculum
 {
@@ -84,6 +84,11 @@ public static class Curriculum
         new(1, Skill.PieceSafety), new(2, Skill.Threats), new(3, Skill.Tactics), new(4, Skill.Opening),
         new(5, Skill.KingSafety), new(6, Skill.Endgame), new(7, Skill.Middlegame),
     };
+
+    public const int ThreatAutoGames = 3;
+    public const double ThreatAutoSkill = 0.4;
+
+    public static bool ShowThreatAutomatically(int gamesPlayed, double threatSkill) => gamesPlayed < ThreatAutoGames || threatSkill < ThreatAutoSkill;
 
     public static PathStage Stage(Skill skill) => Path.First(p => p.Skill == skill);
 
@@ -114,13 +119,12 @@ public static class Curriculum
     {
         int hint = level == PlayerLevel.Beginner ? 2 : 1;
         if (Value(skills, focus) < 0.4) hint += 1;
-        int perDay = 10, bias = 0; double interval = 1;
+        int perDay = PuzzleScheduler.MaxNewPerDay;
         if (successRate is double q)
         {
-            if (q > TargetHigh) { hint -= 1; bias = 1; interval = 1.2; perDay = 10; }
-            else if (q < TargetLow) { hint += 1; bias = -1; interval = 0.8; perDay = 5; }
+            if (q > TargetHigh) hint -= 1;
+            else if (q < TargetLow) { hint += 1; perDay = PuzzleScheduler.MaxNewPerDay / 2; }
         }
-        hint = Math.Min(3, Math.Max(1, hint));
-        return new Adaptation(hint, perDay, bias, interval);
+        return new Adaptation(Math.Min(2, Math.Max(1, hint)), perDay);
     }
 }

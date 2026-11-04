@@ -21,7 +21,7 @@ final class AppModel: ObservableObject {
     @Published var side: Side { didSet { resetTracking() } }
     @Published var thinkMs: Int { didSet { analysisCache.removeAll(); invalidate() } }
     @Published var alwaysMyTurn: Bool { didSet { invalidate() } }
-    @Published var duoTraining: Bool { didSet { suggestionCard = nil; forgetHints(); invalidate() } }
+    @Published var duoTraining: Bool { didSet { suggestionCard = nil; forgetHints(); invalidate(); if duoTraining && !oldValue { showFairPlayNotice(key: "fairPlayDuoShown") } } }
     @Published var explainSuggestions: Bool { didSet { suggestionCard = nil; invalidate() } }
     @Published var showThreats: Bool { didSet { invalidate() } }
     @Published var reviewMoves: Bool { didSet { if !reviewMoves { reviewCard = nil }; invalidate() } }
@@ -53,6 +53,7 @@ final class AppModel: ObservableObject {
     var lastDisplay: CGDirectDisplayID?
     var autoWhiteAtBottom: Bool?
     var pendingScreen: [[Character?]]?
+    var relearnTried: [[Character?]]?
     var stablePlacement: Placement?
     var sideOverride: PieceColor?
     var analysisCache: [String: CachedAnalysis] = [:]
@@ -72,7 +73,7 @@ final class AppModel: ObservableObject {
     var regionMisses = 0
     var confirmSoon = false
     var reviewSeq = 0
-    var pendingReview: (moves: [PlayedMove], marked: Set<String>)?
+    var pendingReview: (moves: [PlayedMove], frames: Int)?
     var cachedLocated: Located?
     var lastScreen: [[Character?]]?
     var lastChangeAt = Date()
@@ -104,6 +105,11 @@ final class AppModel: ObservableObject {
     var gameFinished = false
     var countedProfiles = Set<String>()
     var usedHint: [String: Int] = [:]
+    var gameMistakes: [GameMistake] = []
+    var trainingPriority: [String] = []
+    var threatRequested = Set<String>()
+    var hintNudged = Set<String>()
+    var hintFirstSeen: [String: Date] = [:]
     var threatCard: CoachCard? { didSet { updatePanelCards() } }
     var liftCard: CoachCard? { didSet { updatePanelCards() } }
     var lift: LiftView?
@@ -182,14 +188,18 @@ final class AppModel: ObservableObject {
             Task { @MainActor in self.isActive = true }
         }
         panel.model.onNextHint = { [weak self] in self?.nextHint() }
+        panel.model.onShowThreat = { [weak self] in self?.showThreat() }
+        panel.model.onMore = { [weak self] id in self?.more(cardId: id) }
         panel.model.onExplainAgain = { [weak self] in self?.explainAgain() }
         panel.model.onAsk = { [weak self] q in self?.ask(q) }
         panel.model.onFinish = { [weak self] in self?.endGameNow() }
         activity.onChange = { [weak self] in self?.invalidate() }
-        HotKeys.shared.register(keyCode: HotKeys.keyH, modifiers: HotKeys.optionCommand) { [weak self] in self?.nextHint() }
-        HotKeys.shared.register(keyCode: HotKeys.keyT, modifiers: HotKeys.optionCommand) { [weak self] in self?.toggleSideToMove() }
         bindStore()
         bindPreferences()
+        if !defaults.bool(forKey: "welcomeShown") {
+            defaults.set(true, forKey: "welcomeShown")
+            Task { @MainActor in self.open("welcome") }
+        }
         if let name = ProcessInfo.processInfo.environment["CHESSCOACH_OPEN"] {
             Task { @MainActor in self.open(name) }
         }
@@ -202,6 +212,9 @@ final class AppModel: ObservableObject {
         }
         status = String(localized: "Looking for a chessboard …")
         failedFens = []
+        showFairPlayNotice(key: "fairPlayShown")
+        HotKeys.shared.register(keyCode: HotKeys.keyH, modifiers: HotKeys.controlOptionCommand) { [weak self] in self?.nextHint() }
+        HotKeys.shared.register(keyCode: HotKeys.keyT, modifiers: HotKeys.controlOptionCommand) { [weak self] in self?.toggleSideToMove() }
         activity.start()
         invalidate()
         loopTask?.cancel()
@@ -216,9 +229,10 @@ final class AppModel: ObservableObject {
     }
 
     func stop() {
-        finishGame(GameEnd(reason: .manual, result: "*"), open: false)
+        finishGame(GameEnd(reason: .manual, result: "*"), minPlies: 2, open: false)
         loopTask?.cancel()
         loopTask = nil
+        HotKeys.shared.unregisterAll()
         activity.stop()
         pausedShown = false
         tracked = nil

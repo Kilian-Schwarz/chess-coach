@@ -25,9 +25,6 @@ internal static class Native
         public int biCompression, biSizeImage, biXPelsPerMeter, biYPelsPerMeter, biClrUsed, biClrImportant;
     }
 
-    [DllImport("secur32.dll", CharSet = CharSet.Unicode)]
-    public static extern bool GetUserNameEx(int nameFormat, System.Text.StringBuilder name, ref int size);
-
     public delegate bool MonitorEnumProc(IntPtr hMonitor, IntPtr hdc, ref RECT rect, IntPtr data);
 
     public const int GWL_EXSTYLE = -20;
@@ -75,8 +72,13 @@ internal static class Native
     [DllImport("gdi32.dll")] public static extern bool DeleteObject(IntPtr obj);
     [DllImport("gdi32.dll")] public static extern bool DeleteDC(IntPtr dc);
     [DllImport("gdi32.dll")] public static extern bool BitBlt(IntPtr dest, int x, int y, int w, int h, IntPtr src, int sx, int sy, uint rop);
+    [DllImport("user32.dll")] private static extern short GetAsyncKeyState(int key);
+    [DllImport("user32.dll")] private static extern int GetSystemMetrics(int index);
+    private const int SM_SWAPBUTTON = 23;
     [DllImport("shcore.dll")] public static extern int GetDpiForMonitor(IntPtr monitor, uint type, out uint dpiX, out uint dpiY);
 
+
+    public static bool PrimaryButtonDown() => (GetAsyncKeyState(GetSystemMetrics(SM_SWAPBUTTON) != 0 ? 0x02 : 0x01) & 0x8000) != 0;
 
     public static int GetExStyle(IntPtr hwnd) =>
         IntPtr.Size == 8 ? (int)GetWindowLongPtr64(hwnd, GWL_EXSTYLE) : GetWindowLong32(hwnd, GWL_EXSTYLE);

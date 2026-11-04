@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Instalator Chess Coach</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Odinstaluj Chess Coach</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Zainstaluj Chess Coach {0}</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach jest instalowany tylko dla Twojego konta użytkownika. Uprawnienia administratora nie są potrzebne.</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} jest już zainstalowany i zostanie zaktualizowany do wersji {1}.</value></data>
+  <data name="installButton" xml:space="preserve"><value>Zainstaluj</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>Dodaj skrót na pulpicie</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Instalowanie Chess Coach …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>Trwa kopiowanie plików. Proszę czekać.</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach jest zainstalowany</value></data>
+  <data name="doneBody" xml:space="preserve"><value>Znajdziesz go w menu Start. Aplikacja działa w obszarze powiadomień obok zegara.</value></data>
+  <data name="startButton" xml:space="preserve"><value>Uruchom Chess Coach</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>Instalacja nie powiodła się</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>Ten plik instalacyjny jest niekompletny. Pobierz go ponownie.</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Usunąć Chess Coach?</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach zostanie usunięty z tego komputera.</value></data>
+  <data name="removeButton" xml:space="preserve"><value>Usuń</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>Usuń także moje ustawienia, profile i historię partii</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Usuwanie Chess Coach …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach został usunięty</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Nie udało się całkowicie usunąć Chess Coach</value></data>
+</root>

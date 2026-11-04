@@ -96,6 +96,34 @@ public class RecognitionTests
     }
 
     [Fact]
+    public void ThemeChangeIsDetectedAndRelearnedFromEarlyPosition()
+    {
+        var start = Path.Combine(TestSupport.Root, "intern", "fixtures", "chesscom_start_white.png");
+        var themed = Path.Combine(TestSupport.Root, "intern", "fixtures", "chesscom_theme_d4_nf6_white.png");
+        if (!File.Exists(start) || !File.Exists(themed)) return;
+        var (templates, _) = TestSupport.Learn(start);
+        var img = TestSupport.LoadPng(themed);
+        var scan = BoardScanner.Analyze(img, BoardDetector.Detect(img)!.Value, templates);
+        Assert.True(templates.FitsBadly(scan.Features));
+        var relearned = PieceTemplates.Relearned(scan.Features);
+        Assert.NotNull(relearned);
+        Assert.True(relearned!.Value.WhiteAtBottom);
+        Assert.False(relearned.Value.Templates.FitsBadly(scan.Features));
+        var res = BoardScanner.Scan(img, relearned.Value.Templates)!;
+        Assert.Equal("rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR", TestSupport.PlacementOf(res.Screen, true));
+    }
+
+    [Fact]
+    public void MatchingTemplatesDoNotFitBadly()
+    {
+        var start = Path.Combine(TestSupport.Root, "intern", "fixtures", "chesscom_start_white.png");
+        if (!File.Exists(start)) return;
+        var (templates, _) = TestSupport.Learn(start);
+        var img = TestSupport.LoadPng(start);
+        Assert.False(templates.FitsBadly(BoardScanner.Analyze(img, BoardDetector.Detect(img)!.Value, templates).Features));
+    }
+
+    [Fact]
     public void PrivateWorldChessFixtureLearnsFromEarlyPositionIgnoringArrow()
     {
         var path = Path.Combine(TestSupport.Root, "intern", "fixtures", "worldchess_d4_black_arrow.png");

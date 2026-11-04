@@ -48,7 +48,7 @@
   <data name="hint.fallbackTopic" xml:space="preserve"><value>Osserva bene la posizione.</value></data>
   <data name="hint.fallbackPiece" xml:space="preserve"><value>La casa evidenziata mostra quale pezzo deve muovere.</value></data>
   <data name="hint.fallbackIdea" xml:space="preserve"><value>Migliora la tua posizione o para una minaccia.</value></data>
-  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Shift+F8</value></data>
   <data name="suggest.title" xml:space="preserve"><value>Suggerimento: {0}</value></data>
   <data name="suggest.eval" xml:space="preserve"><value>Valutazione: {0}</value></data>
   <data name="suggest.also" xml:space="preserve"><value>Possibile anche: {0}</value></data>
@@ -88,7 +88,7 @@
   <data name="menu.think" xml:space="preserve"><value>Tempo di riflessione</value></data>
   <data name="menu.nextHint" xml:space="preserve"><value>Suggerimento successivo</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Cambia il lato che muove</value></data>
-  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Shift+F9</value></data>
   <data name="menu.endGame" xml:space="preserve"><value>Termina la partita e mostra il riepilogo</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Copia la partita come PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Riporta il pannello accanto alla scacchiera</value></data>
@@ -111,7 +111,7 @@
   <data name="settings.autostart" xml:space="preserve"><value>Avvia con Windows</value></data>
   <data name="settings.language" xml:space="preserve"><value>Lingua</value></data>
   <data name="settings.langSystem" xml:space="preserve"><value>Sistema</value></data>
-  <data name="settings.hotkeys" xml:space="preserve"><value>Scorciatoie: Ctrl+Alt+H suggerimento successivo, Ctrl+Alt+T cambia il lato che muove.</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Scorciatoie: Ctrl+Shift+F8 suggerimento successivo, Ctrl+Shift+F9 cambia il lato che muove.</value></data>
   <data name="settings.expert" xml:space="preserve"><value>Esperto</value></data>
   <data name="settings.thinkMs" xml:space="preserve"><value>Tempo di riflessione (ms)</value></data>
   <data name="settings.lock" xml:space="preserve"><value>Blocca la modalità esperto</value></data>
@@ -161,6 +161,9 @@
   <data name="training.correct" xml:space="preserve"><value>Corretto: {0}</value></data>
   <data name="training.wrong" xml:space="preserve"><value>Non proprio. Riprova o usa un suggerimento.</value></data>
   <data name="training.best" xml:space="preserve"><value>Mossa migliore: {0}</value></data>
+  <data name="training.instruction" xml:space="preserve"><value>Fai clic o trascina un pezzo per giocare la tua mossa.</value></data>
+  <data name="training.skip" xml:space="preserve"><value>Salta</value></data>
+  <data name="training.stats" xml:space="preserve"><value>{0} di {1} risolti</value></data>
   <data name="menu.checkUpdates" xml:space="preserve"><value>Verifica aggiornamenti …</value></data>
   <data name="update.current" xml:space="preserve"><value>Chess Coach è aggiornato.</value></data>
   <data name="update.ready" xml:space="preserve"><value>L’aggiornamento {0} è pronto e verrà installato all’uscita.</value></data>
@@ -187,4 +190,13 @@
   <data name="report.end.manual" xml:space="preserve"><value>Terminata manualmente</value></data>
   <data name="report.summaryLoading" xml:space="preserve"><value>Scrittura del riepilogo …</value></data>
   <data name="record.openRecap" xml:space="preserve"><value>Apri riepilogo</value></data>
+  <data name="panel.showThreat" xml:space="preserve"><value>Mostra la minaccia</value></data>
+  <data name="report.takeaways" xml:space="preserve"><value>Cosa portarti via</value></data>
+  <data name="report.train" xml:space="preserve"><value>Allena questi {0} problemi</value></data>
+  <data name="report.setFocus" xml:space="preserve"><value>Imposta come obiettivo per la prossima partita</value></data>
+  <data name="report.focusSet" xml:space="preserve"><value>Obiettivo impostato: {0}</value></data>
+  <data name="fairPlay.title" xml:space="preserve"><value>Fair play</value></data>
+  <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach serve per allenarsi: partite contro bot, partite non classificate, scacchiera fisica e analisi. Usare i suoi suggerimenti in partite online classificate viola le regole di fair play di chess.com e Lichess e può costare l'account.</value></data>
+  <data name="update.available" xml:space="preserve"><value>La versione {0} è disponibile. Scegli «Verifica aggiornamenti» nel menu della barra di sistema per installarla.</value></data>
+  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach funziona nella barra di sistema. Apri una scacchiera nel browser, attiva «Attivo» nel menu e mostra una volta la posizione iniziale, così l’app impara i pezzi.</value></data>
 </root>

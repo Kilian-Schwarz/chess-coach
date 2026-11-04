@@ -9,6 +9,10 @@ extension AppModel {
             gameFinished = false
             countedProfiles = []
             usedHint = [:]
+            gameMistakes = []
+            threatRequested = []
+            hintNudged = []
+            hintFirstSeen = [:]
             reviewCard = nil
             reportCard = nil
         case .moves:
@@ -107,7 +111,8 @@ extension AppModel {
             id: gameId, end: final, date: record.startedAt, entries: entries, opening: openingLine,
             whiteProfile: whiteProfile, blackProfile: blackProfile,
             pgn: record.pgn(white: store.profile(id: whiteProfile)?.name ?? "?", black: store.profile(id: blackProfile)?.name ?? "?",
-                            opening: openingLine, result: final.knownResult ? final.result : nil))
+                            opening: openingLine, result: final.knownResult ? final.result : nil),
+            hints: usedHint, mistakes: gameMistakes)
         Task { await complete(snapshot, open: open) }
     }
 
@@ -127,7 +132,7 @@ extension AppModel {
         open("report")
     }
 
-    func reviewedMove(_ e: MoveEntry, ply: Int, ms: Int?) async -> ReviewedMove? {
+    func reviewedMove(_ e: MoveEntry, ply: Int, ms: Int?, hints: [String: Int] = [:]) async -> ReviewedMove? {
         let p = e.played
         var before = e.before ?? analysisCache[p.fenBefore]?.result
         if before == nil, let ms, p.before.board.problem(sideToMove: p.mover) == nil {
@@ -146,18 +151,22 @@ extension AppModel {
             if let after { valueAfter = -after.value } else if ms != nil { valueAfter = before.value } else { return nil }
         }
         return ReviewedMove(color: p.mover == .white ? "w" : "b", uci: p.uci, san: p.san, fenBefore: p.fenBefore,
-                            valueBefore: before.value, valueAfter: valueAfter, bestUci: UCIMove(before.bestMove)?.uci, ply: ply)
+                            valueBefore: before.value, valueAfter: valueAfter, bestUci: UCIMove(before.bestMove)?.uci, ply: ply,
+                            hint: hints[p.fenBefore])
     }
 
     func complete(_ snap: GameSnapshot, open: Bool) async {
         var reviewed: [ReviewedMove?] = []
-        for (i, e) in snap.entries.enumerated() { reviewed.append(await reviewedMove(e, ply: i + 1, ms: nil)) }
+        for (i, e) in snap.entries.enumerated() { reviewed.append(await reviewedMove(e, ply: i + 1, ms: nil, hints: snap.hints)) }
         func report() -> GameReport {
             var r = GameReport.build(moves: reviewed.compactMap { $0 }, id: snap.id, date: snap.date, whiteProfileId: snap.whiteProfile,
                                      blackProfileId: snap.blackProfile, opening: snap.opening)
             r.result = snap.end.result
             r.endReason = snap.end.reason.rawValue
             r.summary = store.games.first { $0.id == snap.id }?.summary
+            let view = perspective(of: r)
+            r.takeaways = Takeaway.build(mistakes: gameId == snap.id ? gameMistakes : snap.mistakes, moves: r.moves, color: view.color,
+                                         focus: view.profile?.focusSkill ?? .pieceSafety)
             return r
         }
         let missing = reviewed.indices.filter { reviewed[$0] == nil }
@@ -171,7 +180,7 @@ extension AppModel {
         if !missing.isEmpty {
             recapProgress = RecapProgress(id: snap.id, done: 0, total: missing.count)
             for (n, i) in missing.enumerated() {
-                reviewed[i] = await reviewedMove(snap.entries[i], ply: i + 1, ms: 200)
+                reviewed[i] = await reviewedMove(snap.entries[i], ply: i + 1, ms: 200, hints: snap.hints)
                 recapProgress = RecapProgress(id: snap.id, done: n + 1, total: missing.count)
                 if n % 4 == 3 || n == missing.count - 1 {
                     current = report()
@@ -184,9 +193,9 @@ extension AppModel {
         guard !reviewed.allSatisfy({ $0 == nil }) else { return }
         let final = report()
         for (color, pid) in [("w", snap.whiteProfile), ("b", snap.blackProfile)] {
-            guard let pid, final.side(color).moves > 0, !countedProfiles.contains(snap.id + pid) else { continue }
+            guard let pid, final.side(color).countsForRating, !countedProfiles.contains(snap.id + pid) else { continue }
             countedProfiles.insert(snap.id + pid)
-            store.update(pid) { $0.completeGame(performance: final.side(color).performance) }
+            store.update(pid) { $0.completeGame(summary: final.side(color)) }
         }
         store.save(game: final, pgn: snap.pgn)
         lastReport = final
@@ -251,8 +260,9 @@ extension AppModel {
         }
         guard inRecord(played) else { return }
         let id = played.fenBefore + played.uci
-        let review = Coach.review(before: played.before.board, played: played.move, after: played.after.board,
-                                  by: played.mover, beforeResult: before, afterResult: after)
+        guard let review = Coach.review(before: played.before.board, played: played.move, after: played.after.board,
+                                        by: played.mover, beforeResult: before, afterResult: after,
+                                        gameOver: played.after.result != nil) else { return }
         let cardId = "\(played.fenBefore)|\(played.uci)"
         let who = playerName(played.mover, me: me)
         if reviewMoves, seq == reviewSeq {
@@ -280,11 +290,18 @@ extension AppModel {
                                                              threatResult: nullResult, moveNumber: played.moveNumber))
         if let pid, firstTime {
             let hint = usedHint[played.fenBefore] ?? 0
-            store.update(pid) { $0.apply(outcome); $0.recordHintUse(level: hint) }
+            let weight = Curriculum.gainWeight(hintLevel: hint)
+            store.update(pid) { $0.apply(outcome, gainWeight: weight); $0.recordHintUse(level: hint) }
             let level = store.profile(id: pid)?.level ?? .beginner
             if let puzzle = Puzzle.make(review: review, beforeResult: before, mistakeType: outcome.mistakeType,
                                         theme: outcome.theme, level: level) {
                 store.updatePuzzles(for: pid) { $0.add(puzzle) }
+            }
+            if let type = outcome.mistakeType {
+                let puzzleId = store.puzzles(for: pid).puzzles.first { $0.fen == review.before.fen(sideToMove: review.player) }?.id
+                gameMistakes.append(GameMistake(ply: record.moves.firstIndex { $0.fenBefore == played.fenBefore && $0.uci == played.uci }.map { $0 + 1 } ?? 0,
+                                                color: played.mover == .white ? "w" : "b", type: type.rawValue, loss: outcome.loss,
+                                                example: outcome.example, puzzleId: puzzleId))
             }
             updateInfoLines()
         }

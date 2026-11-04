@@ -27,7 +27,7 @@ public sealed record BoardColors(double[] Light, double[] Dark)
 public static class BoardReadability
 {
     public const int CoveredLimit = 4;
-    public const double DarkerBy = 40, Distance = 40, RingTolerance = 45, RingShare = 0.6;
+    public const double LuminanceShift = 40, Distance = 40, RingTolerance = 45, RingShare = 0.6;
 
     private static double[]? Background(SquareFeature f) => f.Bg is { Length: 3 } b ? new double[] { b[0], b[1], b[2] } : null;
 
@@ -53,7 +53,7 @@ public static class BoardReadability
             {
                 if (Background(features[r][c]) is not { } px) continue;
                 var re = refs[(r + c) % 2];
-                if (Luminance(re) - Luminance(px) >= DarkerBy && Dist(re, px) >= Distance) covered++;
+                if (Math.Abs(Luminance(re) - Luminance(px)) >= LuminanceShift && Dist(re, px) >= Distance) covered++;
             }
         return covered;
     }

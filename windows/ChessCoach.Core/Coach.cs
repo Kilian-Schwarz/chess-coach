@@ -45,8 +45,8 @@ public sealed record MoveReview(Placement Before, UciMove Played, string PlayedT
 
 public static class Coach
 {
-    public static MoveReview Review(Placement prev, UciMove played, Placement next, PieceColor mover,
-        EngineResult beforeResult, EngineResult? afterResult)
+    public static MoveReview? Review(Placement prev, UciMove played, Placement next, PieceColor mover,
+        EngineResult beforeResult, EngineResult? afterResult, GameResult? result = null)
     {
         int playedValue;
         int? cp = null, mate = null;
@@ -57,7 +57,8 @@ public static class Coach
             cp = afterResult.ScoreCP is int c ? -c : null;
             mate = afterResult.MateIn is int m ? -m : null;
         }
-        else if (next.IsInCheck(mover.Opposite())) { playedValue = 10_000; mateKey = "score.checkmate"; }
+        else if (result is not { } over) return null;
+        else if (over.Kind == GameResultKind.Checkmate) { playedValue = Core.Accuracy.MateValue; mateKey = "score.checkmate"; }
         else { playedValue = 0; mateKey = "score.stalemate"; }
         var best = UciMove.Parse(beforeResult.BestMove);
         int loss = Math.Max(0, beforeResult.Value - playedValue);
@@ -225,6 +226,9 @@ public static class Coach
         }
         int close = t.IndexOf("</think>", StringComparison.Ordinal);
         if (close >= 0) t = t.Substring(close + 8);
+        const string open = "<think>";
+        for (int k = open.Length - 1; k >= 1; k--)
+            if (t.EndsWith(open[..k], StringComparison.Ordinal)) { t = t[..^k]; break; }
         return t.Trim();
     }
 }

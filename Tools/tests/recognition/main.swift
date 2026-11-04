@@ -145,10 +145,31 @@ runEarly("e4 e5", image: "\(boards)/early_e4e5_black.png", expected: "rnbqkbnr/p
 runEarly("Nf3 Nc6", image: "\(boards)/early_nf3nc6_white.png", expected: "r1bqkbnr/pppppppp/2n5/8/8/5N2/PPPPPPPP/RNBQKB1R", whiteBottom: true)
 runEarly("four plies", image: "\(boards)/early_four_plies_black.png", expected: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R", whiteBottom: false)
 
+func runRelearn(_ name: String, oldTheme: String, image: String, expected: String, whiteBottom: Bool) {
+    print("--- relearn \(name)")
+    let old = load(oldTheme)
+    guard let oldRect = BoardDetector.detect(old) else { check(false, "\(name): no board in the old theme"); return }
+    var templates = PieceTemplates()
+    templates.learnStart(BoardScanner.analyze(old, board: oldRect, templates: templates).features)
+    let img = load(image)
+    guard let scan = BoardScanner.scan(img, templates: templates) else { check(false, "\(name): no board"); return }
+    print("old templates read \(placement(of: scan, whiteBottom: whiteBottom)), badly: \(templates.fitsBadly(scan))")
+    check(templates.fitsBadly(scan), "\(name): bad fit not detected")
+    guard let found = templates.learnEarlyPosition(scan.features) else { check(false, "\(name): relearn failed"); return }
+    check(found.whiteAtBottom == whiteBottom, "\(name): orientation")
+    check(found.position.turn == .white, "\(name): side to move \(found.position.turn)")
+    guard let res = BoardScanner.scan(img, templates: templates) else { return }
+    let got = placement(of: res, whiteBottom: whiteBottom)
+    check(got == expected, "\(name): placement \(got) instead of \(expected)")
+    check(!templates.fitsBadly(res), "\(name): still a bad fit after relearning")
+}
+
 let privateDir = "intern/fixtures"
 if FileManager.default.fileExists(atPath: privateDir) {
     runStartFixture("chess.com", image: "\(privateDir)/chesscom_start_white.png", whiteBottom: true)
     runStartFixture("lichess", image: "\(privateDir)/lichess_start_white.png", whiteBottom: true)
+    runRelearn("chess.com custom theme", oldTheme: "\(privateDir)/chesscom_start_white.png", image: "\(privateDir)/chesscom_theme_d4_nf6_white.png",
+               expected: "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: true)
     runEarly("World Chess d4 with arrow", image: "\(privateDir)/worldchess_d4_black_arrow.png",
              expected: "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: false)
 } else {

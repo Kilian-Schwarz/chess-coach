@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>注意：{0}在{1}可能被价值更低的棋子吃掉。</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>注意：{0}走到{1}会让{3}上的{2}失去保护。</value></data>
   <data name="lift.many" xml:space="preserve"><value>注意：有{0}个格子对{1}不安全，已用红色标出。</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>最常见的错误：{0}（{1} 次）。示例：{2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>连续 {0} 步好棋。</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>下一局：{0}</value></data>
 </root>

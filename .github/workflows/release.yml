@@ -67,7 +67,7 @@ jobs:
       - name: Set version
         shell: bash
         run: Tools/release/set-version.sh "${{ needs.notes.outputs.version }}"
-      - name: Build ZIP
+      - name: Build ZIP and setup
         shell: bash
         env:
           OFFICIAL_BUILD: "1"
@@ -75,7 +75,9 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: windows
-          path: dist/windows/*.zip
+          path: |
+            dist/windows/*.zip
+            dist/windows/*-setup.exe
 
   publish:
     needs: [notes, mac, windows]

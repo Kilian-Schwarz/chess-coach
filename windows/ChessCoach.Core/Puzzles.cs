@@ -7,6 +7,7 @@ public sealed class PuzzleAttempt
     public DateTime Date { get; set; }
     public bool Correct { get; set; }
     public int HintLevel { get; set; }
+    public bool Assisted { get; set; }
 }
 
 public sealed class Puzzle
@@ -28,6 +29,8 @@ public sealed class Puzzle
 
     public static readonly double[] IntervalsDays = { 1, 3, 7, 16, 35 };
     public const int AcceptTolerance = 30;
+    public const int AlternativeTolerance = 40;
+    public const int AssistedHintLevel = 4;
 
     [JsonIgnore] public bool IsNew => Attempts.Count == 0;
     [JsonIgnore] public Skill Skill => (Core.MistakeTypeExt.TryParse(MistakeType, out var m) ? m : Core.MistakeType.Other).Skill();
@@ -52,21 +55,32 @@ public sealed class Puzzle
 
     public bool Accepts(string uci) => AcceptedMoves.Contains(uci.ToLowerInvariant());
 
+    public bool TryAcceptAlternative(string uci, int lossCp)
+    {
+        if (lossCp > AlternativeTolerance || uci.Length == 0) return false;
+        if (!Accepts(uci)) AcceptedMoves.Add(uci.ToLowerInvariant());
+        return true;
+    }
+
     public bool Attempt(string move, int hintLevel = 0, DateTime? now = null, double learningSpeed = 1.0)
     {
         var t = now ?? DateTime.UtcNow;
         bool correct = Accepts(move);
-        Attempts.Add(new PuzzleAttempt { Date = t, Correct = correct, HintLevel = hintLevel });
+        Attempts.Add(new PuzzleAttempt { Date = t, Correct = correct, HintLevel = hintLevel, Assisted = hintLevel > 0 });
         double speed = Math.Min(1.5, Math.Max(0.6, learningSpeed));
         if (!correct) Box = 1;
+        else if (hintLevel >= AssistedHintLevel) Box = Math.Max(1, Box - 1);
         else if (hintLevel == 0)
         {
             if (Box >= 5) Mastered = true; else Box += 1;
         }
         double days = IntervalsDays[Math.Min(5, Math.Max(1, Box)) - 1] * speed;
-        DueAt = t.AddSeconds(days * 86_400);
+        DueAt = StartOfDay(t, Math.Max(1, (int)Math.Round(days, MidpointRounding.AwayFromZero)));
         return correct;
     }
+
+    public static DateTime StartOfDay(DateTime t, int days) =>
+        DateTime.SpecifyKind(t.ToLocalTime().Date.AddDays(days), DateTimeKind.Local).ToUniversalTime();
 }
 
 public sealed class PuzzleSet
@@ -93,19 +107,27 @@ public sealed class PuzzleStats
 public static class PuzzleScheduler
 {
     public const int MaxNewPerDay = 10;
+    public const int DailyCap = 15;
     public const int RecentWindow = 30;
+    public const int MinReviewAttempts = 10;
+    public const int MaxThemeRun = 3;
+    public const double FocusShare = 0.55;
+
+    private static IEnumerable<PuzzleAttempt> ReviewAttempts(IEnumerable<Puzzle> puzzles) =>
+        puzzles.SelectMany(p => p.Attempts.Skip(1)).Where(a => !a.Assisted);
+
+    public static int ReviewCount(IEnumerable<Puzzle> puzzles) => ReviewAttempts(puzzles).Count();
 
     public static double? RecentSuccessRate(IEnumerable<Puzzle> puzzles)
     {
-        var all = puzzles.SelectMany(p => p.Attempts).OrderBy(a => a.Date).TakeLast(RecentWindow).ToList();
+        var all = ReviewAttempts(puzzles).OrderBy(a => a.Date).TakeLast(RecentWindow).ToList();
         if (all.Count == 0) return null;
         return (double)all.Count(a => a.Correct) / all.Count;
     }
 
     public static double AdjustedLearningSpeed(double current, IReadOnlyCollection<Puzzle> puzzles)
     {
-        int n = puzzles.Sum(p => p.Attempts.Count);
-        if (n < 10 || RecentSuccessRate(puzzles) is not double q) return current;
+        if (ReviewCount(puzzles) < MinReviewAttempts || RecentSuccessRate(puzzles) is not double q) return current;
         double v = current;
         if (q > 0.85) v += 0.1; else if (q < 0.70) v -= 0.1;
         return Math.Min(1.5, Math.Max(0.6, Math.Round(v * 10, MidpointRounding.AwayFromZero) / 10));
@@ -126,17 +148,44 @@ public static class PuzzleScheduler
         return s;
     }
 
-    public static List<Puzzle> TodaysSelection(IReadOnlyCollection<Puzzle> puzzles, Skill? focus, DateTime? now = null, int maxNew = MaxNewPerDay)
+    public static List<Puzzle> TodaysSelection(IReadOnlyCollection<Puzzle> puzzles, Skill? focus, DateTime? now = null,
+        int maxNew = MaxNewPerDay, Random? rng = null, int cap = DailyCap)
     {
         var t = now ?? DateTime.UtcNow;
-        IOrderedEnumerable<Puzzle> FocusFirst(IEnumerable<Puzzle> src) =>
-            src.OrderByDescending(p => focus != null && p.Skill == focus).ThenBy(p => p.DueAt);
         var live = puzzles.Where(p => !p.Mastered && p.DueAt <= t).ToList();
-        var due = FocusFirst(live.Where(p => !p.IsNew)).ToList();
+        var due = live.Where(p => !p.IsNew).OrderBy(p => p.DueAt).Take(cap).ToList();
         var today = t.ToLocalTime().Date;
         int startedToday = puzzles.Count(p => p.Attempts.Count > 0 && p.Attempts[0].Date.ToLocalTime().Date == today);
-        int room = Math.Max(0, maxNew - startedToday);
-        var fresh = FocusFirst(live.Where(p => p.IsNew)).Take(room);
-        return due.Concat(fresh).ToList();
+        int room = Math.Min(Math.Max(0, maxNew - startedToday), Math.Max(0, cap - due.Count));
+        var fresh = live.Where(p => p.IsNew).OrderBy(p => p.DueAt).Take(room);
+        return Interleave(due.Concat(fresh).ToList(), focus, rng ?? Random.Shared);
+    }
+
+    public static List<Puzzle> Interleave(List<Puzzle> items, Skill? focus, Random rng)
+    {
+        var focused = new Queue<Puzzle>(items.Where(p => focus != null && p.Skill == focus));
+        var others = new Queue<Puzzle>(items.Where(p => focus == null || p.Skill != focus));
+        var result = new List<Puzzle>();
+        while (focused.Count + others.Count > 0)
+        {
+            var first = focused.Count > 0 && (others.Count == 0 || rng.NextDouble() < FocusShare) ? focused : others;
+            var second = first == focused ? others : focused;
+            var pick = Take(first, result) ?? Take(second, result) ?? first.Dequeue();
+            result.Add(pick);
+        }
+        return result;
+    }
+
+    private static Puzzle? Take(Queue<Puzzle> queue, List<Puzzle> result)
+    {
+        if (queue.Count == 0) return null;
+        bool run = result.Count >= MaxThemeRun && result.TakeLast(MaxThemeRun).All(p => p.Theme == queue.Peek().Theme);
+        if (!run) return queue.Dequeue();
+        var alt = queue.FirstOrDefault(p => p.Theme != queue.Peek().Theme);
+        if (alt == null) return null;
+        var rest = queue.Where(p => p != alt).ToList();
+        queue.Clear();
+        foreach (var p in rest) queue.Enqueue(p);
+        return alt;
     }
 }

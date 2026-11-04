@@ -10,7 +10,7 @@ Two ways to publish a release. Both start from the same scripts in `Tools/releas
 1. Move the entries under `Unreleased` in `CHANGELOG.md` to a new section `## [X.Y.Z] - YYYY-MM-DD` and fix the compare links at the bottom. The release notes are cut from that section; the build fails if it is missing.
 2. Commit and push to `main`, wait for green CI.
 3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`. The workflow sets the version in `project.yml` and the `.csproj` files itself, you do not edit them for a release.
-4. The workflow creates the GitHub release with notes, the DMG, the macOS and Windows ZIPs and the signed `update.json`.
+4. The workflow creates the GitHub release with notes, the DMG, the macOS and Windows ZIPs, the Windows installer `ChessCoach-X.Y.Z-setup.exe` and the signed `update.json`.
 
 ## One-time: update signing key
 
@@ -42,7 +42,7 @@ Repository settings, Secrets and variables, Actions, New repository secret.
 | `APPSTORE_API_ISSUER_ID` | issuer ID |
 | `UPDATE_SIGNING_KEY` | text of the update signing PEM |
 
-Windows code signing is optional and not wired up. Without it, SmartScreen may warn on first start until the download has built reputation. If you get a certificate later, add a signing step to the `windows` job before the ZIP is created.
+Windows code signing is optional and not wired up. Without it, SmartScreen warns when the setup or the app is first run, until the download has built reputation. If you get a certificate later, add a signing step to the `windows` job: sign `ChessCoach.exe` before the ZIP is created and the setup program before the ZIP is appended (see `docs/building-windows.md`).
 
 Enable "Private vulnerability reporting" in the repository's Security settings, and set Actions to "Read repository contents" as default token permission; the release job requests write access on its own.
 
@@ -56,9 +56,11 @@ Tools/release/release-local.sh --version X.Y.Z --dry-run
 Tools/release/release-local.sh --version X.Y.Z
 ```
 
-`--dry-run` builds, adds Stockfish and signs, then stops before notarization. Without it the script notarizes and staples the app and the DMG, writes the ZIP, DMG and, when `UPDATE_SIGNING_KEY` points at the PEM file, `update.json` to `dist/mac/`. Pass `--windows-zip FILE` to include the Windows ZIP in `update.json`. With `--upload` (and `GITHUB_TOKEN` in the environment) it also creates a draft release with the files; publish the draft on GitHub. Note that `release-local.sh` runs `set-version.sh`, which edits `project.yml` and the `.csproj` files; do not commit that unless you want to.
+`--dry-run` builds, adds Stockfish and signs, then stops before notarization. Without it the script notarizes and staples the app and the DMG, writes the ZIP, DMG and, when `UPDATE_SIGNING_KEY` points at the PEM file, `update.json` to `dist/mac/`. Pass `--windows-zip FILE` to include the Windows ZIP in `update.json`, and `--windows-setup FILE` to upload the Windows installer with the other assets. With `--upload` (and `GITHUB_TOKEN` in the environment) it also creates a draft release with the files; publish the draft on GitHub. Note that `release-local.sh` runs `set-version.sh`, which edits `project.yml` and the `.csproj` files; do not commit that unless you want to.
 
 The update feed is `https://github.com/Kilian-Schwarz/chess-coach/releases/latest/download/update.json`, so the `update.json` of the newest release is what clients see. Mark a release as latest only after you tested the DMG.
+
+The DMG is built by `Tools/release/build-dmg.sh`: volume "Chess Coach" with the app and an Applications link, the app icon as volume icon, and a Finder layout (window size and icon positions) written by `Tools/release/dsstore.py`. It does not use Finder or AppleScript. `release-local.sh` builds the app with `CC_OFFICIAL_BUILD=YES`, which sets `CCOfficialBuild` in `Info.plist`; only such builds offer to move themselves to Applications.
 
 ## If something fails
 

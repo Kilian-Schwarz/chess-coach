@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Chess Coach installeren</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Chess Coach verwijderen</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Chess Coach {0} installeren</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach wordt alleen voor jouw gebruikersaccount geïnstalleerd. Beheerdersrechten zijn niet nodig.</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} is al geïnstalleerd en wordt bijgewerkt naar versie {1}.</value></data>
+  <data name="installButton" xml:space="preserve"><value>Installeren</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>Snelkoppeling op het bureaublad maken</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Chess Coach wordt geïnstalleerd …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>Even geduld terwijl de bestanden worden gekopieerd.</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach is geïnstalleerd</value></data>
+  <data name="doneBody" xml:space="preserve"><value>Je vindt het in het Startmenu. De app draait in het systeemvak naast de klok.</value></data>
+  <data name="startButton" xml:space="preserve"><value>Chess Coach starten</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>Installatie mislukt</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>Dit installatiebestand is onvolledig. Download het opnieuw.</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Chess Coach verwijderen?</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach wordt van deze computer verwijderd.</value></data>
+  <data name="removeButton" xml:space="preserve"><value>Verwijderen</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>Ook mijn instellingen, profielen en partijgeschiedenis wissen</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Chess Coach wordt verwijderd …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach is verwijderd</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Chess Coach kon niet volledig worden verwijderd</value></data>
+</root>

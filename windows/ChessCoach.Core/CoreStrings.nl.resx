@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activeer je koning.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Een pionzet past hier goed.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbeter je slechtste stuk.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Speel met de koning op {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Speel met de dame op {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Speel met de toren op {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Speel met de loper op {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Speel met het paard op {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Speel met de pion op {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Zet de koning die op {0} staat.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Zet de dame die op {0} staat.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Zet de toren die op {0} staat.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Zet de loper die op {0} staat.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Zet het paard dat op {0} staat.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Zet de pion die op {0} staat.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kan de tegenstander mat zetten.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kan een stuk van de tegenstander slaan en zo materiaal winnen.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kan in één zet twee stukken van de tegenstander tegelijk aanvallen.</value></data>
@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Pas op: een minder waardevol stuk bedreigt {0} op {1}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Pas op: {0} naar {1} laat {2} op {3} onbeschermd achter.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Pas op: {0} velden zijn onveilig voor {1}, rood gemarkeerd.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>Meest voorkomende fout: {0} ({1}×). Voorbeeld: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>{0} goede zetten op rij.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>Voor de volgende partij: {0}</value></data>
 </root>

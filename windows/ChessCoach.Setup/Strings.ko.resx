@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Chess Coach 설치</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Chess Coach 제거</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Chess Coach {0} 설치</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach는 현재 사용자 계정에만 설치됩니다. 관리자 권한은 필요하지 않습니다.</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0}이(가) 이미 설치되어 있으며 {1} 버전으로 업데이트됩니다.</value></data>
+  <data name="installButton" xml:space="preserve"><value>설치</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>바탕 화면에 바로 가기 추가</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Chess Coach를 설치하는 중 …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>파일을 복사하는 동안 기다려 주세요.</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach가 설치되었습니다</value></data>
+  <data name="doneBody" xml:space="preserve"><value>시작 메뉴에서 찾을 수 있습니다. 앱은 시계 옆 알림 영역에서 실행됩니다.</value></data>
+  <data name="startButton" xml:space="preserve"><value>Chess Coach 시작</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>설치하지 못했습니다</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>이 설치 파일이 불완전합니다. 다시 내려받아 주세요.</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Chess Coach를 제거할까요?</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach가 이 컴퓨터에서 제거됩니다.</value></data>
+  <data name="removeButton" xml:space="preserve"><value>제거</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>설정, 프로필, 대국 기록도 삭제</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Chess Coach를 제거하는 중 …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach가 제거되었습니다</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Chess Coach를 완전히 제거하지 못했습니다</value></data>
+</root>

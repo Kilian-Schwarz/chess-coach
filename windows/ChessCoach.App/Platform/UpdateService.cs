@@ -53,7 +53,9 @@ internal sealed class UpdateService : IDisposable
                 if (manual) _notify(Loc.T("update.current"));
                 return;
             }
-            if (!Updater.IsOfficialBuild || !Updater.CanWriteAppDir()) { await OfferPageAsync(manifest.Version, manual); return; }
+            bool canInstall = Updater.IsOfficialBuild && Updater.CanWriteAppDir();
+            if (!manual && !(canInstall && _settings.AutoUpdate)) { Announce(manifest.Version); return; }
+            if (!canInstall) { await OfferPageAsync(manifest.Version); return; }
             bool install = _settings.AutoUpdate || await _ui.InvokeAsync(() => Ask("update.prompt", manifest.Version));
             if (!install) return;
             if (_stagedVersion != manifest.Version)
@@ -72,10 +74,15 @@ internal sealed class UpdateService : IDisposable
         finally { _busy.Release(); }
     }
 
-    private async Task OfferPageAsync(string version, bool manual)
+    private void Announce(string version)
     {
-        if (!manual && _offered == version) return;
+        if (_offered == version) return;
         _offered = version;
+        _notify(Loc.T("update.available", version));
+    }
+
+    private async Task OfferPageAsync(string version)
+    {
         if (await _ui.InvokeAsync(() => Ask("update.openPage", version)))
             Process.Start(new ProcessStartInfo(Updater.ReleasesUrl + "/latest") { UseShellExecute = true });
     }

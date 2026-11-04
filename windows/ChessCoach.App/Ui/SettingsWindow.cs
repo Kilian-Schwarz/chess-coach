@@ -51,7 +51,11 @@ internal sealed class SettingsWindow : Window
         _url.LostFocus += (_, _) => { _model.Settings.LlmUrl = _url.Text; _model.Settings.Save(); };
         _token.LostFocus += (_, _) => _model.LlmToken = _token.Password;
         _url.TextChanged += (_, _) => UpdateHttpWarning();
-        _token.PasswordChanged += (_, _) => UpdateHttpWarning();
+        _token.PasswordChanged += (_, _) =>
+        {
+            UpdateHttpWarning();
+            if (!_loading && _model.LlmToken != _token.Password) _model.LlmToken = _token.Password;
+        };
 
         var sf = new StackPanel { Margin = new Thickness(8) };
         var browse = new Button { Content = Loc.T("settings.choose"), Padding = new Thickness(10, 3, 10, 3), Margin = new Thickness(6, 0, 0, 0) };

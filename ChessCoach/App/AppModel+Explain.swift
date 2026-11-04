@@ -10,7 +10,16 @@ extension AppModel {
         if slot == .review { reviewCard = c } else { suggestionCard = c }
     }
 
-    func startExplanation(_ slot: Slot, _ job: ExplainJob, useCache: Bool = true) {
+    func more(cardId: String) {
+        for slot in [Slot.review, .suggestion] {
+            guard let c = card(slot), c.id == cardId, let style = c.style, let pid = c.profileId, let job = jobs[slot], job.cardId == cardId else { continue }
+            let preferred = store.profile(id: pid)?.style.length ?? .medium
+            store.update(pid) { $0.recordFeedback(.tooShort, usedStyle: style) }
+            startExplanation(slot, job, lengthOverride: max(preferred, style.length.longer ?? style.length))
+        }
+    }
+
+    func startExplanation(_ slot: Slot, _ job: ExplainJob, useCache: Bool = true, lengthOverride: StyleLength? = nil) {
         tasks[slot]?.cancel()
         jobs[slot] = job
         guard llmConfigured else {
@@ -19,7 +28,8 @@ extension AppModel {
         }
         let profile = store.profile(id: job.profileId)
         let context = profile?.promptContext ?? PlayerContext.neutral
-        let style = profile?.nextExplanationStyle().style ?? ExplanationStyle()
+        var style = profile?.nextExplanationStyle().style ?? ExplanationStyle()
+        style.length = lengthOverride ?? ExplanationStyle.firstLength
         let key = job.cardId + "|" + style.key
         let pid = job.profileId
         let finish: @MainActor (AppModel, String) -> Void = { model, text in
@@ -58,12 +68,6 @@ extension AppModel {
         }
     }
 
-    func noteAskedAgain() {
-        guard let last = lastExplanation else { return }
-        store.update(last.profileId) { $0.recordFeedback(.askedAgain, usedStyle: last.style) }
-        lastExplanation = nil
-    }
-
     func panelCollapsed(_ collapsed: Bool) {
         guard collapsed, let last = lastExplanation, Date().timeIntervalSince(last.at) < 6 else { return }
         store.update(last.profileId) { $0.recordFeedback(.collapsedImmediately, usedStyle: last.style) }
@@ -86,7 +90,7 @@ extension AppModel {
         guard let c = card(slot), let job = jobs[slot], c.id == job.cardId else { return }
         if let style = c.style, let pid = c.profileId { store.update(pid) { $0.recordFeedback(.askedAgain, usedStyle: style) } }
         lastExplanation = nil
-        startExplanation(slot, job, useCache: false)
+        startExplanation(slot, job, useCache: false, lengthOverride: card(slot)?.style?.length)
     }
 
     func ask(_ question: String) {
@@ -100,7 +104,6 @@ extension AppModel {
             answerCard = CoachCard(id: id, kind: .answer, title: title, note: String(localized: "Set up an AI server in the settings (⌘,) for answers."))
             return
         }
-        noteAskedAgain()
         let color = hintCtx?.toMove ?? record.current?.turn ?? lastMe ?? .white
         let ctx = hintCtx
         let showsBest = effectiveShowBest || hintLevel >= 4
@@ -108,7 +111,7 @@ extension AppModel {
             placement: placement, toMove: color, question: question,
             score: ctx?.result.score(.facts),
             bestMove: showsBest ? ctx.map { $0.position.board.describeMove($0.hints.move, .facts) } : nil,
-            threat: showThreats ? ctx?.threat?.text(.facts) : nil,
+            threat: ctx.flatMap { threatVisible($0) ? $0.threat?.text(.facts) : nil },
             language: Language.englishName)
         var card = CoachCard(id: id, kind: .answer, title: String(localized: "Your question: \(question)"))
         card.isLoading = true

@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Dikkat: {0}, {1} karesinde daha değersiz bir taş tarafından alınabilir.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Dikkat: {0} taşını {1} karesine oynamak, {3} karesindeki {2} taşını korumasız bırakır.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Dikkat: {0} kare {1} için güvensiz, kırmızıyla işaretli.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>En sık hata: {0} ({1}×). Örnek: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>Art arda {0} iyi hamle.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>Sonraki oyun için: {0}</value></data>
 </root>

@@ -95,6 +95,7 @@ internal sealed class ReportWindow
             _body.Children.Add(Kit.Text($"{GameReport.MoveLabel(k.Ply, k.Color)}: {k.MoveText}", 13, true));
             _body.Children.Add(Kit.Text($"{k.WinBefore:0} % → {k.WinAfter:0} %. {k.Facts}", 12, muted: true, bottom: 6));
         }
+        if (g.Takeaways.Count > 0) RenderTakeaways(g);
         if (g.Summary != null)
         {
             _body.Children.Add(Kit.Text(Loc.T("report.summary"), 14, true, bottom: 4).WithMargin(top: 8));
@@ -107,5 +108,21 @@ internal sealed class ReportWindow
             if (File.Exists(path)) Clipboard.SetText(File.ReadAllText(path));
         }));
         _body.Children.Add(row);
+    }
+
+    private void RenderTakeaways(GameReport g)
+    {
+        _body.Children.Add(Kit.Text(Loc.T("report.takeaways"), 14, true, bottom: 4).WithMargin(top: 8));
+        foreach (var t in g.Takeaways) _body.Children.Add(Kit.Text("• " + t.Text(), 13, bottom: 4));
+        var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 4, 0, 4) };
+        int puzzles = g.Takeaways.SelectMany(t => t.PuzzleIds).Distinct().Count();
+        if (puzzles > 0) row.Children.Add(Kit.Btn(Loc.T("report.train", puzzles), () => _model.TrainTakeaways(g)));
+        if (_model.TakeawayFocus(g) is { } skill)
+            row.Children.Add(Kit.Btn(Loc.T("report.setFocus"), () =>
+            {
+                _model.SetFocus(skill);
+                MessageBox.Show(_window, Loc.T("report.focusSet", skill.Label()), _window.Title);
+            }));
+        if (row.Children.Count > 0) _body.Children.Add(row);
     }
 }

@@ -17,6 +17,7 @@ internal static class Program
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         app.DispatcherUnhandledException += (_, e) => { Log.Write("Unhandled error: " + e.Exception); e.Handled = true; };
         AppDomain.CurrentDomain.UnhandledException += (_, e) => Log.Write("Crash: " + e.ExceptionObject);
+        InstallRegistration.Refresh();
         Loc.Apply(AppSettings.Load().Language);
         var model = new AppModel();
         var tray = new TrayController(model);
@@ -50,6 +51,12 @@ internal static class Program
         };
         model.WireTray(tray);
         updates.Start();
+        if (!model.Settings.FirstRunShown)
+        {
+            model.Settings.FirstRunShown = true;
+            model.Settings.Save();
+            tray.Balloon(Loc.T("firstRun.text"));
+        }
         app.Run();
     }
 }

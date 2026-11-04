@@ -25,6 +25,7 @@
     <NoWarn>$(NoWarn);WFO0003;CS0649</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\ChessCoach.Setup\InstallLayout.cs" Link="Platform\InstallLayout.cs" />
     <ProjectReference Include="..\ChessCoach.Core\ChessCoach.Core.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(OfficialBuild)' == 'true'">

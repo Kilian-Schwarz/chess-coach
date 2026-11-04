@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Chess Coach 安装程序</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>卸载 Chess Coach</value></data>
+  <data name="installHeading" xml:space="preserve"><value>安装 Chess Coach {0}</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach 仅为你的用户账户安装，无需管理员权限。</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} 已安装，将更新到 {1} 版。</value></data>
+  <data name="installButton" xml:space="preserve"><value>安装</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>在桌面创建快捷方式</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>正在安装 Chess Coach …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>正在复制文件，请稍候。</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach 已安装</value></data>
+  <data name="doneBody" xml:space="preserve"><value>可在“开始”菜单中找到。应用位于时钟旁的通知区域。</value></data>
+  <data name="startButton" xml:space="preserve"><value>启动 Chess Coach</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>安装失败</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>此安装文件不完整，请重新下载。</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>要卸载 Chess Coach 吗？</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach 将从这台电脑中移除。</value></data>
+  <data name="removeButton" xml:space="preserve"><value>卸载</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>同时删除我的设置、档案和对局记录</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>正在卸载 Chess Coach …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach 已卸载</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Chess Coach 未能完全卸载</value></data>
+</root>

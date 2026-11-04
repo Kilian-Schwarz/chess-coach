@@ -8,7 +8,8 @@ Every release carries:
 
 - `ChessCoach-<version>-macos.zip`: the notarized, stapled app
 - `ChessCoach-<version>-windows-x64.zip`: the self-contained publish folder with Stockfish
-- `ChessCoach-<version>.dmg`: manual install on macOS
+- `ChessCoach-<version>.dmg`: install on macOS by dragging the app to Applications
+- `ChessCoach-<version>-setup.exe`: installer for Windows (per user, contains the same files as the ZIP)
 - `update.json`
 
 ```json
@@ -32,7 +33,7 @@ ECDSA P-256 over the ZIP bytes with SHA-256, DER encoded, base64. The public key
 - Settings: "Install updates automatically" (on by default). Menu: "Check for Updates ...", which always reports the result.
 - macOS: download, verify SHA-256 and signature, unpack with `ditto` next to the installed app, check that the unpacked app has the bundle identifier, the version named in the feed (`x.y.z` only) and a version newer than the running one, and that it is signed by team `29GTPRH5R3` (strict `SecStaticCode` requirement). A helper process then renames the old app aside, renames the new one into place and restores the old one if that fails. A manual check asks whether to restart right away.
 - Self-built apps (ad-hoc signed or unsigned) never install updates. They show "Update available" with a link to the releases page, once per version. A missing feed (no release yet) is logged once and otherwise ignored.
-- Windows: download, verify, unpack to `%APPDATA%\ChessCoach\update\<version>`, and a small helper script replaces the program folder after the app exits and starts it again.
+- Windows: the installer and the ZIP carry the same files, and the updater does not care which one you used: it replaces the folder the app runs from. Download, verify, unpack to `%APPDATA%\ChessCoach\update\<version>`, and a small helper script replaces the program folder after the app exits and starts it again.
 
 ## Tests
 

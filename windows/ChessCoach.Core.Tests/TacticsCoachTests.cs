@@ -94,6 +94,9 @@ public class TacticsCoachTests
     {
         Assert.Equal("Answer", Coach.CleanAnswer("<think>calc</think>\n Answer "));
         Assert.Equal("Answer", Coach.CleanAnswer("calc</think>Answer"));
+        Assert.Equal("Answer", Coach.CleanAnswer("Answer<thi"));
+        Assert.Equal("Answer", Coach.CleanAnswer("Answer<"));
+        Assert.Equal("a < b", Coach.CleanAnswer("a < b"));
         Assert.Equal("Before", Coach.CleanAnswer("Before<think>unfinished"));
         Assert.Equal("ab", Coach.CleanAnswer("a<think>x</think>b<think>y</think>"));
     }
@@ -107,7 +110,7 @@ public class TacticsCoachTests
         var beforeRes = new EngineResult(before.Fen(PieceColor.White), "e2e4",
             new[] { new EngineLine("e2e4", 30, null, new[] { "e2e4", "e7e5" }), new EngineLine("d2d4", 25, null, new[] { "d2d4" }) });
         var afterRes = new EngineResult("x", "e7e5", new[] { new EngineLine("e7e5", 80, null, new[] { "e7e5", "d2d4" }) });
-        var r = Coach.Review(before, played, next, PieceColor.White, beforeRes, afterRes);
+        var r = Coach.Review(before, played, next, PieceColor.White, beforeRes, afterRes)!;
         Assert.Equal(110, r.Loss);
         Assert.Equal(MoveRating.Inaccuracy, r.Rating);
         Assert.Equal("-0.8", r.PlayedScore);
@@ -136,7 +139,9 @@ public class TacticsCoachTests
         var played = M("a1a8");
         var next = before.Applying(played);
         var res = new EngineResult("f", "a1a8", new[] { new EngineLine("a1a8", null, 1, new[] { "a1a8" }) });
-        var r = Coach.Review(before, played, next, PieceColor.White, res, new EngineResult("g", "", Array.Empty<EngineLine>()));
+        var none = new EngineResult("g", "", Array.Empty<EngineLine>());
+        Assert.Null(Coach.Review(before, played, next, PieceColor.White, res, none));
+        var r = Coach.Review(before, played, next, PieceColor.White, res, none, GameResult.Checkmate(PieceColor.White))!;
         Assert.Equal("Checkmate", r.PlayedScore);
         Assert.Equal(MoveRating.Best, r.Rating);
     }

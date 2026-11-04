@@ -11,9 +11,10 @@ extension AppModel {
     func updateLift(placement: Placement, me: PieceColor, whiteAtBottom: Bool) {
         guard dragHints, let cur = record.current, cur.board != placement, isCoached(cur.turn, me: me),
               let piece = LiftedPiece.detect(last: cur, current: placement) else { clearLift(); return }
-        let key = "\(cur.fen)|\(piece.square)"
+        let faded = hintLevel == 0 && (store.profile(id: profileId(for: cur.turn, me: me))?.supportFaded ?? false)
+        let key = "\(cur.fen)|\(piece.square)|\(faded)"
         guard lift?.key != key else { return }
-        let unsafe = piece.unsafeSquares(in: cur)
+        let unsafe = faded ? [] : piece.unsafeSquares(in: cur)
         let marks = unsafe.map { u -> OverlayState.Square in
             let s = Placement.screenSquare(file: u.file, rank: u.rank, whiteAtBottom: whiteAtBottom)
             return OverlayState.Square(col: s.col, row: s.row)

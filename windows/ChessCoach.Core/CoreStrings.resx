@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Careful: {0} on {1} could be taken by a cheaper piece.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Careful: {0} to {1} leaves {2} on {3} hanging.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Careful: {0} squares are unsafe for the {1}, marked in red.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>Most frequent mistake: {0} ({1}×). Example: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>{0} good moves in a row.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>For the next game: {0}</value></data>
 </root>

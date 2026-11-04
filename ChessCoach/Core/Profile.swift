@@ -8,6 +8,7 @@ struct RatingEntry: Codable, Equatable {
     var date: Date
     var rating: Double
     var performance: Double
+    var weight: Double? = nil
 }
 
 struct PlayerProfile: Codable, Equatable, Identifiable {
@@ -15,10 +16,14 @@ struct PlayerProfile: Codable, Equatable, Identifiable {
     static let placementTotal = 3
     static let startRating = 1100.0
     static let alpha = 0.15
+    static let minSkillObservations = 10
+    static let focusLeaveSkill = 0.8
+    static let focusEnterSkill = 0.6
+    static let minGameMoves = 10
+    static let defaultGameWeight = 20.0
 
     static var defaultName: String {
-        let full = NSFullUserName()
-        return full.isEmpty ? Loc.display("profile.defaultName", "Player") : full
+        Loc.display("profile.defaultName", "Player")
     }
 
     var schemaVersion: Int = PlayerProfile.currentSchemaVersion
@@ -30,10 +35,13 @@ struct PlayerProfile: Codable, Equatable, Identifiable {
     var rating: Double = PlayerProfile.startRating
     var level: PlayerLevel = .beginner
     var skills: [String: Double]
+    var skillCounts: [String: Int] = [:]
     var mistakeCounts: [String: Int] = [:]
     var mistakeExamples: [String: [String]]? = nil
     var focus: String
     var learningSpeed: Double = 1.0
+    var learningSpeedAdjustedAt: Date? = nil
+    var pinnedFocus: String? = nil
     var hintStats = HintStats()
     var ratingHistory: [RatingEntry] = []
     var style = LearningStyle()
@@ -62,10 +70,13 @@ struct PlayerProfile: Codable, Equatable, Identifiable {
         var s = try c.decodeIfPresent([String: Double].self, forKey: .skills) ?? [:]
         for k in Skill.allCases where s[k.rawValue] == nil { s[k.rawValue] = 0.5 }
         skills = s
+        skillCounts = try c.decodeIfPresent([String: Int].self, forKey: .skillCounts) ?? [:]
         mistakeCounts = try c.decodeIfPresent([String: Int].self, forKey: .mistakeCounts) ?? [:]
         mistakeExamples = try c.decodeIfPresent([String: [String]].self, forKey: .mistakeExamples)
         focus = try c.decodeIfPresent(String.self, forKey: .focus) ?? Curriculum.focus(skills: s).rawValue
         learningSpeed = try c.decodeIfPresent(Double.self, forKey: .learningSpeed) ?? 1.0
+        learningSpeedAdjustedAt = try c.decodeIfPresent(Date.self, forKey: .learningSpeedAdjustedAt)
+        pinnedFocus = try c.decodeIfPresent(String.self, forKey: .pinnedFocus)
         hintStats = try c.decodeIfPresent(HintStats.self, forKey: .hintStats) ?? HintStats()
         if hintStats.levelUses.count < 5 { hintStats.levelUses += Array(repeating: 0, count: 5 - hintStats.levelUses.count) }
         ratingHistory = try c.decodeIfPresent([RatingEntry].self, forKey: .ratingHistory) ?? []
@@ -82,14 +93,27 @@ struct PlayerProfile: Codable, Equatable, Identifiable {
 
     var focusSkill: Skill { Skill(rawValue: focus) ?? .pieceSafety }
 
-    mutating func observe(_ skill: Skill, value: Double) {
+    func observationCount(_ skill: Skill) -> Int { skillCounts[skill.rawValue] ?? 0 }
+
+    func hasEnoughData(_ skill: Skill) -> Bool { observationCount(skill) >= PlayerProfile.minSkillObservations }
+
+    var showsThreatAutomatically: Bool { Curriculum.showsThreatAutomatically(gamesPlayed: gamesPlayed, skills: skills) }
+
+    var supportFaded: Bool { Curriculum.supportFaded(skills: skills, counts: skillCounts) }
+
+    mutating func observe(_ skill: Skill, value: Double, gainWeight: Double = 1) {
         let v = min(1, max(0, value))
-        let old = skills[skill.rawValue] ?? 0.5
-        skills[skill.rawValue] = (1 - PlayerProfile.alpha) * old + PlayerProfile.alpha * v
+        let key = skill.rawValue
+        let old = skills[key] ?? 0.5
+        let n = skillCounts[key] ?? 0
+        var a = max(PlayerProfile.alpha, 1 / Double(n + 2))
+        if v > old { a *= gainWeight }
+        skills[key] = (1 - a) * old + a * v
+        skillCounts[key] = n + 1
     }
 
-    mutating func apply(_ analysis: MoveAnalysis) {
-        for o in analysis.observations { observe(o.skill, value: o.value) }
+    mutating func apply(_ analysis: MoveAnalysis, gainWeight: Double = 1) {
+        for o in analysis.observations { observe(o.skill, value: o.value, gainWeight: gainWeight) }
         if let m = analysis.mistakeType, let example = analysis.example { recordMistake(m, example: example) }
         updateFocus()
     }
@@ -107,7 +131,28 @@ struct PlayerProfile: Codable, Equatable, Identifiable {
         hintStats.levelUses[i] += 1
     }
 
-    mutating func updateFocus() { focus = Curriculum.focus(skills: skills).rawValue }
+    mutating func updateFocus() {
+        if let pinned = pinnedFocus { focus = pinned; return }
+        let current = focusSkill
+        if Curriculum.value(skills, current) >= PlayerProfile.focusLeaveSkill {
+            focus = Curriculum.focus(skills: skills).rawValue
+        } else if let earlier = Curriculum.path.prefix(while: { $0.skill != current })
+            .first(where: { Curriculum.value(skills, $0.skill) < PlayerProfile.focusEnterSkill }) {
+            focus = earlier.skill.rawValue
+        }
+    }
+
+    mutating func pinFocus(_ skill: Skill) {
+        pinnedFocus = skill.rawValue
+        focus = skill.rawValue
+    }
+
+    mutating func adjustLearningSpeed(puzzles: [Puzzle], now: Date = Date(), calendar: Calendar = .current) {
+        if let last = learningSpeedAdjustedAt, calendar.isDate(last, inSameDayAs: now) { return }
+        guard PuzzleScheduler.reviewAttempts(puzzles).count >= PuzzleScheduler.minReviewsForSpeed else { return }
+        learningSpeed = PuzzleScheduler.adjustedLearningSpeed(current: learningSpeed, puzzles: puzzles)
+        learningSpeedAdjustedAt = now
+    }
 
     func topMistakes(_ n: Int = 3) -> [(type: MistakeType, count: Int)] {
         let list = mistakeCounts.compactMap { k, v in MistakeType(rawValue: k).flatMap { v > 0 ? (type: $0, count: v) : nil } }
@@ -122,18 +167,34 @@ struct PlayerProfile: Codable, Equatable, Identifiable {
     }
 
     @discardableResult
-    mutating func completeGame(performance: Double, date: Date = Date()) -> Double {
+    mutating func completeGame(performance: Double, weight: Double? = nil, assistedShare: Double = 0, date: Date = Date()) -> Double {
         gamesPlayed += 1
+        pinnedFocus = nil
         if isPlacing {
             placementGames += 1
-            let perfs = ratingHistory.prefix(placementGames - 1).map(\.performance) + [performance]
-            rating = perfs.reduce(0, +) / Double(perfs.count)
+            let w = weight ?? PlayerProfile.defaultGameWeight
+            var sum = performance * w
+            var total = w
+            for e in ratingHistory.prefix(placementGames - 1) {
+                let ew = e.weight ?? PlayerProfile.defaultGameWeight
+                sum += e.performance * ew
+                total += ew
+            }
+            rating = sum / total
         } else {
-            rating += Accuracy.ratingDelta(rating: rating, performance: performance, gameNumber: gamesPlayed)
+            var delta = Accuracy.ratingDelta(rating: rating, performance: performance, gameNumber: gamesPlayed)
+            if delta > 0 { delta *= 1 - min(1, max(0, assistedShare)) }
+            rating += delta
         }
         level = PlayerLevel.from(rating: rating)
-        ratingHistory.append(RatingEntry(date: date, rating: rating, performance: performance))
+        ratingHistory.append(RatingEntry(date: date, rating: rating, performance: performance, weight: weight))
         return rating
+    }
+
+    @discardableResult
+    mutating func completeGame(summary s: SideSummary, date: Date = Date()) -> Double? {
+        guard s.countsForRating else { return nil }
+        return completeGame(performance: s.performance, weight: Double(s.moves), assistedShare: s.assistedShare ?? 0, date: date)
     }
 
     var promptContext: PlayerContext {

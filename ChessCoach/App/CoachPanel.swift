@@ -35,6 +35,7 @@ final class CoachPanelModel: ObservableObject {
     let hintMax = 4
     @Published var canHint = false
     @Published var canExplain = false
+    @Published var canShowThreat = false
     @Published var canFinish = false
     @Published var question = ""
     @Published var isAsking = false
@@ -43,6 +44,8 @@ final class CoachPanelModel: ObservableObject {
     @Published var extraActions: [PanelAction] = []
 
     var onNextHint: () -> Void = {}
+    var onShowThreat: () -> Void = {}
+    var onMore: (String) -> Void = { _ in }
     var onExplainAgain: () -> Void = {}
     var onFinish: () -> Void = {}
     var onAsk: (String) -> Void = { _ in }
@@ -174,7 +177,7 @@ struct CoachPanelView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(model.infoLines, id: \.self) { Text($0).font(.caption).foregroundStyle(.secondary) }
-                        ForEach(model.cards) { c in CardView(card: c) { model.onFeedback(c.id, $0) } }
+                        ForEach(model.cards) { c in CardView(card: c, onFeedback: { model.onFeedback(c.id, $0) }, onMore: { model.onMore(c.id) }) }
                     }
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -221,6 +224,9 @@ struct CoachPanelView: View {
                     .disabled(!model.canHint || model.hintLevel >= model.hintMax)
                 Button("Explain again") { model.onExplainAgain() }
                     .disabled(!model.canExplain)
+                if model.canShowThreat {
+                    Button("Show threat") { model.onShowThreat() }
+                }
             }
             Button { model.onFinish() } label: { Label("Finish game & show recap", systemImage: "flag.checkered") }
                 .controlSize(.small)
@@ -260,6 +266,7 @@ struct CoachPanelView: View {
 private struct CardView: View {
     let card: CoachCard
     let onFeedback: (ExplanationFeedback) -> Void
+    let onMore: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -297,8 +304,8 @@ private struct CardView: View {
     private var feedbackRow: some View {
         if card.feedback == nil {
             HStack(spacing: 6) {
-                Button("Too long") { onFeedback(.tooLong) }
-                Button("Too short") { onFeedback(.tooShort) }
+                if card.style?.length.longer != nil { Button("More") { onMore() } }
+                if card.style?.length.shorter != nil { Button("Too long") { onFeedback(.tooLong) } }
                 Button("Helpful") { onFeedback(.helpful) }
             }
             .controlSize(.small)

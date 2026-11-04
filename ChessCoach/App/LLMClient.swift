@@ -12,7 +12,8 @@ enum LLMError: LocalizedError {
         switch self {
         case .badURL: String(localized: "The server URL is invalid.")
         case .http(401, _), .http(403, _): String(localized: "Access denied. Please check the token.")
-        case .http(let code, let body): String(localized: "The server reported error \(code). \(body.prefix(160))")
+        case .http(404, _): String(localized: "The server did not find the address or model (error 404).")
+        case .http(let code, _): String(localized: "The server reported error \(code).")
         case .noModels: String(localized: "No model list found at this address. For Open WebUI enter the site address, for vLLM use http://host:8000/v1.")
         }
     }
@@ -43,7 +44,10 @@ enum LLMClient {
         if !token.isEmpty { req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
         let (data, resp) = try await URLSession.shared.data(for: req)
         let code = (resp as? HTTPURLResponse)?.statusCode ?? 0
-        guard code == 200 else { throw LLMError.http(code, String(data: data, encoding: .utf8) ?? "") }
+        guard code == 200 else {
+            Log.write("LLM model list failed with status \(code): \(String(data: data, encoding: .utf8)?.prefix(160) ?? "")")
+            throw LLMError.http(code, "")
+        }
         guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let list = json["data"] as? [[String: Any]] else { throw LLMError.noModels }
         return list.compactMap { m in
@@ -85,6 +89,7 @@ enum LLMClient {
         guard code == 200 else {
             var text = ""
             for try await line in bytes.lines { text += line; if text.count > 400 { break } }
+            Log.write("LLM request failed with status \(code): \(text.prefix(160))")
             throw LLMError.http(code, text)
         }
         var full = ""

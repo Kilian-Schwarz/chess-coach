@@ -241,7 +241,8 @@ public sealed class EngineSession : IDisposable
 {
     private readonly Func<string?> _pathProvider;
     private readonly object _gate = new();
-    private readonly HashSet<string> _crashedFens = new();
+    private readonly Dictionary<string, DateTime> _crashedFens = new();
+    public TimeSpan BlockDuration { get; set; } = TimeSpan.FromSeconds(60);
     private readonly Dictionary<string, (EngineResult Result, int Ms)> _cache = new();
     private StockfishEngine? _engine;
     private Timer? _idleTimer;
@@ -303,7 +304,7 @@ public sealed class EngineSession : IDisposable
     public async Task<EngineResult?> AnalyzeAsync(string fen, int movetimeMs, bool priority = true)
     {
         if (Cached(fen, movetimeMs, priority) is { } hit) return hit;
-        lock (_gate) if (_crashedFens.Contains(fen)) return null;
+        if (IsBlocked(fen)) return null;
         await Acquire(priority);
         try
         {
@@ -322,7 +323,7 @@ public sealed class EngineSession : IDisposable
         {
             if (result == null && (!engine.IsRunning || engine.TimedOutFen == fen))
             {
-                _crashedFens.Add(fen);
+                _crashedFens[fen] = DateTime.UtcNow;
                 Log.Write($"Engine failed at position {fen}, not sending again");
                 if (ReferenceEquals(_engine, engine)) _engine = null;
                 engine.Dispose();
@@ -337,7 +338,16 @@ public sealed class EngineSession : IDisposable
         return result;
     }
 
-    public bool IsBlocked(string fen) { lock (_gate) return _crashedFens.Contains(fen); }
+    public bool IsBlocked(string fen)
+    {
+        lock (_gate)
+        {
+            if (!_crashedFens.TryGetValue(fen, out var since)) return false;
+            if (DateTime.UtcNow - since < BlockDuration) return true;
+            _crashedFens.Remove(fen);
+            return false;
+        }
+    }
 
     private void ArmIdle()
     {

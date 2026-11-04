@@ -172,6 +172,28 @@ public sealed class PieceTemplates
         return true;
     }
 
+    public const double MaxUnfitShare = 0.25;
+
+    public bool FitsBadly(SquareFeature[][] features)
+    {
+        int occupied = 0, unknown = 0;
+        foreach (var row in features)
+            foreach (var f in row)
+            {
+                if (!(f.Fill > OccupiedFill)) continue;
+                occupied++;
+                if (Classify(f) == null) unknown++;
+            }
+        return occupied > 0 && unknown > occupied * MaxUnfitShare;
+    }
+
+    public static (PieceTemplates Templates, bool WhiteAtBottom)? Relearned(SquareFeature[][] features)
+    {
+        var t = new PieceTemplates();
+        if (PieceTemplates.LooksLikeStart(features)) return (t, t.LearnStart(features));
+        return t.LearnEarly(features) is bool wb ? (t, wb) : null;
+    }
+
     public bool LearnStart(SquareFeature[][] features)
     {
         double top = features[0].Concat(features[1]).Sum(f => f.MeanLum);

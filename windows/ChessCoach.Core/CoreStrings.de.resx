@@ -94,12 +94,12 @@
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Aktiviere deinen König.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Ein Bauernzug passt hier gut.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbessere deine schlechteste Figur.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Zieh mit dem König auf {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Zieh mit der Dame auf {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Zieh mit dem Turm auf {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Zieh mit dem Läufer auf {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Zieh mit dem Springer auf {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Zieh mit dem Bauern auf {0}.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Zieh den König, der auf {0} steht.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Zieh die Dame, die auf {0} steht.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Zieh den Turm, der auf {0} steht.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Zieh den Läufer, der auf {0} steht.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Zieh den Springer, der auf {0} steht.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Zieh den Bauern, der auf {0} steht.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kann den Gegner mattsetzen.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kann eine gegnerische Figur schlagen und dabei Material gewinnen.</value></data>
   <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kann in einem Zug zwei Figuren des Gegners gleichzeitig angreifen.</value></data>
@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Achtung: {0} auf {1} könnte von einer geringerwertigen Figur geschlagen werden.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Achtung: {0} nach {1} lässt {2} auf {3} ungedeckt.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Achtung: {0} Felder sind für {1} unsicher, rot markiert.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>Häufigster Fehler: {0} ({1}×). Beispiel: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>{0} gute Züge in Folge.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>Fürs nächste Spiel: {0}</value></data>
 </root>

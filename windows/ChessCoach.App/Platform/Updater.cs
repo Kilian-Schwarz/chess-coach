@@ -89,7 +89,10 @@ internal static partial class Updater
 
     public static async Task<UpdateManifest?> FetchAsync(HttpClient http)
     {
-        var json = await http.GetStringAsync(ReleasesUrl + "/latest/download/update.json");
+        using var response = await http.GetAsync(ReleasesUrl + "/latest/download/update.json");
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound) return null;
+        response.EnsureSuccessStatusCode();
+        var json = await response.Content.ReadAsStringAsync();
         return Parse(json) is { } m && IsNewer(m.Version, CurrentVersion) ? m : null;
     }
 

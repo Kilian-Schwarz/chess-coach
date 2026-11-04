@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Chess Coach Kurulumu</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Chess Coach’u Kaldır</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Chess Coach {0} kurulsun</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach yalnızca kullanıcı hesabınız için kurulur. Yönetici hakları gerekmez.</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} zaten kurulu ve {1} sürümüne güncellenecek.</value></data>
+  <data name="installButton" xml:space="preserve"><value>Kur</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>Masaüstüne kısayol ekle</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Chess Coach kuruluyor …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>Dosyalar kopyalanırken lütfen bekleyin.</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach kuruldu</value></data>
+  <data name="doneBody" xml:space="preserve"><value>Başlat menüsünde bulabilirsiniz. Uygulama, saatin yanındaki bildirim alanında çalışır.</value></data>
+  <data name="startButton" xml:space="preserve"><value>Chess Coach’u başlat</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>Kurulum başarısız oldu</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>Bu kurulum dosyası eksik. Lütfen yeniden indirin.</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Chess Coach kaldırılsın mı?</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach bu bilgisayardan kaldırılacak.</value></data>
+  <data name="removeButton" xml:space="preserve"><value>Kaldır</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>Ayarlarımı, profillerimi ve oyun geçmişimi de sil</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Chess Coach kaldırılıyor …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach kaldırıldı</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Chess Coach tamamen kaldırılamadı</value></data>
+</root>

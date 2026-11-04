@@ -33,6 +33,8 @@ extension AppModel {
         persist($llmURL, "llmURL")
         persist($llmBase, "llmBase")
         persist($llmModel, "llmModel")
+        $llmToken.dropFirst().debounce(for: .milliseconds(600), scheduler: DispatchQueue.main)
+            .sink { TokenStore.save($0) }.store(in: &cancellables)
     }
 
     func relaunch() {

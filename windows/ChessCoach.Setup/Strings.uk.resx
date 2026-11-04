@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Встановлення Chess Coach</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Видалення Chess Coach</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Установити Chess Coach {0}</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach встановлюється лише для вашого облікового запису. Права адміністратора не потрібні.</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} уже встановлено, його буде оновлено до версії {1}.</value></data>
+  <data name="installButton" xml:space="preserve"><value>Установити</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>Додати ярлик на робочий стіл</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Встановлення Chess Coach …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>Зачекайте, поки копіюються файли.</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach встановлено</value></data>
+  <data name="doneBody" xml:space="preserve"><value>Він є в меню «Пуск». Застосунок працює в області сповіщень поруч із годинником.</value></data>
+  <data name="startButton" xml:space="preserve"><value>Запустити Chess Coach</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>Не вдалося встановити</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>Цей інсталяційний файл неповний. Завантажте його знову.</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Видалити Chess Coach?</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach буде видалено з цього комп’ютера.</value></data>
+  <data name="removeButton" xml:space="preserve"><value>Видалити</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>Також видалити мої налаштування, профілі та історію партій</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Видалення Chess Coach …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach видалено</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Не вдалося повністю видалити Chess Coach</value></data>
+</root>

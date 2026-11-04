@@ -35,6 +35,7 @@ struct ExplanationStyle: Codable, Hashable {
     }
 
     static let shortPrinciple = ExplanationStyle(length: .short)
+    static let firstLength = StyleLength.short
 }
 
 enum ExplanationFeedback: String, Codable {
@@ -59,6 +60,7 @@ struct LearningStyle: Codable, Equatable {
     static let alpha = 0.25
     static let explorationRate = 0.10
     static let switchMargin = 0.05
+    static let implicitWeight = 0.2
 
     var length: StyleLength
     var depth: StyleDepth
@@ -105,14 +107,14 @@ struct LearningStyle: Codable, Equatable {
         switch f {
         case .helpful: nudge(used, reward: 1)
         case .tooLong, .collapsedImmediately:
-            let w = f == .tooLong ? 1.0 : 0.5
+            let w = f == .tooLong ? 1.0 : LearningStyle.implicitWeight
             if let s = used.length.shorter {
                 nudge(used, reward: 0, weight: w)
                 var n = used; n.length = s
                 nudge(n, reward: 0.8, weight: w)
             }
         case .tooShort, .askedAgain:
-            let w = f == .tooShort ? 1.0 : 0.5
+            let w = f == .tooShort ? 1.0 : LearningStyle.implicitWeight
             if let l = used.length.longer {
                 nudge(used, reward: 0, weight: w)
                 var n = used; n.length = l
@@ -147,7 +149,8 @@ extension PlayerProfile {
 
     mutating func recordFeedback(_ f: ExplanationFeedback, usedStyle: ExplanationStyle) { style.record(f, used: usedStyle) }
 
-    mutating func recordPuzzleAfterExplanation(usedStyle: ExplanationStyle, correct: Bool) {
+    mutating func recordPuzzleAfterExplanation(usedStyle: ExplanationStyle, correct: Bool, assisted: Bool = false) {
+        guard !assisted else { return }
         style.recordPuzzle(after: usedStyle, correct: correct)
     }
 }

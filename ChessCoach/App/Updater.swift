@@ -91,8 +91,15 @@ enum UpdateCheck {
 
 @MainActor
 final class Updater: ObservableObject {
+    struct Pending: Equatable {
+        let version: String
+        let staged: URL?
+    }
+
     @Published private(set) var canCheck = true
+    @Published private(set) var pending: Pending?
     private var stagedVersion: String?
+    private var swapped = false
     private var loggedMissingFeed = false
     private var current: String { Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0" }
 
@@ -102,6 +109,12 @@ final class Updater: ObservableObject {
     }
 
     init() {
+        NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self, let app = self.pending?.staged else { return }
+                self.swap(in: app, relaunch: false)
+            }
+        }
         Task { [weak self] in
             try? await Task.sleep(for: .seconds(20))
             while !Task.isCancelled {
@@ -112,6 +125,15 @@ final class Updater: ObservableObject {
     }
 
     func checkNow() { Task { await check(manual: true) } }
+
+    func applyPending() {
+        guard let pending else { return }
+        if let app = pending.staged {
+            swap(in: app, relaunch: true)
+        } else {
+            NSWorkspace.shared.open(UpdateCheck.releasesURL)
+        }
+    }
 
     private func fetchFeed() async throws -> UpdateFeed? {
         let (data, response) = try await URLSession.shared.data(from: UpdateCheck.feedURL)
@@ -135,13 +157,13 @@ final class Updater: ObservableObject {
                 return
             }
             if stagedVersion == feed.version {
-                if manual { _ = ask(String(localized: "Update installed"), String(localized: "Version \(feed.version) is ready. Restart to use it."), nil) }
+                if manual { applyPending() }
                 return
             }
             let parent = Bundle.main.bundleURL.deletingLastPathComponent()
             guard let asset = feed.macos, manual || automaticallyUpdates, UpdateCheck.isTeamSigned(Bundle.main.bundleURL),
                   FileManager.default.isWritableFile(atPath: parent.path) else {
-                offerDownload(feed.version, manual: manual)
+                announce(feed.version, manual: manual)
                 return
             }
             try await install(asset, version: feed.version, parent: parent, manual: manual)
@@ -153,18 +175,23 @@ final class Updater: ObservableObject {
 
     private func install(_ asset: UpdateFeed.Asset, version: String, parent: URL, manual: Bool) async throws {
         guard let url = UpdateCheck.downloadURL(version: version, file: asset.file) else { throw URLError(.badURL) }
-        let (file, _) = try await URLSession.shared.download(from: url)
+        let (file, response) = try await URLSession.shared.download(from: url)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw URLError(.badServerResponse) }
         guard let app = try await UpdateCheck.stage(zip: file, asset: asset, version: version, current: current, beside: parent) else {
             if manual { _ = ask(String(localized: "The update check failed"), String(localized: "The downloaded update could not be verified."), nil) }
             return
         }
         stagedVersion = version
+        pending = Pending(version: version, staged: app)
         Log.write("Update \(version) staged")
-        let restart = manual && ask(String(localized: "Update installed"), String(localized: "Version \(version) is ready. Restart to use it."), String(localized: "Restart now"))
-        swap(in: app, relaunch: restart)
+        if manual && ask(String(localized: "Update installed"), String(localized: "Version \(version) is ready. Restart to use it."), String(localized: "Restart now")) {
+            applyPending()
+        }
     }
 
     private func swap(in app: URL, relaunch: Bool) {
+        guard !swapped else { return }
+        swapped = true
         let script = "while kill -0 \(ProcessInfo.processInfo.processIdentifier) 2>/dev/null; do sleep 0.3; done; [ -d \"$2\" ] || exit 1; "
             + "rm -rf \"$1.old\"; mv \"$1\" \"$1.old\" || exit 1; "
             + "if mv \"$2\" \"$1\"; then rm -rf \"$1.old\" \"$3\"; [ \"$4\" = 1 ] && /usr/bin/open \"$1\"; else mv \"$1.old\" \"$1\"; fi"
@@ -175,10 +202,9 @@ final class Updater: ObservableObject {
         if relaunch { NSApp.terminate(nil) }
     }
 
-    private func offerDownload(_ version: String, manual: Bool) {
-        let defaults = UserDefaults.standard
-        guard manual || defaults.string(forKey: "offeredUpdate") != version else { return }
-        defaults.set(version, forKey: "offeredUpdate")
+    private func announce(_ version: String, manual: Bool) {
+        pending = Pending(version: version, staged: nil)
+        guard manual else { return }
         if ask(String(localized: "Update available"), String(localized: "Version \(version) is available."), String(localized: "Open Releases Page")) {
             NSWorkspace.shared.open(UpdateCheck.releasesURL)
         }

@@ -118,7 +118,9 @@ struct ProfileView: View {
                         .frame(width: 160, alignment: .leading)
                     ProgressView(value: v)
                         .tint(stage.skill == profile.focusSkill ? .orange : .accentColor)
-                    Text("\(Int((v * 100).rounded())) %").monospacedDigit().frame(width: 50, alignment: .trailing)
+                    Text(profile.hasEnoughData(stage.skill) ? "\(Int((v * 100).rounded())) %" : String(localized: "Not enough data yet"))
+                        .monospacedDigit().foregroundStyle(profile.hasEnoughData(stage.skill) ? .primary : .secondary)
+                        .frame(width: 130, alignment: .trailing)
                 }
                 .accessibilityElement(children: .combine)
             }

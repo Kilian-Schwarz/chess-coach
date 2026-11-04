@@ -82,13 +82,18 @@ struct PathStage {
 struct Adaptation: Equatable {
     var defaultHintLevel: Int
     var newPuzzlesPerDay: Int
-    var difficultyBias: Int
-    var intervalFactor: Double
+    var thinkSeconds: Double
 }
 
 enum Curriculum {
     static let focusThreshold = 0.7
     static let targetRange = 0.70...0.85
+    static let firstHintLevel = 1
+    static let baseThinkSeconds = 15.0
+    static let threatAutoGames = 3
+    static let threatAutoSkill = 0.4
+    static let fadeSkill = 0.8
+    static let fadeObservations = 20
 
     static let path: [PathStage] = [.pieceSafety, .threats, .tactics, .opening, .kingSafety, .endgame, .middlegame]
         .enumerated().map { PathStage(number: $0 + 1, skill: $1) }
@@ -107,15 +112,31 @@ enum Curriculum {
     static func adaptation(level: PlayerLevel, focus: Skill, skills: [String: Double], successRate: Double?) -> Adaptation {
         var hint = level == .beginner ? 2 : 1
         if value(skills, focus) < 0.4 { hint += 1 }
-        var a = Adaptation(defaultHintLevel: hint, newPuzzlesPerDay: 10, difficultyBias: 0, intervalFactor: 1)
+        var a = Adaptation(defaultHintLevel: hint, newPuzzlesPerDay: PuzzleScheduler.maxNewPerDay, thinkSeconds: baseThinkSeconds)
         if let q = successRate {
             if q > targetRange.upperBound {
-                a.defaultHintLevel -= 1; a.difficultyBias = 1; a.intervalFactor = 1.2
+                a.defaultHintLevel -= 1; a.thinkSeconds = 25
             } else if q < targetRange.lowerBound {
-                a.defaultHintLevel += 1; a.difficultyBias = -1; a.intervalFactor = 0.8; a.newPuzzlesPerDay = 5
+                a.defaultHintLevel += 1; a.newPuzzlesPerDay = 5; a.thinkSeconds = 8
             }
         }
-        a.defaultHintLevel = min(3, max(1, a.defaultHintLevel))
+        a.defaultHintLevel = min(2, max(1, a.defaultHintLevel))
         return a
+    }
+
+    static func needsThinkDelay(level: Int, elapsed: TimeInterval, seconds: TimeInterval, nudged: Bool) -> Bool {
+        level >= firstHintLevel && !nudged && elapsed < seconds
+    }
+
+    static func gainWeight(hintLevel: Int) -> Double {
+        hintLevel <= 0 ? 1 : hintLevel <= 2 ? 0.5 : 0
+    }
+
+    static func showsThreatAutomatically(gamesPlayed: Int, skills: [String: Double]) -> Bool {
+        gamesPlayed < threatAutoGames || value(skills, .threats) < threatAutoSkill
+    }
+
+    static func supportFaded(skills: [String: Double], counts: [String: Int]) -> Bool {
+        [Skill.threats, .pieceSafety].allSatisfy { value(skills, $0) >= fadeSkill && (counts[$0.rawValue] ?? 0) >= fadeObservations }
     }
 }

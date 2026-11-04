@@ -13,6 +13,7 @@ public sealed class RatingEntry
     public DateTime Date { get; set; }
     public double Rating { get; set; }
     public double Performance { get; set; }
+    public int Weight { get; set; }
 }
 
 public sealed record PlayerContext(PlayerLevel Level, Skill? Focus = null, IReadOnlyList<string>? TypicalMistakes = null)
@@ -26,6 +27,9 @@ public sealed class PlayerProfile
     public const int PlacementTotal = 3;
     public const double StartRating = 1100.0;
     public const double AlphaSkill = 0.15;
+    public const int MinRatedMoves = 10;
+    public const int MinSkillObservations = 10;
+    public const double FocusExit = 0.8, FocusRegress = 0.6;
 
     public int SchemaVersion { get; set; } = CurrentSchemaVersion;
     public string Id { get; set; } = Guid.NewGuid().ToString().ToLowerInvariant();
@@ -39,6 +43,7 @@ public sealed class PlayerProfile
     private PlayerLevel? _level;
 
     public Dictionary<string, double> Skills { get; set; } = new();
+    public Dictionary<string, int> SkillCounts { get; set; } = new();
 
     public Dictionary<string, int> MistakeCounts { get; set; } = new();
 
@@ -48,6 +53,7 @@ public sealed class PlayerProfile
     private string? _focus;
 
     public double LearningSpeed { get; set; } = 1.0;
+    public DateTime? LearningSpeedAdjustedAt { get; set; }
     public HintStats HintStats { get; set; } = new();
     public List<RatingEntry> RatingHistory { get; set; } = new();
 
@@ -69,6 +75,7 @@ public sealed class PlayerProfile
     public PlayerProfile Normalize()
     {
         Skills ??= new();
+        SkillCounts ??= new();
         foreach (var k in SkillExt.All) if (!Skills.ContainsKey(k.Raw())) Skills[k.Raw()] = 0.5;
         MistakeCounts ??= new();
         RatingHistory ??= new();
@@ -90,8 +97,13 @@ public sealed class PlayerProfile
     {
         double v = Math.Min(1, Math.Max(0, value));
         double old = Skills.TryGetValue(skill.Raw(), out var o) ? o : 0.5;
-        Skills[skill.Raw()] = (1 - AlphaSkill) * old + AlphaSkill * v;
+        int n = SkillCounts.GetValueOrDefault(skill.Raw());
+        double alpha = Math.Max(AlphaSkill, 1.0 / (n + 2));
+        Skills[skill.Raw()] = (1 - alpha) * old + alpha * v;
+        SkillCounts[skill.Raw()] = n + 1;
     }
+
+    public bool HasEnoughData(Skill skill) => SkillCounts.GetValueOrDefault(skill.Raw()) >= MinSkillObservations;
 
     public void Apply(MoveAnalysis analysis)
     {
@@ -112,13 +124,28 @@ public sealed class PlayerProfile
         }
     }
 
+    public void AdjustLearningSpeed(IReadOnlyCollection<Puzzle> puzzles, DateTime? now = null)
+    {
+        var t = now ?? DateTime.UtcNow;
+        if (LearningSpeedAdjustedAt is { } last && last.ToLocalTime().Date == t.ToLocalTime().Date) return;
+        if (PuzzleScheduler.ReviewCount(puzzles) < PuzzleScheduler.MinReviewAttempts) return;
+        LearningSpeed = PuzzleScheduler.AdjustedLearningSpeed(LearningSpeed, puzzles);
+        LearningSpeedAdjustedAt = t;
+    }
+
     public void RecordHintUse(int level)
     {
         while (HintStats.LevelUses.Count < 5) HintStats.LevelUses.Add(0);
         HintStats.LevelUses[Math.Min(4, Math.Max(0, level))] += 1;
     }
 
-    public void UpdateFocus() => _focus = Curriculum.Focus(Skills).Raw();
+    public void UpdateFocus()
+    {
+        var candidate = Curriculum.Focus(Skills);
+        if (_focus == null || !SkillExt.TryParse(_focus, out var current) || candidate == current) { _focus = candidate.Raw(); return; }
+        bool earlier = Array.FindIndex(Curriculum.Path, x => x.Skill == candidate) < Array.FindIndex(Curriculum.Path, x => x.Skill == current);
+        if (Curriculum.Value(Skills, current) >= FocusExit || (earlier && Curriculum.Value(Skills, candidate) < FocusRegress)) _focus = candidate.Raw();
+    }
 
     public List<(MistakeType Type, int Count)> TopMistakes(int n = 3)
     {
@@ -143,18 +170,20 @@ public sealed class PlayerProfile
         }
     }
 
-    public double CompleteGame(double performance, DateTime? date = null)
+    public double CompleteGame(double performance, DateTime? date = null, int ratedMoves = MinRatedMoves)
     {
+        if (ratedMoves < MinRatedMoves) return Rating;
         GamesPlayed += 1;
         if (IsPlacing)
         {
             PlacementGames += 1;
-            var perfs = RatingHistory.Take(PlacementGames - 1).Select(r => r.Performance).Append(performance).ToList();
-            Rating = perfs.Sum() / perfs.Count;
+            var games = RatingHistory.Take(PlacementGames - 1).Select(r => (r.Performance, Weight: Math.Max(1, r.Weight)))
+                .Append((Performance: performance, Weight: ratedMoves)).ToList();
+            Rating = games.Sum(g => g.Performance * g.Weight) / games.Sum(g => g.Weight);
         }
         else Rating += Accuracy.RatingDelta(Rating, performance, GamesPlayed);
         Level = PlayerLevelExt.FromRating(Rating);
-        RatingHistory.Add(new RatingEntry { Date = date ?? DateTime.UtcNow, Rating = Rating, Performance = performance });
+        RatingHistory.Add(new RatingEntry { Date = date ?? DateTime.UtcNow, Rating = Rating, Performance = performance, Weight = ratedMoves });
         return Rating;
     }
 

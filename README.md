@@ -24,9 +24,9 @@ Full guide: [docs/usage.md](docs/usage.md).
 
 Download the latest build from the [Releases](https://github.com/Kilian-Schwarz/chess-coach/releases) page. Stockfish is included.
 
-**macOS 15 or newer:** open the DMG, drag Chess Coach to Applications, start it. A knight icon appears in the menu bar. On first use macOS asks for the Screen Recording permission (System Settings, Privacy & Security, Screen & System Audio Recording). Without it the app cannot see the board. Restart the app after granting it.
+**macOS 15 or newer:** download `ChessCoach-<version>.dmg`, open it and drag Chess Coach onto the Applications folder next to it, then start it from there. If you start it from somewhere else, it offers to move itself to Applications. A knight icon appears in the menu bar. On first use macOS asks for the Screen Recording permission (System Settings, Privacy & Security, Screen & System Audio Recording). Without it the app cannot see the board. Restart the app after granting it.
 
-**Windows 10 (2004) or newer, 64 bit:** unpack the ZIP and start `ChessCoach.exe`. The file is not code-signed, so SmartScreen may warn: choose More info, then Run anyway. The app lives in the notification area of the taskbar. .NET does not need to be installed.
+**Windows 10 (2004) or newer, 64 bit:** download `ChessCoach-<version>-setup.exe` and run it. It installs for your user account only (no administrator rights), adds a Start menu entry and starts the app. The file is not code-signed, so SmartScreen may warn: choose More info, then Run anyway. Remove the app under Settings, Apps. The ZIP `ChessCoach-<version>-windows-x64.zip` is the same app without an installer: unpack it anywhere and start `ChessCoach.exe`. The app lives in the notification area of the taskbar. .NET does not need to be installed.
 
 ## Set up the AI explanations
 

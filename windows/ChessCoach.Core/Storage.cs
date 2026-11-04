@@ -45,10 +45,21 @@ public sealed class Storage
         try
         {
             var p = Read<PlayerProfile>(path);
-            if (p == null || string.IsNullOrEmpty(p.Id) || p.Name == null) return null;
-            return p.Normalize();
+            if (p != null && !string.IsNullOrEmpty(p.Id) && p.Name != null) return p.Normalize();
         }
-        catch (Exception e) when (e is JsonException or IOException or InvalidOperationException) { return null; }
+        catch (Exception e) when (e is JsonException or IOException or InvalidOperationException) { }
+        Quarantine(path);
+        return null;
+    }
+
+    private static void Quarantine(string path)
+    {
+        try
+        {
+            File.Move(path, path + ".corrupt", overwrite: true);
+            Log.Write("Unreadable profile moved to " + path + ".corrupt");
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
     }
 
     public List<PlayerProfile> LoadProfiles()

@@ -21,7 +21,7 @@ internal sealed class PanelWindow : Window
     private readonly TextBlock _focus = Label("", 11, false, Theme.Muted);
     private readonly TextBlock _hintInfo = Label("", 11, false, Theme.Muted);
     private readonly Button _collapse;
-    private readonly Button _next, _again, _send, _finish;
+    private readonly Button _next, _again, _send, _finish, _threat;
     private readonly TextBox _question;
     private readonly StackPanel _extraHost = new() { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 6, 0, 0) };
     private readonly UIElement _body;
@@ -31,9 +31,9 @@ internal sealed class PanelWindow : Window
     private bool _applying;
     private System.Drawing.Rectangle _board;
     private int _hintLevel;
-    private bool _canHint, _canExplain, _isAsking, _canFinish;
+    private bool _canHint, _canExplain, _isAsking, _canFinish, _canShowThreat;
 
-    public event Action? NextHintClicked, ExplainAgainClicked, FinishClicked;
+    public event Action? NextHintClicked, ExplainAgainClicked, FinishClicked, ThreatClicked;
     public event Action<string>? QuestionAsked;
     public event Action<CoachCard, string>? FeedbackGiven;
     public event Action<bool>? CollapsedChanged;
@@ -76,10 +76,12 @@ internal sealed class PanelWindow : Window
         _next.Click += (_, _) => NextHintClicked?.Invoke();
         _again = new Button { Content = Loc.T("panel.again"), Style = Theme.PanelButton };
         _again.Click += (_, _) => ExplainAgainClicked?.Invoke();
+        _threat = new Button { Content = Loc.T("panel.showThreat"), Style = Theme.PanelButton, Margin = new Thickness(6, 0, 0, 0) };
+        _threat.Click += (_, _) => ThreatClicked?.Invoke();
         _finish = new Button { Content = Loc.T("panel.finish"), Style = Theme.SmallButton, Margin = new Thickness(0, 6, 0, 0), HorizontalAlignment = HorizontalAlignment.Left };
         _finish.Click += (_, _) => FinishClicked?.Invoke();
         var row1 = new StackPanel { Orientation = Orientation.Horizontal };
-        row1.Children.Add(_next); row1.Children.Add(_again);
+        row1.Children.Add(_next); row1.Children.Add(_again); row1.Children.Add(_threat);
 
         _question = new TextBox
         {
@@ -156,6 +158,7 @@ internal sealed class PanelWindow : Window
     public int HintLevel { set { if (_hintLevel != value) { _hintLevel = value; _hintInfo.Text = value > 0 ? Loc.T("panel.hintOf", value, HintMax) : ""; UpdateButtons(); } } }
     public bool CanHint { set { if (_canHint != value) { _canHint = value; UpdateButtons(); } } }
     public bool CanExplain { set { if (_canExplain != value) { _canExplain = value; UpdateButtons(); } } }
+    public bool CanShowThreat { set { if (_canShowThreat != value) { _canShowThreat = value; UpdateButtons(); } } }
     public bool CanFinish { set { if (_canFinish != value) { _canFinish = value; UpdateButtons(); } } }
     public bool IsAsking { set { if (_isAsking != value) { _isAsking = value; UpdateButtons(); } } }
 
@@ -187,6 +190,7 @@ internal sealed class PanelWindow : Window
         _next.IsEnabled = _canHint && _hintLevel < HintMax;
         _again.IsEnabled = _canExplain;
         _finish.IsEnabled = _canFinish;
+        _threat.Visibility = _canShowThreat ? Visibility.Visible : Visibility.Collapsed;
         _send.IsEnabled = !_isAsking && _question.Text.Trim().Length > 0;
     }
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="title" xml:space="preserve"><value>Chess Coach セットアップ</value></data>
+  <data name="titleUninstall" xml:space="preserve"><value>Chess Coach のアンインストール</value></data>
+  <data name="installHeading" xml:space="preserve"><value>Chess Coach {0} をインストール</value></data>
+  <data name="installBody" xml:space="preserve"><value>Chess Coach は現在のユーザーアカウントにのみインストールされます。管理者権限は不要です。</value></data>
+  <data name="upgradeBody" xml:space="preserve"><value>Chess Coach {0} はすでにインストールされています。バージョン {1} に更新します。</value></data>
+  <data name="installButton" xml:space="preserve"><value>インストール</value></data>
+  <data name="desktopOption" xml:space="preserve"><value>デスクトップにショートカットを作成する</value></data>
+  <data name="progressHeading" xml:space="preserve"><value>Chess Coach をインストールしています …</value></data>
+  <data name="progressBody" xml:space="preserve"><value>ファイルをコピーしています。しばらくお待ちください。</value></data>
+  <data name="doneHeading" xml:space="preserve"><value>Chess Coach をインストールしました</value></data>
+  <data name="doneBody" xml:space="preserve"><value>スタートメニューにあります。アプリは時計の横の通知領域で動作します。</value></data>
+  <data name="startButton" xml:space="preserve"><value>Chess Coach を起動</value></data>
+  <data name="errorHeading" xml:space="preserve"><value>インストールに失敗しました</value></data>
+  <data name="errorPayload" xml:space="preserve"><value>このセットアップファイルは不完全です。もう一度ダウンロードしてください。</value></data>
+  <data name="removeHeading" xml:space="preserve"><value>Chess Coach を削除しますか？</value></data>
+  <data name="removeBody" xml:space="preserve"><value>Chess Coach をこのコンピューターから削除します。</value></data>
+  <data name="removeButton" xml:space="preserve"><value>削除</value></data>
+  <data name="deleteDataOption" xml:space="preserve"><value>設定、プロフィール、対局履歴も削除する</value></data>
+  <data name="removeProgressHeading" xml:space="preserve"><value>Chess Coach を削除しています …</value></data>
+  <data name="removeDoneHeading" xml:space="preserve"><value>Chess Coach を削除しました</value></data>
+  <data name="removeFailedHeading" xml:space="preserve"><value>Chess Coach を完全には削除できませんでした</value></data>
+</root>

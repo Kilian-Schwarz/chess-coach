@@ -48,7 +48,7 @@
   <data name="hint.fallbackTopic" xml:space="preserve"><value>Внимательно посмотрите на позицию.</value></data>
   <data name="hint.fallbackPiece" xml:space="preserve"><value>Отмеченное поле показывает, какой фигурой нужно ходить.</value></data>
   <data name="hint.fallbackIdea" xml:space="preserve"><value>Улучшите свою позицию или отразите угрозу.</value></data>
-  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Shift+F8</value></data>
   <data name="suggest.title" xml:space="preserve"><value>Предложение: {0}</value></data>
   <data name="suggest.eval" xml:space="preserve"><value>Оценка: {0}</value></data>
   <data name="suggest.also" xml:space="preserve"><value>Также возможно: {0}</value></data>
@@ -88,7 +88,7 @@
   <data name="menu.think" xml:space="preserve"><value>Время на размышление</value></data>
   <data name="menu.nextHint" xml:space="preserve"><value>Следующая подсказка</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Сменить сторону, которая ходит</value></data>
-  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Shift+F9</value></data>
   <data name="menu.endGame" xml:space="preserve"><value>Завершить партию и показать итоги</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Скопировать партию в PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Вернуть панель к доске</value></data>
@@ -111,7 +111,7 @@
   <data name="settings.autostart" xml:space="preserve"><value>Запускать вместе с Windows</value></data>
   <data name="settings.language" xml:space="preserve"><value>Язык</value></data>
   <data name="settings.langSystem" xml:space="preserve"><value>Системный</value></data>
-  <data name="settings.hotkeys" xml:space="preserve"><value>Сочетания клавиш: Ctrl+Alt+H следующая подсказка, Ctrl+Alt+T смена стороны, которая ходит.</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Сочетания клавиш: Ctrl+Shift+F8 следующая подсказка, Ctrl+Shift+F9 смена стороны, которая ходит.</value></data>
   <data name="settings.expert" xml:space="preserve"><value>Эксперт</value></data>
   <data name="settings.thinkMs" xml:space="preserve"><value>Время на размышление (мс)</value></data>
   <data name="settings.lock" xml:space="preserve"><value>Заблокировать режим эксперта</value></data>
@@ -161,6 +161,9 @@
   <data name="training.correct" xml:space="preserve"><value>Верно: {0}</value></data>
   <data name="training.wrong" xml:space="preserve"><value>Не совсем. Попробуйте ещё раз или воспользуйтесь подсказкой.</value></data>
   <data name="training.best" xml:space="preserve"><value>Лучший ход: {0}</value></data>
+  <data name="training.instruction" xml:space="preserve"><value>Щёлкните фигуру или перетащите её, чтобы сделать ход.</value></data>
+  <data name="training.skip" xml:space="preserve"><value>Пропустить</value></data>
+  <data name="training.stats" xml:space="preserve"><value>Решено {0} из {1}</value></data>
   <data name="menu.checkUpdates" xml:space="preserve"><value>Проверить обновления …</value></data>
   <data name="update.current" xml:space="preserve"><value>У вас последняя версия Chess Coach.</value></data>
   <data name="update.ready" xml:space="preserve"><value>Обновление {0} готово и будет установлено при выходе.</value></data>
@@ -187,4 +190,13 @@
   <data name="report.end.manual" xml:space="preserve"><value>Завершена вручную</value></data>
   <data name="report.summaryLoading" xml:space="preserve"><value>Пишется краткий итог …</value></data>
   <data name="record.openRecap" xml:space="preserve"><value>Открыть итоги</value></data>
+  <data name="panel.showThreat" xml:space="preserve"><value>Показать угрозу</value></data>
+  <data name="report.takeaways" xml:space="preserve"><value>Что взять с собой</value></data>
+  <data name="report.train" xml:space="preserve"><value>Потренировать эти задачи ({0})</value></data>
+  <data name="report.setFocus" xml:space="preserve"><value>Сделать приоритетом на следующую партию</value></data>
+  <data name="report.focusSet" xml:space="preserve"><value>Приоритет выбран: {0}</value></data>
+  <data name="fairPlay.title" xml:space="preserve"><value>Честная игра</value></data>
+  <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach создан для тренировки: партии против ботов, партии без рейтинга, живая доска и анализ. Подсказки в рейтинговых онлайн-партиях нарушают правила честной игры chess.com и Lichess, и аккаунт могут заблокировать.</value></data>
+  <data name="update.available" xml:space="preserve"><value>Доступна версия {0}. Чтобы установить, выбери «Проверить обновления» в меню в трее.</value></data>
+  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach работает в трее. Открой шахматную доску в браузере, включи «Включено» в меню трея и один раз покажи начальную позицию, чтобы приложение выучило фигуры.</value></data>
 </root>

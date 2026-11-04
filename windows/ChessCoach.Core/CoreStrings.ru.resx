@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Осторожно: поле {1} ({0}) атакует более слабая фигура.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Осторожно: после хода {0} на {1} без защиты остаётся: {2} на {3}.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Осторожно: небезопасных полей: {0} (фигура: {1}), отмечены красным.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>Самая частая ошибка: {0} ({1}×). Пример: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>Хороших ходов подряд: {0}.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>К следующей партии: {0}</value></data>
 </root>

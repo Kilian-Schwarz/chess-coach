@@ -18,7 +18,7 @@ internal sealed partial class AppModel
     private readonly RectStabilizer _stabilizer = new();
     private int _regionMisses;
     private DateTime _lastFullSearch = DateTime.MinValue;
-    private readonly BoardFingerprint _fp = new(), _lastFp = new();
+    private readonly BoardFingerprint _fp = new(), _lastFp = new(), _dirtyFp = new(), _lastDirtyFp = new();
     private bool _hasLastFp;
     private ScanResult? _cached;
     private string? _lastMonitorKey;
@@ -96,11 +96,24 @@ internal sealed partial class AppModel
 
     private LocateOutcome ScanRegion(TrackedBoard tr, Rectangle region, PieceTemplates templates, bool allowUnchanged)
     {
-        var img = _capturer.CaptureWindow(ref region) ?? CaptureScreen(region.X, region.Y, region.Width, region.Height);
-        if (img == null) return LocateOutcome.Failed;
+        var img = _capturer.CaptureWindow(ref region);
         var expected = new BoardRect(tr.Board.X - region.X, tr.Board.Y - region.Y, tr.Board.Size);
-        _fp.Compute(img, expected);
-        if (allowUnchanged && _hasLastFp && _cached != null && !_fp.Differs(_lastFp)) return LocateOutcome.Unchanged;
+        bool viaScreen = img == null;
+        if (img == null)
+        {
+            var visible = _capturer.Capture(region.X, region.Y, region.Width, region.Height);
+            if (visible == null) return LocateOutcome.Failed;
+            _dirtyFp.Compute(visible, expected);
+            if (allowUnchanged && _hasLastFp && _cached != null && !_dirtyFp.Differs(_lastDirtyFp)) return LocateOutcome.Unchanged;
+            img = CaptureScreen(region.X, region.Y, region.Width, region.Height);
+            if (img == null) return LocateOutcome.Failed;
+            _fp.Compute(img, expected);
+        }
+        else
+        {
+            _fp.Compute(img, expected);
+            if (allowUnchanged && _hasLastFp && _cached != null && !_fp.Differs(_lastFp)) return LocateOutcome.Unchanged;
+        }
         var scan = BoardScanner.Scan(img, templates);
         if (scan == null)
         {
@@ -119,6 +132,7 @@ internal sealed partial class AppModel
         _tracked = new TrackedBoard(tr.Mon, stable.Rect);
         _fp.Compute(img, new BoardRect(stable.Rect.X - region.X, stable.Rect.Y - region.Y, stable.Rect.Size));
         _lastFp.CopyFrom(_fp); _hasLastFp = true;
+        if (viaScreen) _lastDirtyFp.CopyFrom(_dirtyFp);
         _cached = scan;
         return LocateOutcome.Changed;
     }
@@ -160,6 +174,9 @@ internal sealed partial class AppModel
         if (_view != BoardSight.Covered) _view = BoardSight.Gone;
         return any ? LocateOutcome.Lost : LocateOutcome.Failed;
     }
+
+    private const double BoardGoneGraceSeconds = 3, RelearnRetrySeconds = 3;
+    private DateTime _lastRelearnTry = DateTime.MinValue;
 
     private bool _overlayHidden, _panelHidden;
 
@@ -213,8 +230,11 @@ internal sealed partial class AppModel
         if (outcome == LocateOutcome.Lost || _cached == null || _tracked == null)
         {
             _lostSince ??= DateTime.UtcNow;
-            SetStatus(Loc.T("status.searching"));
-            HideAll();
+            if (_view == BoardSight.Gone && (DateTime.UtcNow - _lostSince.Value).TotalSeconds >= BoardGoneGraceSeconds)
+            {
+                SetStatus(Loc.T("status.searching"));
+                HideAll();
+            }
             _pendingScreen = null;
             _settled = false;
             return;
@@ -246,21 +266,21 @@ internal sealed partial class AppModel
                 _autoWhiteAtBottom = t.LearnStart(scan.Features);
                 _templates = t;
                 SaveTemplates(t);
-                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false;
+                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false; _sideToMove = null;
                 SetStatus(Loc.T("status.learned"));
                 return;
             }
         }
 
-        if (_templates.IsEmpty && !scan.LooksLikeStart)
+        if (!scan.LooksLikeStart && (_templates.IsEmpty || _templates.FitsBadly(scan.Features)) && (DateTime.UtcNow - _lastRelearnTry).TotalSeconds >= RelearnRetrySeconds)
         {
-            var t = new PieceTemplates();
-            if (t.LearnEarly(scan.Features) is bool wb)
+            _lastRelearnTry = DateTime.UtcNow;
+            if (PieceTemplates.Relearned(scan.Features) is { } relearned)
             {
-                _autoWhiteAtBottom = wb;
-                _templates = t;
-                SaveTemplates(t);
-                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false;
+                _autoWhiteAtBottom = relearned.WhiteAtBottom;
+                _templates = relearned.Templates;
+                SaveTemplates(_templates);
+                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false; _sideToMove = null;
                 SetStatus(Loc.T("status.learned"));
                 return;
             }
@@ -297,6 +317,11 @@ internal sealed partial class AppModel
         _lastMe = me;
         var placement = new Placement(scan.Screen, whiteAtBottom);
         if (HandleLift(placement, me, whiteAtBottom)) return;
+        if (!placement.Equals(_stablePlacement) && Native.PrimaryButtonDown())
+        {
+            _pendingScreen = null; _cached = null; _hasLastFp = false; _confirmSoon = true;
+            return;
+        }
 
         if (!placement.Equals(_stablePlacement))
         {
@@ -318,7 +343,8 @@ internal sealed partial class AppModel
         {
             var still = _pendingMoves.Where(InRecord).ToList();
             _pendingMoves = new();
-            if (still.Count > 0) StartReview(still, me);
+            ConfirmMoves(still, me);
+            _reviewableKeys.Clear();
         }
         if (_view == BoardSight.Readable && _gameEnd.Observe(BoardSight.Readable, _book.Plies, _update?.Result, placement.IsStartPosition, DateTime.UtcNow) is { } end)
             FinishGame(end);
@@ -434,7 +460,7 @@ internal sealed partial class AppModel
         _hint = null; _hintFen = null; _hintLevel = 0;
         _panel.HintLevel = 0; _panel.CanHint = false; _panel.CanExplain = false; _panel.IsAsking = false;
         _cached = null; _hasLastFp = false; _stabilizer.Reset();
-        _pendingMoves = new(); _reviewSeq++; _confirmSoon = false;
+        _pendingMoves = new(); _reviewableKeys.Clear(); _reviewSeq++; _confirmSoon = false;
         Invalidate();
     }
 }

@@ -104,7 +104,7 @@ do {
     let u = feed(&rec, "seq_4")
     check(u.change == .resync && u.gap && u.reviewable.isEmpty && u.newMoves.isEmpty, "gap: \(u.change) gap \(u.gap) reviewable \(u.reviewable.count)")
     check(u.log.first?.hasPrefix("Resync:") == true, "gap log \(u.log)")
-    check(rec.moves.isEmpty && rec.earlierSegments.count == 1 && u.estimated, "gap starts a new estimated segment")
+    check(rec.moves.count == 1 && rec.breaks == [1] && rec.segmentMoves == 0 && u.estimated, "gap keeps earlier moves and starts an estimated segment")
     let next = feed(&rec, "seq_plain_4")
     check(next.change == .unchanged, "same placement after resync is unchanged")
 }
@@ -137,7 +137,7 @@ do {
     check(u.change == .unchanged && u.reviewable.isEmpty && rec.moves.count == 4, "lifted piece: \(u.change), \(rec.moves.count) moves")
     check(u.log.first?.hasPrefix("Partial frame ignored") == true, "partial frame logged: \(u.log)")
     let drop = feed(&rec, "seq_plain_4")
-    check(drop.change == .unchanged && rec.moves.count == 4 && rec.earlierSegments.isEmpty, "piece put back: \(drop.change)")
+    check(drop.change == .unchanged && rec.moves.count == 4 && rec.breaks.isEmpty, "piece put back: \(drop.change)")
 }
 
 print("--- highlight only: no move, no side change")

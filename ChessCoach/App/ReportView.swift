@@ -71,6 +71,7 @@ private struct ReportDetail: View {
                 }
                 chart
                 keyMoments
+                takeaways
                 summary
                 moves
             }
@@ -146,12 +147,36 @@ private struct ReportDetail: View {
     private var chart: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Winning chances for White").font(.headline)
-            Chart(report.moves, id: \.ply) { m in
-                LineMark(x: .value("Move", m.ply), y: .value("White", m.color == "w" ? m.winBefore : 100 - m.winBefore))
+            Chart(chartPoints, id: \.ply) { p in
+                LineMark(x: .value("Move", p.ply), y: .value("White", p.white))
                     .interpolationMethod(.monotone)
             }
             .chartYScale(domain: 0...100)
             .frame(height: 140)
+        }
+    }
+
+    private var chartPoints: [(ply: Int, white: Double)] {
+        func white(_ color: String, _ v: Double) -> Double { color == "w" ? v : 100 - v }
+        var points = report.moves.map { (ply: $0.ply, white: white($0.color, $0.winBefore)) }
+        if let last = report.moves.last { points.append((ply: last.ply + 1, white: white(last.color, last.winAfter))) }
+        return points
+    }
+
+    @ViewBuilder
+    private var takeaways: some View {
+        let list = report.takeaways ?? []
+        if !list.isEmpty {
+            let ids = list.flatMap(\.puzzleIds)
+            let skill = list.first { $0.kind == .mistake }?.skillValue
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Takeaways").font(.headline)
+                ForEach(Array(list.enumerated()), id: \.offset) { _, t in Text(t.text()) }
+                HStack {
+                    if !ids.isEmpty { Button("Train these puzzles") { app.trainPuzzles(ids) } }
+                    if let skill { Button("Set as focus") { app.setFocus(skill, report: report) } }
+                }
+            }
         }
     }
 

@@ -48,7 +48,7 @@
   <data name="hint.fallbackTopic" xml:space="preserve"><value>请仔细观察局面。</value></data>
   <data name="hint.fallbackPiece" xml:space="preserve"><value>标记的格子显示应当走哪枚棋子。</value></data>
   <data name="hint.fallbackIdea" xml:space="preserve"><value>改善你的局面，或化解对方的威胁。</value></data>
-  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Shift+F8</value></data>
   <data name="suggest.title" xml:space="preserve"><value>建议：{0}</value></data>
   <data name="suggest.eval" xml:space="preserve"><value>评估：{0}</value></data>
   <data name="suggest.also" xml:space="preserve"><value>也可以：{0}</value></data>
@@ -88,7 +88,7 @@
   <data name="menu.think" xml:space="preserve"><value>思考时间</value></data>
   <data name="menu.nextHint" xml:space="preserve"><value>下一条提示</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>切换走棋方</value></data>
-  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Shift+F9</value></data>
   <data name="menu.endGame" xml:space="preserve"><value>结束对局并显示复盘</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>将对局复制为 PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>将面板移回棋盘旁</value></data>
@@ -111,7 +111,7 @@
   <data name="settings.autostart" xml:space="preserve"><value>随 Windows 启动</value></data>
   <data name="settings.language" xml:space="preserve"><value>语言</value></data>
   <data name="settings.langSystem" xml:space="preserve"><value>系统</value></data>
-  <data name="settings.hotkeys" xml:space="preserve"><value>快捷键：Ctrl+Alt+H 下一条提示，Ctrl+Alt+T 切换走棋方。</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>快捷键：Ctrl+Shift+F8 下一条提示，Ctrl+Shift+F9 切换走棋方。</value></data>
   <data name="settings.expert" xml:space="preserve"><value>专家</value></data>
   <data name="settings.thinkMs" xml:space="preserve"><value>思考时间（毫秒）</value></data>
   <data name="settings.lock" xml:space="preserve"><value>锁定专家模式</value></data>
@@ -161,6 +161,9 @@
   <data name="training.correct" xml:space="preserve"><value>正确：{0}</value></data>
   <data name="training.wrong" xml:space="preserve"><value>还差一点。请再试一次，或使用提示。</value></data>
   <data name="training.best" xml:space="preserve"><value>最佳着法：{0}</value></data>
+  <data name="training.instruction" xml:space="preserve"><value>点击或拖动棋子来走棋。</value></data>
+  <data name="training.skip" xml:space="preserve"><value>跳过</value></data>
+  <data name="training.stats" xml:space="preserve"><value>已解决 {0}/{1}</value></data>
   <data name="menu.checkUpdates" xml:space="preserve"><value>检查更新 …</value></data>
   <data name="update.current" xml:space="preserve"><value>Chess Coach 已是最新版本。</value></data>
   <data name="update.ready" xml:space="preserve"><value>更新 {0} 已准备就绪，将在退出时安装。</value></data>
@@ -187,4 +190,13 @@
   <data name="report.end.manual" xml:space="preserve"><value>已手动结束</value></data>
   <data name="report.summaryLoading" xml:space="preserve"><value>正在撰写总结 …</value></data>
   <data name="record.openRecap" xml:space="preserve"><value>打开复盘</value></data>
+  <data name="panel.showThreat" xml:space="preserve"><value>显示威胁</value></data>
+  <data name="report.takeaways" xml:space="preserve"><value>本局要点</value></data>
+  <data name="report.train" xml:space="preserve"><value>练习这 {0} 道题</value></data>
+  <data name="report.setFocus" xml:space="preserve"><value>设为下一局的重点</value></data>
+  <data name="report.focusSet" xml:space="preserve"><value>已设为重点：{0}</value></data>
+  <data name="fairPlay.title" xml:space="preserve"><value>公平竞赛</value></data>
+  <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach 用于练习：与机器人对弈、不计分对局、实体棋盘和分析。在计分的在线对局中使用它的建议，违反 chess.com 和 Lichess 的公平竞赛规则，账号可能被封。</value></data>
+  <data name="update.available" xml:space="preserve"><value>版本 {0} 已可用。请在托盘菜单中选择“检查更新”来安装。</value></data>
+  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach 在托盘中运行。在浏览器中打开棋盘，在托盘菜单中开启“启用”，并展示一次初始局面，让应用学习棋子。</value></data>
 </root>

@@ -1,11 +1,12 @@
 #!/bin/bash
 set -euo pipefail
-usage() { echo "usage: release-local.sh --version X.Y.Z [--identity NAME] [--windows-zip FILE] [--dry-run] [--upload]" >&2; exit 1; }
-version=""; windows_zip=""; identity="Developer ID Application"; dry_run=0; upload=0
+usage() { echo "usage: release-local.sh --version X.Y.Z [--identity NAME] [--windows-zip FILE] [--windows-setup FILE] [--dry-run] [--upload]" >&2; exit 1; }
+version=""; windows_zip=""; windows_setup=""; identity="Developer ID Application"; dry_run=0; upload=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --version) version="${2:?}"; shift 2 ;;
     --windows-zip) windows_zip="${2:?}"; shift 2 ;;
+    --windows-setup) windows_setup="${2:?}"; shift 2 ;;
     --identity) identity="${2:?}"; shift 2 ;;
     --dry-run) dry_run=1; shift ;;
     --upload) upload=1; shift ;;
@@ -30,7 +31,7 @@ finish() { cp "$work"/*.zip "$work"/*.dmg "$work"/*.json "$work/notes.md" "$dist
 "$here/set-version.sh" "$version" "$(date +%Y%m%d%H%M)"
 xcodegen generate >/dev/null
 xcodebuild -project ChessCoach.xcodeproj -scheme ChessCoach -configuration Release \
-  -derivedDataPath "$derived" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build | tail -n 3
+  -derivedDataPath "$derived" CC_OFFICIAL_BUILD=YES CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build | tail -n 3
 app="$work/Chess Coach.app"
 ditto --norsrc --noextattr --noqtn "$derived/Build/Products/Release/Chess Coach.app" "$app"
 "$here/fetch-stockfish.sh" macos "$app/Contents/Resources/stockfish-dist"
@@ -75,7 +76,7 @@ auth=(-H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.githu
 body="$(python3 -I -c 'import json,sys; print(json.dumps({"tag_name":"v"+sys.argv[1],"name":"v"+sys.argv[1],"body":open(sys.argv[2]).read(),"draft":True}))' "$version" "$notes")"
 release="$(curl -fsS "${auth[@]}" -X POST "$api/releases" -d "$body")"
 upload_url="$(python3 -I -c 'import json,sys; print(json.load(sys.stdin)["upload_url"].split("{")[0])' <<<"$release")"
-for f in "$zip" "$dmg" "$dist/update.json" ${windows_zip:+"$windows_zip"}; do
+for f in "$zip" "$dmg" "$dist/update.json" ${windows_zip:+"$windows_zip"} ${windows_setup:+"$windows_setup"}; do
   curl -fsS "${auth[@]}" -H "Content-Type: application/octet-stream" --data-binary @"$f" "$upload_url?name=$(basename "$f")" >/dev/null
 done
 echo "draft release v$version created; publish it on GitHub"

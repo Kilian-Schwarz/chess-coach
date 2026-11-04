@@ -180,5 +180,21 @@ if FileManager.default.fileExists(atPath: "\(privateDir)/chesscom_gameover_popup
     check(BoardReadability.ringMatch(wrongRect, c) < BoardReadability.ringShare, "other site in the region must not look like the dialog frame")
 }
 
+print("--- light and dark cards over the board")
+do {
+    func feature(_ bg: [Int]) -> SquareFeature { SquareFeature(mask: [], lum: [], fill: 0, meanLum: 0, bg: bg) }
+    let light = [240, 217, 181], dark = [181, 136, 99]
+    func board(card: [Int]?) -> [[SquareFeature]] {
+        (0..<8).map { r in (0..<8).map { c in
+            let inner = (1...6).contains(r) && (1...6).contains(c)
+            return feature(inner ? (card ?? ((r + c) % 2 == 1 ? light : dark)) : ((r + c) % 2 == 1 ? light : dark))
+        } }
+    }
+    let colors = BoardColors(light: light.map(Double.init), dark: dark.map(Double.init))
+    check(BoardReadability.view(board(card: nil), colors: colors) == .readable, "plain synthetic board")
+    check(BoardReadability.view(board(card: [255, 255, 255]), colors: colors) == .covered, "white card")
+    check(BoardReadability.view(board(card: [20, 20, 20]), colors: colors) == .covered, "dark card")
+}
+
 print(failures == 0 ? "gameflow OK" : "\(failures) failures")
 exit(failures == 0 ? 0 : 1)

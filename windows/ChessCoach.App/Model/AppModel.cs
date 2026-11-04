@@ -58,14 +58,13 @@ internal sealed partial class AppModel
         _templates = LoadTemplates() ?? new PieceTemplates();
         if (Settings.LlmModel.Length > 0) LlmModels = new() { new LlmModel(Settings.LlmModel, Settings.LlmModel) };
         _panel.NextHintClicked += NextHint;
+        _panel.ThreatClicked += ShowThreat;
         _panel.ExplainAgainClicked += ExplainAgain;
         _panel.FinishClicked += RequestEndGame;
         _panel.QuestionAsked += Ask;
         _panel.FeedbackGiven += OnFeedback;
         _panel.CollapsedChanged += OnPanelCollapsed;
         _session.Changed += () => _ui.BeginInvoke(Invalidate);
-        _hotKeys.Register(Native.MOD_CONTROL | Native.MOD_ALT, 0x48, () => _ui.BeginInvoke(NextHint), "Strg+Alt+H");
-        _hotKeys.Register(Native.MOD_CONTROL | Native.MOD_ALT, 0x54, () => _ui.BeginInvoke(ToggleSideToMove), "Strg+Alt+T");
         InitLearning();
         Log.Write("Chess Coach started, version " + typeof(AppModel).Assembly.GetName().Version);
         if (Settings.ResumeActive) _ui.BeginInvoke(() => SetActive(true));
@@ -93,8 +92,15 @@ internal sealed partial class AppModel
         IsActive = on;
         Settings.ResumeActive = on;
         Settings.Save();
-        if (on) Start(); else Stop();
+        if (on) { ShowFairPlayNoticeOnce(); RegisterHotKeys(); Start(); } else { _hotKeys.Clear(); Stop(); }
         Notify();
+    }
+
+    private void RegisterHotKeys()
+    {
+        const int mods = Native.MOD_CONTROL | Native.MOD_SHIFT;
+        _hotKeys.Register(mods, 0x77, () => _ui.BeginInvoke(NextHint), "Ctrl+Shift+F8");
+        _hotKeys.Register(mods, 0x78, () => _ui.BeginInvoke(ToggleSideToMove), "Ctrl+Shift+F9");
     }
 
     private void Start()
@@ -164,11 +170,18 @@ internal sealed partial class AppModel
         if (_view == BoardSight.Covered && _book.Plies >= GameEndDetector.MinPlies) return 500;
         if (_confirmSoon && _tracked != null) return 200;
         if (_tracked == null)
-            return (DateTime.UtcNow - (_lostSince ?? DateTime.UtcNow)).TotalSeconds > 30 ? 2000 : 1000;
+        {
+            double lost = (DateTime.UtcNow - (_lostSince ?? DateTime.UtcNow)).TotalSeconds;
+            return OnBattery() ? 10000 : lost > 300 ? 8000 : lost > 30 ? 2000 : 1000;
+        }
         double calm = (DateTime.UtcNow - _lastChangeAt).TotalSeconds;
         if (calm < 3) return 400;
-        return (int)Math.Min(1500, 400 + (calm - 3) / 12 * 1100);
+        int delay = calm > 120 ? 4000 : (int)Math.Min(1500, 400 + (calm - 3) / 12 * 1100);
+        return OnBattery() ? delay * 2 : delay;
     }
+
+    private static bool OnBattery() =>
+        System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Offline;
 
     private void Invalidate() { _settled = false; _lastChangeAt = DateTime.UtcNow; }
 
@@ -195,6 +208,17 @@ internal sealed partial class AppModel
         }
         catch (Exception e) { LlmStatus = e.Message; }
         Notify();
+    }
+
+    public async Task<int?> MoveLossAsync(string fen, string uci)
+    {
+        if (ChessPosition.FromFen(fen) is not { } pos || UciMove.Parse(uci) is not { } move) return null;
+        var before = await _engine.AnalyzeAsync(fen, 300, false);
+        if (before == null) return null;
+        var next = pos.Applying(move);
+        if (next.Result is { Kind: GameResultKind.Checkmate }) return 0;
+        var after = await _engine.AnalyzeAsync(next.Fen, 300, false);
+        return after == null ? null : Math.Max(0, before.Value + after.Value);
     }
 
     public void SetModel(string id)

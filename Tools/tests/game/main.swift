@@ -67,11 +67,32 @@ do {
     var u = rec.update(placement: placement(jump), whiteAtBottom: true)
     check(u.change == .resync && u.estimated, "resync segment: \(u.change)")
     check(u.fen.contains(" kq "), "castling rights estimated: \(u.fen)")
-    check(rec.earlierSegments.count == 1, "earlier segments")
+    check(rec.breaks == [1] && rec.moves.count == 1, "earlier moves kept across a plausible resync: \(rec.breaks) \(rec.moves.count)")
     u = rec.update(placement: placement("r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 1 6"), whiteAtBottom: true)
     check(u.change == .moves && u.lastMove?.san == "O-O" && u.fen.hasPrefix("r1bq1rk1/") , "castling in the segment: \(u.lastMove?.san ?? "-")")
+    check(rec.moves.count == 2 && rec.segmentMoves == 1, "moves after the break: \(rec.moves.count)")
+    let pgn = rec.pgn()
+    check(pgn.contains("{ moves missed }") && pgn.contains("1. e4"), "pgn marks the gap and keeps earlier moves")
     u = rec.update(placement: placement(ChessPosition.startFEN), whiteAtBottom: true)
     check(u.change == .newGame && rec.moves.isEmpty && !u.estimated, "new game")
+}
+
+do {
+    var rec = GameRecord()
+    rec.update(placement: placement(ChessPosition.startFEN), whiteAtBottom: true)
+    var fen = ChessPosition.startFEN
+    for f in ["rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"] {
+        fen = f
+        rec.update(placement: placement(f), whiteAtBottom: true)
+    }
+    let good = placement(fen)
+    var u = rec.update(placement: Placement(), whiteAtBottom: true)
+    check(u.change == .resync && rec.moves.isEmpty, "garbage frame starts a fresh segment: \(u.change) \(rec.moves.count)")
+    u = rec.update(placement: good, whiteAtBottom: true)
+    check(rec.moves.count == 2 && u.change != .newGame, "recovering the board restores the earlier moves: \(rec.moves.count)")
+    let next = placement("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2")
+    u = rec.update(placement: next, whiteAtBottom: true)
+    check(u.change == .moves && rec.moves.count == 3, "game continues after the restore: \(u.change) \(rec.moves.count)")
 }
 
 do {

@@ -191,4 +191,19 @@ public class GameFlowTests
         Assert.Equal("1-0", ChessCoachJson.Deserialize<GameReport>(json)!.Result);
         Assert.Null(ChessCoachJson.Deserialize<GameReport>("{\"id\":\"old\"}")!.Result);
     }
+
+    private static SquareFeature[][] Board(Func<int, int, int[]> background) =>
+        Enumerable.Range(0, 8).Select(r => Enumerable.Range(0, 8).Select(c => new SquareFeature { Bg = background(r, c) }).ToArray()).ToArray();
+
+    [Fact]
+    public void LightCardOverBoardCountsAsCovered()
+    {
+        int[] Plain(int r, int c) => (r + c) % 2 == 1 ? new[] { 240, 217, 181 } : new[] { 181, 136, 99 };
+        var plain = Board(Plain);
+        Assert.True(BoardReadability.IsReadable(plain));
+        var withCard = Board((r, c) => r is >= 2 and <= 4 && c is >= 2 and <= 5 ? new[] { 255, 255, 255 } : Plain(r, c));
+        Assert.False(BoardReadability.IsReadable(withCard));
+        var darkCard = Board((r, c) => r is >= 2 and <= 4 && c is >= 2 and <= 5 ? new[] { 20, 20, 20 } : Plain(r, c));
+        Assert.False(BoardReadability.IsReadable(darkCard));
+    }
 }

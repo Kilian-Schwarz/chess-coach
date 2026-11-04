@@ -20,6 +20,7 @@ targets:
       properties:
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
+        CCOfficialBuild: $(CC_OFFICIAL_BUILD)
     settings:
       base:
         PRODUCT_NAME: Chess Coach
@@ -34,4 +35,5 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.board-games
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_APP_SANDBOX: NO
+        CC_OFFICIAL_BUILD: NO
         LOCALIZATION_PREFERS_STRING_CATALOGS: YES

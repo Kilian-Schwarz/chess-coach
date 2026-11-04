@@ -48,7 +48,7 @@
   <data name="hint.fallbackTopic" xml:space="preserve"><value>Konuma dikkatle bakın.</value></data>
   <data name="hint.fallbackPiece" xml:space="preserve"><value>İşaretli kare, hangi taşın oynaması gerektiğini gösterir.</value></data>
   <data name="hint.fallbackIdea" xml:space="preserve"><value>Konumunuzu iyileştirin veya bir tehdidi savuşturun.</value></data>
-  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Shift+F8</value></data>
   <data name="suggest.title" xml:space="preserve"><value>Öneri: {0}</value></data>
   <data name="suggest.eval" xml:space="preserve"><value>Değerlendirme: {0}</value></data>
   <data name="suggest.also" xml:space="preserve"><value>Şunlar da olabilir: {0}</value></data>
@@ -88,7 +88,7 @@
   <data name="menu.think" xml:space="preserve"><value>Düşünme süresi</value></data>
   <data name="menu.nextHint" xml:space="preserve"><value>Sonraki ipucu</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Hamle sırasını değiştir</value></data>
-  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Shift+F9</value></data>
   <data name="menu.endGame" xml:space="preserve"><value>Oyunu bitir ve özeti göster</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Oyunu PGN olarak kopyala</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Paneli tahtanın yanına geri taşı</value></data>
@@ -111,7 +111,7 @@
   <data name="settings.autostart" xml:space="preserve"><value>Windows ile başlat</value></data>
   <data name="settings.language" xml:space="preserve"><value>Dil</value></data>
   <data name="settings.langSystem" xml:space="preserve"><value>Sistem</value></data>
-  <data name="settings.hotkeys" xml:space="preserve"><value>Kısayollar: Ctrl+Alt+H sonraki ipucu, Ctrl+Alt+T hamle sırasını değiştir.</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Kısayollar: Ctrl+Shift+F8 sonraki ipucu, Ctrl+Shift+F9 hamle sırasını değiştir.</value></data>
   <data name="settings.expert" xml:space="preserve"><value>Uzman</value></data>
   <data name="settings.thinkMs" xml:space="preserve"><value>Düşünme süresi (ms)</value></data>
   <data name="settings.lock" xml:space="preserve"><value>Uzman modunu kilitle</value></data>
@@ -161,6 +161,9 @@
   <data name="training.correct" xml:space="preserve"><value>Doğru: {0}</value></data>
   <data name="training.wrong" xml:space="preserve"><value>Pek değil. Tekrar deneyin veya bir ipucu kullanın.</value></data>
   <data name="training.best" xml:space="preserve"><value>En iyi hamle: {0}</value></data>
+  <data name="training.instruction" xml:space="preserve"><value>Hamlenizi oynamak için bir taşa tıklayın veya sürükleyin.</value></data>
+  <data name="training.skip" xml:space="preserve"><value>Atla</value></data>
+  <data name="training.stats" xml:space="preserve"><value>{1} görevden {0} çözüldü</value></data>
   <data name="menu.checkUpdates" xml:space="preserve"><value>Güncellemeleri denetle …</value></data>
   <data name="update.current" xml:space="preserve"><value>Chess Coach güncel.</value></data>
   <data name="update.ready" xml:space="preserve"><value>{0} güncellemesi hazır ve çıkışta yüklenecek.</value></data>
@@ -187,4 +190,13 @@
   <data name="report.end.manual" xml:space="preserve"><value>Elle bitirildi</value></data>
   <data name="report.summaryLoading" xml:space="preserve"><value>Özet yazılıyor …</value></data>
   <data name="record.openRecap" xml:space="preserve"><value>Özeti aç</value></data>
+  <data name="panel.showThreat" xml:space="preserve"><value>Tehdidi göster</value></data>
+  <data name="report.takeaways" xml:space="preserve"><value>Bu oyundan çıkarılacaklar</value></data>
+  <data name="report.train" xml:space="preserve"><value>Bu {0} bulmacayı çalış</value></data>
+  <data name="report.setFocus" xml:space="preserve"><value>Sonraki oyun için odak olarak ayarla</value></data>
+  <data name="report.focusSet" xml:space="preserve"><value>Odak ayarlandı: {0}</value></data>
+  <data name="fairPlay.title" xml:space="preserve"><value>Adil oyun</value></data>
+  <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach pratik içindir: botlara karşı oyunlar, puansız oyunlar, gerçek tahta ve analiz. Önerilerini puanlı çevrim içi oyunlarda kullanmak chess.com ve Lichess adil oyun kurallarına aykırıdır ve hesabınızın kapatılmasına yol açabilir.</value></data>
+  <data name="update.available" xml:space="preserve"><value>{0} sürümü hazır. Yüklemek için tepsi menüsünden "Güncellemeleri denetle" seçeneğini seç.</value></data>
+  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach tepside çalışır. Tarayıcıda bir satranç tahtası aç, tepsi menüsünde "Etkin" seçeneğini aç ve uygulamanın taşları öğrenmesi için başlangıç konumunu bir kez göster.</value></data>
 </root>

@@ -86,4 +86,24 @@ public class UpdaterTests
         using var key = ECDsa.Create();
         key.ImportSubjectPublicKeyInfo(Convert.FromBase64String(Updater.PublicKey), out _);
     }
+
+    private sealed class Stub(System.Net.HttpStatusCode status, string body) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
+            Task.FromResult(new HttpResponseMessage(status) { Content = new StringContent(body) });
+    }
+
+    [Fact]
+    public async Task MissingFeedMeansNoUpdate()
+    {
+        using var http = new HttpClient(new Stub(System.Net.HttpStatusCode.NotFound, "Not Found"));
+        Assert.Null(await Updater.FetchAsync(http));
+    }
+
+    [Fact]
+    public async Task ServerErrorStillThrows()
+    {
+        using var http = new HttpClient(new Stub(System.Net.HttpStatusCode.InternalServerError, ""));
+        await Assert.ThrowsAsync<HttpRequestException>(() => Updater.FetchAsync(http));
+    }
 }

@@ -3,16 +3,22 @@ import SwiftUI
 
 @MainActor
 extension AppModel {
+    static let lostGrace: TimeInterval = 2.5
+    static let reviewStableFrames = 4
+    static let maxUnclassified = 6
+    static var mouseDown: Bool { NSEvent.pressedMouseButtons & 1 != 0 }
+
+    func moveConfirmed(_ moves: [PlayedMove], marks: [(file: Int, rank: Int)]) -> Bool {
+        guard !Self.mouseDown else { return false }
+        let marked = Set(marks.map { UCIMove.squareName($0.file, $0.rank) })
+        return moves.allSatisfy { marked.isSuperset(of: [String($0.uci.prefix(2)), String($0.uci.dropFirst(2).prefix(2))]) }
+    }
+
     func nextDelay() -> Duration {
-        if activity.isPaused { return .milliseconds(1500) }
-        if confirmSoon, tracked != nil { return .milliseconds(200) }
-        if tracked == nil {
-            let lost = Date().timeIntervalSince(lostSince ?? Date())
-            return .milliseconds(lost > 120 ? 4000 : lost > 30 ? 2000 : 1000)
-        }
-        let calm = Date().timeIntervalSince(lastChangeAt)
-        if calm < 3 { return .milliseconds(400) }
-        return .milliseconds(Int(min(1500, 400 + (calm - 3) / 12 * 1100)))
+        .milliseconds(PollingSchedule.delayMs(paused: activity.isPaused, confirmSoon: confirmSoon, tracked: tracked != nil,
+                                              lostFor: Date().timeIntervalSince(lostSince ?? Date()),
+                                              calmFor: Date().timeIntervalSince(lastChangeAt),
+                                              lowPower: ProcessInfo.processInfo.isLowPowerModeEnabled))
     }
 
     func locateBoard() async throws -> Located? {
@@ -146,6 +152,7 @@ extension AppModel {
 
         guard let loc = located else {
             if lostSince == nil { lostSince = Date() }
+            if lastBoardRect != nil, Date().timeIntervalSince(lostSince ?? Date()) < Self.lostGrace { return }
             observeEnd(.gone)
             status = String(localized: "Looking for a chessboard …")
             suggestion = nil
@@ -190,16 +197,19 @@ extension AppModel {
             }
         }
 
-        if templates.isEmpty && !scan.looksLikeStart {
+        if !scan.looksLikeStart, relearnTried != scan.screen, templates.isEmpty || templates.fitsBadly(scan) {
+            relearnTried = scan.screen
             var t = PieceTemplates()
-            if let wb = t.learnEarly(scan.features) {
-                autoWhiteAtBottom = wb
+            if let found = t.learnEarlyPosition(scan.features) {
+                autoWhiteAtBottom = found.whiteAtBottom
                 templates = t
                 Self.saveTemplates(t)
+                record.seed(found.position)
                 pendingScreen = nil
                 stablePlacement = nil
                 dropCapture()
                 status = String(localized: "Pieces learned")
+                Log.write("Pieces relearned from an early position: \(found.position.fen)")
                 return
             }
         }
@@ -209,6 +219,13 @@ extension AppModel {
             suggestion = String(localized: "Show a start position once to learn the pieces")
             overlay.show(boardInScreen: boardRect, state: OverlayState(hint: String(localized: "Show the start position to learn the pieces")))
             settled = true
+            return
+        }
+
+        let unclassified = zip(scan.features.joined(), scan.screen.joined()).filter { $0.0.fill > PieceTemplates.occupiedFill && $0.1 == nil }.count
+        if unclassified > Self.maxUnclassified {
+            status = Loc.display("problem.kings", "Kings not clearly recognised")
+            suggestion = nil
             return
         }
 
@@ -254,17 +271,20 @@ extension AppModel {
             let carriedNow = carried.filter { inRecord($0) }
             if !carriedNow.isEmpty { startReview(carriedNow, me: me) }
             if !coached.isEmpty {
-                let marked = Set(marking.marked.map { UCIMove.squareName($0.file, $0.rank) })
-                if coached.allSatisfy({ marked.isSuperset(of: [String($0.uci.prefix(2)), String($0.uci.dropFirst(2).prefix(2))]) }) {
-                    startReview(coached, me: me)
-                } else {
-                    pendingReview = (coached, marked)
-                }
+                if moveConfirmed(coached, marks: marking.marked) { startReview(coached, me: me) } else { pendingReview = (coached, 0) }
             }
-        } else if let pending = pendingReview {
-            pendingReview = nil
-            let still = pending.moves.filter { inRecord($0) }
-            if !still.isEmpty { startReview(still, me: me) }
+        } else if var pending = pendingReview {
+            pending.moves = pending.moves.filter { inRecord($0) }
+            pending.frames = Self.mouseDown ? 0 : pending.frames + 1
+            let marks = SideToMove.detect(scan: scan, whiteAtBottom: whiteAtBottom, templates: templates).marked
+            if pending.moves.isEmpty {
+                pendingReview = nil
+            } else if moveConfirmed(pending.moves, marks: marks) || (pending.frames >= Self.reviewStableFrames && !Self.mouseDown) {
+                pendingReview = nil
+                startReview(pending.moves, me: me)
+            } else {
+                pendingReview = pending
+            }
         }
         guard var pos = record.current, isActive else { return }
 

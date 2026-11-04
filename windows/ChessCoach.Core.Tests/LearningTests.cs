@@ -74,7 +74,9 @@ public class LearningTests
         var pr = Vectors.GetProperty("profile");
         var p = new PlayerProfile("X");
         p.Observe(Skill.Tactics, 1);
-        Near(pr.GetProperty("skillUpdate").GetProperty("new").GetDouble(), p.Skills["tactics"], 1e-9);
+        Near(0.75, p.Skills["tactics"], 1e-9);
+        p.Observe(Skill.Tactics, 0); Near(0.75 * 2 / 3, p.Skills["tactics"], 1e-9);
+        Assert.Equal(2, p.SkillCounts["tactics"]);
         var perfs = pr.GetProperty("placement")[0].GetProperty("performances").EnumerateArray().Select(x => x.GetDouble()).ToList();
         var after = pr.GetProperty("placement")[0].GetProperty("ratingAfter").EnumerateArray().Select(x => x.GetDouble()).ToList();
         var q = new PlayerProfile("Q");
@@ -111,11 +113,13 @@ public class LearningTests
         sk["opening"] = 0.9; sk["endgame"] = 0.95; sk["middlegame"] = 0.75; sk["king_safety"] = 0.8;
         Assert.Equal(Skill.Middlegame, Curriculum.Focus(sk));
         var b = Curriculum.Adapt(PlayerLevel.Beginner, Skill.PieceSafety, new Dictionary<string, double> { ["piece_safety"] = 0.5 }, 0.78);
-        Assert.True(b.DefaultHintLevel == 2 && b.DifficultyBias == 0 && b.IntervalFactor == 1);
+        Assert.True(b.DefaultHintLevel == 2 && b.NewPuzzlesPerDay == 10);
         var hi = Curriculum.Adapt(PlayerLevel.Intermediate, Skill.Tactics, new Dictionary<string, double> { ["tactics"] = 0.5 }, 0.95);
-        Assert.True(hi.DefaultHintLevel == 1 && hi.DifficultyBias == 1 && hi.IntervalFactor > 1);
+        Assert.Equal(1, hi.DefaultHintLevel);
         var lo = Curriculum.Adapt(PlayerLevel.Intermediate, Skill.Tactics, new Dictionary<string, double> { ["tactics"] = 0.5 }, 0.5);
-        Assert.True(lo.DefaultHintLevel == 2 && lo.DifficultyBias == -1 && lo.IntervalFactor < 1 && lo.NewPuzzlesPerDay < 10);
+        Assert.True(lo.DefaultHintLevel == 2 && lo.NewPuzzlesPerDay < 10);
+        var weak = Curriculum.Adapt(PlayerLevel.Beginner, Skill.Tactics, new Dictionary<string, double> { ["tactics"] = 0.2 }, 0.5);
+        Assert.Equal(2, weak.DefaultHintLevel);
         Assert.Equal("Learning focus: Piece safety", Curriculum.FocusLabel(Skill.PieceSafety));
     }
 
@@ -154,8 +158,8 @@ public class LearningTests
             var h = Hints.Build(sp, side, res)!;
             Assert.Equal("d2", h.Stage2Square);
             Assert.Equal("Move the pawn on d2.", h.Stage2);
-            Assert.Equal("Zieh mit dem Bauern auf d2.", Hints.Stage2Text('P', "d2", new CultureInfo("de")));
-            Assert.Equal("Zieh mit der Dame auf d1.", Hints.Stage2Text('Q', "d1", new CultureInfo("de")));
+            Assert.Equal("Zieh den Bauern, der auf d2 steht.", Hints.Stage2Text('P', "d2", new CultureInfo("de")));
+            Assert.Equal("Zieh die Dame, die auf d1 steht.", Hints.Stage2Text('Q', "d1", new CultureInfo("de")));
             Assert.DoesNotContain(new[] { h.Stage1, h.Stage2, h.Stage3Fallback }, t => t.Contains("d4"));
         }
         Assert.True(Hints.RevealsTarget("Please go to f3", UciMove.Parse("g1f3")!.Value));
@@ -183,16 +187,16 @@ public class LearningTests
         var z = MakePuzzle();
         Assert.True(z.IsNew && z.Box == 1);
         z.Attempt("a1a8", now: T0);
-        Assert.Equal(2, z.Box); Near(3 * Day, (z.DueAt - T0).TotalSeconds, 1);
+        Assert.Equal(2, z.Box); Assert.Equal(Puzzle.StartOfDay(T0, 3), z.DueAt);
         z.Attempt("a1a8", 2, T0); Assert.Equal(2, z.Box);
         z.Attempt("a1a8", now: T0); z.Attempt("a1a8", now: T0);
-        Assert.Equal(4, z.Box); Near(16 * Day, (z.DueAt - T0).TotalSeconds, 1);
+        Assert.Equal(4, z.Box); Assert.Equal(Puzzle.StartOfDay(T0, 16), z.DueAt);
         z.Attempt("a1a2", now: T0);
-        Assert.True(z.Box == 1 && !z.Mastered); Near(Day, (z.DueAt - T0).TotalSeconds, 1);
+        Assert.True(z.Box == 1 && !z.Mastered); Assert.Equal(Puzzle.StartOfDay(T0, 1), z.DueAt);
         for (int i = 0; i < 5; i++) z.Attempt("a1a8", now: T0, learningSpeed: 1.5);
         Assert.True(z.Mastered);
-        var z2 = MakePuzzle(); z2.Attempt("a1a8", now: T0, learningSpeed: 1.5); Near(4.5 * Day, (z2.DueAt - T0).TotalSeconds, 1);
-        var z3 = MakePuzzle(); z3.Attempt("a1a8", now: T0, learningSpeed: 0.6); Near(1.8 * Day, (z3.DueAt - T0).TotalSeconds, 1);
+        var z2 = MakePuzzle(); z2.Attempt("a1a8", now: T0, learningSpeed: 1.5); Assert.Equal(Puzzle.StartOfDay(T0, 5), z2.DueAt);
+        var z3 = MakePuzzle(); z3.Attempt("a1a8", now: T0, learningSpeed: 0.6); Assert.Equal(Puzzle.StartOfDay(T0, 2), z3.DueAt);
         Assert.True(MakePuzzle(accepted: new[] { "e2e4", "d2d4" }).Accepts("D2D4"));
         Assert.False(MakePuzzle().Accepts("a1a7"));
     }
@@ -209,7 +213,7 @@ public class LearningTests
             var res = t.GetProperty("result");
             Assert.Equal(res.GetProperty("box").GetInt32(), z.Box);
             Assert.Equal(res.GetProperty("mastered").GetBoolean(), z.Mastered);
-            Near(res.GetProperty("dueDays").GetDouble() * Day, (z.DueAt - T0).TotalSeconds, 1);
+            Assert.Equal(Puzzle.StartOfDay(T0, (int)Math.Round(res.GetProperty("dueDays").GetDouble(), MidpointRounding.AwayFromZero)), z.DueAt);
         }
         foreach (var t in pz.GetProperty("learningSpeed").EnumerateArray())
         {
@@ -225,8 +229,99 @@ public class LearningTests
     static List<Puzzle> WithAttempts(int n, int correct)
     {
         var p = MakePuzzle();
-        for (int i = 0; i < n; i++) p.Attempts.Add(new PuzzleAttempt { Date = T0.AddSeconds(i), Correct = i < correct });
+        for (int i = 0; i <= n; i++) p.Attempts.Add(new PuzzleAttempt { Date = T0.AddSeconds(i), Correct = i == 0 || i - 1 < correct });
         return new() { p };
+    }
+
+    [Fact]
+    public void AssistedAttemptsDoNotCount()
+    {
+        var z = MakePuzzle();
+        z.Box = 3;
+        z.Attempt("a1a8", 4, T0);
+        Assert.Equal(2, z.Box);
+        Assert.True(z.Attempts[0].Assisted);
+        z.Attempt("a1a8", 1, T0);
+        Assert.Equal(2, z.Box);
+        z.Attempt("a1a2", 0, T0);
+        z.Attempt("a1a8", 0, T0);
+        Assert.Equal(2, PuzzleScheduler.ReviewCount(new[] { z }));
+        Near(0.5, PuzzleScheduler.RecentSuccessRate(new[] { z }) ?? 0);
+        Assert.Null(PuzzleScheduler.RecentSuccessRate(new[] { MakePuzzle() }));
+        var q = MakePuzzle();
+        Assert.False(q.TryAcceptAlternative("a1a7", 41));
+        Assert.True(q.TryAcceptAlternative("A1A7", 40));
+        Assert.True(q.Accepts("a1a7"));
+    }
+
+    [Fact]
+    public void RatingNeedsEnoughMovesAndWeighsGames()
+    {
+        var p = new PlayerProfile("A", "p", T0);
+        Near(1100, p.CompleteGame(1800, T0, 4));
+        Assert.Equal(0, p.GamesPlayed);
+        p.CompleteGame(1000, T0, 10);
+        Near(1000, p.Rating);
+        p.CompleteGame(1400, T0, 30);
+        Near(1300, p.Rating);
+        var s = new PlayerProfile("S");
+        for (int i = 0; i < 20; i++) s.Observe(Skill.Threats, 1);
+        s.Observe(Skill.Threats, 0);
+        Assert.True(s.HasEnoughData(Skill.Threats) && !s.HasEnoughData(Skill.Tactics));
+    }
+
+    [Fact]
+    public void TakeawaysFromMistakes()
+    {
+        var mistakes = new[]
+        {
+            new GameMistake(MistakeType.HangingPiece, 200, "Knight f3 (loss 2.0)", "a"),
+            new GameMistake(MistakeType.HangingPiece, 300, "Bishop c4 (loss 3.0)", "b"),
+            new GameMistake(MistakeType.MissedTactic, 500, "Rook a1 (loss 5.0)", null),
+        };
+        var moves = Enumerable.Range(0, 12).Select(i => new MoveRecord { Color = "w", Rating = i == 6 ? "blunder" : "good" }).ToList();
+        var list = Takeaway.Compute(mistakes, moves, "w", Skill.Threats);
+        Assert.Equal(new[] { "mistake", "positive", "habit" }, list.Select(t => t.Kind));
+        Assert.Equal("hanging_piece", list[0].MistakeType);
+        Assert.Equal(2, list[0].Count);
+        Assert.Equal(new[] { "a", "b" }, list[0].PuzzleIds);
+        Assert.Equal("Bishop c4 (loss 3.0)", list[0].Example);
+        Assert.Equal(6, list[1].Count);
+        Assert.Contains("Hanging piece", list[0].Text());
+        var none = Takeaway.Compute(Array.Empty<GameMistake>(), Array.Empty<MoveRecord>(), "w", Skill.Tactics);
+        Assert.Single(none);
+    }
+
+    [Fact]
+    public void FocusHasHysteresis()
+    {
+        var p = new PlayerProfile("F");
+        p.Skills["piece_safety"] = 0.75; p.Skills["threats"] = 0.5;
+        p.Focus = "piece_safety";
+        p.UpdateFocus();
+        Assert.Equal("piece_safety", p.Focus);
+        p.Skills["piece_safety"] = 0.85;
+        p.UpdateFocus();
+        Assert.Equal("threats", p.Focus);
+        p.Skills["piece_safety"] = 0.65;
+        p.UpdateFocus();
+        Assert.Equal("threats", p.Focus);
+        p.Skills["piece_safety"] = 0.55;
+        p.UpdateFocus();
+        Assert.Equal("piece_safety", p.Focus);
+    }
+
+    [Fact]
+    public void LearningSpeedAdjustsOncePerDay()
+    {
+        var puzzles = WithAttempts(30, 30);
+        var p = new PlayerProfile("L");
+        p.AdjustLearningSpeed(puzzles, T0);
+        Near(1.1, p.LearningSpeed);
+        p.AdjustLearningSpeed(puzzles, T0.AddSeconds(60));
+        Near(1.1, p.LearningSpeed);
+        p.AdjustLearningSpeed(puzzles, T0.AddSeconds(2 * Day));
+        Near(1.2, p.LearningSpeed);
     }
 
     [Fact]
@@ -251,11 +346,16 @@ public class LearningTests
         var future = MakePuzzle(); future.Id = "fut"; future.Fen = "ff"; future.Attempts = new() { oldAttempt }; future.DueAt = T0.AddSeconds(Day);
         Assert.False(set.Add(set.Puzzles[0]));
         set.Puzzles.AddRange(new[] { dueNotFocus, dueFocus, future });
-        var sel = PuzzleScheduler.TodaysSelection(set.Puzzles, Skill.PieceSafety, T0);
+        var sel = PuzzleScheduler.TodaysSelection(set.Puzzles, Skill.PieceSafety, T0, rng: new Random(1));
         Assert.Equal(12, sel.Count);
-        Assert.Equal("d2", sel[0].Id);
-        Assert.All(sel.Skip(2).Take(3), x => Assert.Equal(Skill.PieceSafety, x.Skill));
+        Assert.Contains(sel, x => x.Id == "d1");
+        Assert.Contains(sel, x => x.Id == "d2");
+        Assert.Equal(sel.Count, sel.Select(x => x.Id).Distinct().Count());
         Assert.DoesNotContain(sel, x => x.Id == "fut");
+        var many = Enumerable.Range(0, 30).Select(i => { var q = MakePuzzle(); q.Id = "m" + i; q.Fen = "m" + i; q.Attempts = new() { oldAttempt }; q.DueAt = T0.AddSeconds(-i); return q; }).ToList();
+        var capped = PuzzleScheduler.TodaysSelection(many, null, T0, rng: new Random(2));
+        Assert.Equal(PuzzleScheduler.DailyCap, capped.Count);
+        Assert.DoesNotContain(capped, x => x.Id == "m0");
         var started = MakePuzzle(); started.Id = "s"; started.Fen = "s"; started.Attempts = new() { new PuzzleAttempt { Date = T0, Correct = true } }; started.DueAt = T0.AddSeconds(3 * Day);
         var sel2 = PuzzleScheduler.TodaysSelection(set.Puzzles.Append(started).ToList(), null, T0);
         Assert.Equal(9, sel2.Count(x => x.IsNew));
@@ -385,6 +485,8 @@ public class LearningTests
             Assert.Equal(7, store.LoadProfile("min").Skills.Count);
             File.WriteAllText(Path.Combine(dir, "profiles", "bad.json"), "kaputt");
             Assert.Equal(3, store.LoadProfiles().Count);
+            Assert.True(File.Exists(Path.Combine(dir, "profiles", "bad.json.corrupt")));
+            Assert.False(File.Exists(Path.Combine(dir, "profiles", "bad.json")));
 
             File.WriteAllText(Path.Combine(dir, "profiles", "sw.json"),
                 "{\"schemaVersion\":1,\"id\":\"sw\",\"name\":\"Mac\",\"createdAt\":\"2027-01-15T08:00:00Z\",\"rating\":1500,\"level\":\"intermediate\",\"skills\":{\"tactics\":0.3},\"focus\":\"tactics\",\"extra\":1,\"style\":{\"length\":\"short\",\"depth\":\"concrete\",\"examples\":false,\"tone\":\"auto\",\"scores\":{\"short|concrete\":{\"mean\":0.6,\"n\":2,\"puzzleCorrect\":1,\"puzzleTotal\":2}}}}");
@@ -463,7 +565,7 @@ public class LearningTests
             var played = UciMove.Parse("d2a2")!.Value;
             var afterP = p.Applying(played);
             var after = await An(afterP.Fen(PieceColor.Black));
-            var rev = Coach.Review(p, played, afterP, side, before, after);
+            var rev = Coach.Review(p, played, afterP, side, before, after)!;
             Assert.True(rev.Rating is MoveRating.Blunder or MoveRating.Mistake);
             var nullRes = await An(p.Fen(PieceColor.Black));
             var an = MoveAnalyzer.Analyze(new MoveAnalysisInput(rev, before, after, nullRes, 25));
@@ -482,7 +584,7 @@ public class LearningTests
             var before = await An(fen);
             var played = UciMove.Parse("e1e2")!.Value;
             var afterP = p.Applying(played);
-            var rev = Coach.Review(p, played, afterP, side, before, await An(afterP.Fen(PieceColor.Black)));
+            var rev = Coach.Review(p, played, afterP, side, before, await An(afterP.Fen(PieceColor.Black)))!;
             var an = MoveAnalyzer.Analyze(new MoveAnalysisInput(rev, before, null, null, 30));
             Assert.Contains(an.Observations, o => o.Skill == Skill.Tactics && o.Value == 0);
             Assert.Equal(MistakeType.MissedTactic, an.MistakeType);
@@ -493,7 +595,7 @@ public class LearningTests
             var before = await An(start);
             var mv = UciMove.Parse("e2e4")!.Value;
             var np = p.Applying(mv);
-            var rev = Coach.Review(p, mv, np, side, before, await An(np.Fen(PieceColor.Black)));
+            var rev = Coach.Review(p, mv, np, side, before, await An(np.Fen(PieceColor.Black)))!;
             var an = MoveAnalyzer.Analyze(new MoveAnalysisInput(rev, before, null, null, 1));
             Assert.Null(an.MistakeType); Assert.Equal(GamePhase.Opening, an.Phase);
             var ctx = new PlayerContext(PlayerLevel.Intermediate, Skill.Threats, new[] { "Hanging piece" });

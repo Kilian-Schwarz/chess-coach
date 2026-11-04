@@ -48,7 +48,7 @@
   <data name="hint.fallbackTopic" xml:space="preserve"><value>Look at the position carefully.</value></data>
   <data name="hint.fallbackPiece" xml:space="preserve"><value>The marked square shows which piece should move.</value></data>
   <data name="hint.fallbackIdea" xml:space="preserve"><value>Improve your position or parry a threat.</value></data>
-  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Shift+F8</value></data>
   <data name="suggest.title" xml:space="preserve"><value>Suggestion: {0}</value></data>
   <data name="suggest.eval" xml:space="preserve"><value>Evaluation: {0}</value></data>
   <data name="suggest.also" xml:space="preserve"><value>Also possible: {0}</value></data>
@@ -88,7 +88,7 @@
   <data name="menu.think" xml:space="preserve"><value>Thinking time</value></data>
   <data name="menu.nextHint" xml:space="preserve"><value>Next hint</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Switch side to move</value></data>
-  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Shift+F9</value></data>
   <data name="menu.endGame" xml:space="preserve"><value>Finish game &amp; show recap</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Copy game as PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Move panel back next to the board</value></data>
@@ -111,7 +111,7 @@
   <data name="settings.autostart" xml:space="preserve"><value>Start with Windows</value></data>
   <data name="settings.language" xml:space="preserve"><value>Language</value></data>
   <data name="settings.langSystem" xml:space="preserve"><value>System</value></data>
-  <data name="settings.hotkeys" xml:space="preserve"><value>Shortcuts: Ctrl+Alt+H next hint, Ctrl+Alt+T switch side to move.</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Shortcuts: Ctrl+Shift+F8 next hint, Ctrl+Shift+F9 switch side to move.</value></data>
   <data name="settings.expert" xml:space="preserve"><value>Expert</value></data>
   <data name="settings.thinkMs" xml:space="preserve"><value>Thinking time (ms)</value></data>
   <data name="settings.lock" xml:space="preserve"><value>Lock expert mode</value></data>
@@ -161,6 +161,9 @@
   <data name="training.correct" xml:space="preserve"><value>Correct: {0}</value></data>
   <data name="training.wrong" xml:space="preserve"><value>Not quite. Try again or use a hint.</value></data>
   <data name="training.best" xml:space="preserve"><value>Best move: {0}</value></data>
+  <data name="training.instruction" xml:space="preserve"><value>Click or drag a piece to play your move.</value></data>
+  <data name="training.skip" xml:space="preserve"><value>Skip</value></data>
+  <data name="training.stats" xml:space="preserve"><value>Solved {0} of {1}</value></data>
   <data name="menu.checkUpdates" xml:space="preserve"><value>Check for updates …</value></data>
   <data name="update.current" xml:space="preserve"><value>Chess Coach is up to date.</value></data>
   <data name="update.ready" xml:space="preserve"><value>Update {0} is ready and will be installed when you quit.</value></data>
@@ -187,4 +190,13 @@
   <data name="report.end.manual" xml:space="preserve"><value>Ended manually</value></data>
   <data name="report.summaryLoading" xml:space="preserve"><value>Writing the summary …</value></data>
   <data name="record.openRecap" xml:space="preserve"><value>Open recap</value></data>
+  <data name="panel.showThreat" xml:space="preserve"><value>Show threat</value></data>
+  <data name="report.takeaways" xml:space="preserve"><value>What to take away</value></data>
+  <data name="report.train" xml:space="preserve"><value>Train these {0} puzzles</value></data>
+  <data name="report.setFocus" xml:space="preserve"><value>Set as focus for next game</value></data>
+  <data name="report.focusSet" xml:space="preserve"><value>Focus set: {0}</value></data>
+  <data name="fairPlay.title" xml:space="preserve"><value>Fair play</value></data>
+  <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach is meant for practice: games against bots, unrated games, a physical board and analysis. Using its suggestions in rated online games breaks the fair-play rules of chess.com and Lichess and can get your account closed.</value></data>
+  <data name="update.available" xml:space="preserve"><value>Version {0} is available. Choose "Check for updates" in the tray menu to install it.</value></data>
+  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach runs in the tray. Open a chess board in your browser, switch on "Active" in the tray menu and show the starting position once so the app learns the pieces.</value></data>
 </root>

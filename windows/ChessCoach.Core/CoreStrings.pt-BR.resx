@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>Cuidado: uma peça de menor valor ameaça {0} em {1}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Cuidado: mover {0} para {1} deixa {2} em {3} sem proteção.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Cuidado: {0} casas não são seguras para {1}, marcadas em vermelho.</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>Erro mais frequente: {0} ({1}×). Exemplo: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>{0} bons lances seguidos.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>Para a próxima partida: {0}</value></data>
 </root>

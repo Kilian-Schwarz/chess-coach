@@ -2903,11 +2903,11 @@
    ],
    "coverage": {
     "coveredLimit": 4,
-    "darkerBy": 40,
+    "deviation": 40,
     "distance": 40,
     "ringTolerance": 45,
     "ringShare": 0.6,
-    "rule": "covered squares: per square bg = median border colour; ref = per-parity median of the 64 bg values; covered when lum(ref)-lum(bg) >= darkerBy and RGB distance >= distance; readable when covered < coveredLimit. view(): readable if so; else covered when the 28 ring squares (rank 1/8 and file a/h) match the colours learned from the last readable frame (RGB distance of bg to the parity median <= ringTolerance for >= ringShare of the ring squares), otherwise gone. When no board is found in the tracked region the same ring check runs on the region at the expected board rect (covered or gone)."
+    "rule": "covered squares: per square bg = median border colour; ref = per-parity median of the 64 bg values; covered when |lum(ref)-lum(bg)| >= deviation (darker or lighter cards) and RGB distance >= distance; readable when covered < coveredLimit. view(): readable if so; else covered when the 28 ring squares (rank 1/8 and file a/h) match the colours learned from the last readable frame (RGB distance of bg to the parity median <= ringTolerance for >= ringShare of the ring squares), otherwise gone. When no board is found in the tracked region the same ring check runs on the region at the expected board rect (covered or gone)."
    },
    "coveredSeconds": 3,
    "goneSeconds": 600

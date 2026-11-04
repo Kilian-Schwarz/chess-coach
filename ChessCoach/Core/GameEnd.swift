@@ -26,7 +26,7 @@ struct BoardColors: Equatable {
 
 enum BoardReadability {
     static let coveredLimit = 4
-    static let darkerBy = 40.0
+    static let deviation = 40.0
     static let distance = 40.0
     static let ringTolerance = 45.0
     static let ringShare = 0.6
@@ -57,7 +57,7 @@ enum BoardReadability {
         for r in 0..<8 { for c in 0..<8 {
             guard let px = bg(features[r][c]) else { continue }
             let ref = refs[(r + c) % 2]
-            if luminance(ref) - luminance(px) >= darkerBy && dist(ref, px) >= distance { covered += 1 }
+            if abs(luminance(ref) - luminance(px)) >= deviation && dist(ref, px) >= distance { covered += 1 }
         } }
         return covered
     }

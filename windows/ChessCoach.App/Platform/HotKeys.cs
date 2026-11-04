@@ -37,10 +37,15 @@ internal sealed class HotKeys : IDisposable
         return IntPtr.Zero;
     }
 
-    public void Dispose()
+    public void Clear()
     {
         foreach (var id in _handlers.Keys) Native.UnregisterHotKey(_source.Handle, id);
         _handlers.Clear();
+    }
+
+    public void Dispose()
+    {
+        Clear();
         _source.Dispose();
     }
 }

@@ -15,12 +15,12 @@ Please report what fails with the Windows version, the screen setup (monitors, s
 - Click the icon and turn on Active. The status line in the menu says what the app sees.
 - Show a game with the start position. The status should change to "Pieces learned".
 - A green frame should sit exactly on the board, and clicks must pass through it to the browser.
-- Move a piece. The side to move is read from the highlighted last move. If it is wrong, use "Switch side to move" (Ctrl+Alt+T).
+- Move a piece. The side to move is read from the highlighted last move. If it is wrong, use "Switch side to move" (Ctrl+Shift+F9).
 
 ## 3. Hints and ratings
 
 - The panel appears next to the board. It can be dragged, collapsed and reset from the menu.
-- Press "Next hint" or Ctrl+Alt+H four times. You should see a topic, then a marked piece, then an idea, then an arrow with the move. Clicking the button must not steal keyboard focus from the browser.
+- Press "Next hint" or Ctrl+Shift+F8 four times. You should see a topic, then a marked piece, then an idea, then an arrow with the move. Clicking the button must not steal keyboard focus from the browser.
 - After you move, a rating card shows. With "Show threats" on, a red arrow marks what the opponent threatens.
 - Play to the end of a game, or choose "End game" in the menu. Open Evaluation and look for the accuracy, key moments and the PGN copy button.
 
@@ -62,7 +62,7 @@ Settings has "Install updates automatically" (on by default). The tray menu entr
 
 ## 12. Hotkeys and autostart
 
-- If another program owns Ctrl+Alt+H or Ctrl+Alt+T, the log says so.
+- If another program owns Ctrl+Shift+F8 or Ctrl+Shift+F9, the log says so.
 - "Start with Windows" in Settings should add and remove the app from the startup list.
 
 ## 13. Uninstall

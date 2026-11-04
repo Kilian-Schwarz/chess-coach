@@ -39,17 +39,42 @@ struct GameUpdate {
     }
 }
 
+private struct Stash {
+    let moves: [PlayedMove]
+    let breaks: [Int]
+    let start: ChessPosition?
+    let segmentStart: ChessPosition?
+    let estimated: Bool
+    let current: ChessPosition
+}
+
+enum ResyncContinuity {
+    static let maxLostPieces = 6
+    static let maxChangedSquares = 16
+
+    static func isPlausible(from old: Placement, to new: Placement) -> Bool {
+        let lost = old.pieceCount - new.pieceCount
+        guard lost >= 0, lost <= maxLostPieces else { return false }
+        var changed = 0
+        for r in 0..<8 { for f in 0..<8 where old.squares[r][f] != new.squares[r][f] { changed += 1 } }
+        return changed <= maxChangedSquares
+    }
+}
+
 struct GameRecord {
     private(set) var startPosition: ChessPosition?
     private(set) var isEstimatedStart = false
     private(set) var moves: [PlayedMove] = []
-    private(set) var earlierSegments: [[PlayedMove]] = []
+    private(set) var breaks: [Int] = []
+    private var segmentStart: ChessPosition?
+    private var stash: Stash?
     private(set) var current: ChessPosition?
     private(set) var startedAt = Date()
 
     init() {}
 
     var isEmpty: Bool { moves.isEmpty }
+    var segmentMoves: Int { moves.count - (breaks.last ?? 0) }
 
     var positions: [ChessPosition] {
         guard let s = startPosition else { return [] }
@@ -62,7 +87,6 @@ struct GameRecord {
             if let c = current, c.board == placement, moves.isEmpty, !isEstimatedStart {
                 return makeUpdate(.unchanged, [])
             }
-            if !moves.isEmpty { earlierSegments.append(moves) }
             reset(to: .start, estimated: false)
             return makeUpdate(.newGame, [], log: ["New game: start position"])
         }
@@ -74,10 +98,11 @@ struct GameRecord {
         }
 
         if cur.board == placement {
-            if isEstimatedStart, moves.isEmpty, let h = hintedMover, cur.turn != h.opposite {
+            if isEstimatedStart, segmentMoves == 0, let h = hintedMover, cur.turn != h.opposite {
                 var p = cur
                 p.turn = h.opposite
-                startPosition = p; current = p
+                if moves.isEmpty { startPosition = p }
+                segmentStart = p; current = p
                 return makeUpdate(.unchanged, [], log: ["Side override: last-move marker says \(h.opposite) to move"])
             }
             return makeUpdate(.unchanged, [])
@@ -87,32 +112,45 @@ struct GameRecord {
             append(found.moves)
             return makeUpdate(.moves, found.moves, reviewable: found.unique ? found.moves : [], log: [moveLog(found)])
         }
-        if isEstimatedStart, moves.isEmpty {
+        if isEstimatedStart, segmentMoves == 0 {
             var flipped = cur
             flipped.turn = cur.turn.opposite
             flipped.enPassantFile = nil
             if let found = explain(from: flipped, to: placement, hint: hintedMover) {
-                startPosition = flipped; current = flipped
+                if moves.isEmpty { startPosition = flipped }
+                segmentStart = flipped; current = flipped
                 append(found.moves)
                 return makeUpdate(.moves, found.moves, log: ["Side override: \(flipped.turn) to move fits the move", moveLog(found)])
             }
         }
-        let all = positions
-        for i in stride(from: all.count - 2, through: max(0, all.count - 8), by: -1) where all[i].board == placement {
-            let dropped = moves.count - i
-            moves.removeLast(dropped)
-            current = all[i]
-            return makeUpdate(.takeback, [], log: ["Take-back of \(dropped) ply: \(all[i].fen)"])
+        let base = breaks.last ?? 0
+        if let first = segmentStart {
+            let all = [first] + moves[base...].map(\.after)
+            for i in stride(from: all.count - 2, through: max(0, all.count - 8), by: -1) where all[i].board == placement {
+                let dropped = all.count - 1 - i
+                moves.removeLast(dropped)
+                current = all[i]
+                return makeUpdate(.takeback, [], log: ["Take-back of \(dropped) ply: \(all[i].fen)"])
+            }
         }
         let missing = cur.board.missingPieces(in: placement)
         if missing > 0, missing <= 2 {
             return makeUpdate(.unchanged, [], log: ["Partial frame ignored: \(missing) piece(s) missing"])
         }
-        let hadMoves = !moves.isEmpty
-        if hadMoves { earlierSegments.append(moves) }
+        if moves.isEmpty, let s = stash, ResyncContinuity.isPlausible(from: s.current.board, to: placement) {
+            restore(s)
+            return update(placement: placement, whiteAtBottom: whiteAtBottom, hintedMover: hintedMover)
+        }
         let pos = estimate(placement, previous: cur, whiteAtBottom: whiteAtBottom, hint: hintedMover)
-        reset(to: pos, estimated: true)
-        return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), new segment at \(pos.fen)"])
+        if !moves.isEmpty, ResyncContinuity.isPlausible(from: cur.board, to: placement) {
+            breaks.append(moves.count)
+            segmentStart = pos; current = pos; isEstimatedStart = true
+            return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), segment break at ply \(moves.count), now \(pos.fen)"])
+        }
+        stash = moves.isEmpty ? stash : Stash(moves: moves, breaks: breaks, start: startPosition, segmentStart: segmentStart,
+                                              estimated: isEstimatedStart, current: cur)
+        reset(to: pos, estimated: true, keepStash: true)
+        return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), new game segment at \(pos.fen)"])
     }
 
     private func moveLog(_ found: (moves: [PlayedMove], unique: Bool)) -> String {
@@ -121,13 +159,24 @@ struct GameRecord {
         return "\(kind) \(sans) -> \(found.moves.last!.after.fen)"
     }
 
-    mutating func clear() {
-        startPosition = nil; current = nil; moves = []; earlierSegments = []; isEstimatedStart = false
+    mutating func seed(_ pos: ChessPosition) {
+        clear()
+        reset(to: pos, estimated: true)
     }
 
-    private mutating func reset(to pos: ChessPosition, estimated: Bool) {
-        startPosition = pos; current = pos; moves = []; isEstimatedStart = estimated
+    mutating func clear() {
+        startPosition = nil; segmentStart = nil; current = nil; moves = []; breaks = []; stash = nil; isEstimatedStart = false
+    }
+
+    private mutating func reset(to pos: ChessPosition, estimated: Bool, keepStash: Bool = false) {
+        startPosition = pos; segmentStart = pos; current = pos; moves = []; breaks = []; isEstimatedStart = estimated
+        if !keepStash { stash = nil }
         startedAt = Date()
+    }
+
+    private mutating func restore(_ s: Stash) {
+        moves = s.moves; breaks = s.breaks; startPosition = s.start; segmentStart = s.segmentStart
+        isEstimatedStart = s.estimated; current = s.current; stash = nil
     }
 
     private mutating func append(_ found: [PlayedMove]) {
@@ -139,7 +188,7 @@ struct GameRecord {
                             gap: Bool = false, log: [String] = []) -> GameUpdate {
         let pos = current!
         return GameUpdate(change: change, newMoves: new, position: pos, result: pos.result,
-                          estimated: isEstimatedStart && moves.isEmpty, reviewable: reviewable, gap: gap, log: log)
+                          estimated: isEstimatedStart && segmentMoves == 0, reviewable: reviewable, gap: gap, log: log)
     }
 
     private func estimate(_ placement: Placement, previous: ChessPosition?, whiteAtBottom: Bool, hint: PieceColor?) -> ChessPosition {
@@ -192,8 +241,9 @@ struct GameRecord {
         var text = head.map { "[\($0.0) \"\($0.1.replacingOccurrences(of: "\"", with: "'"))\"]" }.joined(separator: "\n")
         var tokens: [String] = []
         for (i, m) in moves.enumerated() {
+            if breaks.contains(i) { tokens.append("{ moves missed }") }
             if m.mover == .white { tokens.append("\(m.moveNumber).") }
-            else if i == 0 { tokens.append("\(m.moveNumber)...") }
+            else if i == 0 || breaks.contains(i) { tokens.append("\(m.moveNumber)...") }
             tokens.append(m.san)
         }
         tokens.append(res)

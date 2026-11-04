@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessCoach.App", "ChessCoac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessCoach.App.Tests", "ChessCoach.App.Tests\ChessCoach.App.Tests.csproj", "{0F2979A6-9328-4A25-B042-B075AB4E1670}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessCoach.Setup", "ChessCoach.Setup\ChessCoach.Setup.csproj", "{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{0F2979A6-9328-4A25-B042-B075AB4E1670}.Release|x64.Build.0 = Release|Any CPU
 		{0F2979A6-9328-4A25-B042-B075AB4E1670}.Release|x86.ActiveCfg = Release|Any CPU
 		{0F2979A6-9328-4A25-B042-B075AB4E1670}.Release|x86.Build.0 = Release|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Debug|x64.Build.0 = Debug|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Debug|x86.Build.0 = Debug|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Release|x64.ActiveCfg = Release|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Release|x64.Build.0 = Release|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{84CC9AA3-6D20-4BA8-9A22-6EFC94919B5F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

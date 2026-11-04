@@ -1,5 +1,11 @@
 # Using Chess Coach
 
+## Install
+
+macOS: open the DMG and drag Chess Coach onto the Applications folder. If you launch the app from the DMG or the Downloads folder instead, it asks once whether to move itself to Applications; "Move to Applications" copies it there, replaces an older version, restarts from the new place and ejects the DMG.
+
+Windows: run `ChessCoach-<version>-setup.exe`. It installs to `%LOCALAPPDATA%\Programs\Chess Coach` for your user account, adds a Start menu shortcut (and a desktop shortcut if you tick the box), registers the app under Settings, Apps, and starts it. Running a newer setup over an installed copy updates it in place and closes the running app first. The setup is not code-signed, so Windows SmartScreen may show "Windows protected your PC": choose More info, then Run anyway. To uninstall, use Settings, Apps; the dialog asks whether to delete your settings, profiles and game history too. For scripts: `/S` installs silently, `/desktop` adds the desktop shortcut, `/nostart` skips starting the app; `Uninstall.exe /uninstall /S` removes silently and keeps your data unless you add `/deletedata`.
+
 ## Switch it on
 
 Click the knight icon (menu bar on macOS, notification area on Windows) and turn on "Active". The status line under it tells you what the app sees. Turning it off stops all capturing, timers and the engine; an inactive app uses no CPU.
@@ -12,11 +18,11 @@ If the board is not found, make the window larger, avoid heavy zoom, and check t
 
 Set up a new game so that the starting position is visible. The app learns the look of the pieces and squares from that image and shows "Pieces learned". It also detects which side is at the bottom. If you switch to a different piece set or board theme, choose "Relearn pieces" and start from a starting position again.
 
-Under "I play" you pick white, black or automatic. The side to move is normally read from the highlighted last move. If the app is wrong, use "Switch side to move" (macOS Option+Command+T, Windows Ctrl+Alt+T).
+Under "I play" you pick white, black or automatic. The side to move is normally read from the highlighted last move. If the app is wrong, use "Switch side to move" (macOS Control+Option+Command+T, Windows Ctrl+Shift+F9).
 
 ## Hints
 
-Hints come in four steps. Ask for the next one with the "Next hint" button in the panel or with the shortcut (macOS Option+Command+H, Windows Ctrl+Alt+H).
+Hints come in four steps. Ask for the next one with the "Next hint" button in the panel or with the shortcut (macOS Control+Option+Command+H, Windows Ctrl+Shift+F8).
 
 1. Theme: what kind of move to look for, for example "You can win material here" or "Watch the threat".
 2. Piece: the piece worth moving is marked.
@@ -73,7 +79,7 @@ Settings, field for the server address and token, "Load models", pick a model. T
 
 ## Updates
 
-The app checks for updates at start and then every 24 hours, and installs them in the background. The new version starts the next time you quit and open the app, or after you confirm. "Check for Updates ..." in the menu checks right now; "Install updates automatically" in Settings turns the background install off. A failed automatic check is silent.
+The app checks for updates at start and then every 24 hours, and installs them in the background. The new version starts the next time you quit and open the app, or after you confirm. "Check for Updates ..." in the menu checks right now; "Install updates automatically" in Settings turns the background install off. Automatic checks never open a dialog or take the focus: a new version shows up as a menu entry at the top ("Restart to update to version X", or "Version X available ..." when the app cannot update itself) and is installed when you quit or click the entry. Only "Check for Updates ..." opens dialogs. A failed automatic check is silent.
 
 ## Where data lives
 

@@ -57,7 +57,41 @@ check(near(prof.rating, r3 + 0.5 * (1800 - r3) / 4), "rating update game 4")
 check(prof.ratingHistory.count == 4 && prof.gamesPlayed == 4, "history")
 var p2 = PlayerProfile(name: "X")
 p2.observe(.tactics, value: 1)
-check(near(p2.skills["tactics"]!, 0.85 * 0.5 + 0.15, 1e-9), "moving average")
+check(near(p2.skills["tactics"]!, 0.75, 1e-9) && p2.observationCount(.tactics) == 1, "first observation weighs 1/2")
+for _ in 0..<30 { p2.observe(.threats, value: 1) }
+check(near(p2.skills["threats"]!, 1, 0.01) && p2.hasEnoughData(.threats) && !p2.hasEnoughData(.tactics), "counted estimate and minimum data")
+var gain = PlayerProfile(name: "G")
+gain.observe(.tactics, value: 1, gainWeight: 0)
+check(near(gain.skills["tactics"]!, 0.5, 1e-9), "gain weight 0 blocks gains")
+gain.observe(.tactics, value: 0, gainWeight: 0)
+check(gain.skills["tactics"]! < 0.5, "losses always count")
+var fh = PlayerProfile(name: "F")
+fh.skills = Dictionary(uniqueKeysWithValues: Skill.allCases.map { ($0.rawValue, 0.65) })
+fh.focus = Skill.tactics.rawValue
+fh.skills["piece_safety"] = 0.62; fh.updateFocus()
+check(fh.focus == "tactics", "no switch while the earlier skill stays at 0.6 or above")
+fh.skills["piece_safety"] = 0.55; fh.updateFocus()
+check(fh.focus == "piece_safety", "switch to an earlier skill below 0.6")
+fh.skills["piece_safety"] = 0.85; fh.updateFocus()
+check(fh.focus != "piece_safety", "leave the focus at 0.8")
+fh.pinFocus(.endgame); fh.skills["endgame"] = 0.95; fh.updateFocus()
+check(fh.focus == "endgame", "pinned focus holds")
+fh.completeGame(performance: 1200)
+check(fh.pinnedFocus == nil, "pin ends with the next game")
+var rated = PlayerProfile(name: "R")
+rated.completeGame(performance: 1000, weight: 10)
+rated.completeGame(performance: 1600, weight: 30)
+check(near(rated.rating, 1450), "placement is weighted by own moves: \(rated.rating)")
+var gp = PlayerProfile(name: "A"); gp.placementGames = 3; gp.rating = 1200
+var gp2 = gp
+gp.completeGame(performance: 1600, assistedShare: 0)
+gp2.completeGame(performance: 1600, assistedShare: 0.5)
+check(near(gp2.rating - 1200, (gp.rating - 1200) / 2), "assisted share halves rating gains")
+var short = SideSummary(); short.moves = 9
+var longG = SideSummary(); longG.moves = 10; longG.performance = 1500
+var np = PlayerProfile(name: "N")
+check(np.completeGame(summary: short) == nil && np.gamesPlayed == 0, "games under 10 own moves are ignored")
+check(np.completeGame(summary: longG) != nil && np.gamesPlayed == 1, "10 own moves count")
 for level in [0, 2, 2, 9] { p2.recordHintUse(level: level) }
 check(p2.hintStats.levelUses == [1, 0, 2, 0, 1], "hint stats \(p2.hintStats.levelUses)")
 check(near(p2.averageHintLevel ?? 0, (2 + 2 + 4) / 3.0), "average hint level")
@@ -80,11 +114,11 @@ check(Curriculum.focus(skills: sk) == .middlegame, "focus is the weakest when al
 check(Curriculum.path.map(\.skill) == [.pieceSafety, .threats, .tactics, .opening, .kingSafety, .endgame, .middlegame], "path order")
 check(Curriculum.focusLabel(.threats) == "Learning focus: Threats", "focus label")
 let base = Curriculum.adaptation(level: .beginner, focus: .pieceSafety, skills: ["piece_safety": 0.5], successRate: 0.78)
-check(base.defaultHintLevel == 2 && base.difficultyBias == 0 && base.intervalFactor == 1, "adaptation in target range")
+check(base.defaultHintLevel == 2 && base.newPuzzlesPerDay == 10 && base.thinkSeconds == 15, "adaptation in target range")
 let hi = Curriculum.adaptation(level: .intermediate, focus: .tactics, skills: ["tactics": 0.5], successRate: 0.95)
-check(hi.defaultHintLevel == 1 && hi.difficultyBias == 1 && hi.intervalFactor > 1, "adaptation too easy")
+check(hi.defaultHintLevel == 1 && hi.thinkSeconds > 15, "adaptation too easy")
 let lo = Curriculum.adaptation(level: .intermediate, focus: .tactics, skills: ["tactics": 0.5], successRate: 0.5)
-check(lo.defaultHintLevel == 2 && lo.difficultyBias == -1 && lo.intervalFactor < 1 && lo.newPuzzlesPerDay < 10, "adaptation too hard")
+check(lo.defaultHintLevel == 2 && lo.thinkSeconds < 15 && lo.newPuzzlesPerDay < 10, "adaptation too hard")
 
 section("texts")
 let start = parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").placement
@@ -145,7 +179,7 @@ do {
     let catalog = (try? JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: "ChessCoach/Resources/Localizable.xcstrings")))) as? [String: Any]
     let units = ((catalog?["strings"] as? [String: Any])?["hint.stage2.pawn"] as? [String: Any])?["localizations"] as? [String: [String: Any]]
     let de = (units?["de"]?["stringUnit"] as? [String: Any])?["value"] as? String
-    check(de?.replacingOccurrences(of: "%1$@", with: "d2") == "Zieh mit dem Bauern auf d2.", "German stage 2 text: \(de ?? "-")")
+    check(de?.replacingOccurrences(of: "%1$@", with: "d2") == "Zieh den Bauern, der auf d2 steht.", "German stage 2 text: \(de ?? "-")")
 }
 check(Hints.revealsTarget("Go to f3 please", move: UCIMove("g1f3")!) && !Hints.revealsTarget("Develop the knight", move: UCIMove("g1f3")!), "target check")
 for th in HintTheme.allCases {
@@ -154,41 +188,65 @@ for th in HintTheme.allCases {
 check(Hints.stage3Fallback(theme: .develop, piece: "N").hasPrefix("Your knight is still on the back rank"), "stage 3 text")
 
 section("puzzles")
+var utc = Calendar(identifier: .gregorian)
+utc.timeZone = TimeZone(identifier: "UTC")!
+let dayStart = utc.startOfDay(for: t0)
 func puzzle(_ fen: String = "4k3/8/8/8/8/8/8/R3K3 w - - 0 1", accepted: [String] = ["a1a8"], type: MistakeType = .missedTactic) -> Puzzle {
     Puzzle(id: "z", fen: fen, acceptedMoves: accepted, bestLine: accepted, theme: "check", mistakeType: type.rawValue, createdAt: t0, dueAt: t0)
 }
 var z = puzzle()
 check(z.isNew && z.box == 1, "new puzzle")
-z.attempt(move: "a1a8", now: t0)
-check(z.box == 2 && near(z.dueAt.timeIntervalSince(t0), 3 * day, 1), "correct moves to box 2, 3 days")
-z.attempt(move: "a1a8", hintLevel: 2, now: t0)
-check(z.box == 2, "correct with hint keeps the box")
-z.attempt(move: "a1a8", now: t0); z.attempt(move: "a1a8", now: t0)
-check(z.box == 4 && near(z.dueAt.timeIntervalSince(t0), 16 * day, 1), "box 4, 16 days")
-z.attempt(move: "a1a2", now: t0)
-check(z.box == 1 && near(z.dueAt.timeIntervalSince(t0), day, 1) && !z.mastered, "wrong goes back to box 1")
-for _ in 0..<5 { z.attempt(move: "a1a8", now: t0, learningSpeed: 1.5) }
+z.attempt(move: "a1a8", now: t0, calendar: utc)
+check(z.box == 2 && z.dueAt == dayStart.addingTimeInterval(3 * day), "correct moves to box 2, due at the start of day +3")
+z.attempt(move: "a1a8", hintLevel: 2, now: t0, calendar: utc)
+check(z.box == 2 && z.attempts.last?.assisted == true, "correct with hint keeps the box and is assisted")
+z.attempt(move: "a1a8", now: t0, calendar: utc); z.attempt(move: "a1a8", now: t0, calendar: utc)
+check(z.box == 4 && z.dueAt == dayStart.addingTimeInterval(16 * day), "box 4, 16 days")
+z.attempt(move: "a1a8", hintLevel: 4, now: t0, calendar: utc)
+check(z.box == 3, "hint 4 moves the box back by one")
+z.attempt(move: "a1a2", now: t0, calendar: utc)
+check(z.box == 1 && z.dueAt == dayStart.addingTimeInterval(day) && !z.mastered, "wrong goes back to box 1, due tomorrow at day start")
+for _ in 0..<5 { z.attempt(move: "a1a8", now: t0, learningSpeed: 1.5, calendar: utc) }
 check(z.mastered, "mastered after box 5")
-var z2 = puzzle(); z2.attempt(move: "a1a8", now: t0, learningSpeed: 1.5)
-check(near(z2.dueAt.timeIntervalSince(t0), 4.5 * day, 1), "learning speed stretches the interval")
-var z3 = puzzle(); z3.attempt(move: "a1a8", now: t0, learningSpeed: 0.6)
-check(near(z3.dueAt.timeIntervalSince(t0), 1.8 * day, 1), "learning speed shortens the interval")
+var z2 = puzzle(); z2.attempt(move: "a1a8", now: t0, learningSpeed: 1.5, calendar: utc)
+check(z2.dueAt == dayStart.addingTimeInterval(5 * day), "learning speed stretches the interval (4.5 rounds to 5)")
+var z3 = puzzle(); z3.attempt(move: "a1a8", now: t0, learningSpeed: 0.6, calendar: utc)
+check(z3.dueAt == dayStart.addingTimeInterval(2 * day), "learning speed shortens the interval (1.8 rounds to 2)")
+var z4 = puzzle(); z4.attempt(move: "a1a2", now: t0, learningSpeed: 0.6, calendar: utc)
+check(z4.dueAt == dayStart.addingTimeInterval(day), "interval is at least one day")
 check(puzzle(accepted: ["e2e4", "d2d4"]).accepts("D2D4") && !puzzle().accepts("a1a7"), "accepts")
-func withAttempts(_ n: Int, correct: Int) -> [Puzzle] {
-    var p = puzzle()
-    for i in 0..<n { p.attempts.append(PuzzleAttempt(date: t0.addingTimeInterval(Double(i)), correct: i < correct, hintLevel: 0)) }
-    return [p]
+var alt = puzzle(); alt.acceptAlternative("A1A7"); alt.acceptAlternative("a1a7")
+check(alt.accepts("a1a7") && alt.acceptedMoves.count == 2, "alternative accepted once")
+check(Puzzle.isAcceptableAlternative(bestValue: 100, playedValue: 60) && !Puzzle.isAcceptableAlternative(bestValue: 100, playedValue: 59), "alternative tolerance 40 cp")
+func withReviews(_ n: Int, correct: Int, assistedFirst: Int = 0) -> [Puzzle] {
+    (0..<n).map { i in
+        var p = puzzle()
+        p.id = "r\(i)"
+        p.attempts = [PuzzleAttempt(date: t0.addingTimeInterval(Double(i) - 1000), correct: true, hintLevel: 0),
+                      PuzzleAttempt(date: t0.addingTimeInterval(Double(i)), correct: i < correct, hintLevel: i < assistedFirst ? 1 : 0, assisted: i < assistedFirst)]
+        return p
+    }
 }
-check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withAttempts(30, correct: 28)), 1.1), "speed up")
-check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withAttempts(30, correct: 15)), 0.9), "speed down")
-check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withAttempts(30, correct: 23)), 1.0), "speed unchanged at 77 %")
-check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.5, puzzles: withAttempts(30, correct: 30)), 1.5), "speed max 1.5")
-check(near(PuzzleScheduler.adjustedLearningSpeed(current: 0.6, puzzles: withAttempts(30, correct: 0)), 0.6), "speed min 0.6")
-check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withAttempts(5, correct: 5)), 1.0), "speed needs 10 attempts")
+check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withReviews(30, correct: 28)), 1.1), "speed up")
+check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withReviews(30, correct: 15)), 0.9), "speed down")
+check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withReviews(30, correct: 23)), 1.0), "speed unchanged at 77 %")
+check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.5, puzzles: withReviews(30, correct: 30)), 1.5), "speed max 1.5")
+check(near(PuzzleScheduler.adjustedLearningSpeed(current: 0.6, puzzles: withReviews(30, correct: 0)), 0.6), "speed min 0.6")
+check(near(PuzzleScheduler.adjustedLearningSpeed(current: 1.0, puzzles: withReviews(5, correct: 5)), 1.0), "speed needs 10 reviews")
+check(PuzzleScheduler.recentSuccessRate(withReviews(20, correct: 10, assistedFirst: 20)) == nil, "assisted attempts do not count")
+check(near(PuzzleScheduler.recentSuccessRate(withReviews(20, correct: 20, assistedFirst: 10)) ?? 0, 1), "only unassisted reviews count")
+var newOnly = puzzle(); newOnly.attempts = [PuzzleAttempt(date: t0, correct: false, hintLevel: 0)]
+check(PuzzleScheduler.recentSuccessRate([newOnly]) == nil, "first attempts are not reviews")
+var spd = PlayerProfile(name: "S", createdAt: t0)
+spd.adjustLearningSpeed(puzzles: withReviews(30, correct: 30), now: t0, calendar: utc)
+spd.adjustLearningSpeed(puzzles: withReviews(30, correct: 30), now: t0.addingTimeInterval(3600), calendar: utc)
+check(near(spd.learningSpeed, 1.1), "learning speed adjusts once per day")
+spd.adjustLearningSpeed(puzzles: withReviews(30, correct: 30), now: t0.addingTimeInterval(day), calendar: utc)
+check(near(spd.learningSpeed, 1.2), "and again the next day")
 var set = PuzzleSet()
 for i in 0..<14 {
     var p = puzzle(type: i < 3 ? .hangingPiece : .missedTactic)
-    p.id = "n\(i)"; p.fen = "f\(i)"; p.dueAt = t0.addingTimeInterval(Double(-i)); set.add(p)
+    p.id = "n\(i)"; p.fen = "f\(i)"; p.dueAt = t0.addingTimeInterval(Double(-i)); p.createdAt = t0.addingTimeInterval(Double(i)); set.add(p)
 }
 var dueNotFocus = puzzle(type: .missedTactic)
 dueNotFocus.id = "d1"; dueNotFocus.fen = "fd1"; dueNotFocus.dueAt = t0.addingTimeInterval(-1)
@@ -197,17 +255,38 @@ var dueFocus = puzzle(type: .hangingPiece)
 dueFocus.id = "d2"; dueFocus.fen = "fd2"; dueFocus.attempts = dueNotFocus.attempts; dueFocus.dueAt = t0.addingTimeInterval(-1)
 var future = puzzle()
 future.id = "fut"; future.fen = "ff"; future.attempts = dueNotFocus.attempts; future.dueAt = t0.addingTimeInterval(day)
-check(!set.add(set.puzzles[0]), "duplicate position rejected")
+let dup = set.puzzles[0]
+set.puzzles[0].box = 3
+var again = dup; again.id = "again"; again.dueAt = t0
+check(!set.add(again) && set.puzzles.count == 14 && set.puzzles[0].box == 1, "duplicate position is not added but resets to box 1")
 set.puzzles += [dueNotFocus, dueFocus, future]
-let sel = PuzzleScheduler.todaysSelection(set.puzzles, focus: .pieceSafety, now: t0)
+var rng1 = SeededRNG(seed: 5)
+let sel = PuzzleScheduler.todaysSelection(set.puzzles, focus: .pieceSafety, now: t0, maxNew: 10, maxTotal: 15, priority: [], calendar: utc, using: &rng1)
 check(sel.count == 12, "selection: 2 due + 10 new, was \(sel.count)")
-check(sel.first?.id == "d2", "focus repetition first")
-check(sel.dropFirst(2).prefix(3).allSatisfy { $0.skill == .pieceSafety }, "new focus puzzles first")
 check(!sel.contains { $0.id == "fut" }, "future puzzles excluded")
+var runLen = 1, maxRun = 1
+for i in sel.indices.dropFirst() { runLen = sel[i].theme == sel[i - 1].theme ? runLen + 1 : 1; maxRun = max(maxRun, runLen) }
+check(Set(sel.map(\.id)).count == sel.count, "no duplicates in the queue")
+var many = PuzzleSet()
+for i in 0..<40 { var p = puzzle(); p.id = "m\(i)"; p.fen = "m\(i)"; p.dueAt = t0.addingTimeInterval(Double(-i)); p.attempts = dueNotFocus.attempts; many.add(p) }
+let capped = PuzzleScheduler.todaysSelection(many.puzzles, focus: nil, now: t0, calendar: utc)
+check(capped.count == 15 && capped.allSatisfy { Int($0.id.dropFirst())! >= 25 }, "daily cap keeps the oldest due reviews, was \(capped.count)")
+var themed = PuzzleSet()
+for i in 0..<12 { var p = puzzle(type: i < 8 ? .hangingPiece : .missedTactic); p.id = "t\(i)"; p.fen = "t\(i)"; p.theme = i < 8 ? "a" : "b"; themed.add(p) }
+for seed in 1...20 {
+    var g = SeededRNG(seed: UInt64(seed))
+    let q = PuzzleScheduler.interleave(themed.puzzles, focus: .pieceSafety, using: &g)
+    var run = 1, worst = 1
+    for i in q.indices.dropFirst() { run = q[i].theme == q[i - 1].theme ? run + 1 : 1; worst = max(worst, run) }
+    check(q.count == 12 && (worst <= 3 || q.suffix(worst).allSatisfy { $0.theme == "a" }), "interleave run limit (seed \(seed), run \(worst))")
+}
+var g0 = SeededRNG(seed: 9)
+let prio = PuzzleScheduler.todaysSelection(set.puzzles, focus: nil, now: t0, maxNew: 10, maxTotal: 15, priority: ["fut", "n5"], calendar: utc, using: &g0)
+check(prio.prefix(2).map(\.id) == ["fut", "n5"] && prio.count >= 13 && Set(prio.map(\.id)).count == prio.count, "priority puzzles come first, even when not due")
 var startedToday = puzzle()
 startedToday.id = "s"; startedToday.fen = "s"; startedToday.dueAt = t0.addingTimeInterval(3 * day)
 startedToday.attempts = [PuzzleAttempt(date: t0, correct: true, hintLevel: 0)]
-let selDone = PuzzleScheduler.todaysSelection(set.puzzles + [startedToday], focus: nil, now: t0)
+let selDone = PuzzleScheduler.todaysSelection(set.puzzles + [startedToday], focus: nil, now: t0, maxTotal: 40, calendar: utc)
 check(selDone.filter(\.isNew).count == 9, "puzzles started today count against the 10 new ones")
 let st = PuzzleScheduler.stats(set.puzzles, now: t0)
 check(st.total == 17 && st.new == 14 && st.due == 2, "stats \(st)")
@@ -281,7 +360,7 @@ func runEngine() async {
         let played = UCIMove("d2a2")!
         let afterP = p.applying(played)
         let after = await analyze(afterP.fen(sideToMove: .black))
-        let rev = Coach.review(before: p, played: played, after: afterP, by: side, beforeResult: before, afterResult: after)
+        let rev = Coach.review(before: p, played: played, after: afterP, by: side, beforeResult: before, afterResult: after)!
         check(rev.rating == .blunder || rev.rating == .mistake, "queen blunder is a mistake: \(rev.rating.rawValue) \(rev.loss)")
         let nullRes = await analyze(p.fen(sideToMove: .black))
         let an = MoveAnalyzer.analyze(MoveAnalysisInput(review: rev, beforeResult: before, afterResult: after, threatResult: nullRes, moveNumber: 25))
@@ -317,7 +396,7 @@ func runEngine() async {
         let played = UCIMove("e1e2")!
         let afterP = p.applying(played)
         let after = await analyze(afterP.fen(sideToMove: .black))
-        let rev = Coach.review(before: p, played: played, after: afterP, by: side, beforeResult: before, afterResult: after)
+        let rev = Coach.review(before: p, played: played, after: afterP, by: side, beforeResult: before, afterResult: after)!
         let an = MoveAnalyzer.analyze(MoveAnalysisInput(review: rev, beforeResult: before, afterResult: after, threatResult: nil, moveNumber: 30))
         print("  tactic: \(rev.rating.rawValue) loss \(rev.loss) -> \(an.mistakeType?.rawValue ?? "-")")
         check(an.observations.contains { $0.skill == .tactics && $0.value == 0 } && an.mistakeType == .missedTactic, "missed tactic observed")
@@ -329,10 +408,10 @@ func runEngine() async {
         let mv = UCIMove("e2e4")!
         let afterP = p.applying(mv)
         let after = await analyze(afterP.fen(sideToMove: .black))
-        let rev = Coach.review(before: p, played: mv, after: afterP, by: side, beforeResult: before, afterResult: after)
+        let rev = Coach.review(before: p, played: mv, after: afterP, by: side, beforeResult: before, afterResult: after)!
         let an = MoveAnalyzer.analyze(MoveAnalysisInput(review: rev, beforeResult: before, afterResult: after, threatResult: nil, moveNumber: 1))
         check(an.mistakeType == nil && an.phase == .opening && an.observations.contains { $0.skill == .opening && $0.value > 0.9 }, "good opening move")
-        check(an.observations.contains { $0.skill == .pieceSafety && $0.value == 1 }, "piece safety 1")
+        check(!an.observations.contains { $0.skill == .pieceSafety }, "no piece safety observation without a loose piece")
         let ctx = PlayerContext(level: .intermediate, focus: .threats, typicalMistakes: ["Hanging piece"])
         let req = Coach.reviewRequest(rev, context: ctx, style: ExplanationStyle())
         print("  review prompt about \(req.approxTokens) tokens")
@@ -355,7 +434,7 @@ func runEngine() async {
             let mv = UCIMove(u)!
             let np = p.applying(mv)
             let after = await analyze(np.fen(sideToMove: side.opposite), ms: 200)
-            let rev = Coach.review(before: p, played: mv, after: np, by: side, beforeResult: before, afterResult: after)
+            let rev = Coach.review(before: p, played: mv, after: np, by: side, beforeResult: before, afterResult: after)!
             moves.append(ReviewedMove(color: side == .white ? "w" : "b", uci: u, san: nil, fenBefore: fen, valueBefore: before.value,
                                       valueAfter: before.value - rev.loss, bestUci: before.bestMove))
             p = np; side = side.opposite
@@ -531,6 +610,58 @@ do {
     for v in (root["hints"] as! [String: Any])["stage2"] as! [[String: String]] {
         check(Hints.stage2Text(piece: Character(v["piece"]!), square: v["square"]!) == v["text"]!, "vector stage 2 \(v)")
     }
+}
+
+
+section("takeaways and report")
+do {
+    func mv(_ ply: Int, _ color: String, _ rating: String) -> MoveRecord {
+        MoveRecord(ply: ply, color: color, uci: "a1a2", san: nil, text: "", winBefore: 50, winAfter: 50, loss: 0, accuracy: 100, rating: rating, bestText: nil)
+    }
+    let moves = (1...14).map { mv($0, $0 % 2 == 1 ? "w" : "b", "good") }
+    let mistakes = [GameMistake(ply: 3, color: "w", type: "hanging_piece", loss: 300, example: "Qa2", puzzleId: "p1"),
+                    GameMistake(ply: 5, color: "w", type: "hanging_piece", loss: 200, example: "Rb3", puzzleId: "p2"),
+                    GameMistake(ply: 7, color: "w", type: "missed_tactic", loss: 900, example: "Nf3", puzzleId: "p3"),
+                    GameMistake(ply: 4, color: "b", type: "other", loss: 400, example: nil, puzzleId: "p4")]
+    let t = Takeaway.build(mistakes: mistakes, moves: moves, color: "w", focus: .threats)
+    check(t.count == 3 && t[0].kind == .mistake && t[0].mistakeType == "hanging_piece" && t[0].count == 2, "top mistake by count")
+    check(t[0].puzzleIds == ["p1", "p2"] && t[0].example == "Qa2", "puzzle ids and worst example")
+    check(t[1].kind == .positive && t[1].streak == 7 && t[2].kind == .habit && t[2].skill == "threats", "positive streak and habit")
+    check(t[0].text().contains("Hanging piece") && t[2].text().contains("check what the opponent"), "texts: \(t[0].text())")
+    check(Takeaway.build(mistakes: [], moves: [mv(1, "w", "blunder")], color: "w", focus: .tactics).map(\.kind) == [.habit], "no data gives the habit only")
+    let rm = [ReviewedMove(color: "w", uci: "e2e4", san: nil, fenBefore: ChessPosition.startFEN, valueBefore: 30, valueAfter: 30, bestUci: "e2e4")]
+    let big = (0..<20).flatMap { i -> [ReviewedMove] in
+        [ReviewedMove(color: "w", uci: "e2e4", san: nil, fenBefore: ChessPosition.startFEN, valueBefore: 30, valueAfter: i < 6 ? -300 : 30, bestUci: "e2e4", hint: i == 19 ? 4 : nil),
+         ReviewedMove(color: "b", uci: "e7e5", san: nil, fenBefore: ChessPosition.startFEN, valueBefore: 30, valueAfter: 30, bestUci: "e7e5")]
+    }
+    let rep = GameReport.build(moves: big, date: t0)
+    check(rep.white.ratedMoves == 13 && rep.white.countsForRating, "book moves and hinted moves are excluded: \(rep.white.ratedMoves ?? -1)")
+    check(near(rep.white.assistedShare ?? 0, 1.0 / 20), "assisted share")
+    check(!GameReport.build(moves: rm, date: t0).white.countsForRating, "one move is not rated")
+    var ten = (0..<12).map { _ in ReviewedMove(color: "w", uci: "e2e4", san: nil, fenBefore: ChessPosition.startFEN, valueBefore: 30, valueAfter: 30, bestUci: "e2e4") }
+    ten += ten.map { var m = $0; m.color = "b"; return m }
+    check(GameReport.build(moves: ten, date: t0).white.countsForRating, "12 own moves are rated")
+    check(MoveRating.from(valueBefore: 900, valueAfter: 600, wasBest: false) != .blunder, "+9 to +6 is not a blunder")
+    check(MoveRating.from(valueBefore: 0, valueAfter: -400, wasBest: false) == .blunder && MoveRating.from(valueBefore: 0, valueAfter: -150, wasBest: false) == .inaccuracy, "win-chance thresholds")
+    let colored = (0..<5).flatMap { i in [ReviewedMove(color: "w", uci: "e2e4", san: nil, fenBefore: ChessPosition.startFEN, valueBefore: 200, valueAfter: -300 + i, bestUci: "d2d4"),
+                                         ReviewedMove(color: "b", uci: "e7e5", san: nil, fenBefore: ChessPosition.startFEN, valueBefore: 0, valueAfter: 0, bestUci: "e7e5")] }
+    check(GameReport.build(moves: colored, date: t0).keyMoments.filter { $0.color == "w" }.count == 3, "three key moments for the player")
+    check(Curriculum.needsThinkDelay(level: 1, elapsed: 5, seconds: 15, nudged: false) && !Curriculum.needsThinkDelay(level: 1, elapsed: 5, seconds: 15, nudged: true)
+          && !Curriculum.needsThinkDelay(level: 0, elapsed: 0, seconds: 15, nudged: false) && !Curriculum.needsThinkDelay(level: 2, elapsed: 20, seconds: 15, nudged: false), "think delay")
+    check(Curriculum.gainWeight(hintLevel: 0) == 1 && Curriculum.gainWeight(hintLevel: 2) == 0.5 && Curriculum.gainWeight(hintLevel: 3) == 0, "gain weights")
+    check(Curriculum.showsThreatAutomatically(gamesPlayed: 2, skills: [:]) && !Curriculum.showsThreatAutomatically(gamesPlayed: 3, skills: ["threats": 0.5])
+          && Curriculum.showsThreatAutomatically(gamesPlayed: 9, skills: ["threats": 0.3]), "threat auto rule")
+    check(Curriculum.supportFaded(skills: ["threats": 0.85, "piece_safety": 0.9], counts: ["threats": 20, "piece_safety": 25])
+          && !Curriculum.supportFaded(skills: ["threats": 0.85, "piece_safety": 0.9], counts: ["threats": 19, "piece_safety": 25]), "support fade rule")
+    var cs = LearningStyle()
+    cs.recordPuzzle(after: ExplanationStyle(), correct: true)
+    var pp = PlayerProfile(name: "x")
+    pp.recordPuzzleAfterExplanation(usedStyle: ExplanationStyle(), correct: true, assisted: true)
+    check(pp.style.scores.isEmpty, "assisted solves do not feed the style bandit")
+    check(Coach.cleanAnswer("Hello <thi") == "Hello" && Coach.cleanAnswer("a <think>x</think> b") == "a  b", "partial think tag held back")
+    let (pl, sd) = parse("4k3/8/8/8/8/8/8/4K2R w - - 0 1")
+    let res = EngineResult(fen: "x", bestMove: "h1h2", lines: [])
+    check(Coach.review(before: pl, played: UCIMove("h1h2")!, after: pl.applying(UCIMove("h1h2")!), by: sd, beforeResult: res, afterResult: nil) == nil, "no review without an after result")
 }
 
 print("\(checks) checks, \(failures) failures")

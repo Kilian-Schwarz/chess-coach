@@ -48,7 +48,7 @@
   <data name="hint.fallbackTopic" xml:space="preserve"><value>포지션을 잘 살펴보세요.</value></data>
   <data name="hint.fallbackPiece" xml:space="preserve"><value>표시된 칸이 움직여야 할 기물을 알려 줍니다.</value></data>
   <data name="hint.fallbackIdea" xml:space="preserve"><value>내 포지션을 개선하거나 상대의 위협을 막아 보세요.</value></data>
-  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Shift+F8</value></data>
   <data name="suggest.title" xml:space="preserve"><value>제안: {0}</value></data>
   <data name="suggest.eval" xml:space="preserve"><value>평가: {0}</value></data>
   <data name="suggest.also" xml:space="preserve"><value>다른 후보: {0}</value></data>
@@ -88,7 +88,7 @@
   <data name="menu.think" xml:space="preserve"><value>생각 시간</value></data>
   <data name="menu.nextHint" xml:space="preserve"><value>다음 힌트</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>차례 바꾸기</value></data>
-  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Shift+F9</value></data>
   <data name="menu.endGame" xml:space="preserve"><value>대국 종료하고 복기 보기</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>대국을 PGN으로 복사</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>패널을 체스판 옆으로 되돌리기</value></data>
@@ -111,7 +111,7 @@
   <data name="settings.autostart" xml:space="preserve"><value>Windows와 함께 시작</value></data>
   <data name="settings.language" xml:space="preserve"><value>언어</value></data>
   <data name="settings.langSystem" xml:space="preserve"><value>시스템</value></data>
-  <data name="settings.hotkeys" xml:space="preserve"><value>단축키: Ctrl+Alt+H 다음 힌트, Ctrl+Alt+T 차례 바꾸기.</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>단축키: Ctrl+Shift+F8 다음 힌트, Ctrl+Shift+F9 차례 바꾸기.</value></data>
   <data name="settings.expert" xml:space="preserve"><value>전문가</value></data>
   <data name="settings.thinkMs" xml:space="preserve"><value>생각 시간 (ms)</value></data>
   <data name="settings.lock" xml:space="preserve"><value>전문가 모드 잠금</value></data>
@@ -161,6 +161,9 @@
   <data name="training.correct" xml:space="preserve"><value>정답: {0}</value></data>
   <data name="training.wrong" xml:space="preserve"><value>조금 아쉬워요. 다시 시도하거나 힌트를 사용하세요.</value></data>
   <data name="training.best" xml:space="preserve"><value>최선의 수: {0}</value></data>
+  <data name="training.instruction" xml:space="preserve"><value>기물을 클릭하거나 끌어서 수를 두세요.</value></data>
+  <data name="training.skip" xml:space="preserve"><value>건너뛰기</value></data>
+  <data name="training.stats" xml:space="preserve"><value>{1}개 중 {0}개 해결</value></data>
   <data name="menu.checkUpdates" xml:space="preserve"><value>업데이트 확인 …</value></data>
   <data name="update.current" xml:space="preserve"><value>Chess Coach가 최신 버전입니다.</value></data>
   <data name="update.ready" xml:space="preserve"><value>업데이트 {0}이(가) 준비되었으며 종료할 때 설치됩니다.</value></data>
@@ -187,4 +190,13 @@
   <data name="report.end.manual" xml:space="preserve"><value>수동으로 종료</value></data>
   <data name="report.summaryLoading" xml:space="preserve"><value>요약 작성 중 …</value></data>
   <data name="record.openRecap" xml:space="preserve"><value>복기 열기</value></data>
+  <data name="panel.showThreat" xml:space="preserve"><value>위협 보기</value></data>
+  <data name="report.takeaways" xml:space="preserve"><value>이번 대국에서 얻을 점</value></data>
+  <data name="report.train" xml:space="preserve"><value>이 문제 {0}개 연습하기</value></data>
+  <data name="report.setFocus" xml:space="preserve"><value>다음 대국의 중점으로 설정</value></data>
+  <data name="report.focusSet" xml:space="preserve"><value>중점 설정됨: {0}</value></data>
+  <data name="fairPlay.title" xml:space="preserve"><value>페어플레이</value></data>
+  <data name="fairPlay.text" xml:space="preserve"><value>Chess Coach는 연습용입니다. 봇과의 대국, 레이팅이 없는 대국, 실제 체스판, 분석에 사용하세요. 레이팅이 걸린 온라인 대국에서 제안을 사용하면 chess.com과 Lichess의 페어플레이 규정을 위반하며 계정이 정지될 수 있습니다.</value></data>
+  <data name="update.available" xml:space="preserve"><value>버전 {0}을(를) 사용할 수 있습니다. 설치하려면 트레이 메뉴에서 "업데이트 확인"을(를) 선택하세요.</value></data>
+  <data name="firstRun.text" xml:space="preserve"><value>Chess Coach는 트레이에서 실행됩니다. 브라우저에서 체스판을 열고 트레이 메뉴의 "사용"을(를) 켠 다음, 기물을 익히도록 시작 배치를 한 번 보여 주세요.</value></data>
 </root>

@@ -31,8 +31,7 @@ internal sealed partial class AppModel
     {
         _sideOverride = null;
         if (u.Change == GameChange.NewGame) _reviewCard = null;
-        foreach (var pm in u.NewMoves) EnqueueForLearning(pm);
-        foreach (var pm in u.Reviewable) _book.Rated.Add(MoveKey(pm));
+        if (u.Change == GameChange.Takeback) ReconcileBook();
         var moves = _record.Moves;
         if (_reviewCard is { ReviewPly: int ply } && !(ply >= 1 && ply <= moves.Count && MoveKey(moves[ply - 1]) == _reviewCard.Id))
         {
@@ -57,16 +56,32 @@ internal sealed partial class AppModel
 
     private bool InRecord(PlayedMove pm) => _record.Moves.Any(m => MoveKey(m) == MoveKey(pm));
 
-    private void ConfirmReviews(GameUpdate? update, LastMoveMarking? marking, PieceColor me, List<PlayedMove> carried)
+    private readonly HashSet<string> _reviewableKeys = new();
+
+    private void ConfirmReviews(GameUpdate update, LastMoveMarking marking, PieceColor me, List<PlayedMove> carried)
     {
-        var carriedNow = carried.Where(InRecord).ToList();
-        if (carriedNow.Count > 0) StartReview(carriedNow, me);
-        if (update == null || marking == null) return;
-        var coached = update.Reviewable.Where(pm => IsCoached(pm.Mover, me)).ToList();
-        if (coached.Count == 0) return;
-        var marked = marking.Marked.Select(m => UciMove.SquareName(m.File, m.Rank)).ToHashSet();
-        if (coached.All(pm => marked.Contains(pm.Uci[..2]) && marked.Contains(pm.Uci.Substring(2, 2)))) StartReview(coached, me);
-        else _pendingMoves = coached;
+        ConfirmMoves(carried.Where(InRecord).ToList(), me);
+        foreach (var pm in update.Reviewable) _reviewableKeys.Add(MoveKey(pm));
+        var fresh = update.NewMoves.ToList();
+        if (fresh.Count > 0)
+        {
+            var marked = marking.Marked.Select(m => UciMove.SquareName(m.File, m.Rank)).ToHashSet();
+            var last = fresh[^1];
+            if (marked.Contains(last.Uci[..2]) && marked.Contains(last.Uci.Substring(2, 2))) ConfirmMoves(fresh, me);
+            else _pendingMoves = fresh;
+        }
+        if (_pendingMoves.Count == 0) _reviewableKeys.Clear();
+    }
+
+    private void ConfirmMoves(List<PlayedMove> moves, PieceColor me)
+    {
+        foreach (var pm in moves)
+        {
+            if (_reviewableKeys.Contains(MoveKey(pm))) _book.Rated.Add(MoveKey(pm));
+            EnqueueForLearning(pm);
+        }
+        var coached = moves.Where(pm => _reviewableKeys.Contains(MoveKey(pm)) && IsCoached(pm.Mover, me)).ToList();
+        if (coached.Count > 0) StartReview(coached, me);
     }
 
     private void StartReview(List<PlayedMove> moves, PieceColor me)
@@ -91,7 +106,7 @@ internal sealed partial class AppModel
             ? await _engine.AnalyzeAsync(pm.FenAfter, 300) : null;
         if (seq != _reviewSeq || !IsActive || !InRecord(pm)) return;
         int ply = _record.Moves.ToList().FindLastIndex(m => MoveKey(m) == MoveKey(pm)) + 1;
-        var review = Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after);
+        if (Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after, pm.After.Result) is not { } review) return;
         string who = PlayerName(pm.Mover, me);
         var lines = new List<string> { Loc.T("review.played", review.PlayedText, review.PlayedScore) };
         if (review.Rating != MoveRating.Best && review.BestText != null) lines.Add(Loc.T("review.better", review.BestText, before.ScoreText));
@@ -151,6 +166,19 @@ internal sealed partial class AppModel
         _panel.CanExplain = _reviewCard != null;
     }
 
+    private string? _threatShownFen;
+
+    private bool ThreatVisible => Settings.ShowThreats && _threat != null
+        && (_threatShownFen == _hintFen || Curriculum.ShowThreatAutomatically(Active.GamesPlayed, Curriculum.Value(Active.Skills, Skill.Threats)));
+
+    public void ShowThreat()
+    {
+        if (!IsActive || _hint is not { } ctx || _threat == null) return;
+        _threatShownFen = _hintFen;
+        RenderHints(ctx);
+        UpdatePanel();
+    }
+
     public void NextHint()
     {
         if (!IsActive || _hint is not { } ctx || EffectiveShowBest || _hintLevel >= PanelWindow.HintMax) return;
@@ -169,7 +197,7 @@ internal sealed partial class AppModel
         string prefix = Settings.DuoTraining ? ctx.Who + ": " : "";
         _panel.CanExplain = level >= 3 || _reviewCard != null;
         OverlayState.Arrow? threatArrow = null;
-        if (_threat is { } th && Settings.ShowThreats)
+        if (_threat is { } th && ThreatVisible)
         {
             var tf = Placement.ScreenSquare(th.Move.FromFile, th.Move.FromRank, ctx.WhiteAtBottom);
             var tt = Placement.ScreenSquare(th.Move.ToFile, th.Move.ToRank, ctx.WhiteAtBottom);
@@ -393,18 +421,19 @@ internal sealed partial class AppModel
             if (reviewOld)
             {
                 if (_suggestionCard != null) cards.Add(_suggestionCard);
-                if (_threat is { } th0 && Settings.ShowThreats) cards.Add(new CoachCard("threat|" + th0.Text, CardKind.Info, th0.Text));
+                if (_threat is { } th0 && ThreatVisible) cards.Add(new CoachCard("threat|" + th0.Text, CardKind.Info, th0.Text));
                 if (_answerCard != null) cards.Add(_answerCard);
                 cards.Add(review!);
             }
             else
             {
-                if (_threat is { } th && Settings.ShowThreats) cards.Add(new CoachCard("threat|" + th.Text, CardKind.Info, th.Text));
+                if (_threat is { } th && ThreatVisible) cards.Add(new CoachCard("threat|" + th.Text, CardKind.Info, th.Text));
                 if (_suggestionCard != null) cards.Add(_suggestionCard);
                 if (_answerCard != null) cards.Add(_answerCard);
             }
             if (_hint == null && cards.Count == 0 && _update == null) { _panel.HidePanel(); return; }
             _panel.CanFinish = CanFinish;
+            _panel.CanShowThreat = _threat != null && Settings.ShowThreats && !ThreatVisible;
             _panel.FocusText = PanelSubtitle();
             _panel.ShowNextTo(_boardRect, cards);
         }, System.Windows.Threading.DispatcherPriority.Background);

@@ -15,6 +15,7 @@ public sealed class MoveRecord
     public double WinBefore { get; set; }
     public double WinAfter { get; set; }
     public int Loss { get; set; }
+    public int RatedLoss { get; set; }
     public double Accuracy { get; set; }
 
     public string Rating { get; set; } = "";
@@ -24,6 +25,7 @@ public sealed class MoveRecord
 public sealed class SideSummary
 {
     public int Moves { get; set; }
+    public int RatedMoves { get; set; }
     public double Accuracy { get; set; }
     public double Acpl { get; set; }
     public double Performance { get; set; }
@@ -58,9 +60,13 @@ public sealed class GameReport
     public SideSummary White { get; set; } = new();
     public SideSummary Black { get; set; } = new();
     public List<KeyMoment> KeyMoments { get; set; } = new();
+    public List<Takeaway> Takeaways { get; set; } = new();
     public string? Summary { get; set; }
     public string? Result { get; set; }
     public string? EndReason { get; set; }
+
+    public const int BookMoves = 6;
+    public const int EvalClamp = 600;
 
     public SideSummary Side(string color) => color == "w" ? White : Black;
 
@@ -84,6 +90,7 @@ public sealed class GameReport
             string? bestText = BestText(null);
             double wb = Core.Accuracy.WinChance(m.ValueBefore), wa = Core.Accuracy.WinChance(m.ValueAfter);
             int loss = Core.Accuracy.CpLoss(m.ValueBefore, m.ValueAfter);
+            int ratedLoss = Core.Accuracy.CpLoss(Math.Clamp(m.ValueBefore, -EvalClamp, EvalClamp), Math.Clamp(m.ValueAfter, -EvalClamp, EvalClamp));
             double acc = Core.Accuracy.MoveAccuracy(wb, wa);
             var rating = RatingOf(loss, m.BestUci, m.Uci);
             string? san = m.San;
@@ -91,7 +98,7 @@ public sealed class GameReport
             records.Add(new MoveRecord
             {
                 Ply = i + 1, Color = m.Color, Uci = m.Uci, San = san, Text = text, WinBefore = wb, WinAfter = wa,
-                Loss = loss, Accuracy = acc, Rating = rating.Raw(), BestText = bestText,
+                Loss = loss, RatedLoss = ratedLoss, Accuracy = acc, Rating = rating.Raw(), BestText = bestText,
             });
             double drop = wb - wa;
             if (drop >= 10 && place != null && mv != null)
@@ -123,7 +130,9 @@ public sealed class GameReport
             var s = new SideSummary { Moves = mine.Count };
             s.Accuracy = Core.Accuracy.GameAccuracy(mine.Select(r => r.Accuracy).ToList());
             s.Acpl = Core.Accuracy.Acpl(mine.Select(r => r.Loss).ToList());
-            s.Performance = mine.Count == 0 ? 0 : Core.Accuracy.PerformanceRating(s.Acpl);
+            var rated = mine.Count > BookMoves + PlayerProfile.MinRatedMoves / 2 ? mine.Skip(BookMoves).ToList() : mine;
+            s.RatedMoves = mine.Count;
+            s.Performance = mine.Count == 0 ? 0 : Core.Accuracy.PerformanceRating(Core.Accuracy.Acpl(rated.Select(r => r.RatedLoss).ToList()));
             foreach (var r in mine)
                 switch (MoveRatingExt.FromRaw(r.Rating))
                 {
@@ -135,7 +144,8 @@ public sealed class GameReport
                 }
             return s;
         }
-        var top = moments.OrderByDescending(x => x.Drop).Take(3).Select(x => x.M).OrderBy(k => k.Ply).ToList();
+        var top = moments.GroupBy(x => x.M.Color).SelectMany(g => g.OrderByDescending(x => x.Drop).Take(3))
+            .Select(x => x.M).OrderBy(k => k.Ply).ToList();
         return new GameReport
         {
             Id = id ?? Guid.NewGuid().ToString().ToLowerInvariant(), Date = date ?? DateTime.UtcNow,
@@ -166,6 +176,7 @@ public sealed class GameReport
         lines.Add($"Player's moves: {me.Best} best, {me.Good} good, {me.Inaccuracies} inaccuracies, {me.Mistakes} mistakes, {me.Blunders} blunders.");
         foreach (var k in KeyMoments.Where(k => k.Color == color))
             lines.Add($"Key moment ({MoveLabel(k.Ply, k.Color, en)}): {k.PromptText ?? k.MoveText + ". " + k.Facts}.");
+        for (int i = 0; i < Takeaways.Count; i++) lines.Add($"Takeaway {i + 1}: {Takeaways[i].Text(en)}");
         var user = string.Join("\n", lines) + "\n\n" + Coach.StyleCard(context, new ExplanationStyle(StyleLength.Long, StyleDepth.Concrete), answerCulture);
         return new Coach.ExplanationRequest(Prompts.SummarySystem, user, 400);
     }

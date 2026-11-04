@@ -24,6 +24,8 @@ internal sealed class AppSettings
     public string LlmModel { get; set; } = "";
     public string StockfishPath { get; set; } = "";
     public bool AutoUpdate { get; set; } = true;
+    public bool FairPlayNoticeShown { get; set; }
+    public bool FirstRunShown { get; set; }
     public bool PanelCollapsed { get; set; }
     public bool ResumeActive { get; set; }
     public string ActiveProfileId { get; set; } = "";

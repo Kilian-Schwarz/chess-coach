@@ -104,6 +104,7 @@ struct PieceTemplates: Codable {
 
     static let occupiedFill = 0.06
     static let maxDistance = 0.42
+    static let minFitSquares = 4
 
     static func startLayout(whiteAtBottom: Bool) -> [[Character]] {
         if whiteAtBottom {
@@ -134,6 +135,10 @@ struct PieceTemplates: Codable {
     }
 
     mutating func learnEarly(_ features: [[SquareFeature]]) -> Bool? {
+        learnEarlyPosition(features)?.whiteAtBottom
+    }
+
+    mutating func learnEarlyPosition(_ features: [[SquareFeature]]) -> (whiteAtBottom: Bool, position: ChessPosition)? {
         let occupied = features.map { $0.map { $0.fill > PieceTemplates.occupiedFill } }
         let lums = zip(features.joined(), occupied.joined()).filter { $0.1 }.map { $0.0.meanLum }
         guard let lo0 = lums.min(), let hi0 = lums.max(), hi0 - lo0 > 40 else { return nil }
@@ -145,13 +150,13 @@ struct PieceTemplates: Codable {
         }
         let threshold = (lo + hi) / 2
         let bright = features.map { $0.map { $0.meanLum > threshold } }
-        guard let found = EarlyStart.match(occupied: occupied, bright: bright) else { return nil }
-        let board = found.board
+        guard let found = EarlyStart.matchPosition(occupied: occupied, bright: bright) else { return nil }
+        let board = found.position.board
         learn(features) { r, c in
             let (file, rank) = Placement.chessSquare(col: c, row: r, whiteAtBottom: found.whiteAtBottom)
             return board.squares[rank][file]
         }
-        return found.whiteAtBottom
+        return found
     }
 
     private mutating func learn(_ features: [[SquareFeature]], label: (Int, Int) -> Character?) {
@@ -166,6 +171,17 @@ struct PieceTemplates: Codable {
         }
         templates = t
         squareColors = SquareColors.learn(from: features)
+    }
+
+    func fitsBadly(_ scan: ScanResult) -> Bool {
+        guard !isEmpty else { return false }
+        let cells = zip(scan.features.joined(), scan.screen.joined()).filter { $0.0.fill > PieceTemplates.occupiedFill }
+        guard cells.count >= PieceTemplates.minFitSquares else { return false }
+        if cells.filter({ $0.1 == nil }).count * 4 >= cells.count { return true }
+        return [true, false].allSatisfy { wb in
+            let board = Placement(screen: scan.screen, whiteAtBottom: wb)
+            return board.problem(sideToMove: .white) != nil && board.problem(sideToMove: .black) != nil
+        }
     }
 
     func distance(_ f: SquareFeature, to piece: Character) -> Double {

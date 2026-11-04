@@ -12,19 +12,21 @@ extension AppModel {
     func clearHints() {
         forgetHints()
         threatCard = nil
+        panel.model.canShowThreat = false
         panel.model.canHint = false
         panel.model.canExplain = reviewCard != nil
     }
 
-    func defaultHintLevel(for profile: PlayerProfile?) -> Int {
-        guard let p = profile else { return 1 }
-        let rate = PuzzleScheduler.recentSuccessRate(store.puzzles(for: p.id).puzzles)
-        return Curriculum.adaptation(level: p.level, focus: p.focusSkill, skills: p.skills, successRate: rate).defaultHintLevel
-    }
-
     func nextHint() {
         guard isActive, let ctx = hintCtx, !effectiveShowBest, hintLevel < panel.model.hintMax else { return }
-        hintLevel = hintLevel == 0 ? max(1, defaultHintLevel(for: store.profile(id: ctx.profileId))) : hintLevel + 1
+        let elapsed = Date().timeIntervalSince(hintFirstSeen[ctx.fen] ?? .distantPast)
+        if Curriculum.needsThinkDelay(level: hintLevel, elapsed: elapsed, seconds: adaptation(for: ctx.profileId).thinkSeconds,
+                                      nudged: hintNudged.contains(ctx.fen)) {
+            hintNudged.insert(ctx.fen)
+            suggestionCard?.note = String(localized: "Take a moment to think, then press again.")
+            return
+        }
+        hintLevel = hintLevel == 0 ? Curriculum.firstHintLevel : hintLevel + 1
         usedHint[ctx.fen] = max(usedHint[ctx.fen] ?? 0, hintLevel)
         lastChangeAt = Date()
         renderHints(ctx)
@@ -46,6 +48,8 @@ extension AppModel {
 
     func renderHints(_ ctx: HintContext) {
         let level = effectiveShowBest ? 4 : hintLevel
+        if hintFirstSeen[ctx.fen] == nil { hintFirstSeen[ctx.fen] = Date() }
+        let threatShown = threatVisible(ctx)
         let move = ctx.hints.move
         let sq = screenPoint(move, whiteAtBottom: ctx.whiteAtBottom)
         let prefix = duoTraining ? ctx.who + ": " : ""
@@ -53,11 +57,17 @@ extension AppModel {
         var state = OverlayState()
         state.unsafe = lift?.marks ?? []
 
-        let newThreatCard: CoachCard? = (showThreats ? ctx.threat : nil).map {
-            CoachCard(id: ctx.fen + "|threat", kind: .threat, title: String(localized: "Threat"), text: $0.text)
+        var newThreatCard: CoachCard?
+        if threatShown {
+            newThreatCard = ctx.threat.map { CoachCard(id: ctx.fen + "|threat", kind: .threat, title: String(localized: "Threat"), text: $0.text) }
+            if newThreatCard == nil, threatRequested.contains(ctx.fen) {
+                newThreatCard = CoachCard(id: ctx.fen + "|nothreat", kind: .hint, title: String(localized: "Threat"),
+                                          text: String(localized: "No immediate threat found."))
+            }
         }
         if threatCard != newThreatCard { threatCard = newThreatCard }
-        if showThreats, let t = ctx.threat {
+        panel.model.canShowThreat = showThreats && level == 0 && !threatShown
+        if threatShown, let t = ctx.threat {
             let tp = screenPoint(t.move, whiteAtBottom: ctx.whiteAtBottom)
             state.threatArrow = .init(from: tp.from, to: tp.to)
         }
@@ -67,7 +77,7 @@ extension AppModel {
             suggestion = String(localized: "Think for yourself · ⌥⌘H for a hint")
             state.hint = prefix + String(localized: "Your move · think for yourself")
             setHintCard(id: ctx.fen + "|h0", title: String(localized: "\(ctx.who) to move"),
-                        lines: [String(localized: "Think for yourself. “Next hint” (⌥⌘H) reveals more step by step.")])
+                        lines: [String(localized: "Before you move: what does your opponent threaten? Think for yourself. “Next hint” reveals more step by step.")])
         case 1:
             suggestion = String(localized: "Hint 1 of 4")
             state.hint = prefix + String(localized: "Hint 1: topic")

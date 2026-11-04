@@ -9,6 +9,7 @@ struct ReviewedMove: Codable, Equatable {
     var valueAfter: Int
     var bestUci: String?
     var ply: Int? = nil
+    var hint: Int? = nil
 }
 
 struct MoveRecord: Codable, Equatable {
@@ -31,6 +32,10 @@ struct SideSummary: Codable, Equatable {
     var acpl: Double = 0
     var performance: Double = 0
     var best = 0, good = 0, inaccuracies = 0, mistakes = 0, blunders = 0
+    var ratedMoves: Int? = nil
+    var assistedShare: Double? = nil
+
+    var countsForRating: Bool { moves >= PlayerProfile.minGameMoves }
 }
 
 struct KeyMoment: Codable, Equatable {
@@ -57,25 +62,40 @@ struct GameReport: Codable, Equatable {
     var summary: String?
     var result: String?
     var endReason: String?
+    var takeaways: [Takeaway]? = nil
+
+    static let bookMoves = 6
+    static let evalClamp = 600
 
     func side(_ color: String) -> SideSummary { color == "w" ? white : black }
 
-    static func moveRating(loss: Int, bestUci: String?, uci: String) -> MoveRating {
-        MoveRating.from(loss: loss, wasBest: bestUci != nil && bestUci == uci)
+    static func moveRating(valueBefore: Int, valueAfter: Int, bestUci: String?, uci: String) -> MoveRating {
+        MoveRating.from(valueBefore: valueBefore, valueAfter: valueAfter, wasBest: bestUci != nil && bestUci == uci)
     }
 
     static func build(moves reviewed: [ReviewedMove], id: String = UUID().uuidString.lowercased(), date: Date = Date(),
                       whiteProfileId: String? = nil, blackProfileId: String? = nil, opening: String? = nil) -> GameReport {
         var records: [MoveRecord] = []
         var moments: [(drop: Double, moment: KeyMoment)] = []
+        var rated: [String: [Int]] = ["w": [], "b": []]
+        var ownCount: [String: Int] = ["w": 0, "b": 0]
+        var assisted: [String: Double] = ["w": 0, "b": 0]
+        func clamp(_ v: Int) -> Int { min(evalClamp, max(-evalClamp, v)) }
         for (i, m) in reviewed.enumerated() {
+            let n = ownCount[m.color, default: 0]
+            ownCount[m.color] = n + 1
+            let hint = m.hint ?? 0
+            assisted[m.color, default: 0] += hint >= 3 ? 1 : hint > 0 ? 0.5 : 0
+            if hint < 3 {
+                rated[m.color, default: []].append(Accuracy.cpLoss(valueBefore: clamp(m.valueBefore), valueAfter: clamp(m.valueAfter)))
+            }
             let place = ChessPosition(fen: m.fenBefore)?.board
             let mv = UCIMove(m.uci)
             let text = place.flatMap { p in mv.map { p.describeMove($0) } } ?? m.uci
             let bestText: String? = m.bestUci.flatMap { b in b == m.uci ? nil : place.flatMap { p in UCIMove(b).map { p.describeMove($0) } } }
             let wb = Accuracy.winChance(cp: m.valueBefore), wa = Accuracy.winChance(cp: m.valueAfter)
             let loss = Accuracy.cpLoss(valueBefore: m.valueBefore, valueAfter: m.valueAfter)
-            let rating = moveRating(loss: loss, bestUci: m.bestUci, uci: m.uci)
+            let rating = moveRating(valueBefore: m.valueBefore, valueAfter: m.valueAfter, bestUci: m.bestUci, uci: m.uci)
             let san = m.san ?? mv.flatMap { mv in ChessPosition(fen: m.fenBefore).map { SAN.san(mv, in: $0) } }
             records.append(MoveRecord(ply: m.ply ?? i + 1, color: m.color, uci: m.uci, san: san, text: text, winBefore: wb, winAfter: wa, loss: loss,
                                       accuracy: Accuracy.moveAccuracy(winBefore: wb, winAfter: wa), rating: rating.rawValue, bestText: bestText))
@@ -97,7 +117,12 @@ struct GameReport: Codable, Equatable {
             s.moves = mine.count
             s.accuracy = Accuracy.gameAccuracy(mine.map(\.accuracy))
             s.acpl = Accuracy.acpl(mine.map(\.loss))
-            s.performance = mine.isEmpty ? 0 : Accuracy.performanceRating(acpl: s.acpl)
+            let own = records.filter { $0.color == c }.count
+            let skip = own > bookMoves + 5 ? bookMoves : 0
+            let losses = Array((rated[c] ?? []).dropFirst(skip))
+            s.ratedMoves = losses.count
+            s.performance = losses.isEmpty ? 0 : Accuracy.performanceRating(acpl: Accuracy.acpl(losses))
+            s.assistedShare = mine.isEmpty ? 0 : (assisted[c] ?? 0) / Double(mine.count)
             for r in mine {
                 switch MoveRating(rawValue: r.rating) {
                 case .best: s.best += 1
@@ -110,7 +135,10 @@ struct GameReport: Codable, Equatable {
             }
             return s
         }
-        let top = moments.sorted { $0.drop > $1.drop }.prefix(3).map(\.moment).sorted { $0.ply < $1.ply }
+        func top(_ c: String) -> [KeyMoment] {
+            moments.filter { $0.moment.color == c }.sorted { $0.drop > $1.drop }.prefix(3).map(\.moment)
+        }
+        let top = (top("w") + top("b")).sorted { $0.ply < $1.ply }
         return GameReport(id: id, date: date, whiteProfileId: whiteProfileId, blackProfileId: blackProfileId, opening: opening,
                           moves: records, white: summary("w"), black: summary("b"), keyMoments: Array(top), summary: nil,
                           result: nil, endReason: nil)
@@ -132,6 +160,7 @@ struct GameReport: Codable, Equatable {
         for k in keyMoments where k.color == color {
             lines.append("Key moment (\(GameReport.moveLabel(ply: k.ply, color: k.color, .facts))): \(k.moveText). \(k.facts).")
         }
+        for (i, t) in (takeaways ?? []).enumerated() { lines.append("Takeaway \(i + 1): \(t.text(.facts))") }
         let card = Coach.styleCard(context: context, style: ExplanationStyle(length: .long, depth: .concrete), language: language)
         return Coach.ExplanationRequest(system: Coach.summarySystemPrompt, user: lines.joined(separator: "\n") + "\n\n" + card, maxTokens: 400)
     }

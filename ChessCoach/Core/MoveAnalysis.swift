@@ -51,22 +51,27 @@ enum MoveAnalyzer {
         var obs: [SkillObservation] = []
 
         let hangingBefore = Set(r.before.hanging(of: me).map(\.square))
-        let newHanging = after.hanging(of: me).contains { !hangingBefore.contains($0.square) }
-        obs.append(SkillObservation(skill: .pieceSafety, value: loss >= 50 && newHanging ? 0 : 1))
+        let hangingAfter = after.hanging(of: me)
+        let newHanging = hangingAfter.contains { !hangingBefore.contains($0.square) }
+        if !hangingBefore.isEmpty || !hangingAfter.isEmpty {
+            obs.append(SkillObservation(skill: .pieceSafety, value: loss >= 50 && !hangingAfter.isEmpty ? 0 : 1))
+        }
 
         let threat = input.threatResult.flatMap { Threats.detect(board: r.before, currentValue: beforeValue, opponent: $0) }
         if threat != nil { obs.append(SkillObservation(skill: .threats, value: loss < 50 ? 1 : 0)) }
 
         let lines = input.beforeResult.lines
-        let tacticAvailable = lines.count >= 2 && lines[0].value - lines[1].value >= 150
+        let tacticAvailable = lines.count >= 2 && lines[0].value - lines[1].value >= 150 && !r.before.isInCheck(me)
         let foundBest = r.best?.uci == r.played.uci
         if tacticAvailable { obs.append(SkillObservation(skill: .tactics, value: foundBest ? 1 : 0)) }
 
         let accValue = acc / 100
-        switch ph {
-        case .opening: obs.append(SkillObservation(skill: .opening, value: accValue))
-        case .middlegame: obs.append(SkillObservation(skill: .middlegame, value: accValue))
-        case .endgame: obs.append(SkillObservation(skill: .endgame, value: accValue))
+        if abs(Accuracy.winChance(cp: beforeValue) - 50) <= 45 {
+            switch ph {
+            case .opening: obs.append(SkillObservation(skill: .opening, value: accValue))
+            case .middlegame: obs.append(SkillObservation(skill: .middlegame, value: accValue))
+            case .endgame: obs.append(SkillObservation(skill: .endgame, value: accValue))
+            }
         }
 
         let movedPiece = r.before.piece(r.played.fromFile, r.played.fromRank)
@@ -81,7 +86,7 @@ enum MoveAnalyzer {
         else if allowsMate && loss >= 100 { obs.append(SkillObservation(skill: .kingSafety, value: 0)) }
 
         var mistake: MistakeType?
-        if loss > 60 {
+        if loss > 60 && Accuracy.winChance(cp: beforeValue) - Accuracy.winChance(cp: beforeValue - loss) >= MoveRating.inaccuracyDrop {
             if newHanging && loss >= 100 { mistake = .hangingPiece }
             else if threat != nil && loss >= 50 { mistake = .missedThreat }
             else if tacticAvailable && !foundBest { mistake = .missedTactic }

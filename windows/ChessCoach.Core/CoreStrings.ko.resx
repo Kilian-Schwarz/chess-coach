@@ -136,4 +136,7 @@
   <data name="lift.cheaper" xml:space="preserve"><value>주의: {1}의 {0}은(는) 더 가치가 낮은 기물에게 잡힐 수 있습니다.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>주의: {0}을(를) {1}(으)로 옮기면 {3}의 {2}이(가) 무방비 상태가 됩니다.</value></data>
   <data name="lift.many" xml:space="preserve"><value>주의: {1}에게 안전하지 않은 칸이 {0}개 있습니다(빨간색 표시).</value></data>
+  <data name="takeaway.mistake" xml:space="preserve"><value>가장 잦은 실수: {0} ({1}회). 예: {2}</value></data>
+  <data name="takeaway.positive" xml:space="preserve"><value>좋은 수가 {0}번 연속.</value></data>
+  <data name="takeaway.habit" xml:space="preserve"><value>다음 대국을 위해: {0}</value></data>
 </root>
