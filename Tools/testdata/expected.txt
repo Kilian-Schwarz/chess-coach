@@ -1,0 +1,2 @@
+lichess_check_f7.png r1bq1b1r/ppp2kpp/5n2/1P1pN3/3n4/2NP4/PPP2PPP/R1BQ1RK1
+lichess_mate_g8.png r1bq1bkr/ppp2Ppp/5n2/1P1pN3/3n4/2NP4/PPP2PPP/R1BQ1RK1

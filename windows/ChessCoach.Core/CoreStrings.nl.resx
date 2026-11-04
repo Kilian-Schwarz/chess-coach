@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="language.english" xml:space="preserve"><value>Dutch</value></data>
+  <data name="color.white" xml:space="preserve"><value>Wit</value></data>
+  <data name="color.black" xml:space="preserve"><value>Zwart</value></data>
+  <data name="piece.king" xml:space="preserve"><value>Koning</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>Je koning</value></data>
+  <data name="piece.queen" xml:space="preserve"><value>Dame</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>Je dame</value></data>
+  <data name="piece.rook" xml:space="preserve"><value>Toren</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>Je toren</value></data>
+  <data name="piece.bishop" xml:space="preserve"><value>Loper</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>Je loper</value></data>
+  <data name="piece.knight" xml:space="preserve"><value>Paard</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>Je paard</value></data>
+  <data name="piece.pawn" xml:space="preserve"><value>Pion</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>Je pion</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Koningen niet duidelijk herkend</value></data>
+  <data name="problem.backRankPawn" xml:space="preserve"><value>Pion op de grondlijn herkend</value></data>
+  <data name="problem.tooManyPawns" xml:space="preserve"><value>Te veel pionnen herkend</value></data>
+  <data name="problem.tooManyWhite" xml:space="preserve"><value>Te veel witte stukken herkend</value></data>
+  <data name="problem.tooManyBlack" xml:space="preserve"><value>Te veel zwarte stukken herkend</value></data>
+  <data name="problem.impossibleMaterial" xml:space="preserve"><value>Aantal stukken onmogelijk, controleer de herkenning</value></data>
+  <data name="problem.opponentInCheck" xml:space="preserve"><value>De partij die niet aan zet is, staat schaak</value></data>
+  <data name="result.checkmate" xml:space="preserve"><value>Schaakmat, {0} wint</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Pat</value></data>
+  <data name="result.insufficientMaterial" xml:space="preserve"><value>Remise door onvoldoende materiaal</value></data>
+  <data name="result.fiftyMoveRule" xml:space="preserve"><value>Remise door de 50-zettenregel</value></data>
+  <data name="score.checkmate" xml:space="preserve"><value>Schaakmat</value></data>
+  <data name="score.stalemate" xml:space="preserve"><value>Pat</value></data>
+  <data name="score.mateIn" xml:space="preserve"><value>Mat in {0}</value></data>
+  <data name="score.matedIn" xml:space="preserve"><value>Mat in {0} tegen</value></data>
+  <data name="move.castleShort" xml:space="preserve"><value>korte rokade</value></data>
+  <data name="move.castleLong" xml:space="preserve"><value>lange rokade</value></data>
+  <data name="move.capture" xml:space="preserve"><value>{0} {1} slaat {2} {3}</value></data>
+  <data name="move.enPassant" xml:space="preserve"><value>Pion {0} slaat en passant op {1}</value></data>
+  <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
+  <data name="move.promotes" xml:space="preserve"><value>, wordt {0}</value></data>
+  <data name="move.check" xml:space="preserve"><value>, schaak</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} wordt aangevallen en is onbeschermd</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} wordt aangevallen door een zwakker stuk</value></data>
+  <data name="rating.best" xml:space="preserve"><value>Beste zet</value></data>
+  <data name="rating.good" xml:space="preserve"><value>Goede zet</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Onnauwkeurigheid</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Fout</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Zware fout</value></data>
+  <data name="level.beginner" xml:space="preserve"><value>Beginner</value></data>
+  <data name="level.intermediate" xml:space="preserve"><value>Gevorderd</value></data>
+  <data name="level.strong" xml:space="preserve"><value>Sterk</value></data>
+  <data name="skill.pieceSafety" xml:space="preserve"><value>Veiligheid van stukken</value></data>
+  <data name="skill.pieceSafety.summary" xml:space="preserve"><value>Laat nooit een stuk onbeschermd of ongedekt staan.</value></data>
+  <data name="skill.threats" xml:space="preserve"><value>Dreigingen</value></data>
+  <data name="skill.threats.summary" xml:space="preserve"><value>Controleer voor elke zet wat de tegenstander van plan is.</value></data>
+  <data name="skill.tactics" xml:space="preserve"><value>Tactiek</value></data>
+  <data name="skill.tactics.summary" xml:space="preserve"><value>Herken en gebruik vorken, aanvallen op een pin, spiesen en ontdekte aanvallen.</value></data>
+  <data name="skill.opening" xml:space="preserve"><value>Openingsprincipes</value></data>
+  <data name="skill.opening.summary" xml:space="preserve"><value>Ontwikkel stukken, bezet het centrum, rokeer vroeg.</value></data>
+  <data name="skill.kingSafety" xml:space="preserve"><value>Veiligheid van de koning</value></data>
+  <data name="skill.kingSafety.summary" xml:space="preserve"><value>Houd de koning veilig en verzwak zijn dekking niet zonder reden.</value></data>
+  <data name="skill.endgame" xml:space="preserve"><value>Eindspelen</value></data>
+  <data name="skill.endgame.summary" xml:space="preserve"><value>Activeer de koning, promoveer pionnen, win eenvoudige eindspelen veilig.</value></data>
+  <data name="skill.middlegame" xml:space="preserve"><value>Plannen</value></data>
+  <data name="skill.middlegame.summary" xml:space="preserve"><value>Heb een plan in het middenspel: verbeter stukken, val zwakke punten aan.</value></data>
+  <data name="mistake.hangingPiece" xml:space="preserve"><value>Stuk laten staan</value></data>
+  <data name="mistake.missedThreat" xml:space="preserve"><value>Dreiging gemist</value></data>
+  <data name="mistake.missedTactic" xml:space="preserve"><value>Tactiek gemist</value></data>
+  <data name="mistake.kingSafety" xml:space="preserve"><value>Veiligheid van de koning</value></data>
+  <data name="mistake.openingPrinciple" xml:space="preserve"><value>Openingsprincipe</value></data>
+  <data name="mistake.endgameTechnique" xml:space="preserve"><value>Eindspeltechniek</value></data>
+  <data name="mistake.other" xml:space="preserve"><value>Overig</value></data>
+  <data name="mistake.example" xml:space="preserve"><value>{0} (verlies {1})</value></data>
+  <data name="focus.label" xml:space="preserve"><value>Leerfocus: {0}</value></data>
+  <data name="theme.mate" xml:space="preserve"><value>Mat</value></data>
+  <data name="theme.captureGain" xml:space="preserve"><value>Materiaalwinst</value></data>
+  <data name="theme.fork" xml:space="preserve"><value>Vork</value></data>
+  <data name="theme.check" xml:space="preserve"><value>Schaak</value></data>
+  <data name="theme.parryThreat" xml:space="preserve"><value>Dreiging pareren</value></data>
+  <data name="theme.castle" xml:space="preserve"><value>Rokade</value></data>
+  <data name="theme.develop" xml:space="preserve"><value>Stuk ontwikkelen</value></data>
+  <data name="theme.kingActivate" xml:space="preserve"><value>Koning activeren</value></data>
+  <data name="theme.pawnMove" xml:space="preserve"><value>Pionzet</value></data>
+  <data name="theme.improvePiece" xml:space="preserve"><value>Stuk verbeteren</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Hier kun je de tegenstander mat zetten.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Hier kun je materiaal winnen.</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>Zoek een vork: een zet die twee stukken tegelijk aanvalt.</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>Een schaakzet is hier sterk.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Let op de dreiging van de tegenstander.</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>Breng je koning in veiligheid.</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>Ontwikkel een stuk.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activeer je koning.</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Een pionzet past hier goed.</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbeter je slechtste stuk.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Verplaats de koning naar {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Verplaats de dame naar {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Verplaats de toren naar {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Verplaats de loper naar {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Verplaats het paard naar {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Verplaats de pion naar {0}.</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kan de tegenstander mat zetten.</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kan een stuk van de tegenstander slaan en zo materiaal winnen.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kan in één zet twee stukken van de tegenstander tegelijk aanvallen.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} kan de koning van de tegenstander schaak geven, en dat geeft je een voordeel.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>De tegenstander dreigt iets. {0} kan de dreiging afweren.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Je koning staat nog in het centrum. Met de rokade breng je hem in veiligheid en activeer je de toren.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} staat nog op de grondlijn. Breng dit stuk naar een actief veld waar het meer velden controleert.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>In het eindspel is de koning een sterk stuk. Breng hem dichter bij de pionnen en naar het centrum.</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Een pionzet verbetert hier je stelling: hij wint ruimte of opent lijnen voor je stukken.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} staat niet ideaal. Zoek een veld waar dit stuk meer doet.</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>Beste zet: {0} (beoordeling {1}).</value></data>
+  <data name="threat.text" xml:space="preserve"><value>Dreigt: {0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>Dreigt: {0}, mat in {1}</value></data>
+  <data name="profile.placement" xml:space="preserve"><value>Inschaling bezig: partij {0} van {1}</value></data>
+  <data name="profile.defaultName" xml:space="preserve"><value>Speler</value></data>
+  <data name="report.moveLabel" xml:space="preserve"><value>Zet {0}, {1}</value></data>
+  <data name="report.after" xml:space="preserve"><value>Daarna: {0}</value></data>
+  <data name="report.better" xml:space="preserve"><value>Beter was: {0}</value></data>
+  <data name="report.opponentMates" xml:space="preserve"><value>De tegenstander kan mat zetten</value></data>
+  <data name="report.winChance" xml:space="preserve"><value>Winstkans van {0} % naar {1} %</value></data>
+  <data name="report.fallback" xml:space="preserve"><value>Nauwkeurigheid {0} %, {1} fouten of zware fouten</value></data>
+  <data name="report.fallbackMoment" xml:space="preserve"><value>. Sleutelmoment: {0}, {1}</value></data>
+  <data name="opening.display" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="san.pieces" xml:space="preserve"><value>KDTLP</value></data>
+  <data name="san.castleShort" xml:space="preserve"><value>0-0</value></data>
+  <data name="san.castleLong" xml:space="preserve"><value>0-0-0</value></data>
+  <data name="llm.badUrl" xml:space="preserve"><value>De server-URL is ongeldig.</value></data>
+  <data name="llm.denied" xml:space="preserve"><value>Toegang geweigerd. Controleer het token.</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>De server meldt fout {0}. {1}</value></data>
+  <data name="llm.noModels" xml:space="preserve"><value>Op dit adres is geen modellijst gevonden. Voer voor Open WebUI bijvoorbeeld https://openwebui.example.com in, voor vLLM http://host:8000/v1.</value></data>
+  <data name="llm.notConfigured" xml:space="preserve"><value>Kies in de instellingen een server en model voor uitleg.</value></data>
+</root>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="language.english" xml:space="preserve"><value>Russian</value></data>
+  <data name="color.white" xml:space="preserve"><value>Белые</value></data>
+  <data name="color.black" xml:space="preserve"><value>Чёрные</value></data>
+  <data name="piece.king" xml:space="preserve"><value>Король</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>Твой король</value></data>
+  <data name="piece.queen" xml:space="preserve"><value>Ферзь</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>Твой ферзь</value></data>
+  <data name="piece.rook" xml:space="preserve"><value>Ладья</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>Твоя ладья</value></data>
+  <data name="piece.bishop" xml:space="preserve"><value>Слон</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>Твой слон</value></data>
+  <data name="piece.knight" xml:space="preserve"><value>Конь</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>Твой конь</value></data>
+  <data name="piece.pawn" xml:space="preserve"><value>Пешка</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>Твоя пешка</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Короли распознаны неточно</value></data>
+  <data name="problem.backRankPawn" xml:space="preserve"><value>Обнаружена пешка на первой горизонтали</value></data>
+  <data name="problem.tooManyPawns" xml:space="preserve"><value>Обнаружено слишком много пешек</value></data>
+  <data name="problem.tooManyWhite" xml:space="preserve"><value>Обнаружено слишком много белых фигур</value></data>
+  <data name="problem.tooManyBlack" xml:space="preserve"><value>Обнаружено слишком много чёрных фигур</value></data>
+  <data name="problem.impossibleMaterial" xml:space="preserve"><value>Невозможное число фигур, проверь распознавание</value></data>
+  <data name="problem.opponentInCheck" xml:space="preserve"><value>Сторона, которая не ходит, находится под шахом</value></data>
+  <data name="result.checkmate" xml:space="preserve"><value>Шах и мат, побеждают {0}</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Пат</value></data>
+  <data name="result.insufficientMaterial" xml:space="preserve"><value>Ничья из-за недостатка материала</value></data>
+  <data name="result.fiftyMoveRule" xml:space="preserve"><value>Ничья по правилу 50 ходов</value></data>
+  <data name="score.checkmate" xml:space="preserve"><value>Шах и мат</value></data>
+  <data name="score.stalemate" xml:space="preserve"><value>Пат</value></data>
+  <data name="score.mateIn" xml:space="preserve"><value>Мат в {0}</value></data>
+  <data name="score.matedIn" xml:space="preserve"><value>Получает мат через {0}</value></data>
+  <data name="move.castleShort" xml:space="preserve"><value>короткая рокировка</value></data>
+  <data name="move.castleLong" xml:space="preserve"><value>длинная рокировка</value></data>
+  <data name="move.capture" xml:space="preserve"><value>{0} {1} берёт {2} {3}</value></data>
+  <data name="move.enPassant" xml:space="preserve"><value>Пешка {0} берёт на проходе на {1}</value></data>
+  <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
+  <data name="move.promotes" xml:space="preserve"><value>, превращается в {0}</value></data>
+  <data name="move.check" xml:space="preserve"><value>, шах</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} атакован и не защищён</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} атакован более слабой фигурой</value></data>
+  <data name="rating.best" xml:space="preserve"><value>Лучший ход</value></data>
+  <data name="rating.good" xml:space="preserve"><value>Хороший ход</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Неточность</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Грубая ошибка</value></data>
+  <data name="level.beginner" xml:space="preserve"><value>Начинающий</value></data>
+  <data name="level.intermediate" xml:space="preserve"><value>Средний</value></data>
+  <data name="level.strong" xml:space="preserve"><value>Сильный</value></data>
+  <data name="skill.pieceSafety" xml:space="preserve"><value>Безопасность фигур</value></data>
+  <data name="skill.pieceSafety.summary" xml:space="preserve"><value>Не оставлять фигуры без защиты и без прикрытия.</value></data>
+  <data name="skill.threats" xml:space="preserve"><value>Угрозы</value></data>
+  <data name="skill.threats.summary" xml:space="preserve"><value>Перед каждым ходом проверять, что задумал соперник.</value></data>
+  <data name="skill.tactics" xml:space="preserve"><value>Тактика</value></data>
+  <data name="skill.tactics.summary" xml:space="preserve"><value>Замечать и использовать вилки, связки, сквозные удары и вскрытые нападения.</value></data>
+  <data name="skill.opening" xml:space="preserve"><value>Дебютные принципы</value></data>
+  <data name="skill.opening.summary" xml:space="preserve"><value>Развивать фигуры, занимать центр, рокироваться пораньше.</value></data>
+  <data name="skill.kingSafety" xml:space="preserve"><value>Безопасность короля</value></data>
+  <data name="skill.kingSafety.summary" xml:space="preserve"><value>Беречь короля и не ослаблять его укрытие без нужды.</value></data>
+  <data name="skill.endgame" xml:space="preserve"><value>Эндшпили</value></data>
+  <data name="skill.endgame.summary" xml:space="preserve"><value>Активизировать короля, проводить пешки, уверенно выигрывать простые эндшпили.</value></data>
+  <data name="skill.middlegame" xml:space="preserve"><value>Планы</value></data>
+  <data name="skill.middlegame.summary" xml:space="preserve"><value>Иметь план в миттельшпиле: улучшать фигуры, атаковать слабости.</value></data>
+  <data name="mistake.hangingPiece" xml:space="preserve"><value>Подставлена фигура</value></data>
+  <data name="mistake.missedThreat" xml:space="preserve"><value>Пропущена угроза</value></data>
+  <data name="mistake.missedTactic" xml:space="preserve"><value>Пропущена тактика</value></data>
+  <data name="mistake.kingSafety" xml:space="preserve"><value>Безопасность короля</value></data>
+  <data name="mistake.openingPrinciple" xml:space="preserve"><value>Дебютный принцип</value></data>
+  <data name="mistake.endgameTechnique" xml:space="preserve"><value>Техника эндшпиля</value></data>
+  <data name="mistake.other" xml:space="preserve"><value>Прочее</value></data>
+  <data name="mistake.example" xml:space="preserve"><value>{0} (потеря {1})</value></data>
+  <data name="focus.label" xml:space="preserve"><value>Учебный акцент: {0}</value></data>
+  <data name="theme.mate" xml:space="preserve"><value>Мат</value></data>
+  <data name="theme.captureGain" xml:space="preserve"><value>Выигрыш материала</value></data>
+  <data name="theme.fork" xml:space="preserve"><value>Вилка</value></data>
+  <data name="theme.check" xml:space="preserve"><value>Шах</value></data>
+  <data name="theme.parryThreat" xml:space="preserve"><value>Отразить угрозу</value></data>
+  <data name="theme.castle" xml:space="preserve"><value>Рокировка</value></data>
+  <data name="theme.develop" xml:space="preserve"><value>Развить фигуру</value></data>
+  <data name="theme.kingActivate" xml:space="preserve"><value>Активизировать короля</value></data>
+  <data name="theme.pawnMove" xml:space="preserve"><value>Ход пешкой</value></data>
+  <data name="theme.improvePiece" xml:space="preserve"><value>Улучшить фигуру</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Здесь можно поставить мат сопернику.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Здесь можно выиграть материал.</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>Ищи вилку: ход, который атакует сразу две фигуры.</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>Шах здесь силён.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Обрати внимание на угрозу соперника.</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>Уведи короля в безопасное место.</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>Развей фигуру.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Активизируй короля.</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Ход пешкой здесь хорошо подходит.</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Улучши свою худшую фигуру.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Сходи короля на {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Сходи ферзя на {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Сходи ладью на {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Сходи слона на {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Сходи коня на {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Сходи пешку на {0}.</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} может поставить мат сопернику.</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} может взять фигуру соперника и выиграть материал.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} может за один ход атаковать сразу две фигуры соперника.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} может объявить шах королю соперника, и это даёт тебе преимущество.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Соперник что-то задумал. {0} может отразить угрозу.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Твой король всё ещё в центре. Рокировка уведёт его в безопасность и активизирует ладью.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} всё ещё стоит на первой горизонтали. Выведи эту фигуру на активное поле, откуда она контролирует больше полей.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>В эндшпиле король — сильная фигура. Приблизь его к пешкам и к центру.</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Ход пешкой улучшает здесь твою позицию: он завоёвывает пространство или открывает линии для твоих фигур.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} стоит не лучшим образом. Найди поле, где эта фигура принесёт больше пользы.</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>Лучший ход: {0} (оценка {1}).</value></data>
+  <data name="threat.text" xml:space="preserve"><value>Угроза: {0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>Угроза: {0}, мат в {1}</value></data>
+  <data name="profile.placement" xml:space="preserve"><value>Определение уровня: партия {0} из {1}</value></data>
+  <data name="profile.defaultName" xml:space="preserve"><value>Игрок</value></data>
+  <data name="report.moveLabel" xml:space="preserve"><value>Ход {0}, {1}</value></data>
+  <data name="report.after" xml:space="preserve"><value>После этого: {0}</value></data>
+  <data name="report.better" xml:space="preserve"><value>Лучше было: {0}</value></data>
+  <data name="report.opponentMates" xml:space="preserve"><value>Соперник может поставить мат</value></data>
+  <data name="report.winChance" xml:space="preserve"><value>Шанс на победу упал с {0} % до {1} %</value></data>
+  <data name="report.fallback" xml:space="preserve"><value>Точность {0} %, ошибок и грубых ошибок: {1}</value></data>
+  <data name="report.fallbackMoment" xml:space="preserve"><value>. Ключевой момент: {0}, {1}</value></data>
+  <data name="opening.display" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="san.pieces" xml:space="preserve"><value>КФЛСК</value></data>
+  <data name="san.castleShort" xml:space="preserve"><value>O-O</value></data>
+  <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
+  <data name="llm.badUrl" xml:space="preserve"><value>Недопустимый URL сервера.</value></data>
+  <data name="llm.denied" xml:space="preserve"><value>Доступ запрещён. Проверь токен.</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Сервер сообщает об ошибке {0}. {1}</value></data>
+  <data name="llm.noModels" xml:space="preserve"><value>По этому адресу список моделей не найден. Для Open WebUI введи, например, https://openwebui.example.com, для vLLM — http://host:8000/v1.</value></data>
+  <data name="llm.notConfigured" xml:space="preserve"><value>Чтобы получать объяснения, выбери сервер и модель в настройках.</value></data>
+</root>

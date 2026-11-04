@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="status.off" xml:space="preserve"><value>Kapalı</value></data>
+  <data name="status.searching" xml:space="preserve"><value>Satranç tahtası aranıyor …</value></data>
+  <data name="status.paused" xml:space="preserve"><value>Duraklatıldı ({0})</value></data>
+  <data name="reason.locked" xml:space="preserve"><value>ekran kilitli</value></data>
+  <data name="reason.sleep" xml:space="preserve"><value>uyku modunda</value></data>
+  <data name="reason.screensaver" xml:space="preserve"><value>ekran koruyucu</value></data>
+  <data name="status.captureFailed" xml:space="preserve"><value>Ekran yakalanamadı</value></data>
+  <data name="status.learned" xml:space="preserve"><value>Taşlar öğrenildi</value></data>
+  <data name="status.unknownPieces" xml:space="preserve"><value>Tahta bulundu, taşlar henüz bilinmiyor</value></data>
+  <data name="overlay.learn" xml:space="preserve"><value>Taşları öğretmek için başlangıç konumunu gösterin</value></data>
+  <data name="status.opponent" xml:space="preserve"><value>{0} oynuyorsunuz · sıra rakipte</value></data>
+  <data name="overlay.opponent" xml:space="preserve"><value>Sıra rakipte</value></data>
+  <data name="status.noEngine" xml:space="preserve"><value>Stockfish bulunamadı (ayarlar)</value></data>
+  <data name="result.mate" xml:space="preserve"><value>Şah mat</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Pat</value></data>
+  <data name="status.playing" xml:space="preserve"><value>{0} oynuyorsunuz · sıra: {1}</value></data>
+  <data name="who.you" xml:space="preserve"><value>sizde</value></data>
+  <data name="who.partner" xml:space="preserve"><value>ortakta</value></data>
+  <data name="player.you" xml:space="preserve"><value>Siz</value></data>
+  <data name="player.colorYou" xml:space="preserve"><value>{0} (siz)</value></data>
+  <data name="player.colorPartner" xml:space="preserve"><value>{0} (ortak)</value></data>
+  <data name="color.white" xml:space="preserve"><value>Beyaz</value></data>
+  <data name="color.black" xml:space="preserve"><value>Siyah</value></data>
+  <data name="rating.best" xml:space="preserve"><value>En iyi hamle</value></data>
+  <data name="rating.good" xml:space="preserve"><value>İyi hamle</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Hatalı hamle</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Yanlış</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Ağır hata</value></data>
+  <data name="review.played" xml:space="preserve"><value>Oynanan: {0} ({1})</value></data>
+  <data name="review.better" xml:space="preserve"><value>Daha iyisi: {0} ({1})</value></data>
+  <data name="review.titleYou" xml:space="preserve"><value>Hamleniz: {0}</value></data>
+  <data name="review.titleWho" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="note.needLlm" xml:space="preserve"><value>Açıklama almak için ayarlardan bir yapay zekâ sunucusu ekleyin.</value></data>
+  <data name="hint.think" xml:space="preserve"><value>Sıra {0} tarafında · kendiniz düşünün</value></data>
+  <data name="hint.turn" xml:space="preserve"><value>Sıra {0} tarafında</value></data>
+  <data name="hint.thinkLine" xml:space="preserve"><value>Kendiniz düşünün. “Sonraki ipucu” ({0}) adım adım daha fazlasını gösterir.</value></data>
+  <data name="hint.l1" xml:space="preserve"><value>İpucu 1: Konu</value></data>
+  <data name="hint.l2" xml:space="preserve"><value>İpucu 2: Taş</value></data>
+  <data name="hint.l2overlay" xml:space="preserve"><value>İpucu 2: bu taş</value></data>
+  <data name="hint.l3" xml:space="preserve"><value>İpucu 3: Fikir</value></data>
+  <data name="hint.noLlmIdea" xml:space="preserve"><value>Bir yapay zekâ sunucusuyla daha ayrıntılı bir fikir verilebilir (ayarlar).</value></data>
+  <data name="hint.fallbackTopic" xml:space="preserve"><value>Konuma dikkatle bakın.</value></data>
+  <data name="hint.fallbackPiece" xml:space="preserve"><value>İşaretli kare, hangi taşın oynaması gerektiğini gösterir.</value></data>
+  <data name="hint.fallbackIdea" xml:space="preserve"><value>Konumunuzu iyileştirin veya bir tehdidi savuşturun.</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="suggest.title" xml:space="preserve"><value>Öneri: {0}</value></data>
+  <data name="suggest.eval" xml:space="preserve"><value>Değerlendirme: {0}</value></data>
+  <data name="suggest.also" xml:space="preserve"><value>Şunlar da olabilir: {0}</value></data>
+  <data name="ask.title" xml:space="preserve"><value>Soru</value></data>
+  <data name="ask.noPosition" xml:space="preserve"><value>Henüz bir konum tanınmadı.</value></data>
+  <data name="ask.needLlm" xml:space="preserve"><value>Yanıt almak için ayarlardan bir yapay zekâ sunucusu ekleyin.</value></data>
+  <data name="ask.cardTitle" xml:space="preserve"><value>Sorunuz: {0}</value></data>
+  <data name="error.explain" xml:space="preserve"><value>Açıklama başarısız oldu: {0}</value></data>
+  <data name="card.loading" xml:space="preserve"><value>Açıklama yazılıyor …</value></data>
+  <data name="card.thanks" xml:space="preserve"><value>Teşekkürler: {0}</value></data>
+  <data name="feedback.long" xml:space="preserve"><value>Çok uzun</value></data>
+  <data name="feedback.short" xml:space="preserve"><value>Çok kısa</value></data>
+  <data name="feedback.helpful" xml:space="preserve"><value>Yararlı</value></data>
+  <data name="panel.nextHint" xml:space="preserve"><value>Sonraki ipucu</value></data>
+  <data name="panel.again" xml:space="preserve"><value>Yeniden açıkla</value></data>
+  <data name="panel.ask" xml:space="preserve"><value>Soru sor …</value></data>
+  <data name="panel.hintOf" xml:space="preserve"><value>İpucu {0} / {1}</value></data>
+  <data name="panel.collapse" xml:space="preserve"><value>Paneli daralt</value></data>
+  <data name="panel.expand" xml:space="preserve"><value>Paneli genişlet</value></data>
+  <data name="panel.opening" xml:space="preserve"><value>Açılış: {0}</value></data>
+  <data name="panel.record" xml:space="preserve"><value>Oyuncu dosyası</value></data>
+  <data name="panel.training" xml:space="preserve"><value>Antrenman</value></data>
+  <data name="panel.report" xml:space="preserve"><value>Değerlendirme</value></data>
+  <data name="gameCard.title" xml:space="preserve"><value>Oyun değerlendirildi</value></data>
+  <data name="gameCard.line" xml:space="preserve"><value>Doğruluk %{0}, {1} yanlış veya ağır hata.</value></data>
+  <data name="gameCard.rating" xml:space="preserve"><value>Puan {0}</value></data>
+  <data name="gameCard.note" xml:space="preserve"><value>Ayrıntılar “Değerlendirme” altında.</value></data>
+  <data name="menu.active" xml:space="preserve"><value>Etkin</value></data>
+  <data name="menu.duo" xml:space="preserve"><value>İki kişilik antrenman</value></data>
+  <data name="menu.explain" xml:space="preserve"><value>Önerileri açıkla</value></data>
+  <data name="menu.review" xml:space="preserve"><value>Hamleleri değerlendir</value></data>
+  <data name="menu.threats" xml:space="preserve"><value>Tehditleri göster</value></data>
+  <data name="menu.side" xml:space="preserve"><value>Oynadığım taraf</value></data>
+  <data name="menu.sideAuto" xml:space="preserve"><value>Otomatik (altta)</value></data>
+  <data name="menu.best" xml:space="preserve"><value>En iyi hamleyi hemen göster</value></data>
+  <data name="menu.always" xml:space="preserve"><value>Her zaman benim için hesapla</value></data>
+  <data name="menu.think" xml:space="preserve"><value>Düşünme süresi</value></data>
+  <data name="menu.nextHint" xml:space="preserve"><value>Sonraki ipucu</value></data>
+  <data name="menu.toggleSide" xml:space="preserve"><value>Hamle sırasını değiştir</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Oyunu bitir</value></data>
+  <data name="menu.copyPgn" xml:space="preserve"><value>Oyunu PGN olarak kopyala</value></data>
+  <data name="menu.resetPanel" xml:space="preserve"><value>Paneli tahtanın yanına geri taşı</value></data>
+  <data name="menu.record" xml:space="preserve"><value>Oyuncu dosyası …</value></data>
+  <data name="menu.training" xml:space="preserve"><value>Antrenman …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Değerlendirme …</value></data>
+  <data name="menu.relearn" xml:space="preserve"><value>Taşları yeniden öğren</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>Ayarlar …</value></data>
+  <data name="menu.quit" xml:space="preserve"><value>Çık</value></data>
+  <data name="settings.title" xml:space="preserve"><value>Chess Coach · Ayarlar</value></data>
+  <data name="settings.llm" xml:space="preserve"><value>Yapay zekâ sunucusu</value></data>
+  <data name="settings.server" xml:space="preserve"><value>Sunucu</value></data>
+  <data name="settings.token" xml:space="preserve"><value>Belirteç</value></data>
+  <data name="settings.loadModels" xml:space="preserve"><value>Modelleri yükle</value></data>
+  <data name="settings.model" xml:space="preserve"><value>Model</value></data>
+  <data name="settings.path" xml:space="preserve"><value>Yol</value></data>
+  <data name="settings.choose" xml:space="preserve"><value>Seç …</value></data>
+  <data name="settings.chooseTitle" xml:space="preserve"><value>Stockfish seç</value></data>
+  <data name="settings.general" xml:space="preserve"><value>Genel</value></data>
+  <data name="settings.autostart" xml:space="preserve"><value>Windows ile başlat</value></data>
+  <data name="settings.language" xml:space="preserve"><value>Dil</value></data>
+  <data name="settings.langSystem" xml:space="preserve"><value>Sistem</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Kısayollar: Ctrl+Alt+H sonraki ipucu, Ctrl+Alt+T hamle sırasını değiştir.</value></data>
+  <data name="settings.expert" xml:space="preserve"><value>Uzman</value></data>
+  <data name="settings.thinkMs" xml:space="preserve"><value>Düşünme süresi (ms)</value></data>
+  <data name="settings.lock" xml:space="preserve"><value>Uzman modunu kilitle</value></data>
+  <data name="settings.sfFound" xml:space="preserve"><value>Bulundu: {0}</value></data>
+  <data name="settings.sfMissing" xml:space="preserve"><value>Bulunamadı. ChessCoach.exe’nin yanına bir “stockfish” klasörü koyun veya yolu buradan seçin.</value></data>
+  <data name="llm.connecting" xml:space="preserve"><value>Bağlanılıyor …</value></data>
+  <data name="llm.found" xml:space="preserve"><value>{0} model bulundu ({1})</value></data>
+  <data name="settings.httpWarning" xml:space="preserve"><value>Sunucu adresi http:// ile başlıyor. Belirteç şifrelenmeden gönderilir. Mümkünse https:// kullanın.</value></data>
+  <data name="common.ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="common.cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="record.title" xml:space="preserve"><value>Chess Coach · Oyuncu dosyası</value></data>
+  <data name="record.new" xml:space="preserve"><value>Yeni profil …</value></data>
+  <data name="record.partner" xml:space="preserve"><value>Ortak olarak kullan</value></data>
+  <data name="record.newName" xml:space="preserve"><value>Yeni profilin adı</value></data>
+  <data name="record.rating" xml:space="preserve"><value>Puan</value></data>
+  <data name="record.games" xml:space="preserve"><value>{0} oyun değerlendirildi</value></data>
+  <data name="record.history" xml:space="preserve"><value>Puan geçmişi</value></data>
+  <data name="record.noHistory" xml:space="preserve"><value>Henüz yeterli oyun yok.</value></data>
+  <data name="record.skills" xml:space="preserve"><value>Beceriler</value></data>
+  <data name="record.mistakes" xml:space="preserve"><value>En sık yapılan hatalar</value></data>
+  <data name="record.none" xml:space="preserve"><value>Henüz yok.</value></data>
+  <data name="record.puzzles" xml:space="preserve"><value>Bulmacalar</value></data>
+  <data name="record.puzzleStats" xml:space="preserve"><value>toplam {0} · {1} tekrar zamanı gelmiş · {2} öğrenilmiş · {3} deneme · son başarı {4} · tempo {5}</value></data>
+  <data name="record.hints" xml:space="preserve"><value>Hamle başına kullanılan ipuçları</value></data>
+  <data name="record.noHint" xml:space="preserve"><value>yok</value></data>
+  <data name="record.style" xml:space="preserve"><value>Açıklama tarzı</value></data>
+  <data name="record.lastGames" xml:space="preserve"><value>Son oyunlar</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Değerlendirme</value></data>
+  <data name="report.noOpening" xml:space="preserve"><value>açılış yok</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Henüz değerlendirilmiş oyun yok. Bir oyun bittiğinde değerlendirilir.</value></data>
+  <data name="report.opening" xml:space="preserve"><value>Açılış: {0}</value></data>
+  <data name="report.white" xml:space="preserve"><value>Beyaz</value></data>
+  <data name="report.black" xml:space="preserve"><value>Siyah</value></data>
+  <data name="report.sideStats" xml:space="preserve"><value>Doğruluk %{0} · ortalama kayıp {1} · performans {2}</value></data>
+  <data name="report.counts" xml:space="preserve"><value>{0} en iyi · {1} iyi · {2} hatalı hamle · {3} yanlış · {4} ağır hata</value></data>
+  <data name="report.moments" xml:space="preserve"><value>Kritik anlar</value></data>
+  <data name="report.summary" xml:space="preserve"><value>Özet</value></data>
+  <data name="report.copyPgn" xml:space="preserve"><value>PGN’yi kopyala</value></data>
+  <data name="training.title" xml:space="preserve"><value>Chess Coach · Antrenman</value></data>
+  <data name="training.hint" xml:space="preserve"><value>Sonraki ipucu</value></data>
+  <data name="training.solution" xml:space="preserve"><value>Çözümü göster</value></data>
+  <data name="training.next" xml:space="preserve"><value>Sonraki bulmaca</value></data>
+  <data name="training.noneDue" xml:space="preserve"><value>Bugün tekrar zamanı gelmiş bulmaca yok. Bulmacalar oyunlardaki hatalarınızdan gelir.</value></data>
+  <data name="training.done" xml:space="preserve"><value>Bugünün tüm bulmacaları tamamlandı.</value></data>
+  <data name="training.progress" xml:space="preserve"><value>Bulmaca {0} / {1}</value></data>
+  <data name="training.find" xml:space="preserve"><value>Sıra {0} tarafında. En iyi hamleyi bulun.</value></data>
+  <data name="training.correct" xml:space="preserve"><value>Doğru: {0}</value></data>
+  <data name="training.wrong" xml:space="preserve"><value>Pek değil. Tekrar deneyin veya bir ipucu kullanın.</value></data>
+  <data name="training.best" xml:space="preserve"><value>En iyi hamle: {0}</value></data>
+  <data name="menu.checkUpdates" xml:space="preserve"><value>Güncellemeleri denetle …</value></data>
+  <data name="update.current" xml:space="preserve"><value>Chess Coach güncel.</value></data>
+  <data name="update.ready" xml:space="preserve"><value>{0} güncellemesi hazır ve çıkışta yüklenecek.</value></data>
+  <data name="update.failed" xml:space="preserve"><value>Güncelleme denetimi başarısız oldu: {0}</value></data>
+  <data name="update.prompt" xml:space="preserve"><value>{0} sürümü mevcut. Şimdi yüklenip yeniden başlatılsın mı?</value></data>
+  <data name="settings.autoUpdate" xml:space="preserve"><value>Güncellemeleri otomatik yükle</value></data>
+  <data name="settings.restartPrompt" xml:space="preserve"><value>Yeni dilin uygulanması için Chess Coach şimdi yeniden başlatılsın mı?</value></data>
+  <data name="player.default" xml:space="preserve"><value>Oyuncu</value></data>
+  <data name="player.partner" xml:space="preserve"><value>Ortak</value></data>
+  <data name="update.openPage" xml:space="preserve"><value>{0} sürümü mevcut. İndirme sayfası açılsın mı?</value></data>
+</root>

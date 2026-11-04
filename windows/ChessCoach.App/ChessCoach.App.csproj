@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>ChessCoach.App</RootNamespace>
+    <AssemblyName>ChessCoach</AssemblyName>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <StartupObject>ChessCoach.App.Program</StartupObject>
+    <SatelliteResourceLanguages>en;de;fr;es;it;pt-BR;nl;pl;tr;ru;uk;zh-Hans;ja;ko</SatelliteResourceLanguages>
+    <Version>0.1.0</Version>
+    <TieredPGO>false</TieredPGO>
+    <ServerGarbageCollector>false</ServerGarbageCollector>
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <UseSystemResourceKeys>false</UseSystemResourceKeys>
+    <DebugType>none</DebugType>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <NoWarn>$(NoWarn);WFO0003;CS0649</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChessCoach.Core\ChessCoach.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(OfficialBuild)' == 'true'">
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Official</_Parameter1>
+      <_Parameter2>true</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+    <Using Include="System.IO" />
+    <Using Include="System.Net.Http" />
+    <Using Include="System.Threading.Tasks" />
+    <Using Include="System.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\tray-light.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\tray-dark.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\app.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\ChessCoach\Resources\openings.tsv" Link="Resources\openings.tsv" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

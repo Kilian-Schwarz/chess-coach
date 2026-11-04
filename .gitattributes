@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.sln text eol=crlf
+*.ps1 text eol=crlf
+*.png binary
+*.ico binary
+*.icns binary
+*.jpg binary
+*.dmg binary
+*.zip binary
+*.xcassets/** -text

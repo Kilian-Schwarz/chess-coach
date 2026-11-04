@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="status.off" xml:space="preserve"><value>Выключено</value></data>
+  <data name="status.searching" xml:space="preserve"><value>Поиск шахматной доски …</value></data>
+  <data name="status.paused" xml:space="preserve"><value>Пауза ({0})</value></data>
+  <data name="reason.locked" xml:space="preserve"><value>экран заблокирован</value></data>
+  <data name="reason.sleep" xml:space="preserve"><value>спящий режим</value></data>
+  <data name="reason.screensaver" xml:space="preserve"><value>заставка</value></data>
+  <data name="status.captureFailed" xml:space="preserve"><value>Не удалось захватить экран</value></data>
+  <data name="status.learned" xml:space="preserve"><value>Фигуры распознаны</value></data>
+  <data name="status.unknownPieces" xml:space="preserve"><value>Доска найдена, фигуры пока неизвестны</value></data>
+  <data name="overlay.learn" xml:space="preserve"><value>Покажите начальную позицию, чтобы научить программу фигурам</value></data>
+  <data name="status.opponent" xml:space="preserve"><value>Вы играете за {0} · ход соперника</value></data>
+  <data name="overlay.opponent" xml:space="preserve"><value>Ход соперника</value></data>
+  <data name="status.noEngine" xml:space="preserve"><value>Stockfish не найден (настройки)</value></data>
+  <data name="result.mate" xml:space="preserve"><value>Мат</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Пат</value></data>
+  <data name="status.playing" xml:space="preserve"><value>Вы играете за {0} · ход: {1}</value></data>
+  <data name="who.you" xml:space="preserve"><value>ваш</value></data>
+  <data name="who.partner" xml:space="preserve"><value>партнёр</value></data>
+  <data name="player.you" xml:space="preserve"><value>Вы</value></data>
+  <data name="player.colorYou" xml:space="preserve"><value>{0} (вы)</value></data>
+  <data name="player.colorPartner" xml:space="preserve"><value>{0} (партнёр)</value></data>
+  <data name="color.white" xml:space="preserve"><value>Белые</value></data>
+  <data name="color.black" xml:space="preserve"><value>Чёрные</value></data>
+  <data name="rating.best" xml:space="preserve"><value>Лучший ход</value></data>
+  <data name="rating.good" xml:space="preserve"><value>Хороший ход</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Неточность</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Ошибка</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Грубая ошибка</value></data>
+  <data name="review.played" xml:space="preserve"><value>Сыграно: {0} ({1})</value></data>
+  <data name="review.better" xml:space="preserve"><value>Лучше: {0} ({1})</value></data>
+  <data name="review.titleYou" xml:space="preserve"><value>Ваш ход: {0}</value></data>
+  <data name="review.titleWho" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="note.needLlm" xml:space="preserve"><value>Добавьте ИИ-сервер в настройках, чтобы получать объяснения.</value></data>
+  <data name="hint.think" xml:space="preserve"><value>Ход: {0} · подумайте сами</value></data>
+  <data name="hint.turn" xml:space="preserve"><value>Ход: {0}</value></data>
+  <data name="hint.thinkLine" xml:space="preserve"><value>Подумайте сами. «Следующая подсказка» ({0}) раскрывает больше шаг за шагом.</value></data>
+  <data name="hint.l1" xml:space="preserve"><value>Подсказка 1: тема</value></data>
+  <data name="hint.l2" xml:space="preserve"><value>Подсказка 2: фигура</value></data>
+  <data name="hint.l2overlay" xml:space="preserve"><value>Подсказка 2: эта фигура</value></data>
+  <data name="hint.l3" xml:space="preserve"><value>Подсказка 3: идея</value></data>
+  <data name="hint.noLlmIdea" xml:space="preserve"><value>С ИИ-сервером идея была бы подробнее (настройки).</value></data>
+  <data name="hint.fallbackTopic" xml:space="preserve"><value>Внимательно посмотрите на позицию.</value></data>
+  <data name="hint.fallbackPiece" xml:space="preserve"><value>Отмеченное поле показывает, какой фигурой нужно ходить.</value></data>
+  <data name="hint.fallbackIdea" xml:space="preserve"><value>Улучшите свою позицию или отразите угрозу.</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="suggest.title" xml:space="preserve"><value>Предложение: {0}</value></data>
+  <data name="suggest.eval" xml:space="preserve"><value>Оценка: {0}</value></data>
+  <data name="suggest.also" xml:space="preserve"><value>Также возможно: {0}</value></data>
+  <data name="ask.title" xml:space="preserve"><value>Вопрос</value></data>
+  <data name="ask.noPosition" xml:space="preserve"><value>Позиция пока не распознана.</value></data>
+  <data name="ask.needLlm" xml:space="preserve"><value>Добавьте ИИ-сервер в настройках, чтобы получать ответы.</value></data>
+  <data name="ask.cardTitle" xml:space="preserve"><value>Ваш вопрос: {0}</value></data>
+  <data name="error.explain" xml:space="preserve"><value>Не удалось получить объяснение: {0}</value></data>
+  <data name="card.loading" xml:space="preserve"><value>Пишу объяснение …</value></data>
+  <data name="card.thanks" xml:space="preserve"><value>Спасибо: {0}</value></data>
+  <data name="feedback.long" xml:space="preserve"><value>Слишком длинно</value></data>
+  <data name="feedback.short" xml:space="preserve"><value>Слишком коротко</value></data>
+  <data name="feedback.helpful" xml:space="preserve"><value>Полезно</value></data>
+  <data name="panel.nextHint" xml:space="preserve"><value>Следующая подсказка</value></data>
+  <data name="panel.again" xml:space="preserve"><value>Объяснить ещё раз</value></data>
+  <data name="panel.ask" xml:space="preserve"><value>Задать вопрос …</value></data>
+  <data name="panel.hintOf" xml:space="preserve"><value>Подсказка {0} из {1}</value></data>
+  <data name="panel.collapse" xml:space="preserve"><value>Свернуть панель</value></data>
+  <data name="panel.expand" xml:space="preserve"><value>Развернуть панель</value></data>
+  <data name="panel.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
+  <data name="panel.record" xml:space="preserve"><value>Карточка игрока</value></data>
+  <data name="panel.training" xml:space="preserve"><value>Тренировка</value></data>
+  <data name="panel.report" xml:space="preserve"><value>Разбор</value></data>
+  <data name="gameCard.title" xml:space="preserve"><value>Партия разобрана</value></data>
+  <data name="gameCard.line" xml:space="preserve"><value>Точность {0} %, ошибок и грубых ошибок: {1}.</value></data>
+  <data name="gameCard.rating" xml:space="preserve"><value>Рейтинг {0}</value></data>
+  <data name="gameCard.note" xml:space="preserve"><value>Подробнее в разделе «Разбор».</value></data>
+  <data name="menu.active" xml:space="preserve"><value>Включено</value></data>
+  <data name="menu.duo" xml:space="preserve"><value>Тренировка вдвоём</value></data>
+  <data name="menu.explain" xml:space="preserve"><value>Объяснять предложения</value></data>
+  <data name="menu.review" xml:space="preserve"><value>Оценивать ходы</value></data>
+  <data name="menu.threats" xml:space="preserve"><value>Показывать угрозы</value></data>
+  <data name="menu.side" xml:space="preserve"><value>Я играю за</value></data>
+  <data name="menu.sideAuto" xml:space="preserve"><value>Автоматически (внизу)</value></data>
+  <data name="menu.best" xml:space="preserve"><value>Сразу показывать лучший ход</value></data>
+  <data name="menu.always" xml:space="preserve"><value>Всегда считать за меня</value></data>
+  <data name="menu.think" xml:space="preserve"><value>Время на размышление</value></data>
+  <data name="menu.nextHint" xml:space="preserve"><value>Следующая подсказка</value></data>
+  <data name="menu.toggleSide" xml:space="preserve"><value>Сменить сторону, которая ходит</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Завершить партию</value></data>
+  <data name="menu.copyPgn" xml:space="preserve"><value>Скопировать партию в PGN</value></data>
+  <data name="menu.resetPanel" xml:space="preserve"><value>Вернуть панель к доске</value></data>
+  <data name="menu.record" xml:space="preserve"><value>Карточка игрока …</value></data>
+  <data name="menu.training" xml:space="preserve"><value>Тренировка …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Разбор …</value></data>
+  <data name="menu.relearn" xml:space="preserve"><value>Заново распознать фигуры</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>Настройки …</value></data>
+  <data name="menu.quit" xml:space="preserve"><value>Выйти</value></data>
+  <data name="settings.title" xml:space="preserve"><value>Chess Coach · Настройки</value></data>
+  <data name="settings.llm" xml:space="preserve"><value>ИИ-сервер</value></data>
+  <data name="settings.server" xml:space="preserve"><value>Сервер</value></data>
+  <data name="settings.token" xml:space="preserve"><value>Токен</value></data>
+  <data name="settings.loadModels" xml:space="preserve"><value>Загрузить модели</value></data>
+  <data name="settings.model" xml:space="preserve"><value>Модель</value></data>
+  <data name="settings.path" xml:space="preserve"><value>Путь</value></data>
+  <data name="settings.choose" xml:space="preserve"><value>Выбрать …</value></data>
+  <data name="settings.chooseTitle" xml:space="preserve"><value>Выбор Stockfish</value></data>
+  <data name="settings.general" xml:space="preserve"><value>Общие</value></data>
+  <data name="settings.autostart" xml:space="preserve"><value>Запускать вместе с Windows</value></data>
+  <data name="settings.language" xml:space="preserve"><value>Язык</value></data>
+  <data name="settings.langSystem" xml:space="preserve"><value>Системный</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Сочетания клавиш: Ctrl+Alt+H следующая подсказка, Ctrl+Alt+T смена стороны, которая ходит.</value></data>
+  <data name="settings.expert" xml:space="preserve"><value>Эксперт</value></data>
+  <data name="settings.thinkMs" xml:space="preserve"><value>Время на размышление (мс)</value></data>
+  <data name="settings.lock" xml:space="preserve"><value>Заблокировать режим эксперта</value></data>
+  <data name="settings.sfFound" xml:space="preserve"><value>Найден: {0}</value></data>
+  <data name="settings.sfMissing" xml:space="preserve"><value>Не найден. Положите папку «stockfish» рядом с ChessCoach.exe или выберите путь здесь.</value></data>
+  <data name="llm.connecting" xml:space="preserve"><value>Подключение …</value></data>
+  <data name="llm.found" xml:space="preserve"><value>Найдено моделей: {0} ({1})</value></data>
+  <data name="settings.httpWarning" xml:space="preserve"><value>Адрес сервера начинается с http://. Токен будет отправлен без шифрования. По возможности используйте https://.</value></data>
+  <data name="common.ok" xml:space="preserve"><value>OK</value></data>
+  <data name="common.cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="record.title" xml:space="preserve"><value>Chess Coach · Карточка игрока</value></data>
+  <data name="record.new" xml:space="preserve"><value>Новый профиль …</value></data>
+  <data name="record.partner" xml:space="preserve"><value>Использовать как партнёра</value></data>
+  <data name="record.newName" xml:space="preserve"><value>Имя нового профиля</value></data>
+  <data name="record.rating" xml:space="preserve"><value>Рейтинг</value></data>
+  <data name="record.games" xml:space="preserve"><value>Разобрано партий: {0}</value></data>
+  <data name="record.history" xml:space="preserve"><value>История рейтинга</value></data>
+  <data name="record.noHistory" xml:space="preserve"><value>Пока слишком мало партий.</value></data>
+  <data name="record.skills" xml:space="preserve"><value>Навыки</value></data>
+  <data name="record.mistakes" xml:space="preserve"><value>Самые частые ошибки</value></data>
+  <data name="record.none" xml:space="preserve"><value>Пока нет.</value></data>
+  <data name="record.puzzles" xml:space="preserve"><value>Задачи</value></data>
+  <data name="record.puzzleStats" xml:space="preserve"><value>всего {0} · к повторению {1} · освоено {2} · попыток {3} · недавняя успешность {4} · темп {5}</value></data>
+  <data name="record.hints" xml:space="preserve"><value>Использованные подсказки на ход</value></data>
+  <data name="record.noHint" xml:space="preserve"><value>нет</value></data>
+  <data name="record.style" xml:space="preserve"><value>Стиль объяснений</value></data>
+  <data name="record.lastGames" xml:space="preserve"><value>Последние партии</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Разбор</value></data>
+  <data name="report.noOpening" xml:space="preserve"><value>без дебюта</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Разобранных партий пока нет. Партия разбирается по окончании.</value></data>
+  <data name="report.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
+  <data name="report.white" xml:space="preserve"><value>Белые</value></data>
+  <data name="report.black" xml:space="preserve"><value>Чёрные</value></data>
+  <data name="report.sideStats" xml:space="preserve"><value>Точность {0} % · средняя потеря {1} · результативность {2}</value></data>
+  <data name="report.counts" xml:space="preserve"><value>лучших {0} · хороших {1} · неточностей {2} · ошибок {3} · грубых ошибок {4}</value></data>
+  <data name="report.moments" xml:space="preserve"><value>Ключевые моменты</value></data>
+  <data name="report.summary" xml:space="preserve"><value>Итог</value></data>
+  <data name="report.copyPgn" xml:space="preserve"><value>Скопировать PGN</value></data>
+  <data name="training.title" xml:space="preserve"><value>Chess Coach · Тренировка</value></data>
+  <data name="training.hint" xml:space="preserve"><value>Следующая подсказка</value></data>
+  <data name="training.solution" xml:space="preserve"><value>Показать решение</value></data>
+  <data name="training.next" xml:space="preserve"><value>Следующая задача</value></data>
+  <data name="training.noneDue" xml:space="preserve"><value>На сегодня задач для повторения нет. Они берутся из ваших ошибок в партиях.</value></data>
+  <data name="training.done" xml:space="preserve"><value>Все задачи на сегодня решены.</value></data>
+  <data name="training.progress" xml:space="preserve"><value>Задача {0} из {1}</value></data>
+  <data name="training.find" xml:space="preserve"><value>Ход: {0}. Найдите лучший ход.</value></data>
+  <data name="training.correct" xml:space="preserve"><value>Верно: {0}</value></data>
+  <data name="training.wrong" xml:space="preserve"><value>Не совсем. Попробуйте ещё раз или воспользуйтесь подсказкой.</value></data>
+  <data name="training.best" xml:space="preserve"><value>Лучший ход: {0}</value></data>
+  <data name="menu.checkUpdates" xml:space="preserve"><value>Проверить обновления …</value></data>
+  <data name="update.current" xml:space="preserve"><value>У вас последняя версия Chess Coach.</value></data>
+  <data name="update.ready" xml:space="preserve"><value>Обновление {0} готово и будет установлено при выходе.</value></data>
+  <data name="update.failed" xml:space="preserve"><value>Не удалось проверить обновления: {0}</value></data>
+  <data name="update.prompt" xml:space="preserve"><value>Доступна версия {0}. Установить сейчас и перезапустить?</value></data>
+  <data name="settings.autoUpdate" xml:space="preserve"><value>Устанавливать обновления автоматически</value></data>
+  <data name="settings.restartPrompt" xml:space="preserve"><value>Перезапустить Chess Coach сейчас, чтобы применить новый язык?</value></data>
+  <data name="player.default" xml:space="preserve"><value>Игрок</value></data>
+  <data name="player.partner" xml:space="preserve"><value>Партнёр</value></data>
+  <data name="update.openPage" xml:space="preserve"><value>Доступна версия {0}. Открыть страницу загрузки?</value></data>
+</root>

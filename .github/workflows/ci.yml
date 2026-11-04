@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install tools
+        run: brew install xcodegen stockfish
+      - name: Core tests
+        run: SKIP_LLM=1 Tools/run-tests.sh
+      - name: Updater tests
+        run: Tools/release/test-updater.sh
+      - name: Check strings
+        run: python3 Tools/check-strings.py
+      - name: Build app (unsigned)
+        run: |
+          xcodegen generate
+          xcodebuild -project ChessCoach.xcodeproj -scheme ChessCoach -configuration Release \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+
+  windows-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: 10.0.x
+      - name: Install Stockfish
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y stockfish
+          sudo ln -sf /usr/games/stockfish /usr/local/bin/stockfish
+      - name: Test
+        run: dotnet test windows/ChessCoach.Core.Tests/ChessCoach.Core.Tests.csproj -c Release
+
+  windows-app:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: 10.0.x
+      - name: Build
+        run: dotnet build windows/ChessCoach.App/ChessCoach.App.csproj -c Release
+      - name: App tests
+        run: dotnet test windows/ChessCoach.App.Tests/ChessCoach.App.Tests.csproj -c Release

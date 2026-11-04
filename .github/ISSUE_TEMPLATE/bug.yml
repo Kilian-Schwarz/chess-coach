@@ -1,0 +1,47 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: [macOS, Windows]
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS version
+    validations:
+      required: true
+  - type: input
+    id: site
+    attributes:
+      label: Chess site or app showing the board
+      description: For example lichess.org, chess.com, a desktop program. Mention the piece set and board theme if you changed them.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Log excerpt
+      description: Remove anything private before pasting. Never paste API tokens.
+      render: text

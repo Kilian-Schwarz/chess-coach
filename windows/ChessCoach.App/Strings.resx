@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="status.off" xml:space="preserve"><value>Off</value></data>
+  <data name="status.searching" xml:space="preserve"><value>Looking for a chess board …</value></data>
+  <data name="status.paused" xml:space="preserve"><value>Paused ({0})</value></data>
+  <data name="reason.locked" xml:space="preserve"><value>screen locked</value></data>
+  <data name="reason.sleep" xml:space="preserve"><value>sleeping</value></data>
+  <data name="reason.screensaver" xml:space="preserve"><value>screensaver</value></data>
+  <data name="status.captureFailed" xml:space="preserve"><value>Screen capture failed</value></data>
+  <data name="status.learned" xml:space="preserve"><value>Pieces learned</value></data>
+  <data name="status.unknownPieces" xml:space="preserve"><value>Board found, pieces not known yet</value></data>
+  <data name="overlay.learn" xml:space="preserve"><value>Show the starting position to teach the pieces</value></data>
+  <data name="status.opponent" xml:space="preserve"><value>You play {0} · opponent to move</value></data>
+  <data name="overlay.opponent" xml:space="preserve"><value>Opponent to move</value></data>
+  <data name="status.noEngine" xml:space="preserve"><value>Stockfish not found (settings)</value></data>
+  <data name="result.mate" xml:space="preserve"><value>Checkmate</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Stalemate</value></data>
+  <data name="status.playing" xml:space="preserve"><value>You play {0} · {1} to move</value></data>
+  <data name="who.you" xml:space="preserve"><value>you</value></data>
+  <data name="who.partner" xml:space="preserve"><value>partner</value></data>
+  <data name="player.you" xml:space="preserve"><value>You</value></data>
+  <data name="player.colorYou" xml:space="preserve"><value>{0} (you)</value></data>
+  <data name="player.colorPartner" xml:space="preserve"><value>{0} (partner)</value></data>
+  <data name="color.white" xml:space="preserve"><value>White</value></data>
+  <data name="color.black" xml:space="preserve"><value>Black</value></data>
+  <data name="rating.best" xml:space="preserve"><value>Best move</value></data>
+  <data name="rating.good" xml:space="preserve"><value>Good move</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Inaccuracy</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Mistake</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Blunder</value></data>
+  <data name="review.played" xml:space="preserve"><value>Played: {0} ({1})</value></data>
+  <data name="review.better" xml:space="preserve"><value>Better: {0} ({1})</value></data>
+  <data name="review.titleYou" xml:space="preserve"><value>Your move: {0}</value></data>
+  <data name="review.titleWho" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="note.needLlm" xml:space="preserve"><value>Add an AI server in the settings to get explanations.</value></data>
+  <data name="hint.think" xml:space="preserve"><value>{0} to move · think for yourself</value></data>
+  <data name="hint.turn" xml:space="preserve"><value>{0} to move</value></data>
+  <data name="hint.thinkLine" xml:space="preserve"><value>Think for yourself. “Next hint” ({0}) reveals more step by step.</value></data>
+  <data name="hint.l1" xml:space="preserve"><value>Hint 1: Topic</value></data>
+  <data name="hint.l2" xml:space="preserve"><value>Hint 2: Piece</value></data>
+  <data name="hint.l2overlay" xml:space="preserve"><value>Hint 2: this piece</value></data>
+  <data name="hint.l3" xml:space="preserve"><value>Hint 3: Idea</value></data>
+  <data name="hint.noLlmIdea" xml:space="preserve"><value>With an AI server there would be a fuller idea (settings).</value></data>
+  <data name="hint.fallbackTopic" xml:space="preserve"><value>Look at the position carefully.</value></data>
+  <data name="hint.fallbackPiece" xml:space="preserve"><value>The marked square shows which piece should move.</value></data>
+  <data name="hint.fallbackIdea" xml:space="preserve"><value>Improve your position or parry a threat.</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="suggest.title" xml:space="preserve"><value>Suggestion: {0}</value></data>
+  <data name="suggest.eval" xml:space="preserve"><value>Evaluation: {0}</value></data>
+  <data name="suggest.also" xml:space="preserve"><value>Also possible: {0}</value></data>
+  <data name="ask.title" xml:space="preserve"><value>Question</value></data>
+  <data name="ask.noPosition" xml:space="preserve"><value>No position recognised yet.</value></data>
+  <data name="ask.needLlm" xml:space="preserve"><value>Add an AI server in the settings to get answers.</value></data>
+  <data name="ask.cardTitle" xml:space="preserve"><value>Your question: {0}</value></data>
+  <data name="error.explain" xml:space="preserve"><value>Explanation failed: {0}</value></data>
+  <data name="card.loading" xml:space="preserve"><value>Writing explanation …</value></data>
+  <data name="card.thanks" xml:space="preserve"><value>Thanks: {0}</value></data>
+  <data name="feedback.long" xml:space="preserve"><value>Too long</value></data>
+  <data name="feedback.short" xml:space="preserve"><value>Too short</value></data>
+  <data name="feedback.helpful" xml:space="preserve"><value>Helpful</value></data>
+  <data name="panel.nextHint" xml:space="preserve"><value>Next hint</value></data>
+  <data name="panel.again" xml:space="preserve"><value>Explain again</value></data>
+  <data name="panel.ask" xml:space="preserve"><value>Ask a question …</value></data>
+  <data name="panel.hintOf" xml:space="preserve"><value>Hint {0} of {1}</value></data>
+  <data name="panel.collapse" xml:space="preserve"><value>Collapse panel</value></data>
+  <data name="panel.expand" xml:space="preserve"><value>Expand panel</value></data>
+  <data name="panel.opening" xml:space="preserve"><value>Opening: {0}</value></data>
+  <data name="panel.record" xml:space="preserve"><value>Player record</value></data>
+  <data name="panel.training" xml:space="preserve"><value>Training</value></data>
+  <data name="panel.report" xml:space="preserve"><value>Evaluation</value></data>
+  <data name="gameCard.title" xml:space="preserve"><value>Game evaluated</value></data>
+  <data name="gameCard.line" xml:space="preserve"><value>Accuracy {0} %, {1} mistakes or blunders.</value></data>
+  <data name="gameCard.rating" xml:space="preserve"><value>Rating {0}</value></data>
+  <data name="gameCard.note" xml:space="preserve"><value>More under “Evaluation”.</value></data>
+  <data name="menu.active" xml:space="preserve"><value>Active</value></data>
+  <data name="menu.duo" xml:space="preserve"><value>Training for two</value></data>
+  <data name="menu.explain" xml:space="preserve"><value>Explain suggestions</value></data>
+  <data name="menu.review" xml:space="preserve"><value>Rate moves</value></data>
+  <data name="menu.threats" xml:space="preserve"><value>Show threats</value></data>
+  <data name="menu.side" xml:space="preserve"><value>I play</value></data>
+  <data name="menu.sideAuto" xml:space="preserve"><value>Automatic (bottom)</value></data>
+  <data name="menu.best" xml:space="preserve"><value>Show best move immediately</value></data>
+  <data name="menu.always" xml:space="preserve"><value>Always calculate for me</value></data>
+  <data name="menu.think" xml:space="preserve"><value>Thinking time</value></data>
+  <data name="menu.nextHint" xml:space="preserve"><value>Next hint</value></data>
+  <data name="menu.toggleSide" xml:space="preserve"><value>Switch side to move</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>End game</value></data>
+  <data name="menu.copyPgn" xml:space="preserve"><value>Copy game as PGN</value></data>
+  <data name="menu.resetPanel" xml:space="preserve"><value>Move panel back next to the board</value></data>
+  <data name="menu.record" xml:space="preserve"><value>Player record …</value></data>
+  <data name="menu.training" xml:space="preserve"><value>Training …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Evaluation …</value></data>
+  <data name="menu.relearn" xml:space="preserve"><value>Relearn pieces</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>Settings …</value></data>
+  <data name="menu.quit" xml:space="preserve"><value>Quit</value></data>
+  <data name="settings.title" xml:space="preserve"><value>Chess Coach · Settings</value></data>
+  <data name="settings.llm" xml:space="preserve"><value>AI server</value></data>
+  <data name="settings.server" xml:space="preserve"><value>Server</value></data>
+  <data name="settings.token" xml:space="preserve"><value>Token</value></data>
+  <data name="settings.loadModels" xml:space="preserve"><value>Load models</value></data>
+  <data name="settings.model" xml:space="preserve"><value>Model</value></data>
+  <data name="settings.path" xml:space="preserve"><value>Path</value></data>
+  <data name="settings.choose" xml:space="preserve"><value>Choose …</value></data>
+  <data name="settings.chooseTitle" xml:space="preserve"><value>Choose Stockfish</value></data>
+  <data name="settings.general" xml:space="preserve"><value>General</value></data>
+  <data name="settings.autostart" xml:space="preserve"><value>Start with Windows</value></data>
+  <data name="settings.language" xml:space="preserve"><value>Language</value></data>
+  <data name="settings.langSystem" xml:space="preserve"><value>System</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>Shortcuts: Ctrl+Alt+H next hint, Ctrl+Alt+T switch side to move.</value></data>
+  <data name="settings.expert" xml:space="preserve"><value>Expert</value></data>
+  <data name="settings.thinkMs" xml:space="preserve"><value>Thinking time (ms)</value></data>
+  <data name="settings.lock" xml:space="preserve"><value>Lock expert mode</value></data>
+  <data name="settings.sfFound" xml:space="preserve"><value>Found: {0}</value></data>
+  <data name="settings.sfMissing" xml:space="preserve"><value>Not found. Put a “stockfish” folder next to ChessCoach.exe or choose the path here.</value></data>
+  <data name="llm.connecting" xml:space="preserve"><value>Connecting …</value></data>
+  <data name="llm.found" xml:space="preserve"><value>{0} models found ({1})</value></data>
+  <data name="settings.httpWarning" xml:space="preserve"><value>The server address starts with http://. Your token would be sent unencrypted. Use https:// if you can.</value></data>
+  <data name="common.ok" xml:space="preserve"><value>OK</value></data>
+  <data name="common.cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="record.title" xml:space="preserve"><value>Chess Coach · Player record</value></data>
+  <data name="record.new" xml:space="preserve"><value>New profile …</value></data>
+  <data name="record.partner" xml:space="preserve"><value>Use as partner</value></data>
+  <data name="record.newName" xml:space="preserve"><value>Name of the new profile</value></data>
+  <data name="record.rating" xml:space="preserve"><value>Rating</value></data>
+  <data name="record.games" xml:space="preserve"><value>{0} games evaluated</value></data>
+  <data name="record.history" xml:space="preserve"><value>Rating history</value></data>
+  <data name="record.noHistory" xml:space="preserve"><value>Not enough games yet.</value></data>
+  <data name="record.skills" xml:space="preserve"><value>Skills</value></data>
+  <data name="record.mistakes" xml:space="preserve"><value>Most common mistakes</value></data>
+  <data name="record.none" xml:space="preserve"><value>None yet.</value></data>
+  <data name="record.puzzles" xml:space="preserve"><value>Puzzles</value></data>
+  <data name="record.puzzleStats" xml:space="preserve"><value>{0} total · {1} due · {2} mastered · {3} attempts · recent success {4} · pace {5}</value></data>
+  <data name="record.hints" xml:space="preserve"><value>Hints used per move</value></data>
+  <data name="record.noHint" xml:space="preserve"><value>none</value></data>
+  <data name="record.style" xml:space="preserve"><value>Explanation style</value></data>
+  <data name="record.lastGames" xml:space="preserve"><value>Recent games</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Evaluation</value></data>
+  <data name="report.noOpening" xml:space="preserve"><value>no opening</value></data>
+  <data name="report.empty" xml:space="preserve"><value>No evaluated games yet. A game is evaluated when it ends.</value></data>
+  <data name="report.opening" xml:space="preserve"><value>Opening: {0}</value></data>
+  <data name="report.white" xml:space="preserve"><value>White</value></data>
+  <data name="report.black" xml:space="preserve"><value>Black</value></data>
+  <data name="report.sideStats" xml:space="preserve"><value>Accuracy {0} % · average loss {1} · performance {2}</value></data>
+  <data name="report.counts" xml:space="preserve"><value>{0} best · {1} good · {2} inaccuracies · {3} mistakes · {4} blunders</value></data>
+  <data name="report.moments" xml:space="preserve"><value>Key moments</value></data>
+  <data name="report.summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="report.copyPgn" xml:space="preserve"><value>Copy PGN</value></data>
+  <data name="training.title" xml:space="preserve"><value>Chess Coach · Training</value></data>
+  <data name="training.hint" xml:space="preserve"><value>Next hint</value></data>
+  <data name="training.solution" xml:space="preserve"><value>Show solution</value></data>
+  <data name="training.next" xml:space="preserve"><value>Next puzzle</value></data>
+  <data name="training.noneDue" xml:space="preserve"><value>No puzzles are due today. They come from your mistakes in games.</value></data>
+  <data name="training.done" xml:space="preserve"><value>All puzzles for today are done.</value></data>
+  <data name="training.progress" xml:space="preserve"><value>Puzzle {0} of {1}</value></data>
+  <data name="training.find" xml:space="preserve"><value>{0} to move. Find the best move.</value></data>
+  <data name="training.correct" xml:space="preserve"><value>Correct: {0}</value></data>
+  <data name="training.wrong" xml:space="preserve"><value>Not quite. Try again or use a hint.</value></data>
+  <data name="training.best" xml:space="preserve"><value>Best move: {0}</value></data>
+  <data name="menu.checkUpdates" xml:space="preserve"><value>Check for updates …</value></data>
+  <data name="update.current" xml:space="preserve"><value>Chess Coach is up to date.</value></data>
+  <data name="update.ready" xml:space="preserve"><value>Update {0} is ready and will be installed when you quit.</value></data>
+  <data name="update.failed" xml:space="preserve"><value>Update check failed: {0}</value></data>
+  <data name="update.prompt" xml:space="preserve"><value>Version {0} is available. Install it now and restart?</value></data>
+  <data name="settings.autoUpdate" xml:space="preserve"><value>Install updates automatically</value></data>
+  <data name="settings.restartPrompt" xml:space="preserve"><value>Restart Chess Coach now to apply the new language?</value></data>
+  <data name="player.default" xml:space="preserve"><value>Player</value></data>
+  <data name="player.partner" xml:space="preserve"><value>Partner</value></data>
+  <data name="update.openPage" xml:space="preserve"><value>Version {0} is available. Open the download page?</value></data>
+</root>

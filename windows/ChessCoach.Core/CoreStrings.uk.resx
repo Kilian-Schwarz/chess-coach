@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="language.english" xml:space="preserve"><value>Ukrainian</value></data>
+  <data name="color.white" xml:space="preserve"><value>Білі</value></data>
+  <data name="color.black" xml:space="preserve"><value>Чорні</value></data>
+  <data name="piece.king" xml:space="preserve"><value>Король</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>Твій король</value></data>
+  <data name="piece.queen" xml:space="preserve"><value>Ферзь</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>Твій ферзь</value></data>
+  <data name="piece.rook" xml:space="preserve"><value>Тура</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>Твоя тура</value></data>
+  <data name="piece.bishop" xml:space="preserve"><value>Слон</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>Твій слон</value></data>
+  <data name="piece.knight" xml:space="preserve"><value>Кінь</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>Твій кінь</value></data>
+  <data name="piece.pawn" xml:space="preserve"><value>Пішак</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>Твій пішак</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Королів розпізнано неточно</value></data>
+  <data name="problem.backRankPawn" xml:space="preserve"><value>Виявлено пішака на першій горизонталі</value></data>
+  <data name="problem.tooManyPawns" xml:space="preserve"><value>Виявлено забагато пішаків</value></data>
+  <data name="problem.tooManyWhite" xml:space="preserve"><value>Виявлено забагато білих фігур</value></data>
+  <data name="problem.tooManyBlack" xml:space="preserve"><value>Виявлено забагато чорних фігур</value></data>
+  <data name="problem.impossibleMaterial" xml:space="preserve"><value>Неможлива кількість фігур, перевір розпізнавання</value></data>
+  <data name="problem.opponentInCheck" xml:space="preserve"><value>Сторона, яка не ходить, перебуває під шахом</value></data>
+  <data name="result.checkmate" xml:space="preserve"><value>Шах і мат, перемагають {0}</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Пат</value></data>
+  <data name="result.insufficientMaterial" xml:space="preserve"><value>Нічия через брак матеріалу</value></data>
+  <data name="result.fiftyMoveRule" xml:space="preserve"><value>Нічия за правилом 50 ходів</value></data>
+  <data name="score.checkmate" xml:space="preserve"><value>Шах і мат</value></data>
+  <data name="score.stalemate" xml:space="preserve"><value>Пат</value></data>
+  <data name="score.mateIn" xml:space="preserve"><value>Мат у {0}</value></data>
+  <data name="score.matedIn" xml:space="preserve"><value>Отримує мат за {0}</value></data>
+  <data name="move.castleShort" xml:space="preserve"><value>коротка рокіровка</value></data>
+  <data name="move.castleLong" xml:space="preserve"><value>довга рокіровка</value></data>
+  <data name="move.capture" xml:space="preserve"><value>{0} {1} бере {2} {3}</value></data>
+  <data name="move.enPassant" xml:space="preserve"><value>Пішак {0} бере на проході на {1}</value></data>
+  <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
+  <data name="move.promotes" xml:space="preserve"><value>, перетворюється на {0}</value></data>
+  <data name="move.check" xml:space="preserve"><value>, шах</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} під атакою і не захищений</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} атакований слабшою фігурою</value></data>
+  <data name="rating.best" xml:space="preserve"><value>Найкращий хід</value></data>
+  <data name="rating.good" xml:space="preserve"><value>Хороший хід</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Неточність</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Помилка</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Груба помилка</value></data>
+  <data name="level.beginner" xml:space="preserve"><value>Початківець</value></data>
+  <data name="level.intermediate" xml:space="preserve"><value>Середній</value></data>
+  <data name="level.strong" xml:space="preserve"><value>Сильний</value></data>
+  <data name="skill.pieceSafety" xml:space="preserve"><value>Безпека фігур</value></data>
+  <data name="skill.pieceSafety.summary" xml:space="preserve"><value>Не залишати фігури без захисту й без прикриття.</value></data>
+  <data name="skill.threats" xml:space="preserve"><value>Загрози</value></data>
+  <data name="skill.threats.summary" xml:space="preserve"><value>Перед кожним ходом перевіряти, що задумав суперник.</value></data>
+  <data name="skill.tactics" xml:space="preserve"><value>Тактика</value></data>
+  <data name="skill.tactics.summary" xml:space="preserve"><value>Помічати й використовувати виделки, зв'язування, наскрізні удари та відкриті напади.</value></data>
+  <data name="skill.opening" xml:space="preserve"><value>Дебютні принципи</value></data>
+  <data name="skill.opening.summary" xml:space="preserve"><value>Розвивати фігури, займати центр, рокіруватися раніше.</value></data>
+  <data name="skill.kingSafety" xml:space="preserve"><value>Безпека короля</value></data>
+  <data name="skill.kingSafety.summary" xml:space="preserve"><value>Берегти короля й не послаблювати його укриття без потреби.</value></data>
+  <data name="skill.endgame" xml:space="preserve"><value>Ендшпілі</value></data>
+  <data name="skill.endgame.summary" xml:space="preserve"><value>Активізувати короля, проводити пішаки, впевнено вигравати прості ендшпілі.</value></data>
+  <data name="skill.middlegame" xml:space="preserve"><value>Плани</value></data>
+  <data name="skill.middlegame.summary" xml:space="preserve"><value>Мати план у мітельшпілі: покращувати фігури, атакувати слабкості.</value></data>
+  <data name="mistake.hangingPiece" xml:space="preserve"><value>Підставлено фігуру</value></data>
+  <data name="mistake.missedThreat" xml:space="preserve"><value>Пропущено загрозу</value></data>
+  <data name="mistake.missedTactic" xml:space="preserve"><value>Пропущено тактику</value></data>
+  <data name="mistake.kingSafety" xml:space="preserve"><value>Безпека короля</value></data>
+  <data name="mistake.openingPrinciple" xml:space="preserve"><value>Дебютний принцип</value></data>
+  <data name="mistake.endgameTechnique" xml:space="preserve"><value>Техніка ендшпілю</value></data>
+  <data name="mistake.other" xml:space="preserve"><value>Інше</value></data>
+  <data name="mistake.example" xml:space="preserve"><value>{0} (втрата {1})</value></data>
+  <data name="focus.label" xml:space="preserve"><value>Навчальний акцент: {0}</value></data>
+  <data name="theme.mate" xml:space="preserve"><value>Мат</value></data>
+  <data name="theme.captureGain" xml:space="preserve"><value>Виграш матеріалу</value></data>
+  <data name="theme.fork" xml:space="preserve"><value>Виделка</value></data>
+  <data name="theme.check" xml:space="preserve"><value>Шах</value></data>
+  <data name="theme.parryThreat" xml:space="preserve"><value>Відбити загрозу</value></data>
+  <data name="theme.castle" xml:space="preserve"><value>Рокіровка</value></data>
+  <data name="theme.develop" xml:space="preserve"><value>Розвинути фігуру</value></data>
+  <data name="theme.kingActivate" xml:space="preserve"><value>Активізувати короля</value></data>
+  <data name="theme.pawnMove" xml:space="preserve"><value>Хід пішаком</value></data>
+  <data name="theme.improvePiece" xml:space="preserve"><value>Покращити фігуру</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Тут можна поставити мат супернику.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Тут можна виграти матеріал.</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>Шукай виделку: хід, який атакує одразу дві фігури.</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>Шах тут сильний.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Зверни увагу на загрозу суперника.</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>Виведи короля в безпечне місце.</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>Розвинь фігуру.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Активізуй короля.</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Хід пішаком тут добре пасує.</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Покращ свою найгіршу фігуру.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Піди короля на {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Піди ферзя на {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Піди туру на {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Піди слона на {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Піди коня на {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Піди пішака на {0}.</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} може поставити мат супернику.</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} може взяти фігуру суперника й виграти матеріал.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} може одним ходом атакувати одразу дві фігури суперника.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} може оголосити шах королю суперника, і це дає тобі перевагу.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Суперник щось задумав. {0} може відбити загрозу.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Твій король досі в центрі. Рокіровка виведе його в безпеку й активізує туру.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} досі стоїть на першій горизонталі. Виведи цю фігуру на активне поле, звідки вона контролює більше полів.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>В ендшпілі король — сильна фігура. Наблизь його до пішаків і до центру.</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Хід пішаком покращує тут твою позицію: він здобуває простір або відкриває лінії для твоїх фігур.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} стоїть не найкраще. Знайди поле, де ця фігура буде кориснішою.</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>Найкращий хід: {0} (оцінка {1}).</value></data>
+  <data name="threat.text" xml:space="preserve"><value>Загроза: {0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>Загроза: {0}, мат у {1}</value></data>
+  <data name="profile.placement" xml:space="preserve"><value>Визначення рівня: партія {0} з {1}</value></data>
+  <data name="profile.defaultName" xml:space="preserve"><value>Гравець</value></data>
+  <data name="report.moveLabel" xml:space="preserve"><value>Хід {0}, {1}</value></data>
+  <data name="report.after" xml:space="preserve"><value>Після цього: {0}</value></data>
+  <data name="report.better" xml:space="preserve"><value>Краще було: {0}</value></data>
+  <data name="report.opponentMates" xml:space="preserve"><value>Суперник може поставити мат</value></data>
+  <data name="report.winChance" xml:space="preserve"><value>Шанс на перемогу впав з {0} % до {1} %</value></data>
+  <data name="report.fallback" xml:space="preserve"><value>Точність {0} %, помилок і грубих помилок: {1}</value></data>
+  <data name="report.fallbackMoment" xml:space="preserve"><value>. Ключовий момент: {0}, {1}</value></data>
+  <data name="opening.display" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="san.pieces" xml:space="preserve"><value>КФТСК</value></data>
+  <data name="san.castleShort" xml:space="preserve"><value>O-O</value></data>
+  <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
+  <data name="llm.badUrl" xml:space="preserve"><value>Недійсна URL-адреса сервера.</value></data>
+  <data name="llm.denied" xml:space="preserve"><value>Доступ заборонено. Перевір токен.</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Сервер повідомляє про помилку {0}. {1}</value></data>
+  <data name="llm.noModels" xml:space="preserve"><value>За цією адресою список моделей не знайдено. Для Open WebUI введи, наприклад, https://openwebui.example.com, для vLLM — http://host:8000/v1.</value></data>
+  <data name="llm.notConfigured" xml:space="preserve"><value>Щоб отримувати пояснення, вибери сервер і модель у налаштуваннях.</value></data>
+</root>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="status.off" xml:space="preserve"><value>已关闭</value></data>
+  <data name="status.searching" xml:space="preserve"><value>正在寻找棋盘 …</value></data>
+  <data name="status.paused" xml:space="preserve"><value>已暂停（{0}）</value></data>
+  <data name="reason.locked" xml:space="preserve"><value>屏幕已锁定</value></data>
+  <data name="reason.sleep" xml:space="preserve"><value>睡眠中</value></data>
+  <data name="reason.screensaver" xml:space="preserve"><value>屏幕保护程序</value></data>
+  <data name="status.captureFailed" xml:space="preserve"><value>屏幕截取失败</value></data>
+  <data name="status.learned" xml:space="preserve"><value>已学会棋子</value></data>
+  <data name="status.unknownPieces" xml:space="preserve"><value>已找到棋盘，但尚不认识棋子</value></data>
+  <data name="overlay.learn" xml:space="preserve"><value>请显示起始局面，以便学习棋子</value></data>
+  <data name="status.opponent" xml:space="preserve"><value>你执{0} · 轮到对手走棋</value></data>
+  <data name="overlay.opponent" xml:space="preserve"><value>轮到对手走棋</value></data>
+  <data name="status.noEngine" xml:space="preserve"><value>未找到 Stockfish（设置）</value></data>
+  <data name="result.mate" xml:space="preserve"><value>将杀</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>逼和</value></data>
+  <data name="status.playing" xml:space="preserve"><value>你执{0} · 轮到：{1}</value></data>
+  <data name="who.you" xml:space="preserve"><value>你</value></data>
+  <data name="who.partner" xml:space="preserve"><value>搭档</value></data>
+  <data name="player.you" xml:space="preserve"><value>你</value></data>
+  <data name="player.colorYou" xml:space="preserve"><value>{0}（你）</value></data>
+  <data name="player.colorPartner" xml:space="preserve"><value>{0}（搭档）</value></data>
+  <data name="color.white" xml:space="preserve"><value>白方</value></data>
+  <data name="color.black" xml:space="preserve"><value>黑方</value></data>
+  <data name="rating.best" xml:space="preserve"><value>最佳着法</value></data>
+  <data name="rating.good" xml:space="preserve"><value>好棋</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>不够精确</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>失误</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>严重失误</value></data>
+  <data name="review.played" xml:space="preserve"><value>实际走法：{0}（{1}）</value></data>
+  <data name="review.better" xml:space="preserve"><value>更好：{0}（{1}）</value></data>
+  <data name="review.titleYou" xml:space="preserve"><value>你的着法：{0}</value></data>
+  <data name="review.titleWho" xml:space="preserve"><value>{0}：{1}</value></data>
+  <data name="note.needLlm" xml:space="preserve"><value>请在设置中添加 AI 服务器以获得讲解。</value></data>
+  <data name="hint.think" xml:space="preserve"><value>轮到{0}走棋 · 先自己想一想</value></data>
+  <data name="hint.turn" xml:space="preserve"><value>轮到{0}走棋</value></data>
+  <data name="hint.thinkLine" xml:space="preserve"><value>先自己想一想。“下一条提示”（{0}）会逐步给出更多信息。</value></data>
+  <data name="hint.l1" xml:space="preserve"><value>提示 1：主题</value></data>
+  <data name="hint.l2" xml:space="preserve"><value>提示 2：棋子</value></data>
+  <data name="hint.l2overlay" xml:space="preserve"><value>提示 2：这枚棋子</value></data>
+  <data name="hint.l3" xml:space="preserve"><value>提示 3：思路</value></data>
+  <data name="hint.noLlmIdea" xml:space="preserve"><value>连接 AI 服务器后可获得更详细的思路（设置）。</value></data>
+  <data name="hint.fallbackTopic" xml:space="preserve"><value>请仔细观察局面。</value></data>
+  <data name="hint.fallbackPiece" xml:space="preserve"><value>标记的格子显示应当走哪枚棋子。</value></data>
+  <data name="hint.fallbackIdea" xml:space="preserve"><value>改善你的局面，或化解对方的威胁。</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="suggest.title" xml:space="preserve"><value>建议：{0}</value></data>
+  <data name="suggest.eval" xml:space="preserve"><value>评估：{0}</value></data>
+  <data name="suggest.also" xml:space="preserve"><value>也可以：{0}</value></data>
+  <data name="ask.title" xml:space="preserve"><value>提问</value></data>
+  <data name="ask.noPosition" xml:space="preserve"><value>尚未识别到局面。</value></data>
+  <data name="ask.needLlm" xml:space="preserve"><value>请在设置中添加 AI 服务器以获得回答。</value></data>
+  <data name="ask.cardTitle" xml:space="preserve"><value>你的问题：{0}</value></data>
+  <data name="error.explain" xml:space="preserve"><value>讲解失败：{0}</value></data>
+  <data name="card.loading" xml:space="preserve"><value>正在撰写讲解 …</value></data>
+  <data name="card.thanks" xml:space="preserve"><value>谢谢：{0}</value></data>
+  <data name="feedback.long" xml:space="preserve"><value>太长</value></data>
+  <data name="feedback.short" xml:space="preserve"><value>太短</value></data>
+  <data name="feedback.helpful" xml:space="preserve"><value>有帮助</value></data>
+  <data name="panel.nextHint" xml:space="preserve"><value>下一条提示</value></data>
+  <data name="panel.again" xml:space="preserve"><value>再讲一遍</value></data>
+  <data name="panel.ask" xml:space="preserve"><value>提个问题 …</value></data>
+  <data name="panel.hintOf" xml:space="preserve"><value>提示 {0}/{1}</value></data>
+  <data name="panel.collapse" xml:space="preserve"><value>收起面板</value></data>
+  <data name="panel.expand" xml:space="preserve"><value>展开面板</value></data>
+  <data name="panel.opening" xml:space="preserve"><value>开局：{0}</value></data>
+  <data name="panel.record" xml:space="preserve"><value>棋手档案</value></data>
+  <data name="panel.training" xml:space="preserve"><value>训练</value></data>
+  <data name="panel.report" xml:space="preserve"><value>复盘</value></data>
+  <data name="gameCard.title" xml:space="preserve"><value>对局已复盘</value></data>
+  <data name="gameCard.line" xml:space="preserve"><value>准确率 {0}%，失误或严重失误 {1} 次。</value></data>
+  <data name="gameCard.rating" xml:space="preserve"><value>等级分 {0}</value></data>
+  <data name="gameCard.note" xml:space="preserve"><value>更多内容见“复盘”。</value></data>
+  <data name="menu.active" xml:space="preserve"><value>启用</value></data>
+  <data name="menu.duo" xml:space="preserve"><value>双人训练</value></data>
+  <data name="menu.explain" xml:space="preserve"><value>讲解建议</value></data>
+  <data name="menu.review" xml:space="preserve"><value>评价着法</value></data>
+  <data name="menu.threats" xml:space="preserve"><value>显示威胁</value></data>
+  <data name="menu.side" xml:space="preserve"><value>我执</value></data>
+  <data name="menu.sideAuto" xml:space="preserve"><value>自动（位于下方）</value></data>
+  <data name="menu.best" xml:space="preserve"><value>立即显示最佳着法</value></data>
+  <data name="menu.always" xml:space="preserve"><value>始终为我计算</value></data>
+  <data name="menu.think" xml:space="preserve"><value>思考时间</value></data>
+  <data name="menu.nextHint" xml:space="preserve"><value>下一条提示</value></data>
+  <data name="menu.toggleSide" xml:space="preserve"><value>切换走棋方</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>结束对局</value></data>
+  <data name="menu.copyPgn" xml:space="preserve"><value>将对局复制为 PGN</value></data>
+  <data name="menu.resetPanel" xml:space="preserve"><value>将面板移回棋盘旁</value></data>
+  <data name="menu.record" xml:space="preserve"><value>棋手档案 …</value></data>
+  <data name="menu.training" xml:space="preserve"><value>训练 …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>复盘 …</value></data>
+  <data name="menu.relearn" xml:space="preserve"><value>重新学习棋子</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>设置 …</value></data>
+  <data name="menu.quit" xml:space="preserve"><value>退出</value></data>
+  <data name="settings.title" xml:space="preserve"><value>Chess Coach · 设置</value></data>
+  <data name="settings.llm" xml:space="preserve"><value>AI 服务器</value></data>
+  <data name="settings.server" xml:space="preserve"><value>服务器</value></data>
+  <data name="settings.token" xml:space="preserve"><value>令牌</value></data>
+  <data name="settings.loadModels" xml:space="preserve"><value>加载模型</value></data>
+  <data name="settings.model" xml:space="preserve"><value>模型</value></data>
+  <data name="settings.path" xml:space="preserve"><value>路径</value></data>
+  <data name="settings.choose" xml:space="preserve"><value>选择 …</value></data>
+  <data name="settings.chooseTitle" xml:space="preserve"><value>选择 Stockfish</value></data>
+  <data name="settings.general" xml:space="preserve"><value>常规</value></data>
+  <data name="settings.autostart" xml:space="preserve"><value>随 Windows 启动</value></data>
+  <data name="settings.language" xml:space="preserve"><value>语言</value></data>
+  <data name="settings.langSystem" xml:space="preserve"><value>系统</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>快捷键：Ctrl+Alt+H 下一条提示，Ctrl+Alt+T 切换走棋方。</value></data>
+  <data name="settings.expert" xml:space="preserve"><value>专家</value></data>
+  <data name="settings.thinkMs" xml:space="preserve"><value>思考时间（毫秒）</value></data>
+  <data name="settings.lock" xml:space="preserve"><value>锁定专家模式</value></data>
+  <data name="settings.sfFound" xml:space="preserve"><value>已找到：{0}</value></data>
+  <data name="settings.sfMissing" xml:space="preserve"><value>未找到。请在 ChessCoach.exe 旁放置“stockfish”文件夹，或在此选择路径。</value></data>
+  <data name="llm.connecting" xml:space="preserve"><value>正在连接 …</value></data>
+  <data name="llm.found" xml:space="preserve"><value>找到 {0} 个模型（{1}）</value></data>
+  <data name="settings.httpWarning" xml:space="preserve"><value>服务器地址以 http:// 开头，令牌将以明文发送。请尽量使用 https://。</value></data>
+  <data name="common.ok" xml:space="preserve"><value>确定</value></data>
+  <data name="common.cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="record.title" xml:space="preserve"><value>Chess Coach · 棋手档案</value></data>
+  <data name="record.new" xml:space="preserve"><value>新建档案 …</value></data>
+  <data name="record.partner" xml:space="preserve"><value>用作搭档</value></data>
+  <data name="record.newName" xml:space="preserve"><value>新档案的名称</value></data>
+  <data name="record.rating" xml:space="preserve"><value>等级分</value></data>
+  <data name="record.games" xml:space="preserve"><value>已复盘 {0} 局</value></data>
+  <data name="record.history" xml:space="preserve"><value>等级分走势</value></data>
+  <data name="record.noHistory" xml:space="preserve"><value>对局还不够多。</value></data>
+  <data name="record.skills" xml:space="preserve"><value>技能</value></data>
+  <data name="record.mistakes" xml:space="preserve"><value>最常见的失误</value></data>
+  <data name="record.none" xml:space="preserve"><value>暂无。</value></data>
+  <data name="record.puzzles" xml:space="preserve"><value>习题</value></data>
+  <data name="record.puzzleStats" xml:space="preserve"><value>共 {0} 道 · 待复习 {1} 道 · 已掌握 {2} 道 · 尝试 {3} 次 · 近期成功率 {4} · 进度 {5}</value></data>
+  <data name="record.hints" xml:space="preserve"><value>每步使用的提示</value></data>
+  <data name="record.noHint" xml:space="preserve"><value>无</value></data>
+  <data name="record.style" xml:space="preserve"><value>讲解风格</value></data>
+  <data name="record.lastGames" xml:space="preserve"><value>最近对局</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · 复盘</value></data>
+  <data name="report.noOpening" xml:space="preserve"><value>无开局</value></data>
+  <data name="report.empty" xml:space="preserve"><value>还没有复盘过的对局。对局结束后会自动复盘。</value></data>
+  <data name="report.opening" xml:space="preserve"><value>开局：{0}</value></data>
+  <data name="report.white" xml:space="preserve"><value>白方</value></data>
+  <data name="report.black" xml:space="preserve"><value>黑方</value></data>
+  <data name="report.sideStats" xml:space="preserve"><value>准确率 {0}% · 平均损失 {1} · 表现 {2}</value></data>
+  <data name="report.counts" xml:space="preserve"><value>最佳 {0} · 好棋 {1} · 不够精确 {2} · 失误 {3} · 严重失误 {4}</value></data>
+  <data name="report.moments" xml:space="preserve"><value>关键时刻</value></data>
+  <data name="report.summary" xml:space="preserve"><value>总结</value></data>
+  <data name="report.copyPgn" xml:space="preserve"><value>复制 PGN</value></data>
+  <data name="training.title" xml:space="preserve"><value>Chess Coach · 训练</value></data>
+  <data name="training.hint" xml:space="preserve"><value>下一条提示</value></data>
+  <data name="training.solution" xml:space="preserve"><value>显示答案</value></data>
+  <data name="training.next" xml:space="preserve"><value>下一道习题</value></data>
+  <data name="training.noneDue" xml:space="preserve"><value>今天没有需要复习的习题。习题来自你在对局中的失误。</value></data>
+  <data name="training.done" xml:space="preserve"><value>今天的习题已全部完成。</value></data>
+  <data name="training.progress" xml:space="preserve"><value>第 {0} 题，共 {1} 题</value></data>
+  <data name="training.find" xml:space="preserve"><value>轮到{0}走棋。请找出最佳着法。</value></data>
+  <data name="training.correct" xml:space="preserve"><value>正确：{0}</value></data>
+  <data name="training.wrong" xml:space="preserve"><value>还差一点。请再试一次，或使用提示。</value></data>
+  <data name="training.best" xml:space="preserve"><value>最佳着法：{0}</value></data>
+  <data name="menu.checkUpdates" xml:space="preserve"><value>检查更新 …</value></data>
+  <data name="update.current" xml:space="preserve"><value>Chess Coach 已是最新版本。</value></data>
+  <data name="update.ready" xml:space="preserve"><value>更新 {0} 已准备就绪，将在退出时安装。</value></data>
+  <data name="update.failed" xml:space="preserve"><value>检查更新失败：{0}</value></data>
+  <data name="update.prompt" xml:space="preserve"><value>版本 {0} 可用。现在安装并重新启动吗？</value></data>
+  <data name="settings.autoUpdate" xml:space="preserve"><value>自动安装更新</value></data>
+  <data name="settings.restartPrompt" xml:space="preserve"><value>现在重新启动 Chess Coach 以应用新语言吗？</value></data>
+  <data name="player.default" xml:space="preserve"><value>棋手</value></data>
+  <data name="player.partner" xml:space="preserve"><value>搭档</value></data>
+  <data name="update.openPage" xml:space="preserve"><value>版本 {0} 可用。要打开下载页面吗？</value></data>
+</root>

@@ -1,0 +1,37 @@
+name: ChessCoach
+options:
+  bundleIdPrefix: de.webschwarz
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  ChessCoach:
+    type: application
+    platform: macOS
+    sources:
+      - ChessCoach
+    info:
+      path: ChessCoach/Info.plist
+      properties:
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    settings:
+      base:
+        PRODUCT_NAME: Chess Coach
+        PRODUCT_MODULE_NAME: ChessCoach
+        PRODUCT_BUNDLE_IDENTIFIER: de.webschwarz.chesscoach
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: NO
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_LSUIElement: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Chess Coach
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.board-games
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_APP_SANDBOX: NO
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES

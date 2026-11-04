@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="language.english" xml:space="preserve"><value>German</value></data>
+  <data name="color.white" xml:space="preserve"><value>Weiß</value></data>
+  <data name="color.black" xml:space="preserve"><value>Schwarz</value></data>
+  <data name="piece.king" xml:space="preserve"><value>König</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>Dein König</value></data>
+  <data name="piece.queen" xml:space="preserve"><value>Dame</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>Deine Dame</value></data>
+  <data name="piece.rook" xml:space="preserve"><value>Turm</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>Dein Turm</value></data>
+  <data name="piece.bishop" xml:space="preserve"><value>Läufer</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>Dein Läufer</value></data>
+  <data name="piece.knight" xml:space="preserve"><value>Springer</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>Dein Springer</value></data>
+  <data name="piece.pawn" xml:space="preserve"><value>Bauer</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>Dein Bauer</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>Könige nicht eindeutig erkannt</value></data>
+  <data name="problem.backRankPawn" xml:space="preserve"><value>Bauer auf der Grundreihe erkannt</value></data>
+  <data name="problem.tooManyPawns" xml:space="preserve"><value>Zu viele Bauern erkannt</value></data>
+  <data name="problem.tooManyWhite" xml:space="preserve"><value>Zu viele weiße Figuren erkannt</value></data>
+  <data name="problem.tooManyBlack" xml:space="preserve"><value>Zu viele schwarze Figuren erkannt</value></data>
+  <data name="problem.impossibleMaterial" xml:space="preserve"><value>Figurenzahl unmöglich, Erkennung prüfen</value></data>
+  <data name="problem.opponentInCheck" xml:space="preserve"><value>Seite, die nicht am Zug ist, steht im Schach</value></data>
+  <data name="result.checkmate" xml:space="preserve"><value>Schachmatt, {0} gewinnt</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>Patt</value></data>
+  <data name="result.insufficientMaterial" xml:space="preserve"><value>Remis durch Material</value></data>
+  <data name="result.fiftyMoveRule" xml:space="preserve"><value>Remis nach 50 Zügen</value></data>
+  <data name="score.checkmate" xml:space="preserve"><value>Schachmatt</value></data>
+  <data name="score.stalemate" xml:space="preserve"><value>Patt</value></data>
+  <data name="score.mateIn" xml:space="preserve"><value>Matt in {0}</value></data>
+  <data name="score.matedIn" xml:space="preserve"><value>Wird matt in {0}</value></data>
+  <data name="move.castleShort" xml:space="preserve"><value>kurze Rochade</value></data>
+  <data name="move.castleLong" xml:space="preserve"><value>lange Rochade</value></data>
+  <data name="move.capture" xml:space="preserve"><value>{0} {1} schlägt {2} {3}</value></data>
+  <data name="move.enPassant" xml:space="preserve"><value>Bauer {0} schlägt en passant auf {1}</value></data>
+  <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
+  <data name="move.promotes" xml:space="preserve"><value>, wird {0}</value></data>
+  <data name="move.check" xml:space="preserve"><value>, Schach</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} ist angegriffen und ungedeckt</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} wird von einer schwächeren Figur angegriffen</value></data>
+  <data name="rating.best" xml:space="preserve"><value>Bester Zug</value></data>
+  <data name="rating.good" xml:space="preserve"><value>Guter Zug</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>Ungenauigkeit</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>Fehler</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>Patzer</value></data>
+  <data name="level.beginner" xml:space="preserve"><value>Anfänger</value></data>
+  <data name="level.intermediate" xml:space="preserve"><value>Fortgeschritten</value></data>
+  <data name="level.strong" xml:space="preserve"><value>Stark</value></data>
+  <data name="skill.pieceSafety" xml:space="preserve"><value>Figurenschutz</value></data>
+  <data name="skill.pieceSafety.summary" xml:space="preserve"><value>Keine Figur ungedeckt oder ungeschützt stehen lassen.</value></data>
+  <data name="skill.threats" xml:space="preserve"><value>Drohungen</value></data>
+  <data name="skill.threats.summary" xml:space="preserve"><value>Vor jedem Zug prüfen, was der Gegner jetzt vorhat.</value></data>
+  <data name="skill.tactics" xml:space="preserve"><value>Taktik</value></data>
+  <data name="skill.tactics.summary" xml:space="preserve"><value>Gabel, Fesselung, Spieß und Abzug erkennen und nutzen.</value></data>
+  <data name="skill.opening" xml:space="preserve"><value>Eröffnungsprinzipien</value></data>
+  <data name="skill.opening.summary" xml:space="preserve"><value>Figuren entwickeln, Zentrum besetzen, früh rochieren.</value></data>
+  <data name="skill.kingSafety" xml:space="preserve"><value>Königssicherheit</value></data>
+  <data name="skill.kingSafety.summary" xml:space="preserve"><value>Den König geschützt halten und die Deckung nicht ohne Not schwächen.</value></data>
+  <data name="skill.endgame" xml:space="preserve"><value>Endspiele</value></data>
+  <data name="skill.endgame.summary" xml:space="preserve"><value>König aktivieren, Bauern umwandeln, einfache Endspiele sicher gewinnen.</value></data>
+  <data name="skill.middlegame" xml:space="preserve"><value>Pläne</value></data>
+  <data name="skill.middlegame.summary" xml:space="preserve"><value>Im Mittelspiel einen Plan haben: Figuren verbessern, Schwächen angreifen.</value></data>
+  <data name="mistake.hangingPiece" xml:space="preserve"><value>Figur eingestellt</value></data>
+  <data name="mistake.missedThreat" xml:space="preserve"><value>Drohung übersehen</value></data>
+  <data name="mistake.missedTactic" xml:space="preserve"><value>Taktik verpasst</value></data>
+  <data name="mistake.kingSafety" xml:space="preserve"><value>Königssicherheit</value></data>
+  <data name="mistake.openingPrinciple" xml:space="preserve"><value>Eröffnungsprinzip</value></data>
+  <data name="mistake.endgameTechnique" xml:space="preserve"><value>Endspieltechnik</value></data>
+  <data name="mistake.other" xml:space="preserve"><value>Sonstiges</value></data>
+  <data name="mistake.example" xml:space="preserve"><value>{0} (Verlust {1})</value></data>
+  <data name="focus.label" xml:space="preserve"><value>Lernfokus: {0}</value></data>
+  <data name="theme.mate" xml:space="preserve"><value>Matt</value></data>
+  <data name="theme.captureGain" xml:space="preserve"><value>Materialgewinn</value></data>
+  <data name="theme.fork" xml:space="preserve"><value>Gabel</value></data>
+  <data name="theme.check" xml:space="preserve"><value>Schach</value></data>
+  <data name="theme.parryThreat" xml:space="preserve"><value>Drohung parieren</value></data>
+  <data name="theme.castle" xml:space="preserve"><value>Rochade</value></data>
+  <data name="theme.develop" xml:space="preserve"><value>Figur entwickeln</value></data>
+  <data name="theme.kingActivate" xml:space="preserve"><value>König aktivieren</value></data>
+  <data name="theme.pawnMove" xml:space="preserve"><value>Bauernzug</value></data>
+  <data name="theme.improvePiece" xml:space="preserve"><value>Figur verbessern</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Hier lässt sich der Gegner mattsetzen.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Hier kann man Material gewinnen.</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>Such nach einer Gabel: einem Zug, der zwei Figuren gleichzeitig angreift.</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>Ein Schach ist hier stark.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Achte auf die Drohung des Gegners.</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>Bring deinen König in Sicherheit.</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>Entwickle eine Figur.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Aktiviere deinen König.</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Ein Bauernzug passt hier gut.</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbessere deine schlechteste Figur.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Bewege den König auf {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Bewege die Dame auf {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Bewege den Turm auf {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Bewege den Läufer auf {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Bewege den Springer auf {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Bewege den Bauern auf {0}.</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kann den Gegner mattsetzen.</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kann eine gegnerische Figur schlagen und dabei Material gewinnen.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kann in einem Zug zwei Figuren des Gegners gleichzeitig angreifen.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} kann dem gegnerischen König Schach bieten, und das bringt dir einen Vorteil.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Der Gegner droht etwas. {0} kann die Drohung abwehren.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Dein König steht noch in der Mitte. Mit der Rochade bringst du ihn in Sicherheit und aktivierst den Turm.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} steht noch auf der Grundreihe. Bring diese Figur auf ein aktives Feld, von dem aus sie mehr Felder kontrolliert.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>Im Endspiel ist der König eine starke Figur. Führe ihn näher an die Bauern und ins Zentrum.</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Ein Bauernzug verbessert hier deine Stellung: Er gewinnt Raum oder öffnet Linien für deine Figuren.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} steht nicht ideal. Such ein Feld, auf dem diese Figur mehr bewirkt.</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>Bester Zug: {0} (Bewertung {1}).</value></data>
+  <data name="threat.text" xml:space="preserve"><value>Droht: {0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>Droht: {0}, Matt in {1}</value></data>
+  <data name="profile.placement" xml:space="preserve"><value>Einstufung läuft: Partie {0} von {1}</value></data>
+  <data name="profile.defaultName" xml:space="preserve"><value>Spieler</value></data>
+  <data name="report.moveLabel" xml:space="preserve"><value>Zug {0}, {1}</value></data>
+  <data name="report.after" xml:space="preserve"><value>Danach: {0}</value></data>
+  <data name="report.better" xml:space="preserve"><value>Besser war: {0}</value></data>
+  <data name="report.opponentMates" xml:space="preserve"><value>Der Gegner kann Matt setzen</value></data>
+  <data name="report.winChance" xml:space="preserve"><value>Gewinnchance von {0} % auf {1} %</value></data>
+  <data name="report.fallback" xml:space="preserve"><value>Genauigkeit {0} %, {1} Fehler oder Patzer</value></data>
+  <data name="report.fallbackMoment" xml:space="preserve"><value>. Wichtigster Moment: {0}, {1}</value></data>
+  <data name="opening.display" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="san.pieces" xml:space="preserve"><value>KDTLS</value></data>
+  <data name="san.castleShort" xml:space="preserve"><value>0-0</value></data>
+  <data name="san.castleLong" xml:space="preserve"><value>0-0-0</value></data>
+  <data name="llm.badUrl" xml:space="preserve"><value>Die Server-URL ist ungültig.</value></data>
+  <data name="llm.denied" xml:space="preserve"><value>Zugriff verweigert. Bitte Token prüfen.</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>Server meldet Fehler {0}. {1}</value></data>
+  <data name="llm.noModels" xml:space="preserve"><value>Unter dieser Adresse wurde keine Modellliste gefunden. Für Open WebUI z. B. https://openwebui.example.com eintragen, für vLLM http://host:8000/v1.</value></data>
+  <data name="llm.notConfigured" xml:space="preserve"><value>Für Erklärungen in den Einstellungen Server und Modell wählen.</value></data>
+</root>

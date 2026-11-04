@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="language.english" xml:space="preserve"><value>Simplified Chinese</value></data>
+  <data name="color.white" xml:space="preserve"><value>白方</value></data>
+  <data name="color.black" xml:space="preserve"><value>黑方</value></data>
+  <data name="piece.king" xml:space="preserve"><value>王</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>你的王</value></data>
+  <data name="piece.queen" xml:space="preserve"><value>后</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>你的后</value></data>
+  <data name="piece.rook" xml:space="preserve"><value>车</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>你的车</value></data>
+  <data name="piece.bishop" xml:space="preserve"><value>象</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>你的象</value></data>
+  <data name="piece.knight" xml:space="preserve"><value>马</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>你的马</value></data>
+  <data name="piece.pawn" xml:space="preserve"><value>兵</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>你的兵</value></data>
+  <data name="problem.kings" xml:space="preserve"><value>未能清楚识别双方的王</value></data>
+  <data name="problem.backRankPawn" xml:space="preserve"><value>在底线检测到兵</value></data>
+  <data name="problem.tooManyPawns" xml:space="preserve"><value>检测到的兵过多</value></data>
+  <data name="problem.tooManyWhite" xml:space="preserve"><value>检测到的白方棋子过多</value></data>
+  <data name="problem.tooManyBlack" xml:space="preserve"><value>检测到的黑方棋子过多</value></data>
+  <data name="problem.impossibleMaterial" xml:space="preserve"><value>棋子数量不可能，请检查识别结果</value></data>
+  <data name="problem.opponentInCheck" xml:space="preserve"><value>未轮到走棋的一方正被将军</value></data>
+  <data name="result.checkmate" xml:space="preserve"><value>将杀，{0}获胜</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>逼和</value></data>
+  <data name="result.insufficientMaterial" xml:space="preserve"><value>子力不足，和棋</value></data>
+  <data name="result.fiftyMoveRule" xml:space="preserve"><value>五十回合规则，和棋</value></data>
+  <data name="score.checkmate" xml:space="preserve"><value>将杀</value></data>
+  <data name="score.stalemate" xml:space="preserve"><value>逼和</value></data>
+  <data name="score.mateIn" xml:space="preserve"><value>{0}步杀</value></data>
+  <data name="score.matedIn" xml:space="preserve"><value>{0}步后被杀</value></data>
+  <data name="move.castleShort" xml:space="preserve"><value>短易位</value></data>
+  <data name="move.castleLong" xml:space="preserve"><value>长易位</value></data>
+  <data name="move.capture" xml:space="preserve"><value>{0} {1} 吃 {2} {3}</value></data>
+  <data name="move.enPassant" xml:space="preserve"><value>兵 {0} 在 {1} 吃过路兵</value></data>
+  <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
+  <data name="move.promotes" xml:space="preserve"><value>，升变为{0}</value></data>
+  <data name="move.check" xml:space="preserve"><value>，将军</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} 受到攻击且无保护</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} 被价值更低的棋子攻击</value></data>
+  <data name="rating.best" xml:space="preserve"><value>最佳着法</value></data>
+  <data name="rating.good" xml:space="preserve"><value>好棋</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>不精确</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>失误</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>严重失误</value></data>
+  <data name="level.beginner" xml:space="preserve"><value>初学者</value></data>
+  <data name="level.intermediate" xml:space="preserve"><value>中级</value></data>
+  <data name="level.strong" xml:space="preserve"><value>高级</value></data>
+  <data name="skill.pieceSafety" xml:space="preserve"><value>棋子安全</value></data>
+  <data name="skill.pieceSafety.summary" xml:space="preserve"><value>不要让任何棋子处于无保护或无防守的状态。</value></data>
+  <data name="skill.threats" xml:space="preserve"><value>威胁</value></data>
+  <data name="skill.threats.summary" xml:space="preserve"><value>每步棋之前，先检查对手想做什么。</value></data>
+  <data name="skill.tactics" xml:space="preserve"><value>战术</value></data>
+  <data name="skill.tactics.summary" xml:space="preserve"><value>识别并运用捉双、牵制、穿击和闪击。</value></data>
+  <data name="skill.opening" xml:space="preserve"><value>开局原则</value></data>
+  <data name="skill.opening.summary" xml:space="preserve"><value>出动棋子，占据中心，尽早易位。</value></data>
+  <data name="skill.kingSafety" xml:space="preserve"><value>王的安全</value></data>
+  <data name="skill.kingSafety.summary" xml:space="preserve"><value>保持王的安全，不要无故削弱它的防护。</value></data>
+  <data name="skill.endgame" xml:space="preserve"><value>残局</value></data>
+  <data name="skill.endgame.summary" xml:space="preserve"><value>激活王，兵升变，稳稳赢下简单残局。</value></data>
+  <data name="skill.middlegame" xml:space="preserve"><value>计划</value></data>
+  <data name="skill.middlegame.summary" xml:space="preserve"><value>中局要有计划：改善棋子位置，进攻对方弱点。</value></data>
+  <data name="mistake.hangingPiece" xml:space="preserve"><value>棋子被送吃</value></data>
+  <data name="mistake.missedThreat" xml:space="preserve"><value>漏看威胁</value></data>
+  <data name="mistake.missedTactic" xml:space="preserve"><value>错过战术</value></data>
+  <data name="mistake.kingSafety" xml:space="preserve"><value>王的安全</value></data>
+  <data name="mistake.openingPrinciple" xml:space="preserve"><value>开局原则</value></data>
+  <data name="mistake.endgameTechnique" xml:space="preserve"><value>残局技巧</value></data>
+  <data name="mistake.other" xml:space="preserve"><value>其他</value></data>
+  <data name="mistake.example" xml:space="preserve"><value>{0}（损失 {1}）</value></data>
+  <data name="focus.label" xml:space="preserve"><value>学习重点：{0}</value></data>
+  <data name="theme.mate" xml:space="preserve"><value>杀棋</value></data>
+  <data name="theme.captureGain" xml:space="preserve"><value>赢子</value></data>
+  <data name="theme.fork" xml:space="preserve"><value>捉双</value></data>
+  <data name="theme.check" xml:space="preserve"><value>将军</value></data>
+  <data name="theme.parryThreat" xml:space="preserve"><value>化解威胁</value></data>
+  <data name="theme.castle" xml:space="preserve"><value>王车易位</value></data>
+  <data name="theme.develop" xml:space="preserve"><value>出动棋子</value></data>
+  <data name="theme.kingActivate" xml:space="preserve"><value>激活王</value></data>
+  <data name="theme.pawnMove" xml:space="preserve"><value>走兵</value></data>
+  <data name="theme.improvePiece" xml:space="preserve"><value>改善棋子</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>这里可以将杀对手。</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>这里可以赢子。</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>找找捉双：一步同时攻击两个棋子的着法。</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>这里将军很有力。</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>注意对手的威胁。</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>让你的王安全。</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>出动一个棋子。</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>激活你的王。</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>这里走兵很合适。</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>改善你最差的棋子。</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>把王走到 {0}。</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>把后走到 {0}。</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>把车走到 {0}。</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>把象走到 {0}。</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>把马走到 {0}。</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>把兵走到 {0}。</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0}可以将杀对手。</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}可以吃掉对方一个棋子并赢子。</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0}可以一步同时攻击对方两个棋子。</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0}可以将对方的王，这会给你带来优势。</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>对手在威胁着什么。{0}可以化解这个威胁。</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>你的王还在中心。易位可以让它安全，并激活车。</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0}还在底线。把这个棋子走到能控制更多格子的活跃位置。</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>在残局中，王是一枚强子。让它靠近兵并走向中心。</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>这里走兵能改善你的局面：争取空间，或为你的棋子打开线路。</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}的位置不理想。找一个能让这个棋子发挥更大作用的格子。</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>最佳着法：{0}（评估 {1}）。</value></data>
+  <data name="threat.text" xml:space="preserve"><value>威胁：{0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>威胁：{0}，{1}步杀</value></data>
+  <data name="profile.placement" xml:space="preserve"><value>定级进行中：第 {0} 局，共 {1} 局</value></data>
+  <data name="profile.defaultName" xml:space="preserve"><value>玩家</value></data>
+  <data name="report.moveLabel" xml:space="preserve"><value>第 {0} 步，{1}</value></data>
+  <data name="report.after" xml:space="preserve"><value>之后：{0}</value></data>
+  <data name="report.better" xml:space="preserve"><value>更好的是：{0}</value></data>
+  <data name="report.opponentMates" xml:space="preserve"><value>对手可以将杀</value></data>
+  <data name="report.winChance" xml:space="preserve"><value>胜率从 {0} % 降至 {1} %</value></data>
+  <data name="report.fallback" xml:space="preserve"><value>准确率 {0} %，{1} 个失误或严重失误</value></data>
+  <data name="report.fallbackMoment" xml:space="preserve"><value>。关键时刻：{0}，{1}</value></data>
+  <data name="opening.display" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="san.pieces" xml:space="preserve"><value>KQRBN</value></data>
+  <data name="san.castleShort" xml:space="preserve"><value>O-O</value></data>
+  <data name="san.castleLong" xml:space="preserve"><value>O-O-O</value></data>
+  <data name="llm.badUrl" xml:space="preserve"><value>服务器 URL 无效。</value></data>
+  <data name="llm.denied" xml:space="preserve"><value>访问被拒绝。请检查令牌。</value></data>
+  <data name="llm.httpError" xml:space="preserve"><value>服务器返回错误 {0}。{1}</value></data>
+  <data name="llm.noModels" xml:space="preserve"><value>在此地址未找到模型列表。Open WebUI 请填写例如 https://openwebui.example.com，vLLM 请填写 http://host:8000/v1。</value></data>
+  <data name="llm.notConfigured" xml:space="preserve"><value>要获得讲解，请在设置中选择服务器和模型。</value></data>
+</root>

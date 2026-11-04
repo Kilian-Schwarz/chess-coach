@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="status.off" xml:space="preserve"><value>オフ</value></data>
+  <data name="status.searching" xml:space="preserve"><value>チェスボードを探しています …</value></data>
+  <data name="status.paused" xml:space="preserve"><value>一時停止中（{0}）</value></data>
+  <data name="reason.locked" xml:space="preserve"><value>画面ロック中</value></data>
+  <data name="reason.sleep" xml:space="preserve"><value>スリープ中</value></data>
+  <data name="reason.screensaver" xml:space="preserve"><value>スクリーンセーバー</value></data>
+  <data name="status.captureFailed" xml:space="preserve"><value>画面のキャプチャに失敗しました</value></data>
+  <data name="status.learned" xml:space="preserve"><value>駒を学習しました</value></data>
+  <data name="status.unknownPieces" xml:space="preserve"><value>ボードを検出しました。駒はまだ未登録です</value></data>
+  <data name="overlay.learn" xml:space="preserve"><value>駒を学習するため、初期配置を表示してください</value></data>
+  <data name="status.opponent" xml:space="preserve"><value>{0}でプレイ中 · 相手の番です</value></data>
+  <data name="overlay.opponent" xml:space="preserve"><value>相手の番です</value></data>
+  <data name="status.noEngine" xml:space="preserve"><value>Stockfish が見つかりません（設定）</value></data>
+  <data name="result.mate" xml:space="preserve"><value>チェックメイト</value></data>
+  <data name="result.stalemate" xml:space="preserve"><value>ステイルメイト</value></data>
+  <data name="status.playing" xml:space="preserve"><value>{0}でプレイ中 · 手番：{1}</value></data>
+  <data name="who.you" xml:space="preserve"><value>あなた</value></data>
+  <data name="who.partner" xml:space="preserve"><value>パートナー</value></data>
+  <data name="player.you" xml:space="preserve"><value>あなた</value></data>
+  <data name="player.colorYou" xml:space="preserve"><value>{0}（あなた）</value></data>
+  <data name="player.colorPartner" xml:space="preserve"><value>{0}（パートナー）</value></data>
+  <data name="color.white" xml:space="preserve"><value>白</value></data>
+  <data name="color.black" xml:space="preserve"><value>黒</value></data>
+  <data name="rating.best" xml:space="preserve"><value>最善手</value></data>
+  <data name="rating.good" xml:space="preserve"><value>好手</value></data>
+  <data name="rating.inaccuracy" xml:space="preserve"><value>不正確な手</value></data>
+  <data name="rating.mistake" xml:space="preserve"><value>ミス</value></data>
+  <data name="rating.blunder" xml:space="preserve"><value>大悪手</value></data>
+  <data name="review.played" xml:space="preserve"><value>指した手：{0}（{1}）</value></data>
+  <data name="review.better" xml:space="preserve"><value>より良い手：{0}（{1}）</value></data>
+  <data name="review.titleYou" xml:space="preserve"><value>あなたの手：{0}</value></data>
+  <data name="review.titleWho" xml:space="preserve"><value>{0}：{1}</value></data>
+  <data name="note.needLlm" xml:space="preserve"><value>解説を受けるには、設定で AI サーバーを追加してください。</value></data>
+  <data name="hint.think" xml:space="preserve"><value>{0}の手番 · まず自分で考えましょう</value></data>
+  <data name="hint.turn" xml:space="preserve"><value>{0}の手番</value></data>
+  <data name="hint.thinkLine" xml:space="preserve"><value>まず自分で考えましょう。「次のヒント」（{0}）で段階的に詳しくなります。</value></data>
+  <data name="hint.l1" xml:space="preserve"><value>ヒント 1：テーマ</value></data>
+  <data name="hint.l2" xml:space="preserve"><value>ヒント 2：駒</value></data>
+  <data name="hint.l2overlay" xml:space="preserve"><value>ヒント 2：この駒</value></data>
+  <data name="hint.l3" xml:space="preserve"><value>ヒント 3：アイデア</value></data>
+  <data name="hint.noLlmIdea" xml:space="preserve"><value>AI サーバーがあれば、より詳しいアイデアを表示できます（設定）。</value></data>
+  <data name="hint.fallbackTopic" xml:space="preserve"><value>局面をよく観察しましょう。</value></data>
+  <data name="hint.fallbackPiece" xml:space="preserve"><value>印の付いたマスが、動かすべき駒を示しています。</value></data>
+  <data name="hint.fallbackIdea" xml:space="preserve"><value>自分の形を整えるか、相手の狙いを防ぎましょう。</value></data>
+  <data name="hint.keys" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="suggest.title" xml:space="preserve"><value>提案：{0}</value></data>
+  <data name="suggest.eval" xml:space="preserve"><value>評価：{0}</value></data>
+  <data name="suggest.also" xml:space="preserve"><value>ほかの候補：{0}</value></data>
+  <data name="ask.title" xml:space="preserve"><value>質問</value></data>
+  <data name="ask.noPosition" xml:space="preserve"><value>まだ局面を認識していません。</value></data>
+  <data name="ask.needLlm" xml:space="preserve"><value>回答を受けるには、設定で AI サーバーを追加してください。</value></data>
+  <data name="ask.cardTitle" xml:space="preserve"><value>あなたの質問：{0}</value></data>
+  <data name="error.explain" xml:space="preserve"><value>解説に失敗しました：{0}</value></data>
+  <data name="card.loading" xml:space="preserve"><value>解説を作成中 …</value></data>
+  <data name="card.thanks" xml:space="preserve"><value>ありがとうございます：{0}</value></data>
+  <data name="feedback.long" xml:space="preserve"><value>長すぎる</value></data>
+  <data name="feedback.short" xml:space="preserve"><value>短すぎる</value></data>
+  <data name="feedback.helpful" xml:space="preserve"><value>役に立った</value></data>
+  <data name="panel.nextHint" xml:space="preserve"><value>次のヒント</value></data>
+  <data name="panel.again" xml:space="preserve"><value>もう一度説明</value></data>
+  <data name="panel.ask" xml:space="preserve"><value>質問する …</value></data>
+  <data name="panel.hintOf" xml:space="preserve"><value>ヒント {0}/{1}</value></data>
+  <data name="panel.collapse" xml:space="preserve"><value>パネルを折りたたむ</value></data>
+  <data name="panel.expand" xml:space="preserve"><value>パネルを展開</value></data>
+  <data name="panel.opening" xml:space="preserve"><value>オープニング：{0}</value></data>
+  <data name="panel.record" xml:space="preserve"><value>プレイヤー記録</value></data>
+  <data name="panel.training" xml:space="preserve"><value>トレーニング</value></data>
+  <data name="panel.report" xml:space="preserve"><value>総評</value></data>
+  <data name="gameCard.title" xml:space="preserve"><value>対局を評価しました</value></data>
+  <data name="gameCard.line" xml:space="preserve"><value>精度 {0}％、ミスまたは大悪手 {1} 回。</value></data>
+  <data name="gameCard.rating" xml:space="preserve"><value>レーティング {0}</value></data>
+  <data name="gameCard.note" xml:space="preserve"><value>詳細は「総評」をご覧ください。</value></data>
+  <data name="menu.active" xml:space="preserve"><value>有効</value></data>
+  <data name="menu.duo" xml:space="preserve"><value>二人でトレーニング</value></data>
+  <data name="menu.explain" xml:space="preserve"><value>提案を解説する</value></data>
+  <data name="menu.review" xml:space="preserve"><value>指し手を評価する</value></data>
+  <data name="menu.threats" xml:space="preserve"><value>狙いを表示する</value></data>
+  <data name="menu.side" xml:space="preserve"><value>自分の色</value></data>
+  <data name="menu.sideAuto" xml:space="preserve"><value>自動（下側）</value></data>
+  <data name="menu.best" xml:space="preserve"><value>最善手をすぐに表示</value></data>
+  <data name="menu.always" xml:space="preserve"><value>常に自分の分を計算</value></data>
+  <data name="menu.think" xml:space="preserve"><value>思考時間</value></data>
+  <data name="menu.nextHint" xml:space="preserve"><value>次のヒント</value></data>
+  <data name="menu.toggleSide" xml:space="preserve"><value>手番を切り替える</value></data>
+  <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>対局を終了</value></data>
+  <data name="menu.copyPgn" xml:space="preserve"><value>対局を PGN でコピー</value></data>
+  <data name="menu.resetPanel" xml:space="preserve"><value>パネルをボードの横に戻す</value></data>
+  <data name="menu.record" xml:space="preserve"><value>プレイヤー記録 …</value></data>
+  <data name="menu.training" xml:space="preserve"><value>トレーニング …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>総評 …</value></data>
+  <data name="menu.relearn" xml:space="preserve"><value>駒を学習し直す</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>設定 …</value></data>
+  <data name="menu.quit" xml:space="preserve"><value>終了</value></data>
+  <data name="settings.title" xml:space="preserve"><value>Chess Coach · 設定</value></data>
+  <data name="settings.llm" xml:space="preserve"><value>AI サーバー</value></data>
+  <data name="settings.server" xml:space="preserve"><value>サーバー</value></data>
+  <data name="settings.token" xml:space="preserve"><value>トークン</value></data>
+  <data name="settings.loadModels" xml:space="preserve"><value>モデルを読み込む</value></data>
+  <data name="settings.model" xml:space="preserve"><value>モデル</value></data>
+  <data name="settings.path" xml:space="preserve"><value>パス</value></data>
+  <data name="settings.choose" xml:space="preserve"><value>選択 …</value></data>
+  <data name="settings.chooseTitle" xml:space="preserve"><value>Stockfish を選択</value></data>
+  <data name="settings.general" xml:space="preserve"><value>一般</value></data>
+  <data name="settings.autostart" xml:space="preserve"><value>Windows と同時に起動</value></data>
+  <data name="settings.language" xml:space="preserve"><value>言語</value></data>
+  <data name="settings.langSystem" xml:space="preserve"><value>システム</value></data>
+  <data name="settings.hotkeys" xml:space="preserve"><value>ショートカット：Ctrl+Alt+H 次のヒント、Ctrl+Alt+T 手番の切り替え。</value></data>
+  <data name="settings.expert" xml:space="preserve"><value>エキスパート</value></data>
+  <data name="settings.thinkMs" xml:space="preserve"><value>思考時間（ミリ秒）</value></data>
+  <data name="settings.lock" xml:space="preserve"><value>エキスパートモードをロック</value></data>
+  <data name="settings.sfFound" xml:space="preserve"><value>検出：{0}</value></data>
+  <data name="settings.sfMissing" xml:space="preserve"><value>見つかりません。ChessCoach.exe の隣に「stockfish」フォルダーを置くか、ここでパスを選択してください。</value></data>
+  <data name="llm.connecting" xml:space="preserve"><value>接続中 …</value></data>
+  <data name="llm.found" xml:space="preserve"><value>{0} 個のモデルが見つかりました（{1}）</value></data>
+  <data name="settings.httpWarning" xml:space="preserve"><value>サーバーのアドレスが http:// で始まっています。トークンは暗号化されずに送信されます。可能なら https:// を使ってください。</value></data>
+  <data name="common.ok" xml:space="preserve"><value>OK</value></data>
+  <data name="common.cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="record.title" xml:space="preserve"><value>Chess Coach · プレイヤー記録</value></data>
+  <data name="record.new" xml:space="preserve"><value>新しいプロフィール …</value></data>
+  <data name="record.partner" xml:space="preserve"><value>パートナーとして使う</value></data>
+  <data name="record.newName" xml:space="preserve"><value>新しいプロフィールの名前</value></data>
+  <data name="record.rating" xml:space="preserve"><value>レーティング</value></data>
+  <data name="record.games" xml:space="preserve"><value>{0} 局を評価済み</value></data>
+  <data name="record.history" xml:space="preserve"><value>レーティングの推移</value></data>
+  <data name="record.noHistory" xml:space="preserve"><value>対局数がまだ足りません。</value></data>
+  <data name="record.skills" xml:space="preserve"><value>スキル</value></data>
+  <data name="record.mistakes" xml:space="preserve"><value>よくあるミス</value></data>
+  <data name="record.none" xml:space="preserve"><value>まだありません。</value></data>
+  <data name="record.puzzles" xml:space="preserve"><value>問題</value></data>
+  <data name="record.puzzleStats" xml:space="preserve"><value>全 {0} 問 · 復習 {1} 問 · 習得 {2} 問 · 挑戦 {3} 回 · 最近の成功率 {4} · ペース {5}</value></data>
+  <data name="record.hints" xml:space="preserve"><value>1 手あたりのヒント使用数</value></data>
+  <data name="record.noHint" xml:space="preserve"><value>なし</value></data>
+  <data name="record.style" xml:space="preserve"><value>解説スタイル</value></data>
+  <data name="record.lastGames" xml:space="preserve"><value>最近の対局</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · 総評</value></data>
+  <data name="report.noOpening" xml:space="preserve"><value>オープニングなし</value></data>
+  <data name="report.empty" xml:space="preserve"><value>評価済みの対局はまだありません。対局が終わると評価されます。</value></data>
+  <data name="report.opening" xml:space="preserve"><value>オープニング：{0}</value></data>
+  <data name="report.white" xml:space="preserve"><value>白</value></data>
+  <data name="report.black" xml:space="preserve"><value>黒</value></data>
+  <data name="report.sideStats" xml:space="preserve"><value>精度 {0}％ · 平均損失 {1} · パフォーマンス {2}</value></data>
+  <data name="report.counts" xml:space="preserve"><value>最善手 {0} · 好手 {1} · 不正確な手 {2} · ミス {3} · 大悪手 {4}</value></data>
+  <data name="report.moments" xml:space="preserve"><value>重要な局面</value></data>
+  <data name="report.summary" xml:space="preserve"><value>まとめ</value></data>
+  <data name="report.copyPgn" xml:space="preserve"><value>PGN をコピー</value></data>
+  <data name="training.title" xml:space="preserve"><value>Chess Coach · トレーニング</value></data>
+  <data name="training.hint" xml:space="preserve"><value>次のヒント</value></data>
+  <data name="training.solution" xml:space="preserve"><value>解答を表示</value></data>
+  <data name="training.next" xml:space="preserve"><value>次の問題</value></data>
+  <data name="training.noneDue" xml:space="preserve"><value>今日復習する問題はありません。問題は対局でのミスから作られます。</value></data>
+  <data name="training.done" xml:space="preserve"><value>今日の問題はすべて完了しました。</value></data>
+  <data name="training.progress" xml:space="preserve"><value>問題 {0}/{1}</value></data>
+  <data name="training.find" xml:space="preserve"><value>{0}の手番。最善手を見つけましょう。</value></data>
+  <data name="training.correct" xml:space="preserve"><value>正解：{0}</value></data>
+  <data name="training.wrong" xml:space="preserve"><value>惜しい。もう一度試すか、ヒントを使ってください。</value></data>
+  <data name="training.best" xml:space="preserve"><value>最善手：{0}</value></data>
+  <data name="menu.checkUpdates" xml:space="preserve"><value>更新を確認 …</value></data>
+  <data name="update.current" xml:space="preserve"><value>Chess Coach は最新です。</value></data>
+  <data name="update.ready" xml:space="preserve"><value>更新 {0} の準備ができました。終了時にインストールされます。</value></data>
+  <data name="update.failed" xml:space="preserve"><value>更新の確認に失敗しました：{0}</value></data>
+  <data name="update.prompt" xml:space="preserve"><value>バージョン {0} が利用できます。今すぐインストールして再起動しますか？</value></data>
+  <data name="settings.autoUpdate" xml:space="preserve"><value>更新を自動的にインストールする</value></data>
+  <data name="settings.restartPrompt" xml:space="preserve"><value>新しい言語を適用するため、Chess Coach を今すぐ再起動しますか？</value></data>
+  <data name="player.default" xml:space="preserve"><value>プレイヤー</value></data>
+  <data name="player.partner" xml:space="preserve"><value>パートナー</value></data>
+  <data name="update.openPage" xml:space="preserve"><value>バージョン {0} が利用できます。ダウンロードページを開きますか？</value></data>
+</root>
