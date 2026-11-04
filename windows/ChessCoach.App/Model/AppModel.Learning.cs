@@ -10,9 +10,9 @@ internal sealed partial class AppModel
     public Storage Storage { get; } = new(AppPaths.DataDir);
     public List<PlayerProfile> Profiles { get; private set; } = new();
     private readonly Dictionary<string, PuzzleSet> _puzzles = new();
-    private readonly Queue<PlayedMove> _moveQueue = new();
-    private readonly List<ReviewedMove> _reviewed = new();
-    private readonly Dictionary<string, int> _hintUsed = new();
+    private GameBook _book = new();
+    private readonly Dictionary<string, RecapProgress> _progress = new();
+    private readonly CancellationTokenSource _recapCts = new();
     private readonly Dictionary<string, ExplanationStyle> _styles = new();
     private readonly Dictionary<string, ExplanationStyle> _reviewStyleByFen = new();
     private readonly Dictionary<string, ExplanationStyle> _themeStyle = new();
@@ -21,13 +21,23 @@ internal sealed partial class AppModel
     private DateTime _lastExplainAt = DateTime.MinValue;
     private string _pgnCache = "";
     private string? _openingName;
-    private string? _endReason;
+    private GameEnd? _pendingEnd;
     private HintSet? _hintSet;
     private string? _hintSetFen;
 
     public GameReport? LastReport { get; private set; }
     public event Action? ReportChanged;
     public Action? OpenRecord, OpenTraining, OpenReport;
+    public string? RecapSelection { get; private set; }
+    public int GamePlies => _book.Plies;
+
+    public RecapProgress? ProgressFor(string id) => _progress.GetValueOrDefault(id);
+
+    public void ShowRecap(string? id = null)
+    {
+        RecapSelection = id ?? LastReport?.Id;
+        OpenReport?.Invoke();
+    }
 
     private void InitLearning()
     {
@@ -92,11 +102,9 @@ internal sealed partial class AppModel
         try { Storage.Save(p); } catch (Exception e) { Log.Write("Profile not saved: " + e.Message); }
     }
 
-    private PlayerProfile? ProfileFor(PieceColor color)
-    {
-        var me = _lastMe ?? PieceColor.White;
-        return color == me ? Active : Partner;
-    }
+    private PlayerProfile? ProfileFor(PieceColor color) => ProfileFor(color, _lastMe ?? PieceColor.White);
+
+    private PlayerProfile? ProfileFor(PieceColor color, PieceColor me) => color == me ? Active : Partner;
 
     private PlayerContext ContextFor(PieceColor color) => (ProfileFor(color) ?? Active).PromptContext;
 
@@ -129,7 +137,7 @@ internal sealed partial class AppModel
 
     private void RecordHintUse(HintContext ctx, int level)
     {
-        if (!_hintUsed.TryGetValue(ctx.Fen, out var old) || level > old) _hintUsed[ctx.Fen] = level;
+        if (!_book.HintUsed.TryGetValue(ctx.Fen, out var old) || level > old) _book.HintUsed[ctx.Fen] = level;
     }
 
     private ExplanationStyle PickStyle(PieceColor color)
@@ -195,13 +203,12 @@ internal sealed partial class AppModel
 
     private void EnqueueForLearning(PlayedMove pm)
     {
-        _moveQueue.Enqueue(pm);
+        _book.Queue.Enqueue(pm);
         _threatResult = null;
     }
 
     private void LearningPositionChanged(GameUpdate? previous, GameUpdate u, PieceColor me)
     {
-        if (u.Change == GameChange.NewGame && (_reviewed.Count + _moveQueue.Count) >= 4) _endReason = "new game";
         if (u.NewMoves.Count > 0)
         {
             UpdateOpening();
@@ -209,7 +216,6 @@ internal sealed partial class AppModel
             var black = me == PieceColor.Black ? Active.Name : Partner?.Name ?? "?";
             _pgnCache = _record.Pgn(white, black, opening: _openingName);
         }
-        if (u.IsGameOver && _endReason == null) _endReason = "game over";
     }
 
     private void UpdateOpening()
@@ -225,33 +231,40 @@ internal sealed partial class AppModel
 
     public string CurrentPgn() => _record.IsEmpty ? _pgnCache : _record.Pgn(Active.Name, Partner?.Name ?? "?", opening: _openingName);
 
-    public void RequestEndGame() { _endReason = "menu"; Invalidate(); }
+    public void RequestEndGame()
+    {
+        var known = _record.Current?.Result is { } r ? GameEndDetector.For(r) : null;
+        _pendingEnd = new GameEnd(GameEndReason.Manual, known?.Result ?? "*");
+        Invalidate();
+    }
+
+    public bool CanFinish => _book.Plies >= 2;
 
     private async Task BackgroundWorkAsync(CancellationToken ct)
     {
-        for (int i = 0; i < 3 && _moveQueue.Count > 0 && IsActive && !ct.IsCancellationRequested; i++)
-            await AnalyzeMoveAsync(_moveQueue.Dequeue());
+        var me = _lastMe ?? PieceColor.White;
+        for (int i = 0; i < 3 && _book.Queue.Count > 0 && IsActive && !ct.IsCancellationRequested; i++)
+            await AnalyzeMoveAsync(_book, _book.Queue.Dequeue(), me, 300);
     }
 
-    private async Task AnalyzeMoveAsync(PlayedMove pm)
+    private async Task AnalyzeMoveAsync(GameBook book, PlayedMove pm, PieceColor me, int ms)
     {
         if (pm.Before.Board.Problem(pm.Mover) != null) return;
-        var before = await _engine.AnalyzeAsync(pm.FenBefore, 300);
+        var before = await _engine.AnalyzeAsync(pm.FenBefore, ms, false);
         if (before == null) return;
         bool over = pm.After.Result is { Kind: GameResultKind.Checkmate or GameResultKind.Stalemate };
-        EngineResult? after = over ? null : await _engine.AnalyzeAsync(pm.FenAfter, 300);
+        EngineResult? after = over ? null : await _engine.AnalyzeAsync(pm.FenAfter, ms, false);
         int valueAfter = after is { BestMove.Length: > 0 } ? -after.Value : (pm.After.IsCheck ? Accuracy.MateValue : 0);
-        _reviewed.Add(new ReviewedMove(pm.Mover == PieceColor.White ? "w" : "b", pm.Uci, pm.San, pm.FenBefore,
+        book.Reviewed.Add(new ReviewedMove(pm.Mover == PieceColor.White ? "w" : "b", pm.Uci, pm.San, pm.FenBefore,
             before.Value, valueAfter, before.BestMove.Length > 0 ? before.BestMove : null));
 
-        var me = _lastMe ?? PieceColor.White;
-        if (!IsCoached(pm.Mover, me) || !_rated.Contains(MoveKey(pm)) || ProfileFor(pm.Mover) is not { } prof) return;
+        if (!IsCoached(pm.Mover, me) || !book.Rated.Contains(MoveKey(pm)) || ProfileFor(pm.Mover, me) is not { } prof) return;
         var review = Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after);
         EngineResult? threatRes = null;
-        if (Threats.NullMoveFen(pm.Before) is { } nf) threatRes = await _engine.AnalyzeAsync(nf, 300);
+        if (Threats.NullMoveFen(pm.Before) is { } nf) threatRes = await _engine.AnalyzeAsync(nf, ms, false);
         var analysis = MoveAnalyzer.Analyze(new MoveAnalysisInput(review, before, after, threatRes, pm.MoveNumber));
         prof.Apply(analysis);
-        prof.RecordHintUse(_hintUsed.GetValueOrDefault(pm.FenBefore));
+        prof.RecordHintUse(book.HintUsed.GetValueOrDefault(pm.FenBefore));
         if (analysis.Theme is { } th && _reviewStyleByFen.TryGetValue(pm.FenBefore, out var st)) _themeStyle[th.Raw()] = st;
         var puzzle = Puzzle.Make(review, before, analysis.MistakeType, analysis.Theme, prof.Level);
         if (puzzle != null && PuzzlesFor(prof.Id).Add(puzzle)) SavePuzzles(prof.Id);
@@ -259,68 +272,119 @@ internal sealed partial class AppModel
         Notify();
     }
 
-    private async Task FinishGameAsync(bool resetRecord)
+    private void FinishGame(GameEnd end)
     {
-        var reason = _endReason ?? "";
-        while (_moveQueue.Count > 0 && IsActive) await AnalyzeMoveAsync(_moveQueue.Dequeue());
-        if (!IsActive) return;
-        _endReason = null;
-        var reviewed = _reviewed.ToList();
+        var book = _book;
+        _book = new GameBook();
         var pgn = _pgnCache;
-        _reviewed.Clear(); _hintUsed.Clear();
-        if (resetRecord) { _record = new GameRecord(); _update = null; _stablePlacement = null; _pgnCache = ""; _openingName = null; }
-        if (reviewed.Count < 4) return;
-        Log.Write($"Game ended ({reason}), {reviewed.Count} plies");
+        var opening = _openingName;
+        if (end.Reason is GameEndReason.Overlay or GameEndReason.BoardGone or GameEndReason.Manual)
+        {
+            _record = new GameRecord(); _update = null; _stablePlacement = null; _pendingScreen = null;
+            _cached = null; _hasLastFp = false; _pgnCache = ""; _openingName = null;
+        }
+        _gameEnd.Reset();
+        if (book.Plies < 2) return;
+        Log.Write($"Game end: {end.ReasonKey}, result {end.Result}, {book.Plies} plies");
 
         var me = _lastMe ?? PieceColor.White;
         var whiteProf = me == PieceColor.White ? Active : Partner;
         var blackProf = me == PieceColor.Black ? Active : Partner;
-        var report = GameReport.Build(reviewed, null, DateTime.UtcNow, whiteProf?.Id, blackProf?.Id, _openingName);
-        foreach (var (prof, c) in new[] { (whiteProf, "w"), (blackProf, "b") })
-        {
-            if (prof == null) continue;
-            prof.CompleteGame(report.Side(c).Performance);
-            prof.LearningSpeed = PuzzleScheduler.AdjustedLearningSpeed(prof.LearningSpeed, PuzzlesFor(prof.Id).Puzzles);
-            SaveProfile(prof);
-        }
-        report.Summary = report.FallbackSummary(me == PieceColor.White ? "w" : "b");
-        try { Storage.Save(report, pgn); } catch (Exception e) { Log.Write("Game not saved: " + e.Message); }
+        var report = GameReport.Build(book.Reviewed, null, DateTime.UtcNow, whiteProf?.Id, blackProf?.Id, opening);
+        report.Result = end.Result;
+        report.EndReason = end.ReasonKey;
+        SaveReport(report, pgn);
         LastReport = report;
-        var mine = report.Side(me == PieceColor.White ? "w" : "b");
-        _reviewCard = new CoachCard("report|" + report.Id, CardKind.Info, Loc.T("gameCard.title"))
-        {
-            Lines = new[] { Loc.T("gameCard.line", $"{mine.Accuracy:0}", mine.Mistakes + mine.Blunders),
-                            Active.PlacementText ?? Loc.T("gameCard.rating", $"{Active.Rating:0}") },
-            Note = Loc.T("gameCard.note"),
-        };
-        UpdatePanel();
-        Notify();
+        RecapSelection = report.Id;
+        _progress[report.Id] = new RecapProgress(report.Id, book.Reviewed.Count, book.Plies);
         ReportChanged?.Invoke();
-        if (LlmConfigured) _ = SummarizeAsync(report, me, reviewed);
+        if (Settings.OpenRecap && !end.Silent) OpenReport?.Invoke();
+        _ = CompleteRecapAsync(report, book, me, whiteProf, blackProf);
     }
 
-    private async Task SummarizeAsync(GameReport report, PieceColor me, List<ReviewedMove> reviewed)
+    private void SaveReport(GameReport report, string? pgn = null)
+    {
+        try { Storage.Save(report, pgn); } catch (Exception e) { Log.Write("Game not saved: " + e.Message); }
+    }
+
+    private async Task CompleteRecapAsync(GameReport report, GameBook book, PieceColor me, PlayerProfile? whiteProf, PlayerProfile? blackProf)
     {
         try
         {
+            int total = book.Reviewed.Count + book.Queue.Count, sinceSave = 0;
+            while (book.Queue.Count > 0)
+            {
+                _recapCts.Token.ThrowIfCancellationRequested();
+                await AnalyzeMoveAsync(book, book.Queue.Dequeue(), me, 200);
+                _progress[report.Id] = new RecapProgress(report.Id, book.Reviewed.Count, total);
+                if (++sinceSave % 4 == 0 || book.Queue.Count == 0)
+                {
+                    report.Rebuild(book.Reviewed);
+                    SaveReport(report);
+                }
+                ReportChanged?.Invoke();
+            }
+            report.Rebuild(book.Reviewed);
+            _progress.Remove(report.Id);
+            foreach (var (prof, c) in new[] { (whiteProf, "w"), (blackProf, "b") })
+            {
+                if (prof == null) continue;
+                prof.CompleteGame(report.Side(c).Performance);
+                prof.LearningSpeed = PuzzleScheduler.AdjustedLearningSpeed(prof.LearningSpeed, PuzzlesFor(prof.Id).Puzzles);
+                SaveProfile(prof);
+            }
             string color = me == PieceColor.White ? "w" : "b";
-            var req = report.SummaryRequest(color, ContextFor(me));
-            string b = Settings.LlmBase, token = _llmToken, model = Settings.LlmModel;
-            var text = await Task.Run(() => LlmClient.ExplainAsync(b, token, model, req.System, req.User, null, default, req.MaxTokens));
-            if (string.IsNullOrWhiteSpace(text)) return;
-            report.Summary = text;
-            Storage.Save(report);
-            RunOnUi(() => { ReportChanged?.Invoke(); });
+            var mine = report.Side(color);
+            _reviewCard = new CoachCard("report|" + report.Id, CardKind.Info, Loc.T("gameCard.title"))
+            {
+                Lines = new[] { Loc.T("gameCard.line", $"{mine.Accuracy:0}", mine.Mistakes + mine.Blunders),
+                                Active.PlacementText ?? Loc.T("gameCard.rating", $"{Active.Rating:0}") },
+                Note = Loc.T("gameCard.note"),
+            };
+            UpdatePanel();
+            Notify();
+            await StreamSummaryAsync(report, color, me);
         }
-        catch (Exception e) { Log.Write("Summary failed: " + e.Message); }
+        catch (OperationCanceledException) { }
+        catch (Exception e) { Log.Write("Recap failed: " + e.Message); _progress.Remove(report.Id); ReportChanged?.Invoke(); }
+    }
+
+    private Task StreamSummaryAsync(GameReport report, string color, PieceColor me)
+    {
+        var done = new TaskCompletionSource();
+        string fallback = report.FallbackSummary(color);
+        if (!LlmConfigured || report.Moves.Count == 0)
+        {
+            report.Summary = fallback;
+            SaveReport(report);
+            ReportChanged?.Invoke();
+            return Task.CompletedTask;
+        }
+        var req = report.SummaryRequest(color, ContextFor(me));
+        report.Summary = "";
+        ReportChanged?.Invoke();
+        Explain(req.System, req.User, req.MaxTokens, (text, finished) =>
+        {
+            report.Summary = text;
+            if (finished) { SaveReport(report); done.TrySetResult(); }
+            ReportChanged?.Invoke();
+        }, msg =>
+        {
+            Log.Write("Summary failed: " + msg);
+            report.Summary = fallback;
+            SaveReport(report);
+            ReportChanged?.Invoke();
+            done.TrySetResult();
+        });
+        return done.Task;
     }
 
     public void WireTray(TrayController tray)
     {
         tray.OpenRecord = () => OpenRecord?.Invoke();
         tray.OpenTraining = () => OpenTraining?.Invoke();
-        tray.OpenReport = () => OpenReport?.Invoke();
         tray.EndGame = RequestEndGame;
+        tray.OpenReport = () => ShowRecap();
         tray.CopyPgn = () =>
         {
             var pgn = CurrentPgn();
@@ -330,7 +394,7 @@ internal sealed partial class AppModel
         {
             new PanelAction("record", Loc.T("panel.record"), () => OpenRecord?.Invoke()),
             new PanelAction("training", Loc.T("panel.training"), () => OpenTraining?.Invoke()),
-            new PanelAction("report", Loc.T("panel.report"), () => OpenReport?.Invoke()),
+            new PanelAction("report", Loc.T("panel.report"), () => ShowRecap()),
         });
     }
 }

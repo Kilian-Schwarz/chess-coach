@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>Sunucu {0} hatası bildiriyor. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Bu adreste model listesi bulunamadı. Open WebUI için örneğin https://openwebui.example.com, vLLM için http://host:8000/v1 gir.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Açıklama almak için ayarlarda bir sunucu ve model seç.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>Dikkat: {0}, {1} karesinde korumasız kalır.</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>Dikkat: {0}, {1} karesinde daha değersiz bir taş tarafından alınabilir.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>Dikkat: {0} taşını {1} karesine oynamak, {3} karesindeki {2} taşını korumasız bırakır.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>Dikkat: {0} kare {1} için güvensiz, kırmızıyla işaretli.</value></data>
 </root>

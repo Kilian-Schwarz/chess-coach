@@ -51,6 +51,7 @@ extension AppModel {
         let prefix = duoTraining ? ctx.who + ": " : ""
         panel.model.canExplain = level >= 3 || reviewCard != nil
         var state = OverlayState()
+        state.unsafe = lift?.marks ?? []
 
         let newThreatCard: CoachCard? = (showThreats ? ctx.threat : nil).map {
             CoachCard(id: ctx.fen + "|threat", kind: .threat, title: String(localized: "Threat"), text: $0.text)

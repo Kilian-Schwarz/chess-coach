@@ -27,19 +27,36 @@ public static class TestSupport
         return new RgbImage(img.Width, img.Height, img.Data);
     }
 
+    private static bool Complete(string dir) =>
+        File.Exists(Path.Combine(dir, "mid_black.png")) && File.Exists(Path.Combine(dir, "lift_dots_only.png"));
+
     public static string? SyntheticDir()
     {
         var dir = Path.Combine(Root, "build", "testboards");
-        if (File.Exists(Path.Combine(dir, "mid_black.png"))) return dir;
+        if (Complete(dir)) return dir;
         try
         {
             var psi = new ProcessStartInfo("python3", $"\"{Path.Combine(Root, "Tools", "make_board.py")}\" \"{dir}\"")
             { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false };
             using var p = Process.Start(psi)!;
             p.WaitForExit(60000);
-            return File.Exists(Path.Combine(dir, "mid_black.png")) ? dir : null;
+            return Complete(dir) ? dir : null;
         }
         catch { return null; }
+    }
+
+    public static string? PrivateFixtures()
+    {
+        var dir = Path.Combine(Root, "intern", "fixtures");
+        return File.Exists(Path.Combine(dir, "chesscom_gameover_popup_white_mated.png")) && File.Exists(Path.Combine(dir, "chesscom_start_white.png")) ? dir : null;
+    }
+
+    public static (PieceTemplates Templates, bool WhiteBottom) Learn(string startPath)
+    {
+        var img = LoadPng(startPath);
+        var templates = new PieceTemplates();
+        var board = BoardDetector.Detect(img) ?? throw new Exception("no board in " + startPath);
+        return (templates, templates.LearnStart(BoardScanner.Analyze(img, board, templates).Features));
     }
 
     public static string? StockfishPath() => StockfishEngine.FindBinary();

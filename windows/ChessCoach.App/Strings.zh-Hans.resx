@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>下一条提示</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>切换走棋方</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>结束对局</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>结束对局并显示复盘</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>将对局复制为 PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>将面板移回棋盘旁</value></data>
   <data name="menu.record" xml:space="preserve"><value>棋手档案 …</value></data>
   <data name="menu.training" xml:space="preserve"><value>训练 …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>复盘 …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>上次复盘 …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>重新学习棋子</value></data>
   <data name="menu.settings" xml:space="preserve"><value>设置 …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>退出</value></data>
@@ -141,7 +141,7 @@
   <data name="record.lastGames" xml:space="preserve"><value>最近对局</value></data>
   <data name="report.title" xml:space="preserve"><value>Chess Coach · 复盘</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>无开局</value></data>
-  <data name="report.empty" xml:space="preserve"><value>还没有复盘过的对局。对局结束后会自动复盘。</value></data>
+  <data name="report.empty" xml:space="preserve"><value>还没有复盘。对局结束后会出现复盘。</value></data>
   <data name="report.opening" xml:space="preserve"><value>开局：{0}</value></data>
   <data name="report.white" xml:space="preserve"><value>白方</value></data>
   <data name="report.black" xml:space="preserve"><value>黑方</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>版本 {0} 可用。要打开下载页面吗？</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>你的上一步</value></data>
   <data name="review.gap" xml:space="preserve"><value>错过了几步，下一步将重新评分</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>拖动时的提示</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>对局结束后打开复盘</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>结束对局并显示复盘</value></data>
+  <data name="report.progress" xml:space="preserve"><value>正在分析着法：{0} / {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>结果：{0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>结果：未知</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>以将杀结束</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>以逼和结束</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>已结束：网站在棋盘上方显示了结果</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>已结束：棋盘消失了</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>已结束：新的对局开始了</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>已手动结束</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>正在撰写总结 …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>打开复盘</value></data>
 </root>

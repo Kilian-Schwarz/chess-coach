@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Indice suivant</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Changer le camp au trait</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Terminer la partie</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Terminer la partie et afficher le bilan</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Copier la partie en PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Replacer le panneau à côté de l’échiquier</value></data>
   <data name="menu.record" xml:space="preserve"><value>Dossier du joueur …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Entraînement …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Bilan …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Dernier bilan …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Réapprendre les pièces</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Paramètres …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Quitter</value></data>
@@ -141,7 +141,7 @@
   <data name="record.lastGames" xml:space="preserve"><value>Parties récentes</value></data>
   <data name="report.title" xml:space="preserve"><value>Chess Coach · Bilan</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>sans ouverture</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Aucune partie analysée pour le moment. Une partie est analysée à sa fin.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Aucun bilan pour l’instant. Il apparaît à la fin d’une partie.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Ouverture : {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Blancs</value></data>
   <data name="report.black" xml:space="preserve"><value>Noirs</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>La version {0} est disponible. Ouvrir la page de téléchargement ?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Votre dernier coup</value></data>
   <data name="review.gap" xml:space="preserve"><value>Coups manqués : le prochain coup sera de nouveau évalué</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Conseils pendant le glissement</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Ouvrir le bilan après une partie</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Terminer la partie et afficher le bilan</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Analyse des coups : {0} sur {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Résultat : {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Résultat : inconnu</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Terminée par échec et mat</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Terminée par pat</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Terminée : le site a affiché un résultat sur l’échiquier</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Terminée : l’échiquier a disparu</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Terminée : une nouvelle partie a commencé</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Terminée manuellement</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Rédaction du résumé …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Ouvrir le bilan</value></data>
 </root>

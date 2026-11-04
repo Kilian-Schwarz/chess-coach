@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>De server meldt fout {0}. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Op dit adres is geen modellijst gevonden. Voer voor Open WebUI bijvoorbeeld https://openwebui.example.com in, voor vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Kies in de instellingen een server en model voor uitleg.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>Pas op: {0} op {1} zou onbeschermd staan.</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>Pas op: een minder waardevol stuk bedreigt {0} op {1}.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>Pas op: {0} naar {1} laat {2} op {3} onbeschermd achter.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>Pas op: {0} velden zijn onveilig voor {1}, rood gemarkeerd.</value></data>
 </root>

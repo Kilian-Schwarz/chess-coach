@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>サーバーがエラー {0} を返しました。{1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>このアドレスにモデル一覧が見つかりません。Open WebUI なら例えば https://openwebui.example.com、vLLM なら http://host:8000/v1 を入力してください。</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>解説を表示するには、設定でサーバーとモデルを選んでください。</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>注意：{1}の{0}は守られません。</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>注意：{1}の{0}は、価値の低い駒に取られる可能性があります。</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>注意：{0}を{1}に動かすと、{3}の{2}が無防備になります。</value></data>
+  <data name="lift.many" xml:space="preserve"><value>注意：{1}にとって安全でないマスが{0}か所あります（赤で表示）。</value></data>
 </root>

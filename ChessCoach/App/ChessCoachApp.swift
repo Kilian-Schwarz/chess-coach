@@ -43,6 +43,9 @@ struct StatusLabel: View {
                 guard let request else { return }
                 NSApp.activate(ignoringOtherApps: true)
                 openWindow(id: request.id)
+                DispatchQueue.main.async {
+                    NSApp.windows.first { $0.identifier?.rawValue.contains(request.id) == true }?.makeKeyAndOrderFront(nil)
+                }
             }
     }
 }
@@ -89,8 +92,8 @@ struct MenuContent: View {
             .keyboardShortcut("h", modifiers: [.option, .command])
         Button("Switch side to move") { model.toggleSideToMove() }
             .keyboardShortcut("t", modifiers: [.option, .command])
-        Button("End game") { model.endGameNow() }
-            .disabled(model.movesInGame < 6)
+        Button("Finish game & show recap") { model.endGameNow() }
+            .disabled(model.movesInGame < 2)
 
         Divider()
 
@@ -106,6 +109,8 @@ struct MenuContent: View {
         Text(store.active.placementText() ?? "\(store.active.level.title()) · \(Int(store.active.rating.rounded()))")
         Text(model.focusLine)
         Button("Training …") { model.open("training") }
+        Button("Last recap …") { model.showRecap() }
+            .disabled(model.lastReport == nil && store.games.isEmpty)
         Button("Evaluation …") { model.open("report") }
             .disabled(model.lastReport == nil && store.games.isEmpty)
         Button("Player profile …") { model.open("profile") }
@@ -116,6 +121,7 @@ struct MenuContent: View {
         Toggle("Explain suggestions", isOn: $model.explainSuggestions)
         Toggle("Rate moves", isOn: $model.reviewMoves)
         Toggle("Show threats", isOn: $model.showThreats)
+        Toggle("Hints while dragging", isOn: $model.dragHints)
 
         Divider()
 
@@ -198,6 +204,8 @@ struct SettingsView: View {
                 Toggle("Explain suggestions", isOn: $model.explainSuggestions)
                 Toggle("Rate and explain moves", isOn: $model.reviewMoves)
                 Toggle("Show threats", isOn: $model.showThreats)
+                Toggle("Hints while dragging", isOn: $model.dragHints)
+                Toggle("Open recap after a game", isOn: $model.openRecap)
             }
 
             if model.expertUnlocked {

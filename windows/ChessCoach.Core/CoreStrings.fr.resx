@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>Le serveur signale l'erreur {0}. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Aucune liste de modèles trouvée à cette adresse. Pour Open WebUI, saisis p. ex. https://openwebui.example.com, pour vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Pour obtenir des explications, choisis un serveur et un modèle dans les réglages.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>Attention : {0} en {1} serait sans défense.</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>Attention : une pièce de moindre valeur menace {0} en {1}.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>Attention : jouer {0} en {1} laisse {2} en {3} sans protection.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>Attention : {0} cases ne sont pas sûres pour {1}, marquées en rouge.</value></data>
 </root>

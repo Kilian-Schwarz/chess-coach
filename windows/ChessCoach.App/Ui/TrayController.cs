@@ -72,7 +72,7 @@ internal sealed class TrayController : IDisposable
 
     private static ToolStripMenuItem Item(string text, Action click, bool isChecked = false, string? shortcut = null)
     {
-        var it = new ToolStripMenuItem(text) { Checked = isChecked };
+        var it = new ToolStripMenuItem(text.Replace("&", "&&")) { Checked = isChecked };
         if (shortcut != null) it.ShortcutKeyDisplayString = shortcut;
         it.Click += (_, _) => click();
         return it;
@@ -89,6 +89,8 @@ internal sealed class TrayController : IDisposable
         _menu.Items.Add(Item(Loc.T("menu.explain"), () => { s.ExplainSuggestions = !s.ExplainSuggestions; _model.SettingsChanged(); }, s.ExplainSuggestions));
         _menu.Items.Add(Item(Loc.T("menu.review"), () => { s.ReviewMoves = !s.ReviewMoves; _model.SettingsChanged(); }, s.ReviewMoves));
         _menu.Items.Add(Item(Loc.T("menu.threats"), () => { s.ShowThreats = !s.ShowThreats; _model.SettingsChanged(); }, s.ShowThreats));
+        _menu.Items.Add(Item(Loc.T("menu.dragHints"), () => { s.DragHints = !s.DragHints; _model.SettingsChanged(); }, s.DragHints));
+        _menu.Items.Add(Item(Loc.T("menu.openRecap"), () => { s.OpenRecap = !s.OpenRecap; _model.SettingsChanged(); }, s.OpenRecap));
 
         var side = new ToolStripMenuItem(Loc.T("menu.side"));
         foreach (var (title, val) in new[] { (Loc.T("menu.sideAuto"), AppModel.SideChoice.Auto), (Loc.T("color.white"), AppModel.SideChoice.White), (Loc.T("color.black"), AppModel.SideChoice.Black) })

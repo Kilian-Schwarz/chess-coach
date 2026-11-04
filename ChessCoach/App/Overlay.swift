@@ -4,10 +4,11 @@ import SwiftUI
 struct OverlayState: Equatable {
     struct Arrow: Equatable { var from: (col: Int, row: Int); var to: (col: Int, row: Int); var partner = false
         static func == (a: Arrow, b: Arrow) -> Bool { a.from == b.from && a.to == b.to && a.partner == b.partner } }
-    struct Square: Equatable { var col: Int; var row: Int }
+    struct Square: Equatable, Hashable { var col: Int; var row: Int }
     var arrow: Arrow?
     var threatArrow: Arrow?
     var highlight: Square?
+    var unsafe: [Square] = []
     var partnerHighlight = false
     var label: String?
     var hint: String?
@@ -60,6 +61,14 @@ struct OverlayView: View {
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 3)
                     .strokeBorder(Color.green.opacity(0.55), lineWidth: 2)
+
+                ForEach(model.state.unsafe, id: \.self) { s in
+                    Rectangle()
+                        .fill(Color.red.opacity(0.22))
+                        .overlay(Rectangle().strokeBorder(Color.red.opacity(0.5), lineWidth: max(1.5, sq * 0.03)))
+                        .frame(width: sq, height: sq)
+                        .offset(x: inset + CGFloat(s.col) * sq, y: inset + CGFloat(s.row) * sq)
+                }
 
                 if let h = model.state.highlight {
                     let c = model.state.partnerHighlight ? Color.blue : Color.yellow

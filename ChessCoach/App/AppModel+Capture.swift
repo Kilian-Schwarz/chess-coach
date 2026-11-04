@@ -50,6 +50,7 @@ extension AppModel {
 
     private func locateInRegion(_ tr: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect), templates currentTemplates: PieceTemplates) async throws -> Located? {
         var reason = "no capture"
+        var lastCrop: (image: CGImage, expected: BoardRect)?
         for factor in [0.12, 0.3] {
             let m = max(tr.rect.width * factor, 40)
             guard let d = try await ScreenCapture.captureRegion(displayID: tr.displayID, frame: tr.frame,
@@ -65,6 +66,7 @@ extension AppModel {
                 return cached
             }
             let img = d.image
+            lastCrop = (img, expected)
             let scan: ScanResult? = await Task.detached(priority: .userInitiated) {
                 guard let rgb = RGBImage(cgImage: img) else { return nil }
                 return BoardScanner.scan(rgb, templates: currentTemplates)
@@ -82,6 +84,19 @@ extension AppModel {
                 return loc
             }
             reason = "no board in a \(d.image.width)x\(d.image.height) crop (margin \(Int(factor * 100)) %)"
+        }
+        missView = .gone
+        if let crop = lastCrop, let colors = boardColors {
+            let feats: [[SquareFeature]]? = await Task.detached(priority: .userInitiated) {
+                guard let rgb = RGBImage(cgImage: crop.image) else { return nil }
+                return BoardScanner.analyze(rgb, board: crop.expected, templates: PieceTemplates()).features
+            }.value
+            if let feats, BoardReadability.ringMatch(feats, colors) >= BoardReadability.ringShare { missView = .covered }
+        }
+        if missView == .covered, var cached = cachedLocated {
+            regionMisses = max(regionMisses, 1)
+            cached.unchanged = true
+            return cached
         }
         regionMisses += 1
         if regionMisses < 3, var cached = cachedLocated {
@@ -131,7 +146,7 @@ extension AppModel {
 
         guard let loc = located else {
             if lostSince == nil { lostSince = Date() }
-            if let lost = lostSince, Date().timeIntervalSince(lost) > 60 { finishGame() }
+            observeEnd(.gone)
             status = String(localized: "Looking for a chessboard …")
             suggestion = nil
             hideAll()
@@ -140,11 +155,18 @@ extension AppModel {
             return
         }
         lostSince = nil
-        if loc.unchanged && settled && pendingReview == nil { return }
+        if regionMisses > 0 { observeEnd(missView); return }
+        if loc.unchanged && settled && pendingReview == nil {
+            if lastView != .readable { observeEnd(lastView) }
+            return
+        }
 
         let display = loc.display, scan = loc.scan, scale = loc.scale
         if lastScreen != scan.screen { lastScreen = scan.screen; lastChangeAt = Date() }
         lastDisplay = display.displayID
+        lastView = BoardReadability.view(scan.features, colors: boardColors)
+        if lastView != .readable { observeEnd(lastView); return }
+        boardColors = BoardColors.learn(scan.features)
         let local = boardStabilizer.accept(BoardRect(x: display.origin.x + scan.board.x * scale, y: display.origin.y + scan.board.y * scale,
                                                      size: scan.board.size * scale)).rect
         let boardRect = cocoaRect(for: BoardRect(x: local.x - display.origin.x, y: local.y - display.origin.y, size: local.size),
@@ -209,9 +231,10 @@ extension AppModel {
         let me: PieceColor = whiteAtBottom ? .white : .black
         lastMe = me
         let placement = Placement(screen: scan.screen, whiteAtBottom: whiteAtBottom)
+        updateLift(placement: placement, me: me, whiteAtBottom: whiteAtBottom)
 
         if placement != stablePlacement {
-            if placement.isStartPosition, !record.moves.isEmpty { finishGame() }
+            if placement.isStartPosition { observeEnd(.readable, isStart: true) }
             let marking = SideToMove.detect(scan: scan, whiteAtBottom: whiteAtBottom, templates: templates)
             let update = record.update(placement: placement, whiteAtBottom: whiteAtBottom, hintedMover: marking.mover)
             stablePlacement = placement
@@ -248,10 +271,7 @@ extension AppModel {
         if let o = sideOverride, o != pos.turn { pos = flipped(pos, to: o) }
         else if effectiveAlwaysMyTurn && !duoTraining && pos.turn != me { pos = flipped(pos, to: me) }
 
-        switch pos.result {
-        case .checkmate?, .stalemate?: finishGame()
-        default: break
-        }
+        observeEnd(.readable, result: record.current?.result)
 
         let toMove = pos.turn
         guard isCoached(toMove, me: me) else {

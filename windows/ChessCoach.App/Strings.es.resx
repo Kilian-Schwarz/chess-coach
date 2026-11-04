@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Siguiente pista</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Cambiar el lado que mueve</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Terminar la partida</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Terminar partida y mostrar resumen</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Copiar la partida como PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Volver a colocar el panel junto al tablero</value></data>
   <data name="menu.record" xml:space="preserve"><value>Ficha del jugador …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Entrenamiento …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Análisis …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Último resumen …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Volver a aprender las piezas</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Ajustes …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Salir</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>ninguna</value></data>
   <data name="record.style" xml:space="preserve"><value>Estilo de explicación</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Partidas recientes</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Análisis</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Resumen</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>sin apertura</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Aún no hay partidas analizadas. Una partida se analiza cuando termina.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Aún no hay resúmenes. Aparece uno cuando termina una partida.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Apertura: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Blancas</value></data>
   <data name="report.black" xml:space="preserve"><value>Negras</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>La versión {0} está disponible. ¿Abrir la página de descarga?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Tu última jugada</value></data>
   <data name="review.gap" xml:space="preserve"><value>Jugadas perdidas: la próxima jugada se volverá a valorar</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Consejos al arrastrar</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Abrir el resumen tras una partida</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Terminar partida y mostrar resumen</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Analizando jugadas: {0} de {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Resultado: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Resultado: desconocido</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Terminada por jaque mate</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Terminada por ahogado</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Terminada: la web mostró un resultado sobre el tablero</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Terminada: el tablero desapareció</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Terminada: empezó una partida nueva</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Terminada manualmente</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Redactando el resumen …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Abrir resumen</value></data>
 </root>

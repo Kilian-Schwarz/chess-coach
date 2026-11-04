@@ -1,5 +1,5 @@
 import sys, os
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 FONT_PATHS = ["/System/Library/Fonts/Apple Symbols.ttf", "/Library/Fonts/Arial Unicode.ttf",
               "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"]
@@ -29,7 +29,7 @@ def parse_fen(fen):
     return board
 
 
-def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None):
+def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None, dots=None, floating=None, popup=None):
     W, H = 1600, 1000
     img = Image.new("RGB", (W, H), (38, 36, 33))
     d = ImageDraw.Draw(img)
@@ -67,6 +67,33 @@ def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None):
                 d.text((x + 3, y + 2), str(rank + 1), fill=DARK if light else LIGHT)
             if row == 7:
                 d.text((x + sq - 10, y + sq - 14), "abcdefgh"[file], fill=DARK if light else LIGHT)
+    for file, rank in dots or []:
+        col = file if white_bottom else 7 - file
+        row = 7 - rank if white_bottom else rank
+        x, y = ox + col * sq, oy + row * sq
+        light = (rank + file) % 2 == 1
+        shade = (210, 211, 186) if light else (107, 134, 77)
+        if board[7 - rank][file]:
+            d.ellipse([x + 2, y + 2, x + sq - 3, y + sq - 3], outline=shade, width=max(3, sq // 12))
+        else:
+            r = sq * 0.16
+            d.ellipse([x + sq / 2 - r, y + sq / 2 - r, x + sq / 2 + r, y + sq / 2 + r], fill=shade)
+    if floating:
+        g, (fx, fy) = floating
+        if g.isupper():
+            d.text((fx, fy), GLYPH_SOLID[g.lower()], font=f, fill=(250, 250, 250), anchor="mm")
+            d.text((fx, fy), GLYPH_OUTLINE[g.lower()], font=f, fill=(20, 20, 20), anchor="mm")
+        else:
+            d.text((fx, fy), GLYPH_SOLID[g], font=f, fill=(25, 25, 25), anchor="mm")
+    if popup:
+        box = (ox + 2 * sq, oy + 2 * sq, ox + 6 * sq, oy + 5 * sq)
+        if popup == "blur":
+            region = img.crop(box).filter(ImageFilter.GaussianBlur(sq * 0.9))
+            img.paste(region, box[:2])
+        else:
+            d.rectangle(box, fill=(49, 46, 43))
+            d.text(((box[0] + box[2]) / 2, box[1] + sq * 0.5), "Game Over", fill=(240, 240, 240), anchor="mm")
+            d.rectangle([box[0] + 10, box[1] + sq, box[2] - 10, box[1] + sq * 1.6], fill=(106, 160, 60))
     img.save(path)
 
 
@@ -101,6 +128,16 @@ if __name__ == "__main__":
         render(fen, white_bottom, os.path.join(out, name + ".png"))
     for name, (fen, hl) in SEQUENCE.items():
         render(fen, True, os.path.join(out, name + ".png"), highlight=hl)
+    midgame = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R"
+    render(midgame, True, os.path.join(out, "popup_blank.png"), popup="blank")
+    render(midgame, True, os.path.join(out, "popup_blur.png"), popup="blur")
+    render(midgame, True, os.path.join(out, "popup_none.png"))
+    lifted = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R"
+    lift_from = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/3P1N2/PPP2PPP/RNBQK2R"
+    dots = {(1, 4), (0, 5), (3, 4), (4, 5), (5, 6), (1, 2)}
+    render(lift_from, True, os.path.join(out, "lift_dots.png"), dots=dots, floating=("B", (310 + 5 * 72 + 36, 140 + 3 * 72 + 20)))
+    render(lift_from, True, os.path.join(out, "lift_offgrid.png"), floating=("B", (310 + 8 * 72 + 60, 140 + 3 * 72)))
+    render(lift_from, True, os.path.join(out, "lift_dots_only.png"), dots=dots)
     with open(os.path.join(out, "expected.txt"), "w") as fh:
         fh.write(mid + "\n")
     print("ok")

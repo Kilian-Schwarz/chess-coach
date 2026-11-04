@@ -6,12 +6,18 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [0.1.1] - 2026-11-04
 
+### Added
+- Automatic recap: the game end is detected (checkmate, stalemate, a "game over" dialog over the board, a new starting position; a missing board or another tab only pauses the game) and the recap window opens by itself. It shows engine numbers at once, fills in missing move analyses in the background with a progress bar, and streams the AI summary afterwards. New setting "Open recap after a game", menu item "Last recap …", game list in the player file, and a "Finish game & show recap" button in the panel.
+- Hints while dragging: a lifted piece is never counted as a move. Unsafe target squares are marked in red with a short line in the panel. New setting "Hints while dragging".
+- The piece set is learned from positions up to four plies after the start.
+
 ### Fixed
+- Only certain moves are rated; moves from a guessed side or an unknown gap are no longer rated.
+- Stage-2 hint texts.
+- German chess terms in explanations.
+- The panel stays where you put it.
 - Windows windows are no longer marked as protected content, which fixes the DRM warning (error S:102) on Shadow and other remote desktops.
 - The board is now read directly from its window, so the overlay and panel never appear in the capture.
-
-### Added
-- The piece set is learned from positions up to four plies after the start.
 
 ## [0.1.0] - 2026-11-04
 

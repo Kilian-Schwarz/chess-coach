@@ -26,7 +26,10 @@ internal sealed partial class AppModel
     private DateTime _lastChangeAt = DateTime.UtcNow;
     private DateTime? _lostSince;
     private bool _settled, _pausedShown, _pausedStatus;
-    private DateTime _lastBoardSeen = DateTime.UtcNow;
+    private BoardSight _view = BoardSight.Readable;
+    private bool _ringSeen;
+    private BoardColors? _colors;
+    private readonly GameEndDetector _gameEnd = new();
 
     private char?[][]? _pendingScreen;
     private Placement? _stablePlacement;
@@ -42,7 +45,7 @@ internal sealed partial class AppModel
         _pausedShown = true;
         _pausedStatus = true;
         HideAll();
-        _tracked = null; _cached = null; _hasLastFp = false; _stabilizer.Reset();
+        _tracked = null; _cached = null; _hasLastFp = false; _stabilizer.Reset(); _gameEnd.Reset(); _view = BoardSight.Readable;
         SetStatus(Loc.T("status.paused", _session.Reason));
         Invalidate();
     }
@@ -59,6 +62,8 @@ internal sealed partial class AppModel
     private async Task<LocateOutcome> LocateAsync()
     {
         var templates = _templates;
+        _view = BoardSight.Readable;
+        _ringSeen = false;
         if (_tracked is { } tr && (DateTime.UtcNow - _lastFullSearch).TotalSeconds < 5)
         {
             var monRect = new Rectangle(tr.Mon.X, tr.Mon.Y, tr.Mon.Width, tr.Mon.Height);
@@ -74,6 +79,11 @@ internal sealed partial class AppModel
                     break;
                 }
                 reason = $"no board in a {region.Width}x{region.Height} crop (margin {(int)(factor * 100)} %)";
+            }
+            if (_ringSeen && _cached != null)
+            {
+                _view = BoardSight.Covered;
+                return LocateOutcome.Unchanged;
             }
             _regionMisses++;
             if (_regionMisses < 3 && _cached != null) return LocateOutcome.Unchanged;
@@ -92,10 +102,20 @@ internal sealed partial class AppModel
         _fp.Compute(img, expected);
         if (allowUnchanged && _hasLastFp && _cached != null && !_fp.Differs(_lastFp)) return LocateOutcome.Unchanged;
         var scan = BoardScanner.Scan(img, templates);
-        if (scan == null) return LocateOutcome.Lost;
+        if (scan == null)
+        {
+            _ringSeen |= BoardReadability.Sight(BoardScanner.Analyze(img, expected, templates).Features, _colors) == BoardSight.Covered;
+            return LocateOutcome.Lost;
+        }
+        if (!BoardReadability.IsReadable(scan.Features))
+        {
+            _ringSeen |= BoardReadability.Sight(scan.Features, _colors) == BoardSight.Covered;
+            return LocateOutcome.Lost;
+        }
         var b = scan.Board;
         var stable = _stabilizer.Accept(new BoardRect(region.X + b.X, region.Y + b.Y, b.Size));
         if (stable.Changed) Log.Write($"Board moved or resized: {(int)stable.Rect.Size} px at {(int)stable.Rect.X},{(int)stable.Rect.Y}");
+        _colors = BoardColors.Learn(scan.Features);
         _tracked = new TrackedBoard(tr.Mon, stable.Rect);
         _fp.Compute(img, new BoardRect(stable.Rect.X - region.X, stable.Rect.Y - region.Y, stable.Rect.Size));
         _lastFp.CopyFrom(_fp); _hasLastFp = true;
@@ -119,6 +139,12 @@ internal sealed partial class AppModel
                 any = true;
                 var scan = BoardScanner.Scan(img, templates);
                 if (scan == null) continue;
+                if (BoardReadability.Sight(scan.Features, _colors) is var sight && sight != BoardSight.Readable)
+                {
+                    if (sight == BoardSight.Covered) _view = BoardSight.Covered;
+                    continue;
+                }
+                _colors = BoardColors.Learn(scan.Features);
                 var b = scan.Board;
                 _stabilizer.Reset();
                 var stable = _stabilizer.Accept(new BoardRect(m.X + b.X, m.Y + b.Y, b.Size)).Rect;
@@ -131,6 +157,7 @@ internal sealed partial class AppModel
         }
         finally { if (hidden) _ui.Invoke(RestoreAfterCapture); }
         _tracked = null; _cached = null; _hasLastFp = false;
+        if (_view != BoardSight.Covered) _view = BoardSight.Gone;
         return any ? LocateOutcome.Lost : LocateOutcome.Failed;
     }
 
@@ -169,7 +196,7 @@ internal sealed partial class AppModel
         _pausedShown = false;
         if (_pausedStatus) { _pausedStatus = false; SetStatus(Loc.T("status.searching")); Invalidate(); }
 
-        if (_endReason != null) await FinishGameAsync(true);
+        if (_pendingEnd is { } requested) { _pendingEnd = null; FinishGame(requested); }
         var outcome = await LocateAsync();
         ct.ThrowIfCancellationRequested();
         if (!IsActive) return;
@@ -181,10 +208,11 @@ internal sealed partial class AppModel
             _tracked = null;
             return;
         }
+        if (_view != BoardSight.Readable && _gameEnd.Observe(_view, _book.Plies, null, false, DateTime.UtcNow) is { } hiddenEnd)
+            FinishGame(hiddenEnd);
         if (outcome == LocateOutcome.Lost || _cached == null || _tracked == null)
         {
             _lostSince ??= DateTime.UtcNow;
-            if (_endReason == null && (DateTime.UtcNow - _lastBoardSeen).TotalSeconds > 60 && (_reviewed.Count + _moveQueue.Count) >= 4) _endReason = "board gone";
             SetStatus(Loc.T("status.searching"));
             HideAll();
             _pendingScreen = null;
@@ -192,8 +220,7 @@ internal sealed partial class AppModel
             return;
         }
         _lostSince = null;
-        _lastBoardSeen = DateTime.UtcNow;
-        if (outcome == LocateOutcome.Unchanged && _settled)
+        if (outcome == LocateOutcome.Unchanged && _settled && _pendingMoves.Count == 0)
         {
             await BackgroundWorkAsync(ct);
             return;
@@ -242,7 +269,7 @@ internal sealed partial class AppModel
         if (_templates.IsEmpty)
         {
             SetStatus(Loc.T("status.unknownPieces"));
-            _overlay.Show(_boardRect, new OverlayState { Hint = Loc.T("overlay.learn") });
+            ShowOverlay(_boardRect, new OverlayState { Hint = Loc.T("overlay.learn") });
             _settled = true;
             return;
         }
@@ -250,9 +277,11 @@ internal sealed partial class AppModel
         if (!SameScreen(_pendingScreen, scan.Screen))
         {
             _pendingScreen = scan.Screen;
+            _confirmSoon = _tracked != null;
             _cached = null; _hasLastFp = false;
             return;
         }
+        _confirmSoon = false;
 
         bool whiteAtBottom;
         switch (Side)
@@ -267,9 +296,12 @@ internal sealed partial class AppModel
         var me = whiteAtBottom ? PieceColor.White : PieceColor.Black;
         _lastMe = me;
         var placement = new Placement(scan.Screen, whiteAtBottom);
+        if (HandleLift(placement, me, whiteAtBottom)) return;
 
         if (!placement.Equals(_stablePlacement))
         {
+            var carried = _pendingMoves;
+            _pendingMoves = new();
             var marking = SideToMove.Detect(scan, whiteAtBottom, _templates);
             var previousUpdate = _update;
             var u = _record.Update(placement, whiteAtBottom, marking.Mover);
@@ -280,9 +312,16 @@ internal sealed partial class AppModel
             _suggestionCard = null; _answerCard = null; _threat = null; _threatFen = null;
             _questionCts?.Cancel(); _suggestionCts?.Cancel(); _threatCts?.Cancel();
             OnPositionChanged(previousUpdate, u, whiteAtBottom, me);
+            ConfirmReviews(u, marking, me, carried);
         }
-        if (_pendingReview != null) await ReviewPendingAsync(me);
-        if (_endReason != null) await FinishGameAsync(false);
+        else if (_pendingMoves.Count > 0)
+        {
+            var still = _pendingMoves.Where(InRecord).ToList();
+            _pendingMoves = new();
+            if (still.Count > 0) StartReview(still, me);
+        }
+        if (_view == BoardSight.Readable && _gameEnd.Observe(BoardSight.Readable, _book.Plies, _update?.Result, placement.IsStartPosition, DateTime.UtcNow) is { } end)
+            FinishGame(end);
 
         var toMove = (EffectiveAlwaysMyTurn && !Settings.DuoTraining) ? me : (_sideToMove ?? me);
         if (_update == null) return;
@@ -290,7 +329,7 @@ internal sealed partial class AppModel
         {
             SetStatus(Loc.T("status.opponent", Loc.Color(me)));
             ClearHints();
-            _overlay.Show(_boardRect, new OverlayState { Hint = Loc.T("overlay.opponent") });
+            ShowOverlay(_boardRect, new OverlayState { Hint = Loc.T("overlay.opponent") });
             _settled = true;
             UpdatePanel();
             await BackgroundWorkAsync(ct);
@@ -307,7 +346,7 @@ internal sealed partial class AppModel
             if (fen != _lastProblemFen) { _lastProblemFen = fen; Log.Write($"Position not checkable ({problem}): {fen}"); }
             SetStatus($"{who} · {problem}");
             ClearHints();
-            _overlay.Show(_boardRect, new OverlayState { Hint = problem });
+            ShowOverlay(_boardRect, new OverlayState { Hint = problem });
             _settled = true;
             UpdatePanel();
             return;
@@ -328,7 +367,7 @@ internal sealed partial class AppModel
         {
             string text = placement.IsInCheck(toMove) ? Loc.T("result.mate") : Loc.T("result.stalemate");
             ClearHints();
-            _overlay.Show(_boardRect, new OverlayState { Hint = text });
+            ShowOverlay(_boardRect, new OverlayState { Hint = text });
             SetStatus($"{who} · {text}");
             _settled = true;
             UpdatePanel();
@@ -391,9 +430,11 @@ internal sealed partial class AppModel
         _autoWhiteAtBottom = null;
         _reviewCts?.Cancel(); _suggestionCts?.Cancel(); _questionCts?.Cancel(); _threatCts?.Cancel();
         _reviewCard = null; _suggestionCard = null; _answerCard = null; _threat = null; _threatFen = null;
+        ClearLift();
         _hint = null; _hintFen = null; _hintLevel = 0;
         _panel.HintLevel = 0; _panel.CanHint = false; _panel.CanExplain = false; _panel.IsAsking = false;
         _cached = null; _hasLastFp = false; _stabilizer.Reset();
+        _pendingMoves = new(); _reviewSeq++; _confirmSoon = false;
         Invalidate();
     }
 }

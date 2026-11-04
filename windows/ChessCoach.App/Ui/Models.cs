@@ -33,6 +33,7 @@ public sealed record OverlayState
     public Arrow? Move { get; init; }
     public Arrow? Threat { get; init; }
     public Sq? Highlight { get; init; }
+    public IReadOnlyList<Sq>? Unsafe { get; init; }
     public bool PartnerHighlight { get; init; }
     public string? Label { get; init; }
     public string? Hint { get; init; }

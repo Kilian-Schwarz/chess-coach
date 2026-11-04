@@ -18,8 +18,9 @@ internal sealed partial class AppModel
     private Threats.Threat? _threat;
     private string? _threatFen;
     private Coach.ExplanationRequest? _lastReviewReq;
-    private PlayedMove? _pendingReview;
-    private readonly HashSet<string> _rated = new();
+    private List<PlayedMove> _pendingMoves = new();
+    private int _reviewSeq;
+    private bool _confirmSoon;
     private int _gapCounter;
     private bool _panelDirty;
     private EngineResult? _threatResult;
@@ -29,22 +30,19 @@ internal sealed partial class AppModel
     private void OnPositionChanged(GameUpdate? previous, GameUpdate u, bool whiteAtBottom, PieceColor me)
     {
         _sideOverride = null;
-        if (u.Change == GameChange.NewGame) { _reviewCard = null; _rated.Clear(); }
-        _pendingReview = null;
+        if (u.Change == GameChange.NewGame) _reviewCard = null;
         foreach (var pm in u.NewMoves) EnqueueForLearning(pm);
-        foreach (var pm in u.Reviewable)
-        {
-            _rated.Add(MoveKey(pm));
-            if (IsCoached(pm.Mover, me)) _pendingReview = pm;
-        }
+        foreach (var pm in u.Reviewable) _book.Rated.Add(MoveKey(pm));
         var moves = _record.Moves;
         if (_reviewCard is { ReviewPly: int ply } && !(ply >= 1 && ply <= moves.Count && MoveKey(moves[ply - 1]) == _reviewCard.Id))
         {
+            _reviewSeq++;
             _reviewCts?.Cancel();
             _reviewCard = null;
         }
         if (u.Gap && Settings.ReviewMoves)
         {
+            _reviewSeq++;
             _reviewCts?.Cancel();
             _reviewCard = new CoachCard("gap|" + ++_gapCounter, CardKind.Review, Loc.T("review.gap"));
         }
@@ -57,30 +55,53 @@ internal sealed partial class AppModel
         return Settings.DuoTraining ? Loc.T("review.titleWho", who, rating) : Loc.T("review.titleYou", rating);
     }
 
-    private async Task ReviewPendingAsync(PieceColor me)
+    private bool InRecord(PlayedMove pm) => _record.Moves.Any(m => MoveKey(m) == MoveKey(pm));
+
+    private void ConfirmReviews(GameUpdate? update, LastMoveMarking? marking, PieceColor me, List<PlayedMove> carried)
     {
-        var pm = _pendingReview;
-        _pendingReview = null;
-        if (pm == null || !Settings.ReviewMoves) return;
-        if (pm.Before.Board.Problem(pm.Mover) != null) return;
+        var carriedNow = carried.Where(InRecord).ToList();
+        if (carriedNow.Count > 0) StartReview(carriedNow, me);
+        if (update == null || marking == null) return;
+        var coached = update.Reviewable.Where(pm => IsCoached(pm.Mover, me)).ToList();
+        if (coached.Count == 0) return;
+        var marked = marking.Marked.Select(m => UciMove.SquareName(m.File, m.Rank)).ToHashSet();
+        if (coached.All(pm => marked.Contains(pm.Uci[..2]) && marked.Contains(pm.Uci.Substring(2, 2)))) StartReview(coached, me);
+        else _pendingMoves = coached;
+    }
+
+    private void StartReview(List<PlayedMove> moves, PieceColor me)
+    {
+        int seq = ++_reviewSeq;
+        _ = ReviewMovesAsync(moves, me, seq);
+    }
+
+    private async Task ReviewMovesAsync(List<PlayedMove> moves, PieceColor me, int seq)
+    {
+        try { foreach (var pm in moves) await ReviewOwnMoveAsync(pm, me, seq); }
+        catch (Exception e) { Log.Write("Review failed: " + e.Message); }
+    }
+
+    private async Task ReviewOwnMoveAsync(PlayedMove pm, PieceColor me, int seq)
+    {
+        if (!Settings.ReviewMoves || pm.Before.Board.Problem(pm.Mover) != null) return;
+        var started = DateTime.UtcNow;
         var before = await _engine.AnalyzeAsync(pm.FenBefore, 300);
         if (before == null) return;
-        EngineResult? after = pm.After.Board.Problem(pm.Mover.Opposite()) == null
+        EngineResult? after = pm.After.Result == null && pm.After.Board.Problem(pm.Mover.Opposite()) == null
             ? await _engine.AnalyzeAsync(pm.FenAfter, 300) : null;
-        var recorded = _record.Moves;
-        int ply = -1;
-        for (int i = 0; i < recorded.Count; i++) if (MoveKey(recorded[i]) == MoveKey(pm)) ply = i + 1;
-        if (ply < 0) return;
+        if (seq != _reviewSeq || !IsActive || !InRecord(pm)) return;
+        int ply = _record.Moves.ToList().FindLastIndex(m => MoveKey(m) == MoveKey(pm)) + 1;
         var review = Coach.Review(pm.Before.Board, pm.Move, pm.After.Board, pm.Mover, before, after);
         string who = PlayerName(pm.Mover, me);
         var lines = new List<string> { Loc.T("review.played", review.PlayedText, review.PlayedScore) };
         if (review.Rating != MoveRating.Best && review.BestText != null) lines.Add(Loc.T("review.better", review.BestText, before.ScoreText));
-        string id = $"{pm.FenBefore}|{pm.Uci}";
+        string id = MoveKey(pm);
         var card = new CoachCard(id, CardKind.Review, ReviewTitle(who, review, pm.SanDisplay))
         {
             Rating = review.Rating, Lines = lines, ReviewPly = ply,
             StaleTitle = Settings.DuoTraining ? null : $"{Loc.T("review.titleLast")}: {Loc.Rating(review.Rating)} ({pm.SanDisplay})",
         };
+        Log.Write($"Review shown for {pm.San} {(int)(DateTime.UtcNow - started).TotalMilliseconds} ms after the move was confirmed");
         if (!LlmConfigured)
         {
             _reviewCard = card with { Note = Loc.T("note.needLlm") };
@@ -192,7 +213,7 @@ internal sealed partial class AppModel
                 RenderSolution(ctx);
                 break;
         }
-        _overlay.Show(ctx.BoardRect, state);
+        ShowOverlay(ctx.BoardRect, state);
         UpdatePanel();
     }
 
@@ -363,7 +384,8 @@ internal sealed partial class AppModel
         {
             _panelDirty = false;
             if (!IsActive || _boardRect.Width == 0) return;
-            var cards = new List<CoachCard>(4);
+            var cards = new List<CoachCard>(5);
+            if (_liftCard != null) cards.Add(_liftCard);
             var review = _reviewCard;
             bool reviewOld = review is { ReviewPly: int rp, StaleTitle: not null } && rp < _record.Moves.Count;
             if (reviewOld) review = review! with { Title = review.StaleTitle! };
@@ -382,6 +404,7 @@ internal sealed partial class AppModel
                 if (_answerCard != null) cards.Add(_answerCard);
             }
             if (_hint == null && cards.Count == 0 && _update == null) { _panel.HidePanel(); return; }
+            _panel.CanFinish = CanFinish;
             _panel.FocusText = PanelSubtitle();
             _panel.ShowNextTo(_boardRect, cards);
         }, System.Windows.Threading.DispatcherPriority.Background);

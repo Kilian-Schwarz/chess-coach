@@ -59,6 +59,8 @@ public sealed class GameReport
     public SideSummary Black { get; set; } = new();
     public List<KeyMoment> KeyMoments { get; set; } = new();
     public string? Summary { get; set; }
+    public string? Result { get; set; }
+    public string? EndReason { get; set; }
 
     public SideSummary Side(string color) => color == "w" ? White : Black;
 
@@ -140,6 +142,12 @@ public sealed class GameReport
             WhiteProfileId = whiteProfileId, BlackProfileId = blackProfileId, Opening = opening,
             Moves = records, White = Summary("w"), Black = Summary("b"), KeyMoments = top,
         };
+    }
+
+    public void Rebuild(IReadOnlyList<ReviewedMove> reviewed)
+    {
+        var fresh = Build(reviewed, Id, Date, WhiteProfileId, BlackProfileId, Opening);
+        Moves = fresh.Moves; White = fresh.White; Black = fresh.Black; KeyMoments = fresh.KeyMoments;
     }
 
     public static string MoveLabel(int ply, string color, CultureInfo? culture = null) =>

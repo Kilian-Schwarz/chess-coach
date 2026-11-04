@@ -59,6 +59,7 @@ internal sealed partial class AppModel
         if (Settings.LlmModel.Length > 0) LlmModels = new() { new LlmModel(Settings.LlmModel, Settings.LlmModel) };
         _panel.NextHintClicked += NextHint;
         _panel.ExplainAgainClicked += ExplainAgain;
+        _panel.FinishClicked += RequestEndGame;
         _panel.QuestionAsked += Ask;
         _panel.FeedbackGiven += OnFeedback;
         _panel.CollapsedChanged += OnPanelCollapsed;
@@ -82,6 +83,7 @@ internal sealed partial class AppModel
     public void SettingsChanged()
     {
         Settings.Save();
+        if (!Settings.DragHints) ClearLift();
         ClearAnalysisState();
     }
 
@@ -109,6 +111,7 @@ internal sealed partial class AppModel
     {
         _loop?.Cancel();
         _loop = null;
+        if (_book.Plies >= 2) FinishGame(new GameEnd(GameEndReason.Manual, "*", true));
         _session.Stop();
         _tracked = null;
         _cached = null;
@@ -122,6 +125,7 @@ internal sealed partial class AppModel
     public void Shutdown()
     {
         if (IsActive) { SetActive(false); }
+        _recapCts.Cancel();
         _hotKeys.Dispose();
         _capturer.Dispose();
         _engine.Dispose();
@@ -157,6 +161,8 @@ internal sealed partial class AppModel
     private int NextDelay()
     {
         if (_pausedShown) return 2000;
+        if (_view == BoardSight.Covered && _book.Plies >= GameEndDetector.MinPlies) return 500;
+        if (_confirmSoon && _tracked != null) return 200;
         if (_tracked == null)
             return (DateTime.UtcNow - (_lostSince ?? DateTime.UtcNow)).TotalSeconds > 30 ? 2000 : 1000;
         double calm = (DateTime.UtcNow - _lastChangeAt).TotalSeconds;
@@ -226,6 +232,7 @@ internal sealed partial class AppModel
 
     private void HideAll()
     {
+        ClearLift();
         _overlay.HideOverlay();
         _panel.HidePanel();
         _hint = null;

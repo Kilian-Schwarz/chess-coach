@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Next hint</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Switch side to move</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>End game</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Finish game &amp; show recap</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Copy game as PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Move panel back next to the board</value></data>
   <data name="menu.record" xml:space="preserve"><value>Player record …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Training …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Evaluation …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Last recap …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Relearn pieces</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Settings …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Quit</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>none</value></data>
   <data name="record.style" xml:space="preserve"><value>Explanation style</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Recent games</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Evaluation</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Recap</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>no opening</value></data>
-  <data name="report.empty" xml:space="preserve"><value>No evaluated games yet. A game is evaluated when it ends.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>No recaps yet. A recap appears when a game ends.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Opening: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>White</value></data>
   <data name="report.black" xml:space="preserve"><value>Black</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>Version {0} is available. Open the download page?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Your last move</value></data>
   <data name="review.gap" xml:space="preserve"><value>Moves missed – the next move will be rated again</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Hints while dragging</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Open recap after a game</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Finish game &amp; show recap</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Analysing moves: {0} of {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Result: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Result: unknown</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Ended by checkmate</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Ended by stalemate</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Ended: the site showed a result over the board</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Ended: the board disappeared</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Ended: a new game started</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Ended manually</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Writing the summary …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Open recap</value></data>
 </root>

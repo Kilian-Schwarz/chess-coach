@@ -30,8 +30,15 @@ struct ExplainJob {
     var build: (PlayerContext, ExplanationStyle) -> Coach.ExplanationRequest?
 }
 
+struct RecapProgress: Equatable {
+    var id: String
+    var done: Int
+    var total: Int
+}
+
 struct GameSnapshot {
     var id: String
+    var end: GameEnd
     var date: Date
     var entries: [MoveEntry]
     var opening: String?

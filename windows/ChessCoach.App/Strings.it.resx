@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Suggerimento successivo</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Cambia il lato che muove</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Termina la partita</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Termina la partita e mostra il riepilogo</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Copia la partita come PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Riporta il pannello accanto alla scacchiera</value></data>
   <data name="menu.record" xml:space="preserve"><value>Scheda giocatore …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Allenamento …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Analisi …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Ultimo riepilogo …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Reimpara i pezzi</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Impostazioni …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Esci</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>nessuno</value></data>
   <data name="record.style" xml:space="preserve"><value>Stile di spiegazione</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Partite recenti</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Analisi</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Riepilogo</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>nessuna apertura</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Ancora nessuna partita analizzata. Una partita viene analizzata quando termina.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Nessun riepilogo per ora. Compare alla fine di una partita.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Apertura: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Bianco</value></data>
   <data name="report.black" xml:space="preserve"><value>Nero</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>È disponibile la versione {0}. Aprire la pagina di download?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>La tua ultima mossa</value></data>
   <data name="review.gap" xml:space="preserve"><value>Mosse perse: la prossima mossa verrà valutata di nuovo</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Suggerimenti durante il trascinamento</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Apri il riepilogo dopo una partita</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Termina la partita e mostra il riepilogo</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Analisi delle mosse: {0} di {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Risultato: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Risultato: sconosciuto</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Terminata per scacco matto</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Terminata per stallo</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Terminata: il sito ha mostrato un risultato sulla scacchiera</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Terminata: la scacchiera è scomparsa</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Terminata: è iniziata una nuova partita</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Terminata manualmente</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Scrittura del riepilogo …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Apri riepilogo</value></data>
 </root>

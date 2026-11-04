@@ -81,6 +81,12 @@ internal sealed class OverlayVisual : FrameworkElement
         double sq = size / 8;
         dc.DrawRoundedRectangle(null, FramePen, new Rect(inset, inset, size, size), 3, 3);
 
+        if (_state.Unsafe is { } marks)
+        {
+            var red = new SolidColorBrush(Color.FromArgb(70, 255, 59, 48));
+            red.Freeze();
+            foreach (var m in marks) dc.DrawRectangle(red, null, new Rect(inset + m.Col * sq, inset + m.Row * sq, sq, sq));
+        }
         if (_state.Highlight is { } h)
         {
             var c = _state.PartnerHighlight ? Color.FromRgb(10, 132, 255) : Color.FromRgb(255, 214, 10);

@@ -167,17 +167,24 @@ struct ProfileView: View {
     }
 
     private var recentGames: some View {
-        let games = store.games.filter { $0.whiteProfileId == profile.id || $0.blackProfileId == profile.id }.prefix(8)
+        let games = store.games.filter { $0.whiteProfileId == profile.id || $0.blackProfileId == profile.id }.prefix(30)
         return VStack(alignment: .leading, spacing: 6) {
             Text("Recent games").font(.headline)
             if games.isEmpty { Text("No games yet.").foregroundStyle(.secondary) }
             ForEach(Array(games), id: \.id) { g in
                 let color = g.whiteProfileId == profile.id ? "w" : "b"
-                HStack {
-                    Text(g.date.formatted(date: .abbreviated, time: .omitted)).frame(width: 110, alignment: .leading)
-                    Text("Accuracy \(g.side(color).accuracy, specifier: "%.0f") %").monospacedDigit().frame(width: 130, alignment: .leading)
-                    Text(g.opening ?? "–").foregroundStyle(.secondary).lineLimit(1)
+                Button { app.showRecap(g.id) } label: {
+                    HStack {
+                        Text(g.date.formatted(date: .abbreviated, time: .shortened)).frame(width: 150, alignment: .leading)
+                        Text("Accuracy \(g.side(color).accuracy, specifier: "%.0f") %").monospacedDigit().frame(width: 130, alignment: .leading)
+                        Text(g.opening ?? "–").foregroundStyle(.secondary).lineLimit(1)
+                        Spacer()
+                        Image(systemName: "chevron.right").foregroundStyle(.secondary).accessibilityHidden(true)
+                    }
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .help("Open recap")
             }
         }
     }

@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>次のヒント</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>手番を切り替える</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>対局を終了</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>対局を終了して振り返りを表示</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>対局を PGN でコピー</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>パネルをボードの横に戻す</value></data>
   <data name="menu.record" xml:space="preserve"><value>プレイヤー記録 …</value></data>
   <data name="menu.training" xml:space="preserve"><value>トレーニング …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>総評 …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>前回の振り返り …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>駒を学習し直す</value></data>
   <data name="menu.settings" xml:space="preserve"><value>設定 …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>終了</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>なし</value></data>
   <data name="record.style" xml:space="preserve"><value>解説スタイル</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>最近の対局</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · 総評</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · 振り返り</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>オープニングなし</value></data>
-  <data name="report.empty" xml:space="preserve"><value>評価済みの対局はまだありません。対局が終わると評価されます。</value></data>
+  <data name="report.empty" xml:space="preserve"><value>振り返りはまだありません。対局が終わると表示されます。</value></data>
   <data name="report.opening" xml:space="preserve"><value>オープニング：{0}</value></data>
   <data name="report.white" xml:space="preserve"><value>白</value></data>
   <data name="report.black" xml:space="preserve"><value>黒</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>バージョン {0} が利用できます。ダウンロードページを開きますか？</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>あなたの直前の手</value></data>
   <data name="review.gap" xml:space="preserve"><value>手を見逃しました。次の手から再び評価します</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>ドラッグ中のヒント</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>対局後に振り返りを開く</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>対局を終了して振り返りを表示</value></data>
+  <data name="report.progress" xml:space="preserve"><value>着手を分析中：{0} / {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>結果：{0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>結果：不明</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>チェックメイトで終了</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>ステイルメイトで終了</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>終了：サイトが盤面の上に結果を表示しました</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>終了：盤面が消えました</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>終了：新しい対局が始まりました</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>手動で終了</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>要約を作成中 …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>振り返りを開く</value></data>
 </root>

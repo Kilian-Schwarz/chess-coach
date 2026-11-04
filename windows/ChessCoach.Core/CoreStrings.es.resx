@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>El servidor devuelve el error {0}. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>No se encontró ninguna lista de modelos en esta dirección. Para Open WebUI introduce p. ej. https://openwebui.example.com, para vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Para obtener explicaciones, elige un servidor y un modelo en los ajustes.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>Cuidado: {0} en {1} quedaría sin defensa.</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>Cuidado: {0} en {1} podría caer ante una pieza de menor valor.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>Cuidado: mover {0} a {1} deja {2} en {3} sin protección.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>Cuidado: {0} casillas no son seguras para {1}, marcadas en rojo.</value></data>
 </root>

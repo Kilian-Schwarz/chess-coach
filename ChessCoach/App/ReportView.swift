@@ -14,7 +14,7 @@ struct ReportView: View {
     }
 
     private var selected: GameReport? {
-        store.games.first { $0.id == (selection ?? app.lastReport?.id ?? store.games.first?.id) }
+        store.games.first { $0.id == (selection ?? app.recapSelection ?? app.lastReport?.id ?? store.games.first?.id) }
     }
 
     var body: some View {
@@ -36,12 +36,21 @@ struct ReportView: View {
         } detail: {
             if let g = selected {
                 ReportDetail(app: app, store: store, report: g)
+            } else if let p = app.recapProgress {
+                VStack(spacing: 12) {
+                    ProgressView(value: Double(p.done), total: Double(max(p.total, 1)))
+                        .frame(width: 240)
+                    Text("Analysing moves \(p.done) of \(p.total) …").foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ContentUnavailableView("No game selected", systemImage: "doc.text.magnifyingglass")
             }
         }
         .frame(minWidth: 820, minHeight: 560)
         .navigationTitle("Evaluation")
+        .onChange(of: app.recapSelection) { _, id in if let id { selection = id } }
+        .onAppear { if let id = app.recapSelection { selection = id } }
     }
 }
 
@@ -87,6 +96,13 @@ private struct ReportDetail: View {
             Text(report.opening.map { String(localized: "Opening: \($0)") } ?? String(localized: "No opening recognised"))
                 .foregroundStyle(.secondary)
             Text("\(report.moves.count) half-moves").font(.callout).foregroundStyle(.secondary)
+            if let r = report.result, r != "*" { Text("Result: \(r)").font(.callout).foregroundStyle(.secondary) }
+            if let p = app.recapProgress, p.id == report.id {
+                HStack(spacing: 8) {
+                    ProgressView(value: Double(p.done), total: Double(max(p.total, 1))).frame(width: 160)
+                    Text("Analysing moves \(p.done) of \(p.total) …").font(.callout).foregroundStyle(.secondary)
+                }
+            }
         }
     }
 

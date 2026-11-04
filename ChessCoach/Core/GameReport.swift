@@ -8,6 +8,7 @@ struct ReviewedMove: Codable, Equatable {
     var valueBefore: Int
     var valueAfter: Int
     var bestUci: String?
+    var ply: Int? = nil
 }
 
 struct MoveRecord: Codable, Equatable {
@@ -54,6 +55,8 @@ struct GameReport: Codable, Equatable {
     var black: SideSummary
     var keyMoments: [KeyMoment]
     var summary: String?
+    var result: String?
+    var endReason: String?
 
     func side(_ color: String) -> SideSummary { color == "w" ? white : black }
 
@@ -74,7 +77,7 @@ struct GameReport: Codable, Equatable {
             let loss = Accuracy.cpLoss(valueBefore: m.valueBefore, valueAfter: m.valueAfter)
             let rating = moveRating(loss: loss, bestUci: m.bestUci, uci: m.uci)
             let san = m.san ?? mv.flatMap { mv in ChessPosition(fen: m.fenBefore).map { SAN.san(mv, in: $0) } }
-            records.append(MoveRecord(ply: i + 1, color: m.color, uci: m.uci, san: san, text: text, winBefore: wb, winAfter: wa, loss: loss,
+            records.append(MoveRecord(ply: m.ply ?? i + 1, color: m.color, uci: m.uci, san: san, text: text, winBefore: wb, winAfter: wa, loss: loss,
                                       accuracy: Accuracy.moveAccuracy(winBefore: wb, winAfter: wa), rating: rating.rawValue, bestText: bestText))
             guard wb - wa >= 10, let place, let mv else { continue }
             var facts: [String] = []
@@ -85,7 +88,7 @@ struct GameReport: Codable, Equatable {
                 facts.append(Loc.display("report.opponentMates", "The opponent can checkmate"))
             }
             facts.append(Loc.display("report.winChance", "Win chance fell from \(Int(wb.rounded())) % to \(Int(wa.rounded())) %"))
-            moments.append((wb - wa, KeyMoment(ply: i + 1, color: m.color, moveText: text, bestText: bestText,
+            moments.append((wb - wa, KeyMoment(ply: m.ply ?? i + 1, color: m.color, moveText: text, bestText: bestText,
                                               winBefore: wb, winAfter: wa, facts: facts.joined(separator: ". "))))
         }
         func summary(_ c: String) -> SideSummary {
@@ -109,7 +112,8 @@ struct GameReport: Codable, Equatable {
         }
         let top = moments.sorted { $0.drop > $1.drop }.prefix(3).map(\.moment).sorted { $0.ply < $1.ply }
         return GameReport(id: id, date: date, whiteProfileId: whiteProfileId, blackProfileId: blackProfileId, opening: opening,
-                          moves: records, white: summary("w"), black: summary("b"), keyMoments: Array(top), summary: nil)
+                          moves: records, white: summary("w"), black: summary("b"), keyMoments: Array(top), summary: nil,
+                          result: nil, endReason: nil)
     }
 
     static func moveLabel(ply: Int, color: String, _ loc: Loc = .display) -> String {

@@ -97,7 +97,10 @@ internal sealed class RecordWindow
         foreach (var g in _model.Storage.LoadGames(30).Where(g => g.WhiteProfileId == p.Id || g.BlackProfileId == p.Id).Take(8))
         {
             var side = g.WhiteProfileId == p.Id ? g.White : g.Black;
-            _body.Children.Add(Kit.Text($"{g.Date.ToLocalTime():g} · {side.Accuracy:0} % · {g.Opening ?? "-"}", 12));
+            var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 4) };
+            row.Children.Add(Kit.Btn(Loc.T("record.openRecap"), () => _model.ShowRecap(g.Id)));
+            row.Children.Add(new TextBlock { Text = $"{g.Date.ToLocalTime():g} · {side.Accuracy:0} % · {g.Result ?? "*"} · {g.Opening ?? "-"}", FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
+            _body.Children.Add(row);
         }
     }
 

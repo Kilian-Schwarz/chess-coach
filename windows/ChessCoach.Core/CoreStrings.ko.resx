@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>서버가 오류 {0}을(를) 반환했습니다. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>이 주소에서 모델 목록을 찾을 수 없습니다. Open WebUI는 예를 들어 https://openwebui.example.com, vLLM은 http://host:8000/v1을 입력하세요.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>설명을 받으려면 설정에서 서버와 모델을 선택하세요.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>주의: {1}의 {0}은(는) 보호받지 못합니다.</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>주의: {1}의 {0}은(는) 더 가치가 낮은 기물에게 잡힐 수 있습니다.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>주의: {0}을(를) {1}(으)로 옮기면 {3}의 {2}이(가) 무방비 상태가 됩니다.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>주의: {1}에게 안전하지 않은 칸이 {0}개 있습니다(빨간색 표시).</value></data>
 </root>

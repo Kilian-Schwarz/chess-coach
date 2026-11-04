@@ -100,23 +100,30 @@ public static class Tactics
         return map;
     }
 
-    public static List<string> HangingPieces(this Placement self, PieceColor color, CultureInfo? culture = null)
+    public readonly record struct HangingPiece(char Piece, int File, int Rank, bool Unprotected)
+    {
+        public string Square => UciMove.SquareName(File, Rank);
+    }
+
+    public static List<HangingPiece> Hanging(this Placement self, PieceColor color)
     {
         var enemy = self.Attackers(color.Opposite());
         var friends = self.Attackers(color);
-        var output = new List<string>();
+        var output = new List<HangingPiece>();
         for (int r = 0; r < 8; r++) for (int f = 0; f < 8; f++)
         {
             if (self.Squares[r][f] is not char p || Placement.ColorOf(p) != color || char.ToLowerInvariant(p) == 'k') continue;
             var att = enemy[r][f];
             if (att.Count == 0) continue;
-            int cheapest = att.Min(a => PieceInfo.Value(a.Piece));
-            string sq = UciMove.SquareName(f, r);
-            if (friends[r][f].Count == 0) output.Add(CoreLocale.Format("hanging.unprotected", culture, PieceInfo.Name(p, culture), sq));
-            else if (cheapest < PieceInfo.Value(p)) output.Add(CoreLocale.Format("hanging.cheaper", culture, PieceInfo.Name(p, culture), sq));
+            bool unprotected = friends[r][f].Count == 0;
+            if (unprotected || att.Min(a => PieceInfo.Value(a.Piece)) < PieceInfo.Value(p)) output.Add(new HangingPiece(p, f, r, unprotected));
         }
         return output;
     }
+
+    public static List<string> HangingPieces(this Placement self, PieceColor color, CultureInfo? culture = null) =>
+        self.Hanging(color).Select(h => CoreLocale.Format(h.Unprotected ? "hanging.unprotected" : "hanging.cheaper", culture,
+            PieceInfo.Name(h.Piece, culture), h.Square)).ToList();
 
     private static readonly string[] Singular = { "King", "Queen", "Rook", "Bishop", "Knight", "Pawn" };
     private static readonly string[] Plural = { "King", "Queens", "Rooks", "Bishops", "Knights", "Pawns" };

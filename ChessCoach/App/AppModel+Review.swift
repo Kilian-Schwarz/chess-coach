@@ -17,6 +17,7 @@ extension AppModel {
             break
         }
         syncEntries()
+        panel.model.canFinish = entries.count >= 2 && !gameFinished
         if let c = reviewCard, let ply = c.reviewPly,
            !(record.moves.indices.contains(ply - 1) && c.id == "\(record.moves[ply - 1].fenBefore)|\(record.moves[ply - 1].uci)") {
             reviewSeq += 1
@@ -92,18 +93,28 @@ extension AppModel {
         }
     }
 
-    func endGameNow() { finishGame() }
+    func endGameNow() { finishGame(GameEnd(reason: .manual, result: "*"), minPlies: 2) }
 
-    func finishGame() {
-        guard !gameFinished, entries.count >= 6 else { return }
+    func finishGame(_ end: GameEnd, minPlies: Int = GameEndDetector.minPlies, open: Bool = true) {
+        guard !gameFinished, entries.count >= minPlies else { return }
         gameFinished = true
+        panel.model.canFinish = false
+        let decided = record.current?.result.flatMap(GameEndDetector.end(for:))
+        let final = end.knownResult ? end : GameEnd(reason: end.reason, result: decided?.result ?? "*")
+        Log.write("Game end: \(final.reason.rawValue), result \(final.result), \(entries.count) plies")
         let whiteProfile = profileForReport(.white), blackProfile = profileForReport(.black)
         let snapshot = GameSnapshot(
-            id: gameId, date: record.startedAt, entries: entries, opening: openingLine,
+            id: gameId, end: final, date: record.startedAt, entries: entries, opening: openingLine,
             whiteProfile: whiteProfile, blackProfile: blackProfile,
             pgn: record.pgn(white: store.profile(id: whiteProfile)?.name ?? "?", black: store.profile(id: blackProfile)?.name ?? "?",
-                            opening: openingLine))
-        Task { await complete(snapshot) }
+                            opening: openingLine, result: final.knownResult ? final.result : nil))
+        Task { await complete(snapshot, open: open) }
+    }
+
+    func observeEnd(_ view: BoardView, result: GameResult? = nil, isStart: Bool = false) {
+        guard !gameFinished else { return }
+        guard let end = gameEnd.observe(view, plies: record.moves.count, result: result, isStart: isStart, at: Date()) else { return }
+        finishGame(end, minPlies: 1, open: !end.silent)
     }
 
     func profileForReport(_ color: PieceColor) -> String? {
@@ -111,41 +122,79 @@ extension AppModel {
         return profileId(for: color, me: me)
     }
 
-    func complete(_ snap: GameSnapshot) async {
-        var reviewed: [ReviewedMove] = []
-        for e in snap.entries {
-            let p = e.played
-            var before = e.before ?? analysisCache[p.fenBefore]?.result
-            if before == nil, p.before.board.problem(sideToMove: p.mover) == nil { before = await analysis(p.fenBefore, ms: 300, priority: false) }
-            guard let before else { continue }
-            let valueAfter: Int
-            switch p.after.result {
-            case .checkmate?: valueAfter = Accuracy.mateValue
-            case .some: valueAfter = 0
-            case nil:
-                var after = e.after ?? analysisCache[p.fenAfter]?.result
-                if after == nil, p.after.board.problem(sideToMove: p.after.turn) == nil { after = await analysis(p.fenAfter, ms: 300, priority: false) }
-                valueAfter = after.map { -$0.value } ?? before.value
+    func showRecap(_ id: String? = nil) {
+        recapSelection = id ?? lastReport?.id ?? store.games.first?.id
+        open("report")
+    }
+
+    func reviewedMove(_ e: MoveEntry, ply: Int, ms: Int?) async -> ReviewedMove? {
+        let p = e.played
+        var before = e.before ?? analysisCache[p.fenBefore]?.result
+        if before == nil, let ms, p.before.board.problem(sideToMove: p.mover) == nil {
+            before = await analysis(p.fenBefore, ms: ms, priority: false, forced: true)
+        }
+        guard let before else { return nil }
+        let valueAfter: Int
+        switch p.after.result {
+        case .checkmate?: valueAfter = Accuracy.mateValue
+        case .some: valueAfter = 0
+        case nil:
+            var after = e.after ?? analysisCache[p.fenAfter]?.result
+            if after == nil, let ms, p.after.board.problem(sideToMove: p.after.turn) == nil {
+                after = await analysis(p.fenAfter, ms: ms, priority: false, forced: true)
             }
-            reviewed.append(ReviewedMove(color: p.mover == .white ? "w" : "b", uci: p.uci, san: p.san, fenBefore: p.fenBefore,
-                                         valueBefore: before.value, valueAfter: valueAfter,
-                                         bestUci: UCIMove(before.bestMove)?.uci))
+            if let after { valueAfter = -after.value } else if ms != nil { valueAfter = before.value } else { return nil }
         }
-        guard !reviewed.isEmpty else { return }
-        let report = GameReport.build(moves: reviewed, id: snap.id, date: snap.date, whiteProfileId: snap.whiteProfile,
-                                      blackProfileId: snap.blackProfile, opening: snap.opening)
+        return ReviewedMove(color: p.mover == .white ? "w" : "b", uci: p.uci, san: p.san, fenBefore: p.fenBefore,
+                            valueBefore: before.value, valueAfter: valueAfter, bestUci: UCIMove(before.bestMove)?.uci, ply: ply)
+    }
+
+    func complete(_ snap: GameSnapshot, open: Bool) async {
+        var reviewed: [ReviewedMove?] = []
+        for (i, e) in snap.entries.enumerated() { reviewed.append(await reviewedMove(e, ply: i + 1, ms: nil)) }
+        func report() -> GameReport {
+            var r = GameReport.build(moves: reviewed.compactMap { $0 }, id: snap.id, date: snap.date, whiteProfileId: snap.whiteProfile,
+                                     blackProfileId: snap.blackProfile, opening: snap.opening)
+            r.result = snap.end.result
+            r.endReason = snap.end.reason.rawValue
+            r.summary = store.games.first { $0.id == snap.id }?.summary
+            return r
+        }
+        let missing = reviewed.indices.filter { reviewed[$0] == nil }
+        var current = report()
+        if !reviewed.allSatisfy({ $0 == nil }) {
+            store.save(game: current, pgn: snap.pgn)
+            lastReport = current
+        }
+        refreshActions()
+        if open && openRecap { showRecap(snap.id) }
+        if !missing.isEmpty {
+            recapProgress = RecapProgress(id: snap.id, done: 0, total: missing.count)
+            for (n, i) in missing.enumerated() {
+                reviewed[i] = await reviewedMove(snap.entries[i], ply: i + 1, ms: 200)
+                recapProgress = RecapProgress(id: snap.id, done: n + 1, total: missing.count)
+                if n % 4 == 3 || n == missing.count - 1 {
+                    current = report()
+                    lastReport = current
+                    store.save(game: current, pgn: snap.pgn)
+                }
+            }
+            recapProgress = nil
+        }
+        guard !reviewed.allSatisfy({ $0 == nil }) else { return }
+        let final = report()
         for (color, pid) in [("w", snap.whiteProfile), ("b", snap.blackProfile)] {
-            guard let pid, report.side(color).moves > 0, !countedProfiles.contains(snap.id + pid) else { continue }
+            guard let pid, final.side(color).moves > 0, !countedProfiles.contains(snap.id + pid) else { continue }
             countedProfiles.insert(snap.id + pid)
-            store.update(pid) { $0.completeGame(performance: report.side(color).performance) }
+            store.update(pid) { $0.completeGame(performance: final.side(color).performance) }
         }
-        store.save(game: report, pgn: snap.pgn)
-        lastReport = report
+        store.save(game: final, pgn: snap.pgn)
+        lastReport = final
         refreshActions()
         updateInfoLines()
         reportCard = CoachCard(id: "report|" + snap.id, kind: .report, title: String(localized: "Game finished"),
                                text: String(localized: "The evaluation is ready. Open it from the buttons below or the menu."))
-        writeSummary(for: report)
+        writeSummary(for: final)
     }
 
     func perspective(of report: GameReport) -> (color: String, profile: PlayerProfile?) {

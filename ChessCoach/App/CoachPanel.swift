@@ -35,6 +35,7 @@ final class CoachPanelModel: ObservableObject {
     let hintMax = 4
     @Published var canHint = false
     @Published var canExplain = false
+    @Published var canFinish = false
     @Published var question = ""
     @Published var isAsking = false
     @Published var focusText: String?
@@ -43,6 +44,7 @@ final class CoachPanelModel: ObservableObject {
 
     var onNextHint: () -> Void = {}
     var onExplainAgain: () -> Void = {}
+    var onFinish: () -> Void = {}
     var onAsk: (String) -> Void = { _ in }
     var onFeedback: (String, ExplanationFeedback) -> Void = { _, _ in }
 }
@@ -220,6 +222,9 @@ struct CoachPanelView: View {
                 Button("Explain again") { model.onExplainAgain() }
                     .disabled(!model.canExplain)
             }
+            Button { model.onFinish() } label: { Label("Finish game & show recap", systemImage: "flag.checkered") }
+                .controlSize(.small)
+                .disabled(!model.canFinish)
             if !model.extraActions.isEmpty {
                 HStack {
                     ForEach(model.extraActions) { a in

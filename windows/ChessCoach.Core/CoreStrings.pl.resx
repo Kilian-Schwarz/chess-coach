@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>Serwer zgłasza błąd {0}. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Pod tym adresem nie znaleziono listy modeli. Dla Open WebUI wpisz np. https://openwebui.example.com, dla vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Aby uzyskać wyjaśnienia, wybierz serwer i model w ustawieniach.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>Uwaga: pole {1} nie jest chronione (figura: {0}).</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>Uwaga: pole {1} ({0}) jest atakowane przez słabszą figurę.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>Uwaga: po ruchu {0} na {1} bez ochrony zostaje: {2} na {3}.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>Uwaga: niebezpiecznych pól: {0} (figura: {1}), zaznaczone na czerwono.</value></data>
 </root>

@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Наступна підказка</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Змінити сторону, що ходить</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Завершити партію</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Завершити партію та показати підсумок</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Копіювати партію як PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Повернути панель до дошки</value></data>
   <data name="menu.record" xml:space="preserve"><value>Картка гравця …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Тренування …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Розбір …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Останній підсумок …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Розпізнати фігури заново</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Налаштування …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Вийти</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>немає</value></data>
   <data name="record.style" xml:space="preserve"><value>Стиль пояснень</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Останні партії</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Розбір</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Підсумок</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>без дебюту</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Розібраних партій поки немає. Партію розбирають після завершення.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Підсумків ще немає. Він з’являється, коли партія завершується.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Білі</value></data>
   <data name="report.black" xml:space="preserve"><value>Чорні</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>Доступна версія {0}. Відкрити сторінку завантаження?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Ваш останній хід</value></data>
   <data name="review.gap" xml:space="preserve"><value>Ходи пропущено – наступний хід знову буде оцінено</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Підказки під час перетягування</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Відкривати підсумок після партії</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Завершити партію та показати підсумок</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Аналіз ходів: {0} із {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Результат: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Результат: невідомий</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Завершена матом</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Завершена патом</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Завершена: сайт показав результат поверх дошки</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Завершена: дошка зникла</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Завершена: почалася нова партія</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Завершена вручну</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Пишеться стислий підсумок …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Відкрити підсумок</value></data>
 </root>

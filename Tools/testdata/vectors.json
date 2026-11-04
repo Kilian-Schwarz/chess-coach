@@ -2528,5 +2528,389 @@
    "intermediate",
    "strong"
   ]
+ },
+ "gameFlow": {
+  "unsafe": [
+   {
+    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "from": "c4",
+    "unsafe": {
+     "a6": "undefended",
+     "e6": "undefended",
+     "f7": "undefended"
+    }
+   },
+   {
+    "fen": "4k3/8/2p5/3q4/8/4N3/8/4K3 w - - 0 1",
+    "from": "e3",
+    "unsafe": {
+     "c4": "undefended",
+     "f5": "undefended",
+     "g2": "undefended"
+    }
+   },
+   {
+    "fen": "3rk3/8/8/8/8/3B4/8/3QK3 w - - 0 1",
+    "from": "d3",
+    "unsafe": {
+     "e4": "leavesHanging:d1",
+     "f5": "leavesHanging:d1",
+     "g6": "leavesHanging:d1",
+     "h7": "leavesHanging:d1",
+     "e2": "leavesHanging:d1",
+     "f1": "leavesHanging:d1",
+     "c4": "leavesHanging:d1",
+     "b5": "leavesHanging:d1",
+     "a6": "leavesHanging:d1",
+     "c2": "leavesHanging:d1",
+     "b1": "leavesHanging:d1"
+    }
+   },
+   {
+    "fen": "4k3/8/3p4/8/4P3/8/8/4K3 w - - 0 1",
+    "from": "e4",
+    "unsafe": {
+     "e5": "undefended"
+    }
+   },
+   {
+    "fen": "4k3/8/3p4/2p5/8/8/4P3/4K3 w - - 0 1",
+    "from": "e2",
+    "unsafe": {}
+   }
+  ],
+  "lifted": [
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": "c4"
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": null
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/pppp1ppp/2n2n2/2b1pB2/4P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": "c4",
+    "comment": "floating piece over f5"
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/pppp1ppp/2n2n2/1Bb1p3/4P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": null,
+    "comment": "legal move Bb5 completed"
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/3P4/PPP2PPP/RNBQK2R",
+    "lifted": null,
+    "comment": "two own pieces missing"
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": null,
+    "comment": "opponent piece missing, side to move is white"
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/1ppp1ppp/2n2n2/2b1p3/4P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": "c4",
+    "comment": "one extra disturbed square is tolerated"
+   },
+   {
+    "last": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1",
+    "current": "r1bqk2r/1ppp1ppp/2n2n2/2b5/4P3/3P1N2/PPP2PPP/RNBQK2R",
+    "lifted": null,
+    "comment": "two disturbed squares"
+   }
+  ],
+  "gameEnd": {
+   "minPlies": 6,
+   "cases": [
+    {
+     "name": "mate",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 30,
+       "result": "checkmate:w"
+      }
+     ],
+     "end": {
+      "step": 0,
+      "reason": "checkmate",
+      "result": "1-0"
+     }
+    },
+    {
+     "name": "mate black",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 31,
+       "result": "checkmate:b"
+      }
+     ],
+     "end": {
+      "step": 0,
+      "reason": "checkmate",
+      "result": "0-1"
+     }
+    },
+    {
+     "name": "stalemate",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 50,
+       "result": "stalemate"
+      }
+     ],
+     "end": {
+      "step": 0,
+      "reason": "stalemate",
+      "result": "1/2-1/2"
+     }
+    },
+    {
+     "name": "new start",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 12,
+       "isStart": true
+      }
+     ],
+     "end": {
+      "step": 0,
+      "reason": "newStart",
+      "result": "*"
+     }
+    },
+    {
+     "name": "new start with few plies",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 3,
+       "isStart": true
+      }
+     ],
+     "end": null
+    },
+    {
+     "name": "mate on an empty record",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 0,
+       "result": "checkmate:w"
+      }
+     ],
+     "end": null
+    },
+    {
+     "name": "covered 3 s",
+     "steps": [
+      {
+       "t": 0,
+       "view": "readable",
+       "plies": 20
+      },
+      {
+       "t": 1,
+       "view": "covered",
+       "plies": 20
+      },
+      {
+       "t": 2,
+       "view": "covered",
+       "plies": 20
+      },
+      {
+       "t": 3,
+       "view": "covered",
+       "plies": 20
+      },
+      {
+       "t": 4,
+       "view": "covered",
+       "plies": 20
+      }
+     ],
+     "end": {
+      "step": 4,
+      "reason": "overlay",
+      "result": "*",
+      "silent": false
+     }
+    },
+    {
+     "name": "covered less than 3 s",
+     "steps": [
+      {
+       "t": 0,
+       "view": "covered",
+       "plies": 20
+      },
+      {
+       "t": 2.9,
+       "view": "covered",
+       "plies": 20
+      },
+      {
+       "t": 3,
+       "view": "readable",
+       "plies": 20
+      }
+     ],
+     "end": null
+    },
+    {
+     "name": "covered with few plies",
+     "steps": [
+      {
+       "t": 0,
+       "view": "covered",
+       "plies": 4
+      },
+      {
+       "t": 10,
+       "view": "covered",
+       "plies": 4
+      }
+     ],
+     "end": null
+    },
+    {
+     "name": "covered then gone never ends",
+     "steps": [
+      {
+       "t": 0,
+       "view": "covered",
+       "plies": 20
+      },
+      {
+       "t": 1.5,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 3,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 60,
+       "view": "gone",
+       "plies": 20
+      }
+     ],
+     "end": null
+    },
+    {
+     "name": "tab switch",
+     "steps": [
+      {
+       "t": 0,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 5,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 60,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 599,
+       "view": "gone",
+       "plies": 20
+      }
+     ],
+     "end": null
+    },
+    {
+     "name": "gone 10 minutes ends silently",
+     "steps": [
+      {
+       "t": 0,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 300,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 600,
+       "view": "gone",
+       "plies": 20
+      }
+     ],
+     "end": {
+      "step": 2,
+      "reason": "boardGone",
+      "result": "*",
+      "silent": true
+     }
+    },
+    {
+     "name": "gone then back resets",
+     "steps": [
+      {
+       "t": 0,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 500,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 501,
+       "view": "readable",
+       "plies": 20
+      },
+      {
+       "t": 502,
+       "view": "gone",
+       "plies": 20
+      },
+      {
+       "t": 1100,
+       "view": "gone",
+       "plies": 20
+      }
+     ],
+     "end": null
+    }
+   ],
+   "coverage": {
+    "coveredLimit": 4,
+    "darkerBy": 40,
+    "distance": 40,
+    "ringTolerance": 45,
+    "ringShare": 0.6,
+    "rule": "covered squares: per square bg = median border colour; ref = per-parity median of the 64 bg values; covered when lum(ref)-lum(bg) >= darkerBy and RGB distance >= distance; readable when covered < coveredLimit. view(): readable if so; else covered when the 28 ring squares (rank 1/8 and file a/h) match the colours learned from the last readable frame (RGB distance of bg to the parity median <= ringTolerance for >= ringShare of the ring squares), otherwise gone. When no board is found in the tracked region the same ring check runs on the region at the expected board rect (covered or gone)."
+   },
+   "coveredSeconds": 3,
+   "goneSeconds": 600
+  }
  }
 }

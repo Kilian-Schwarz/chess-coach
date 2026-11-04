@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Следующая подсказка</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Сменить сторону, которая ходит</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Завершить партию</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Завершить партию и показать итоги</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Скопировать партию в PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Вернуть панель к доске</value></data>
   <data name="menu.record" xml:space="preserve"><value>Карточка игрока …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Тренировка …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Разбор …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Последние итоги …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Заново распознать фигуры</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Настройки …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Выйти</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>нет</value></data>
   <data name="record.style" xml:space="preserve"><value>Стиль объяснений</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Последние партии</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Разбор</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Итоги</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>без дебюта</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Разобранных партий пока нет. Партия разбирается по окончании.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Итогов пока нет. Они появляются, когда партия заканчивается.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Белые</value></data>
   <data name="report.black" xml:space="preserve"><value>Чёрные</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>Доступна версия {0}. Открыть страницу загрузки?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Ваш последний ход</value></data>
   <data name="review.gap" xml:space="preserve"><value>Ходы пропущены – следующий ход снова будет оценён</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Подсказки при перетаскивании</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Открывать итоги после партии</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Завершить партию и показать итоги</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Анализ ходов: {0} из {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Результат: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Результат: неизвестен</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Завершена матом</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Завершена патом</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Завершена: сайт показал результат поверх доски</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Завершена: доска исчезла</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Завершена: началась новая партия</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Завершена вручную</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Пишется краткий итог …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Открыть итоги</value></data>
 </root>

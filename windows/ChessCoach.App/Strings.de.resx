@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Nächster Hinweis</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Seite am Zug wechseln</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Strg+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Partie beenden</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Partie beenden &amp; Rückblick zeigen</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Partie als PGN kopieren</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Panel zurück neben das Brett</value></data>
   <data name="menu.record" xml:space="preserve"><value>Spielerakte …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Training …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Auswertung …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Letzter Rückblick …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Figuren neu einlernen</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Einstellungen …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Beenden</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>keiner</value></data>
   <data name="record.style" xml:space="preserve"><value>Erklärstil</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Letzte Partien</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Auswertung</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Rückblick</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>ohne Eröffnung</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Noch keine ausgewertete Partie. Eine Partie wird ausgewertet, wenn sie endet.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Noch kein Rückblick. Er erscheint, sobald eine Partie endet.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Eröffnung: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Weiß</value></data>
   <data name="report.black" xml:space="preserve"><value>Schwarz</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>Version {0} ist verfügbar. Die Download-Seite öffnen?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Dein letzter Zug</value></data>
   <data name="review.gap" xml:space="preserve"><value>Züge verpasst – der nächste Zug wird wieder bewertet</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Hinweise beim Ziehen</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Rückblick nach einer Partie öffnen</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Partie beenden &amp; Rückblick zeigen</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Züge werden analysiert: {0} von {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Ergebnis: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Ergebnis: unbekannt</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Beendet durch Matt</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Beendet durch Patt</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Beendet: Die Seite hat ein Ergebnis über dem Brett angezeigt</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Beendet: Das Brett ist verschwunden</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Beendet: Eine neue Partie hat begonnen</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Von Hand beendet</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Die Zusammenfassung wird geschrieben …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Rückblick öffnen</value></data>
 </root>

@@ -268,13 +268,53 @@ public sealed class EngineSession : IDisposable
         }
     }
 
-    public async Task<EngineResult?> AnalyzeAsync(string fen, int movetimeMs)
+    private readonly List<(bool Priority, TaskCompletionSource Gate)> _waiters = new();
+    private bool _busy;
+
+    private Task Acquire(bool priority)
     {
         lock (_gate)
         {
-            if (_cache.TryGetValue(fen, out var cached) && cached.Ms >= movetimeMs) return cached.Result;
-            if (_crashedFens.Contains(fen)) return null;
+            if (!_busy) { _busy = true; return Task.CompletedTask; }
+            var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            _waiters.Add((priority, tcs));
+            return tcs.Task;
         }
+    }
+
+    private void Release()
+    {
+        lock (_gate)
+        {
+            if (_waiters.Count == 0) { _busy = false; return; }
+            int i = _waiters.FindIndex(w => w.Priority);
+            var next = _waiters[Math.Max(i, 0)];
+            _waiters.RemoveAt(Math.Max(i, 0));
+            next.Gate.SetResult();
+        }
+    }
+
+    private EngineResult? Cached(string fen, int movetimeMs, bool priority)
+    {
+        lock (_gate)
+            return _cache.TryGetValue(fen, out var c) && (c.Ms >= movetimeMs || !priority) ? c.Result : null;
+    }
+
+    public async Task<EngineResult?> AnalyzeAsync(string fen, int movetimeMs, bool priority = true)
+    {
+        if (Cached(fen, movetimeMs, priority) is { } hit) return hit;
+        lock (_gate) if (_crashedFens.Contains(fen)) return null;
+        await Acquire(priority);
+        try
+        {
+            if (Cached(fen, movetimeMs, priority) is { } again) return again;
+            return await RunAsync(fen, movetimeMs);
+        }
+        finally { Release(); }
+    }
+
+    private async Task<EngineResult?> RunAsync(string fen, int movetimeMs)
+    {
         var engine = Ensure();
         if (engine == null) return null;
         var result = await engine.AnalyzeAsync(fen, movetimeMs);
@@ -289,7 +329,7 @@ public sealed class EngineSession : IDisposable
             }
             if (result != null)
             {
-                if (_cache.Count > 40) _cache.Clear();
+                if (_cache.Count > 300) _cache.Clear();
                 _cache[fen] = (result, movetimeMs);
             }
             ArmIdle();

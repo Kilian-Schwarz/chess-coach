@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Volgende hint</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Kleur aan zet wisselen</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Partij beëindigen</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Partij beëindigen en terugblik tonen</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Partij kopiëren als PGN</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Paneel terugzetten naast het bord</value></data>
   <data name="menu.record" xml:space="preserve"><value>Spelersdossier …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Training …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Analyse …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Laatste terugblik …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Stukken opnieuw leren</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Instellingen …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Afsluiten</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>geen</value></data>
   <data name="record.style" xml:space="preserve"><value>Uitlegstijl</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Recente partijen</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Analyse</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Terugblik</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>geen opening</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Nog geen geanalyseerde partijen. Een partij wordt geanalyseerd als ze afgelopen is.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Nog geen terugblik. Die verschijnt zodra een partij eindigt.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Opening: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Wit</value></data>
   <data name="report.black" xml:space="preserve"><value>Zwart</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>Versie {0} is beschikbaar. De downloadpagina openen?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Jouw laatste zet</value></data>
   <data name="review.gap" xml:space="preserve"><value>Zetten gemist: de volgende zet wordt weer beoordeeld</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Hints tijdens het slepen</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Terugblik openen na een partij</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Partij beëindigen en terugblik tonen</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Zetten analyseren: {0} van {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Uitslag: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Uitslag: onbekend</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Geëindigd door schaakmat</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Geëindigd door pat</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Geëindigd: de site toonde een uitslag boven het bord</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Geëindigd: het bord verdween</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Geëindigd: een nieuwe partij begon</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Handmatig beëindigd</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>De samenvatting wordt geschreven …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Terugblik openen</value></data>
 </root>

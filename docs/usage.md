@@ -49,9 +49,15 @@ The profile at the bottom of the board is the active one. In two-person training
 
 "Training" opens a window with puzzles made from your own mistakes. Move by clicking or dragging. You get feedback, and the same hint steps are available. A solved puzzle comes back after 1, 3, 7, 16 and 35 days; a failed one starts over at one day. Using a hint repeats the box instead of advancing. The app watches your success rate: above about 85 percent it makes puzzles harder and spacing longer, below 70 percent it repeats more.
 
-## Evaluation
+## Dragging hints
 
-When a game ends (checkmate, stalemate, a new starting position, the board gone for a minute, or "End game") the "Evaluation" window opens. It shows for each side: accuracy, average centipawn loss, counts of inaccuracies, mistakes and blunders, a performance rating, the opening, three key moments with the facts behind them, and an AI summary with three lessons. Games are saved as JSON and PGN in the data folder, and "Copy game as PGN" is in the menu.
+When you lift a piece and have not put it down yet, the app does not count it as a move. With "Hints while dragging" on (default), the squares where the piece would be in danger are marked in red and one line in the panel says why, for example "Careful: Knight on e5 would be undefended." A square is marked when the piece would be attacked and undefended or attacked by a cheaper piece, or when the move leaves another of your pieces hanging. The best move is never revealed.
+
+## Recap
+
+The app ends a game when it sees checkmate or stalemate, when a "game over" dialog covers the middle of the board for 3 seconds while the board frame stays in place, or when a new starting position appears. The last two need at least 6 half-moves. If the board disappears or another page replaces it (for example when you switch tabs), the game is only paused and continues when the board returns. After 10 minutes without a board the game is finished quietly; its recap is then available under "Last recap …" without opening by itself. The result is only recorded when it is certain (checkmate or stalemate); otherwise it stays unknown. You can also press "Finish game & show recap" in the panel or the menu.
+
+The recap window then opens by itself and comes to the front (switch this off with "Open recap after a game"). It shows accuracy, mistakes and key moments straight away. Moves that were not analysed yet are filled in in the background with a progress bar, and the AI summary follows as soon as it is written. "Last recap …" in the menu and the game list in the player file open past games again. Games are saved as JSON and PGN in the data folder.
 
 ## Training with two people
 

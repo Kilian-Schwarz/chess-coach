@@ -89,12 +89,12 @@
   <data name="menu.nextHint" xml:space="preserve"><value>Sonraki ipucu</value></data>
   <data name="menu.toggleSide" xml:space="preserve"><value>Hamle sırasını değiştir</value></data>
   <data name="menu.toggleKeys" xml:space="preserve"><value>Ctrl+Alt+T</value></data>
-  <data name="menu.endGame" xml:space="preserve"><value>Oyunu bitir</value></data>
+  <data name="menu.endGame" xml:space="preserve"><value>Oyunu bitir ve özeti göster</value></data>
   <data name="menu.copyPgn" xml:space="preserve"><value>Oyunu PGN olarak kopyala</value></data>
   <data name="menu.resetPanel" xml:space="preserve"><value>Paneli tahtanın yanına geri taşı</value></data>
   <data name="menu.record" xml:space="preserve"><value>Oyuncu dosyası …</value></data>
   <data name="menu.training" xml:space="preserve"><value>Antrenman …</value></data>
-  <data name="menu.report" xml:space="preserve"><value>Değerlendirme …</value></data>
+  <data name="menu.report" xml:space="preserve"><value>Son özet …</value></data>
   <data name="menu.relearn" xml:space="preserve"><value>Taşları yeniden öğren</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Ayarlar …</value></data>
   <data name="menu.quit" xml:space="preserve"><value>Çık</value></data>
@@ -139,9 +139,9 @@
   <data name="record.noHint" xml:space="preserve"><value>yok</value></data>
   <data name="record.style" xml:space="preserve"><value>Açıklama tarzı</value></data>
   <data name="record.lastGames" xml:space="preserve"><value>Son oyunlar</value></data>
-  <data name="report.title" xml:space="preserve"><value>Chess Coach · Değerlendirme</value></data>
+  <data name="report.title" xml:space="preserve"><value>Chess Coach · Özet</value></data>
   <data name="report.noOpening" xml:space="preserve"><value>açılış yok</value></data>
-  <data name="report.empty" xml:space="preserve"><value>Henüz değerlendirilmiş oyun yok. Bir oyun bittiğinde değerlendirilir.</value></data>
+  <data name="report.empty" xml:space="preserve"><value>Henüz özet yok. Bir oyun bittiğinde görünür.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Açılış: {0}</value></data>
   <data name="report.white" xml:space="preserve"><value>Beyaz</value></data>
   <data name="report.black" xml:space="preserve"><value>Siyah</value></data>
@@ -173,4 +173,18 @@
   <data name="update.openPage" xml:space="preserve"><value>{0} sürümü mevcut. İndirme sayfası açılsın mı?</value></data>
   <data name="review.titleLast" xml:space="preserve"><value>Son hamleniz</value></data>
   <data name="review.gap" xml:space="preserve"><value>Hamleler kaçırıldı: bir sonraki hamle yeniden değerlendirilecek</value></data>
+  <data name="menu.dragHints" xml:space="preserve"><value>Sürüklerken ipuçları</value></data>
+  <data name="menu.openRecap" xml:space="preserve"><value>Oyundan sonra özeti aç</value></data>
+  <data name="panel.finish" xml:space="preserve"><value>Oyunu bitir ve özeti göster</value></data>
+  <data name="report.progress" xml:space="preserve"><value>Hamleler analiz ediliyor: {0} / {1}</value></data>
+  <data name="report.resultLine" xml:space="preserve"><value>Sonuç: {0}</value></data>
+  <data name="report.resultUnknown" xml:space="preserve"><value>Sonuç: bilinmiyor</value></data>
+  <data name="report.end.checkmate" xml:space="preserve"><value>Mat ile bitti</value></data>
+  <data name="report.end.stalemate" xml:space="preserve"><value>Pat ile bitti</value></data>
+  <data name="report.end.overlay" xml:space="preserve"><value>Bitti: site tahtanın üzerinde bir sonuç gösterdi</value></data>
+  <data name="report.end.boardGone" xml:space="preserve"><value>Bitti: tahta kayboldu</value></data>
+  <data name="report.end.newStart" xml:space="preserve"><value>Bitti: yeni bir oyun başladı</value></data>
+  <data name="report.end.manual" xml:space="preserve"><value>Elle bitirildi</value></data>
+  <data name="report.summaryLoading" xml:space="preserve"><value>Özet yazılıyor …</value></data>
+  <data name="record.openRecap" xml:space="preserve"><value>Özeti aç</value></data>
 </root>

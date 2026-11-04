@@ -36,7 +36,9 @@ internal static class Kit
     {
         w.Show();
         if (w.WindowState == WindowState.Minimized) w.WindowState = WindowState.Normal;
+        w.Topmost = true;
         w.Activate();
+        w.Topmost = false;
     }
 
     public static ProgressBar Bar(double value, double max = 1) => new()

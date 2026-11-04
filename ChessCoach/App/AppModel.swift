@@ -25,6 +25,8 @@ final class AppModel: ObservableObject {
     @Published var explainSuggestions: Bool { didSet { suggestionCard = nil; invalidate() } }
     @Published var showThreats: Bool { didSet { invalidate() } }
     @Published var reviewMoves: Bool { didSet { if !reviewMoves { reviewCard = nil }; invalidate() } }
+    @Published var openRecap: Bool
+    @Published var dragHints: Bool { didSet { if !dragHints { clearLift() }; invalidate() } }
 
     @Published var expertUnlocked: Bool { didSet { analysisCache.removeAll(); suggestionCard = nil; invalidate() } }
     @Published var showBestImmediately: Bool { didSet { suggestionCard = nil; invalidate() } }
@@ -76,6 +78,9 @@ final class AppModel: ObservableObject {
     var lastChangeAt = Date()
     var lostSince: Date?
     var settled = false
+    var lastView = BoardView.readable
+    var missView = BoardView.gone
+    var boardColors: BoardColors?
     var lastAnalysisAt = Date()
 
     var hintCtx: HintContext?
@@ -87,6 +92,8 @@ final class AppModel: ObservableObject {
 
     @Published var windowRequest: WindowRequest?
     @Published var lastReport: GameReport?
+    @Published var recapSelection: String?
+    @Published var recapProgress: RecapProgress?
     @Published var summaryDraft: [String: String] = [:]
     @Published var movesInGame = 0
     @Published private(set) var focusLine = ""
@@ -98,6 +105,9 @@ final class AppModel: ObservableObject {
     var countedProfiles = Set<String>()
     var usedHint: [String: Int] = [:]
     var threatCard: CoachCard? { didSet { updatePanelCards() } }
+    var liftCard: CoachCard? { didSet { updatePanelCards() } }
+    var lift: LiftView?
+    var gameEnd = GameEndDetector()
     var reportCard: CoachCard? { didSet { updatePanelCards() } }
     var jobs: [Slot: ExplainJob] = [:]
     var tasks: [Slot: Task<Void, Never>] = [:]
@@ -131,6 +141,11 @@ final class AppModel: ObservableObject {
         var score: String
     }
 
+    struct LiftView: Equatable {
+        var key: String
+        var marks: [OverlayState.Square]
+    }
+
     struct Located {
         var display: CapturedDisplay
         var scan: ScanResult
@@ -151,6 +166,8 @@ final class AppModel: ObservableObject {
         explainSuggestions = defaults.flag("explainSuggestions", true)
         reviewMoves = defaults.flag("reviewMoves", true)
         showThreats = defaults.flag("showThreats", true)
+        openRecap = defaults.flag("openRecap", true)
+        dragHints = defaults.flag("dragHints", true)
         expertUnlocked = defaults.flag("expertUnlocked", false)
         showBestImmediately = defaults.flag("showBestImmediately", false)
         llmURL = defaults.string(forKey: "llmURL") ?? ""
@@ -167,6 +184,7 @@ final class AppModel: ObservableObject {
         panel.model.onNextHint = { [weak self] in self?.nextHint() }
         panel.model.onExplainAgain = { [weak self] in self?.explainAgain() }
         panel.model.onAsk = { [weak self] q in self?.ask(q) }
+        panel.model.onFinish = { [weak self] in self?.endGameNow() }
         activity.onChange = { [weak self] in self?.invalidate() }
         HotKeys.shared.register(keyCode: HotKeys.keyH, modifiers: HotKeys.optionCommand) { [weak self] in self?.nextHint() }
         HotKeys.shared.register(keyCode: HotKeys.keyT, modifiers: HotKeys.optionCommand) { [weak self] in self?.toggleSideToMove() }
@@ -198,7 +216,7 @@ final class AppModel: ObservableObject {
     }
 
     func stop() {
-        finishGame()
+        finishGame(GameEnd(reason: .manual, result: "*"), open: false)
         loopTask?.cancel()
         loopTask = nil
         activity.stop()
@@ -224,6 +242,9 @@ final class AppModel: ObservableObject {
         suggestionCard = nil
         answerCard = nil
         threatCard = nil
+        clearLift()
+        gameEnd.reset()
+        boardColors = nil
         record.clear()
         entries = []
         sideOverride = nil
@@ -251,7 +272,7 @@ final class AppModel: ObservableObject {
         guard let rect = lastBoardRect, isActive else { return }
         let review = displayedReviewCard()
         let reviewIsOld = review.map { $0.reviewPly != nil && $0.reviewPly! < record.moves.count } ?? false
-        let cards = (reviewIsOld ? [reportCard, suggestionCard, threatCard, answerCard, review] : [reportCard, review, threatCard, suggestionCard, answerCard]).compactMap { $0 }
+        let cards = (reviewIsOld ? [liftCard, reportCard, suggestionCard, threatCard, answerCard, review] : [liftCard, reportCard, review, threatCard, suggestionCard, answerCard]).compactMap { $0 }
         if cards.isEmpty { panel.hide() } else { panel.show(nextTo: rect, cards: cards) }
     }
 

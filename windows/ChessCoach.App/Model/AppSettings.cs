@@ -15,6 +15,8 @@ internal sealed class AppSettings
     public bool ExplainSuggestions { get; set; } = true;
     public bool ReviewMoves { get; set; } = true;
     public bool ShowThreats { get; set; } = true;
+    public bool OpenRecap { get; set; } = true;
+    public bool DragHints { get; set; } = true;
     public bool ExpertUnlocked { get; set; }
     public bool ShowBestImmediately { get; set; }
     public string LlmUrl { get; set; } = "";

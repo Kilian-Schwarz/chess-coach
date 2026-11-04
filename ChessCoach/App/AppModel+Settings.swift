@@ -26,6 +26,8 @@ extension AppModel {
         persist($explainSuggestions, "explainSuggestions")
         persist($showThreats, "showThreats")
         persist($reviewMoves, "reviewMoves")
+        persist($openRecap, "openRecap")
+        persist($dragHints, "dragHints")
         persist($expertUnlocked, "expertUnlocked")
         persist($showBestImmediately, "showBestImmediately")
         persist($llmURL, "llmURL")

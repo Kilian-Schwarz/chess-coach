@@ -132,4 +132,8 @@
   <data name="llm.httpError" xml:space="preserve"><value>Сервер повідомляє про помилку {0}. {1}</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>За цією адресою список моделей не знайдено. Для Open WebUI введи, наприклад, https://openwebui.example.com, для vLLM — http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Щоб отримувати пояснення, вибери сервер і модель у налаштуваннях.</value></data>
+  <data name="lift.undefended" xml:space="preserve"><value>Обережно: поле {1} не захищене (фігура: {0}).</value></data>
+  <data name="lift.cheaper" xml:space="preserve"><value>Обережно: поле {1} ({0}) атакує слабша фігура.</value></data>
+  <data name="lift.leaves" xml:space="preserve"><value>Обережно: після ходу {0} на {1} без захисту залишається: {2} на {3}.</value></data>
+  <data name="lift.many" xml:space="preserve"><value>Обережно: небезпечних полів: {0} (фігура: {1}), позначені червоним.</value></data>
 </root>
