@@ -106,5 +106,54 @@ for (file, fen) in expected.sorted(by: { $0.key < $1.key }) {
                 marked: m.marked, checks: m.checks, mover: .white))
 }
 
+func placement(of res: ScanResult, whiteBottom: Bool) -> String {
+    String(Placement(screen: res.screen, whiteAtBottom: whiteBottom).fen(sideToMove: .white).split(separator: " ")[0])
+}
+
+func runEarly(_ name: String, image: String, expected: String, whiteBottom: Bool) {
+    print("--- early \(name)")
+    let img = load(image)
+    guard let rect = BoardDetector.detect(img) else { check(false, "\(name): no board"); return }
+    var templates = PieceTemplates()
+    let scan = BoardScanner.analyze(img, board: rect, templates: templates)
+    check(!scan.looksLikeStart, "\(name): taken for the start position")
+    let t0 = Date()
+    let wb = templates.learnEarly(scan.features)
+    print("search \(Int(Date().timeIntervalSince(t0) * 1000)) ms")
+    check(wb == whiteBottom, "\(name): orientation \(String(describing: wb)) instead of \(whiteBottom)")
+    guard wb != nil, let res = BoardScanner.scan(img, templates: templates) else { return }
+    let got = placement(of: res, whiteBottom: whiteBottom)
+    check(got == expected, "\(name): placement \(got) instead of \(expected)")
+}
+
+func runStartFixture(_ name: String, image: String, whiteBottom: Bool) {
+    print("--- start \(name)")
+    let img = load(image)
+    guard let rect = BoardDetector.detect(img) else { check(false, "\(name): no board"); return }
+    var templates = PieceTemplates()
+    let scan = BoardScanner.analyze(img, board: rect, templates: templates)
+    check(scan.looksLikeStart, "\(name): start position not recognised")
+    check(templates.learnStart(scan.features) == whiteBottom, "\(name): orientation")
+    guard let res = BoardScanner.scan(img, templates: templates) else { return }
+    let got = placement(of: res, whiteBottom: whiteBottom)
+    check(got == startPlacement, "\(name): placement \(got)")
+}
+
+let startPlacement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+runEarly("d4", image: "\(boards)/early_d4_white.png", expected: "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: true)
+runEarly("e4 e5", image: "\(boards)/early_e4e5_black.png", expected: "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR", whiteBottom: false)
+runEarly("Nf3 Nc6", image: "\(boards)/early_nf3nc6_white.png", expected: "r1bqkbnr/pppppppp/2n5/8/8/5N2/PPPPPPPP/RNBQKB1R", whiteBottom: true)
+runEarly("four plies", image: "\(boards)/early_four_plies_black.png", expected: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R", whiteBottom: false)
+
+let privateDir = "intern/fixtures"
+if FileManager.default.fileExists(atPath: privateDir) {
+    runStartFixture("chess.com", image: "\(privateDir)/chesscom_start_white.png", whiteBottom: true)
+    runStartFixture("lichess", image: "\(privateDir)/lichess_start_white.png", whiteBottom: true)
+    runEarly("World Chess d4 with arrow", image: "\(privateDir)/worldchess_d4_black_arrow.png",
+             expected: "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: false)
+} else {
+    print("private fixtures absent, skipped")
+}
+
 print(failures == 0 ? "recognition OK" : "\(failures) failures")
 exit(failures == 0 ? 0 : 1)

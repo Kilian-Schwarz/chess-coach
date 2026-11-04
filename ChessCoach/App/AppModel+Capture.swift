@@ -139,6 +139,20 @@ extension AppModel {
             }
         }
 
+        if templates.isEmpty && !scan.looksLikeStart {
+            var t = PieceTemplates()
+            if let wb = t.learnEarly(scan.features) {
+                autoWhiteAtBottom = wb
+                templates = t
+                Self.saveTemplates(t)
+                pendingScreen = nil
+                stablePlacement = nil
+                dropCapture()
+                status = String(localized: "Pieces learned")
+                return
+            }
+        }
+
         guard !templates.isEmpty else {
             status = String(localized: "Board found, pieces still unknown")
             suggestion = String(localized: "Show a start position once to learn the pieces")

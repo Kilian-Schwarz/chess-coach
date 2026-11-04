@@ -15,6 +15,12 @@ Chess Coach is licensed under GPL-3.0. It ships with or builds on the following 
 - License: CC0 1.0 Universal (public domain dedication)
 - Source: https://github.com/lichess-org/chess-openings
 
+## cburnett piece set (test images only)
+
+- Use: the lichess screenshots in `Tools/testdata/` show the cburnett chess piece set; the images are used only as recognition test data and are not shipped with the app
+- Author: Colin M.L. Burnett (https://en.wikipedia.org/wiki/User:Cburnett)
+- License: GPLv2+ (https://www.gnu.org/licenses/gpl-2.0.txt), as published by lichess for `public/piece/cburnett` in https://github.com/lichess-org/lila/blob/master/COPYING.md
+
 ## Test-only NuGet packages
 
 - Use: unit tests only, not shipped with the app

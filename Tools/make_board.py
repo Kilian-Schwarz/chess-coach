@@ -70,6 +70,14 @@ def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None):
     img.save(path)
 
 
+EARLY = {
+    "early_d4_white": ("rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", True),
+    "early_e4e5_black": ("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR", False),
+    "early_nf3nc6_white": ("r1bqkbnr/pppppppp/2n5/8/8/5N2/PPPPPPPP/RNBQKB1R", True),
+    "early_four_plies_black": ("r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R", False),
+}
+
+
 if __name__ == "__main__":
     out = sys.argv[1]
     os.makedirs(out, exist_ok=True)
@@ -79,6 +87,8 @@ if __name__ == "__main__":
     render(mid, True, os.path.join(out, "mid_white.png"), highlight={(3, 1), (3, 2)})
     render(start, False, os.path.join(out, "start_black.png"), origin=(420, 90), sq=80)
     render(mid, False, os.path.join(out, "mid_black.png"), origin=(420, 90), sq=80)
+    for name, (fen, white_bottom) in EARLY.items():
+        render(fen, white_bottom, os.path.join(out, name + ".png"))
     with open(os.path.join(out, "expected.txt"), "w") as fh:
         fh.write(mid + "\n")
     print("ok")

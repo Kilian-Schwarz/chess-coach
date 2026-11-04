@@ -50,6 +50,59 @@ public class RecognitionTests
         Assert.Equal(expected, placement);
     }
 
+    private const string StartPlacement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+
+    private static string PlacementAfterEarlyLearning(string path, bool whiteBottom)
+    {
+        var img = TestSupport.LoadPng(path);
+        var rect = BoardDetector.Detect(img)!.Value;
+        var templates = new PieceTemplates();
+        var scan = BoardScanner.Analyze(img, rect, templates);
+        Assert.False(scan.LooksLikeStart);
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var wb = templates.LearnEarly(scan.Features);
+        Console.WriteLine($"early position search {sw.ElapsedMilliseconds} ms");
+        Assert.Equal(whiteBottom, wb);
+        var res = BoardScanner.Scan(img, templates)!;
+        return TestSupport.PlacementOf(res.Screen, whiteBottom);
+    }
+
+    [Theory]
+    [InlineData("early_d4_white", "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", true)]
+    [InlineData("early_e4e5_black", "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR", false)]
+    [InlineData("early_nf3nc6_white", "r1bqkbnr/pppppppp/2n5/8/8/5N2/PPPPPPPP/RNBQKB1R", true)]
+    [InlineData("early_four_plies_black", "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R", false)]
+    public void EarlyPositionsLearnFromSyntheticBoards(string name, string expected, bool whiteBottom)
+    {
+        var dir = TestSupport.SyntheticDir();
+        if (dir == null) return;
+        Assert.Equal(expected, PlacementAfterEarlyLearning(Path.Combine(dir, name + ".png"), whiteBottom));
+    }
+
+    [Theory]
+    [InlineData("chesscom_start_white.png")]
+    [InlineData("lichess_start_white.png")]
+    public void PrivateStartFixturesLearnAndClassify(string file)
+    {
+        var path = Path.Combine(TestSupport.Root, "intern", "fixtures", file);
+        if (!File.Exists(path)) return;
+        var img = TestSupport.LoadPng(path);
+        var templates = new PieceTemplates();
+        var scan = BoardScanner.Analyze(img, BoardDetector.Detect(img)!.Value, templates);
+        Assert.True(scan.LooksLikeStart);
+        Assert.True(templates.LearnStart(scan.Features));
+        var res = BoardScanner.Scan(img, templates)!;
+        Assert.Equal(StartPlacement, TestSupport.PlacementOf(res.Screen, true));
+    }
+
+    [Fact]
+    public void PrivateWorldChessFixtureLearnsFromEarlyPositionIgnoringArrow()
+    {
+        var path = Path.Combine(TestSupport.Root, "intern", "fixtures", "worldchess_d4_black_arrow.png");
+        if (!File.Exists(path)) return;
+        Assert.Equal("rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", PlacementAfterEarlyLearning(path, false));
+    }
+
     [Fact]
     public void FingerprintDetectsChangeAndIgnoresSameImage()
     {

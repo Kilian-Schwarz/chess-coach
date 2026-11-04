@@ -178,12 +178,45 @@ public sealed class PieceTemplates
         double bottom = features[6].Concat(features[7]).Sum(f => f.MeanLum);
         bool whiteAtBottom = bottom > top;
         var layout = StartLayout(whiteAtBottom);
+        Learn(features, (r, c) => layout[r].Length == 0 ? null : layout[r][c]);
+        return whiteAtBottom;
+    }
+
+    public bool? LearnEarly(SquareFeature[][] features)
+    {
+        var occupied = features.Select(row => row.Select(f => f.Fill > OccupiedFill).ToArray()).ToArray();
+        var lums = features.SelectMany((row, r) => row.Where((_, c) => occupied[r][c]).Select(f => f.MeanLum)).ToList();
+        if (lums.Count == 0) return null;
+        double lo = lums.Min(), hi = lums.Max();
+        if (hi - lo <= 40) return null;
+        for (int i = 0; i < 8; i++)
+        {
+            double t = (lo + hi) / 2;
+            var low = lums.Where(x => x <= t).ToList();
+            var high = lums.Where(x => x > t).ToList();
+            lo = low.Count > 0 ? low.Average() : 0;
+            hi = high.Count > 0 ? high.Average() : 0;
+        }
+        double threshold = (lo + hi) / 2;
+        var bright = features.Select(row => row.Select(f => f.MeanLum > threshold).ToArray()).ToArray();
+        if (EarlyStart.Match(occupied, bright) is not { } found) return null;
+        Learn(features, (r, c) =>
+        {
+            var (file, rank) = Placement.ChessSquare(c, r, found.WhiteAtBottom);
+            return found.Board.Squares[rank][file];
+        });
+        return found.WhiteAtBottom;
+    }
+
+    private void Learn(SquareFeature[][] features, Func<int, int, char?> label)
+    {
         var t = new Dictionary<string, List<SquareFeature>>();
-        foreach (int r in new[] { 0, 1, 6, 7 })
+        for (int r = 0; r < 8; r++)
         {
             for (int c = 0; c < 8; c++)
             {
-                string key = layout[r][c].ToString();
+                if (label(r, c) is not { } piece) continue;
+                string key = piece.ToString();
 
                 if ((key == "p" || key == "P") && t.TryGetValue(key, out var have) && have.Count >= 4) continue;
                 if (!t.TryGetValue(key, out var list)) t[key] = list = new List<SquareFeature>();
@@ -192,7 +225,6 @@ public sealed class PieceTemplates
         }
         Templates = t;
         SquareColors = SquareColors.Learn(features);
-        return whiteAtBottom;
     }
 
     public double Distance(SquareFeature f, char piece) =>

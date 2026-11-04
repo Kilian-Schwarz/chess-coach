@@ -174,6 +174,20 @@ internal sealed partial class AppModel
             }
         }
 
+        if (_templates.IsEmpty && !scan.LooksLikeStart)
+        {
+            var t = new PieceTemplates();
+            if (t.LearnEarly(scan.Features) is bool wb)
+            {
+                _autoWhiteAtBottom = wb;
+                _templates = t;
+                SaveTemplates(t);
+                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false;
+                SetStatus(Loc.T("status.learned"));
+                return;
+            }
+        }
+
         if (_templates.IsEmpty)
         {
             SetStatus(Loc.T("status.unknownPieces"));

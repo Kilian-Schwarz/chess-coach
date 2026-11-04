@@ -129,17 +129,43 @@ struct PieceTemplates: Codable {
         let bottom = (features[6] + features[7]).map(\.meanLum).reduce(0, +)
         let whiteAtBottom = bottom > top
         let layout = PieceTemplates.startLayout(whiteAtBottom: whiteAtBottom)
+        learn(features) { r, c in layout[r].isEmpty ? nil : layout[r][c] }
+        return whiteAtBottom
+    }
+
+    mutating func learnEarly(_ features: [[SquareFeature]]) -> Bool? {
+        let occupied = features.map { $0.map { $0.fill > PieceTemplates.occupiedFill } }
+        let lums = zip(features.joined(), occupied.joined()).filter { $0.1 }.map { $0.0.meanLum }
+        guard let lo0 = lums.min(), let hi0 = lums.max(), hi0 - lo0 > 40 else { return nil }
+        var lo = lo0, hi = hi0
+        for _ in 0..<8 {
+            let t = (lo + hi) / 2
+            lo = lums.filter { $0 <= t }.reduce(0, +) / Double(max(lums.filter { $0 <= t }.count, 1))
+            hi = lums.filter { $0 > t }.reduce(0, +) / Double(max(lums.filter { $0 > t }.count, 1))
+        }
+        let threshold = (lo + hi) / 2
+        let bright = features.map { $0.map { $0.meanLum > threshold } }
+        guard let found = EarlyStart.match(occupied: occupied, bright: bright) else { return nil }
+        let board = found.board
+        learn(features) { r, c in
+            let (file, rank) = Placement.chessSquare(col: c, row: r, whiteAtBottom: found.whiteAtBottom)
+            return board.squares[rank][file]
+        }
+        return found.whiteAtBottom
+    }
+
+    private mutating func learn(_ features: [[SquareFeature]], label: (Int, Int) -> Character?) {
         var t: [String: [SquareFeature]] = [:]
-        for r in [0, 1, 6, 7] {
+        for r in 0..<8 {
             for c in 0..<8 {
-                let key = String(layout[r][c])
+                guard let piece = label(r, c) else { continue }
+                let key = String(piece)
                 if (key == "p" || key == "P"), (t[key]?.count ?? 0) >= 4 { continue }
                 t[key, default: []].append(features[r][c])
             }
         }
         templates = t
         squareColors = SquareColors.learn(from: features)
-        return whiteAtBottom
     }
 
     func distance(_ f: SquareFeature, to piece: Character) -> Double {
