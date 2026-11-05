@@ -37,3 +37,11 @@ targets:
         ENABLE_APP_SANDBOX: NO
         CC_OFFICIAL_BUILD: NO
         LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+      configs:
+        Release:
+          DEPLOYMENT_POSTPROCESSING: YES
+          STRIP_INSTALLED_PRODUCT: YES
+          STRIP_STYLE: all
+          COPY_PHASE_STRIP: YES
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          OTHER_SWIFT_FLAGS: "-debug-prefix-map $(SRCROOT)=. -file-prefix-map $(SRCROOT)=."
