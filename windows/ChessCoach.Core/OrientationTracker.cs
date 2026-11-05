@@ -8,6 +8,8 @@ public sealed class OrientationTracker
 
     public bool? WhiteAtBottom { get; private set; }
 
+    public bool HasEvidence => _contrary > 0;
+
     public void Set(bool? value)
     {
         WhiteAtBottom = value;

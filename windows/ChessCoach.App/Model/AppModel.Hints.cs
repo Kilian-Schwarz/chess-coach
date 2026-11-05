@@ -201,11 +201,15 @@ internal sealed partial class AppModel
         && (EffectiveShowBest || _hintLevel >= Curriculum.FirstHintLevel || _threatShownFen == _hintFen
             || (ProfileFor(h.ToMove, h.Me) ?? Active).ShowsThreatAutomatically);
 
-    private bool ThreatVisible => _threat != null && ThreatShown;
+    private bool OpportunityShown => _hint is { } h && HintSetFor(h)?.Opportunity == true;
+
+    private bool ThreatVisible => _threat != null && ThreatShown && !OpportunityShown;
 
     private CoachCard? ThreatCard()
     {
         if (!ThreatShown) return null;
+        if (_threat != null && _hint is { } hc && OpportunityShown)
+            return new CoachCard("opportunity|" + hc.Fen, CardKind.Info, Hints.OpportunityText(Loc.Culture));
         if (_threat is { } th) return new CoachCard("threat|" + th.Text, CardKind.Info, th.Text);
         return _threatShownFen == _hintFen && _hintFen != null
             ? new CoachCard("nothreat|" + _hintFen, CardKind.Info, Loc.T("threat.none")) : null;
@@ -432,6 +436,7 @@ internal sealed partial class AppModel
 
     private readonly Dictionary<string, Grounding> _groundingCache = new();
     private HashSet<string> _questionAllowed = new();
+    private (UciMove Move, string San)? _withheld;
 
     private async Task<Grounding> GroundingAsync(string question, Placement placement, PieceColor color, HintContext? hint, int level, HintSet? hints,
         CancellationToken ct)
@@ -493,6 +498,10 @@ internal sealed partial class AppModel
         var hintCtx = _hint;
         int level = EffectiveShowBest ? 4 : _hintLevel;
         var hintSet = hintCtx != null ? HintSetFor(hintCtx) : null;
+        _withheld = null;
+        if (hintCtx != null && level is >= 1 and <= 3 && PositionFacts.MentionedMove(question, hintCtx.Position) != hintCtx.Move
+            && !question.ToLowerInvariant().Contains(UciMove.SquareName(hintCtx.Move.ToFile, hintCtx.Move.ToRank)))
+            _withheld = (hintCtx.Move, San.Of(hintCtx.Move, hintCtx.Position));
         _answerCard = new CoachCard(id, CardKind.Answer, title ?? Loc.T("ask.cardTitle", question)) { IsLoading = true };
         _panel.ClearQuestion();
         _panel.IsAsking = true;
@@ -534,6 +543,7 @@ internal sealed partial class AppModel
         {
             var cleaned = FactCheck.Clean(text, _questionAllowed);
             if (cleaned.Removed > 0) Log.Write($"Answer: removed {cleaned.Removed} sentence(s) with invented moves");
+            if (_withheld is { } withheld && cleaned.Text != null) cleaned = FactCheck.Withholding(cleaned.Text, withheld.Move, withheld.San);
             shown = cleaned.Text ?? "";
             if (cleaned.Text == null) note = Loc.T("explain.noReliable");
         }

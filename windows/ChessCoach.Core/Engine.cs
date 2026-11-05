@@ -14,7 +14,7 @@ public sealed record EngineLine(string Move, int? ScoreCP, int? MateIn, IReadOnl
             if (m == 0) return CoreLocale.Get("score.checkmate", culture);
             return CoreLocale.Format(m > 0 ? "score.mateIn" : "score.matedIn", culture, Math.Abs(m));
         }
-        if (cp is int c) return (c >= 0 ? "+" : "") + (c / 100.0).ToString("0.0", CultureInfo.InvariantCulture);
+        if (cp is int c) return (c >= 0 ? "+" : "") + (c / 100.0).ToString("0.0", culture ?? CoreLocale.Culture);
         return "";
     }
 

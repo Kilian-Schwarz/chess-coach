@@ -31,11 +31,11 @@ public static class PuzzleCoach
         if (p.SourceMove is not int number || p.PlayedValue is not int value || UciMove.Parse(p.PlayedMove ?? "") is not { } played
             || ChessPosition.FromFen(p.Fen) is not { } pos || !pos.IsLegal(played))
             return CoreLocale.Format("puzzle.source.date", culture, date);
-        return CoreLocale.Format("puzzle.source.move", culture, date, number, San.Localize(San.Of(played, pos), culture), Evaluation(value));
+        return CoreLocale.Format("puzzle.source.move", culture, date, number, San.Localize(San.Of(played, pos), culture), Evaluation(value, culture));
     }
 
-    public static string Evaluation(int cp) =>
-        Math.Abs(cp) >= 9_000 ? (cp > 0 ? "+M" : "−M") : (cp / 100.0).ToString("+0.0;−0.0;+0.0", CultureInfo.InvariantCulture);
+    public static string Evaluation(int cp, CultureInfo? culture = null) =>
+        Math.Abs(cp) >= 9_000 ? (cp > 0 ? "+M" : "−M") : (cp / 100.0).ToString("+0.0;−0.0;+0.0", culture ?? CoreLocale.Culture);
 
     public static string Question(HintTheme t, CultureInfo? culture = null) => CoreLocale.Get("puzzle.ask." + t.Raw(), culture);
 
@@ -55,20 +55,23 @@ public static class PuzzleCoach
         {
             case HintTheme.Discovered:
                 if (pos.Board.DiscoveredTargets(best, me) is not { Count: > 0 } xs) return null;
-                return CoreLocale.Format("puzzle.why.discovered", culture, xs[0].Blocker.Text(culture), xs[0].Slider.Text(culture), xs[0].Target.Text(culture));
+                return CoreLocale.Format("puzzle.why.discovered", culture, Capital(xs[0].Blocker.Phrase(culture), culture), xs[0].Slider.Phrase(culture), xs[0].Target.Phrase(culture, true));
             case HintTheme.Pin:
                 if (pos.Board.CreatedPins(best, me.Opposite()) is not { Count: > 0 } pins) return null;
                 var pin = pins[0];
-                return CoreLocale.Format("puzzle.why.pin", culture, new PieceAt(pin.Piece, pin.Square).Text(culture), new PieceAt(pin.Target, pin.TargetSquare).Text(culture));
+                return CoreLocale.Format("puzzle.why.pin", culture, Capital(new PieceAt(pin.Piece, pin.Square).Phrase(culture), culture), new PieceAt(pin.Target, pin.TargetSquare).Phrase(culture));
             case HintTheme.Fork:
                 var targets = ForkTargets(pos, best);
                 if (targets.Count < 2 || pos.Board.Piece(best.FromFile, best.FromRank) is not char mover) return null;
-                return CoreLocale.Format("puzzle.why.fork", culture, new PieceAt(mover, UciMove.SquareName(best.ToFile, best.ToRank)).Text(culture),
-                    string.Join(", ", targets.Take(3).Select(t => t.Text(culture))));
+                return CoreLocale.Format("puzzle.why.fork", culture,
+                    Capital(new PieceAt(mover, UciMove.SquareName(best.ToFile, best.ToRank)).Phrase(culture), culture),
+                    string.Join(", ", targets.Take(3).Select(t => t.Phrase(culture, true))));
             default:
                 return null;
         }
     }
+
+    private static string Capital(string text, CultureInfo? culture) => char.ToUpper(text[0], culture ?? CoreLocale.Culture) + text[1..];
 
     public static List<PieceAt> ForkTargets(ChessPosition pos, UciMove best)
     {
@@ -97,7 +100,8 @@ public static class PuzzleCoach
             {
                 string text = DisplayLine(o.Line, culture);
                 if (o.Line.EndsWith('#')) parts.Add(CoreLocale.Format("puzzle.why.mate", culture, text));
-                else if (o.Delta > 0) parts.Add(CoreLocale.Format("puzzle.why.gain", culture, text, o.Delta));
+                else if (o.Delta == 1) parts.Add(CoreLocale.Format("puzzle.why.gain.one", culture, text));
+                else if (o.Delta > 1) parts.Add(CoreLocale.Format("puzzle.why.gain", culture, text, o.Delta));
                 else parts.Add(CoreLocale.Format("puzzle.why.line", culture, text));
             }
         }
@@ -107,7 +111,7 @@ public static class PuzzleCoach
     public static string Hint3(HintTheme theme, UciMove move, ChessPosition pos, CultureInfo? culture = null)
     {
         char piece = pos.Board.Piece(move.FromFile, move.FromRank) ?? 'P';
-        string fallback = Hints.Stage3Fallback(theme, piece, culture);
+        string fallback = Hints.Stage3Fallback(theme, piece, culture, Hints.Variant(theme, pos.Board, pos.Turn, move));
         var area = AreaClause(theme, move, pos, culture);
         return area == null || Hints.RevealsTarget(area, move) ? fallback : fallback + " " + area;
     }
@@ -116,10 +120,13 @@ public static class PuzzleCoach
     {
         var me = pos.Turn;
         string dest = UciMove.SquareName(best.ToFile, best.ToRank);
+        if (theme == HintTheme.Unpin && pos.Board.Unpinned(best, me).FirstOrDefault() is { Piece: not '\0' } pin)
+            return CoreLocale.Format("puzzle.area.unpin", culture, new PieceAt(pin.Piece, pin.Square).Text(culture),
+                new PieceAt(pin.Target, pin.TargetSquare).Text(culture), new PieceAt(pin.Pinner, pin.PinnerSquare).Text(culture));
         if (theme == HintTheme.Discovered)
         {
             foreach (var x in pos.Board.DiscoveredTargets(best, me))
-                if (x.Target.Square != dest) return CoreLocale.Format("puzzle.area.discovered", culture, x.Slider.Text(culture), x.Target.Text(culture));
+                if (x.Target.Square != dest) return CoreLocale.Format("puzzle.area.discovered", culture, x.Slider.Phrase(culture), x.Target.Phrase(culture, true));
         }
         var after = pos.Board.Applying(best);
         var enemy = after.Attacks(best.ToFile, best.ToRank)
@@ -137,9 +144,14 @@ public static class PuzzleCoach
         if (PositionFacts.OutcomeOf(refutation, after, me) is { } o)
         {
             if (o.Line.EndsWith('#')) return CoreLocale.Get("puzzle.fail.mate", culture);
-            if (o.Delta < 0 && o.Captures.FirstOrDefault(c => c.By != me) is { } c)
-                return CoreLocale.Format("puzzle.fail.loss", culture, PieceInfo.Name(c.Victim, culture), c.Square);
+            if (o.Delta < 0 && o.Played.Count > 0)
+            {
+                string reply = San.Localize(San.Of(o.Played[0].Move, after), culture);
+                return o.Delta == -1 ? CoreLocale.Format("puzzle.fail.loss.one", culture, reply) : CoreLocale.Format("puzzle.fail.loss", culture, reply, -o.Delta);
+            }
         }
+        if (ChessPosition.FromFen(p.Fen) is { } start && BestMove(p) is { } best && Mechanism(p, start, best, culture) is { } idea)
+            return CoreLocale.Format("puzzle.fail.idea", culture, idea);
         return CoreLocale.Format("puzzle.fail.miss", culture, ThemeOf(p).Title(culture));
     }
 

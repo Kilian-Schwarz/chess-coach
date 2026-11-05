@@ -109,7 +109,7 @@ internal sealed partial class AppModel
         {
             var visible = _grabber.Screen(region);
             if (visible == null) return new RegionProbe(ProbeKind.CaptureFailed, null, null, region, true);
-            _dirtyFp.Compute(visible, expected);
+            _dirtyFp.Compute(visible, expected, _overlay.Covered);
             if (hasLast && hasCached && !_dirtyFp.Differs(_lastDirtyFp)) return new RegionProbe(ProbeKind.Unchanged, null, null, region, true);
             img = CaptureScreen(region.X, region.Y, region.Width, region.Height);
             if (img == null) return new RegionProbe(ProbeKind.CaptureFailed, null, null, region, true);
@@ -198,7 +198,7 @@ internal sealed partial class AppModel
         var probe = SearchMonitors(mons, templates);
         if (probe.Scan != null || !allowHide || !_ui.Invoke(() => _overlay.IsVisible || _panel.IsVisible)) return probe;
         _lastHiddenSearch = DateTime.UtcNow;
-        bool hidden = _ui.Invoke(HideForCapture);
+        bool hidden = _ui.Invoke(() => HideForCapture(true));
         try
         {
             var second = SearchMonitors(mons, templates);
@@ -251,10 +251,10 @@ internal sealed partial class AppModel
 
     private bool _overlayHidden, _panelHidden;
 
-    private bool HideForCapture()
+    private bool HideForCapture(bool withPanel)
     {
         _overlayHidden = _overlay.IsVisible;
-        _panelHidden = _panel.IsVisible;
+        _panelHidden = withPanel && _panel.IsVisible;
         if (_overlayHidden) _overlay.Visibility = System.Windows.Visibility.Hidden;
         if (_panelHidden) _panel.Visibility = System.Windows.Visibility.Hidden;
         if (_overlayHidden || _panelHidden) Native.DwmFlush();
@@ -269,8 +269,12 @@ internal sealed partial class AppModel
 
     private RgbImage? CaptureScreen(int x, int y, int w, int h)
     {
-        bool hidden = _ui.Invoke(HideForCapture);
-        try { return _grabber.Screen(new Rectangle(x, y, w, h)); }
+        var area = new Rectangle(x, y, w, h);
+        bool hide = DateTime.UtcNow - _lastHiddenSearch >= HiddenSearchGap && _ui.Invoke(() => _overlay.IsVisible);
+        if (!hide) return _grabber.Screen(area);
+        _lastHiddenSearch = DateTime.UtcNow;
+        bool hidden = _ui.Invoke(() => HideForCapture(false));
+        try { return _grabber.Screen(area); }
         finally { if (hidden) _ui.Invoke(RestoreAfterCapture); }
     }
 
@@ -285,6 +289,7 @@ internal sealed partial class AppModel
 
     private async Task TickAsync(CancellationToken ct)
     {
+        bool downAtStart = MouseDown;
         if (_session.IsPaused())
         {
             EnterPause();
@@ -324,12 +329,15 @@ internal sealed partial class AppModel
             return;
         }
         _lostSince = null;
+        bool held = downAtStart || MouseDown;
+        if (held) { _mouseHeld = true; _stuck.Reset(); }
         if (_regionMissed)
         {
             ObserveEnd(_missView);
             return;
         }
-        if (outcome == LocateOutcome.Unchanged && _settled && _pendingMoves.Count == 0 && !(_stablePlacement is { } sp && RecordDisagrees(sp)))
+        if (TickGate.CanSkip(outcome == LocateOutcome.Unchanged, _settled, _pendingMoves.Count > 0, _forceResync, _mouseHeld, _confirmSoon,
+                _stablePlacement is { } sp && RecordDisagrees(sp), _orientation.HasEvidence))
         {
             if (_lastView != BoardSight.Readable) ObserveEnd(_lastView);
             await BackgroundWorkAsync(ct);
@@ -446,7 +454,7 @@ internal sealed partial class AppModel
         var me = whiteAtBottom ? PieceColor.White : PieceColor.Black;
         _lastMe = me;
         var placement = new Placement(scan.Screen, whiteAtBottom);
-        bool mouseDown = MouseDown;
+        bool mouseDown = held || MouseDown;
         HandleLift(placement, me, whiteAtBottom, mouseDown);
 
         if (mouseDown)
@@ -469,6 +477,7 @@ internal sealed partial class AppModel
             _forceResync = true;
             _stablePlacement = null;
             Log.Write("Screen and record disagreed for 3 s, resyncing");
+            DropCapture();
             return;
         }
 
@@ -492,7 +501,7 @@ internal sealed partial class AppModel
         }
         else if (_pendingMoves.Count > 0)
             ConfirmPending(SideToMove.Detect(scan, whiteAtBottom, _templates), me);
-        ObserveEnd(BoardSight.Readable, _update?.Result);
+        ObserveEnd(BoardSight.Readable, _record.DecidedResult);
 
         var toMove = (EffectiveAlwaysMyTurn && !Settings.DuoTraining) ? me : (_sideToMove ?? me);
         if (_update == null) return;

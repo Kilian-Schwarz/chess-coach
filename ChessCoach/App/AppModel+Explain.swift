@@ -109,6 +109,11 @@ extension AppModel {
             return
         }
         let color = hintCtx?.toMove ?? record.current?.turn ?? lastMe ?? .white
+        var withheld: (move: UCIMove, san: String)?
+        if let ctx = hintCtx, !effectiveShowBest, (1...3).contains(hintLevel), PositionFacts.mentionedMove(in: question, position: ctx.position) != ctx.hints.move,
+           !question.lowercased().contains(UCIMove.squareName(ctx.hints.move.toFile, ctx.hints.move.toRank)) {
+            withheld = (ctx.hints.move, SAN.san(ctx.hints.move, in: ctx.position))
+        }
         let profile = store.profile(id: hintCtx?.profileId ?? store.activeId)
         var card = CoachCard(id: id, kind: .answer, title: title ?? String(localized: "Your question: \(question)"))
         card.isLoading = true
@@ -126,8 +131,9 @@ extension AppModel {
         }, update: { [weak self] text, done in
             guard let self, self.answerCard?.id == id else { return }
             guard done else { self.answerCard?.text = text; return }
-            let checked = FactCheck.clean(text, allowed: self.questionAllowed)
+            var checked = FactCheck.clean(text, allowed: self.questionAllowed)
             if checked.removed > 0 { Log.write("Answer: removed \(checked.removed) sentence(s) with invented moves") }
+            if let withheld, let kept = checked.text { checked = FactCheck.withholding(kept, move: withheld.move, san: withheld.san) }
             self.answerCard?.text = checked.text ?? ""
             if checked.text == nil { self.answerCard?.note = String(localized: "No reliable explanation. Try “Explain again”.") }
             self.answerCard?.isLoading = false

@@ -112,7 +112,7 @@ internal sealed class TrainingWindow
 
     private void ShowIntro(Puzzle p)
     {
-        _theme.Text = PuzzleCoach.ThemeOf(p).Title();
+        _theme.Text = "";
         _question.Text = PuzzleCoach.Question(PuzzleCoach.ThemeOf(p));
         _source.Text = PuzzleCoach.Source(p);
     }
@@ -140,6 +140,7 @@ internal sealed class TrainingWindow
     private void ShowLesson(Puzzle p)
     {
         if (!_lessons.TryGetValue(p.Id, out var l)) return;
+        _theme.Text = PuzzleCoach.ThemeOf(p).Title();
         _lesson.Text = Loc.T("puzzle.why.title") + "\n" + l.Why + "\n\n" + Loc.T("puzzle.habit.title") + "\n" + l.Habit;
     }
 
@@ -239,6 +240,8 @@ internal sealed class TrainingWindow
             _board.Set(_position.Board, _whiteAtBottom);
             _board.Mark((answer.FromFile, answer.FromRank), (answer.ToFile, answer.ToRank));
             _lineIndex = reply + 1;
+            _hintLevel = 0;
+            _hint.Text = "";
             return;
         }
         _finished = true;
@@ -283,13 +286,15 @@ internal sealed class TrainingWindow
             return;
         }
         _hintLevel = Math.Min(4, _hintLevel + 1);
-        var best = UciMove.Parse(_puzzle.AcceptedMoves[0]);
+        bool later = _lineIndex > 0 && _puzzle.BestLine.Count > _lineIndex;
+        var best = UciMove.Parse(later ? _puzzle.BestLine[_lineIndex] : _puzzle.AcceptedMoves[0]);
         if (best is not { } m) return;
         char piece = _position.Board.Squares[m.FromRank][m.FromFile] ?? 'P';
         HintThemeExt.TryParse(_puzzle.Theme, out var theme);
+        if (later) theme = Hints.Theme(_position.Board, m, _position.Turn, null, false, _puzzle.BestLine.Skip(_lineIndex).ToList());
         switch (_hintLevel)
         {
-            case 1: _hint.Text = theme.Stage1Text(); break;
+            case 1: _hint.Text = theme.Stage1Text(null, Hints.Variant(theme, _position.Board, _position.Turn, m)); break;
             case 2:
                 _hint.Text = Hints.Stage2Text(piece, UciMove.SquareName(m.FromFile, m.FromRank));
                 _board.Mark((m.FromFile, m.FromRank), null);

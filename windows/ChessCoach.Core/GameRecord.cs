@@ -81,6 +81,7 @@ public sealed class GameRecord
     private Stash? _stash;
     public int SegmentMoves => _moves.Count - (_breaks.Count > 0 ? _breaks[^1] : 0);
     public ChessPosition? Current { get; private set; }
+    public GameResult? DecidedResult => IsEstimatedStart && SegmentMoves == 0 ? null : Current?.Result;
 
     public DateTime StartedAt { get; private set; } = DateTime.UtcNow;
 

@@ -8,6 +8,27 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 - Windows installer `ChessCoach-<version>-setup.exe`: per-user install without administrator rights, Start menu and optional desktop shortcut, entry under Settings, Apps, in-place upgrade, uninstall that can keep or delete your data, silent mode (`/S`).
 - macOS: the DMG opens as a drag-to-Applications window with the app icon as volume icon, and the app offers once to move itself to Applications when it runs from elsewhere.
 
+## [0.1.2] - 2026-11-05
+
+### Changed
+- The board is tracked by checking it where it was, so overlay and panel stay visible while you move pieces; they only disappear when the board has really been gone for a moment.
+- On macOS the board's own browser window is captured, so other windows in front of it no longer end or disturb the game; switching tabs pauses and resumes the same game.
+- The board orientation stays fixed for the whole game.
+- A resync keeps the game: the recap, accuracy and PGN always cover all moves.
+- Faster reaction: the board is checked at least every 1.5 seconds and immediately after switching apps or Spaces.
+- Explanations use the engine's line, pins, discovered attacks and the concrete consequence of a threat; hints name the real theme and hint 3 is concrete.
+- A threat is shown only when it wins something, with the reason; "check" and "mate" are verified by the move generator.
+- Puzzles explain where they come from, ask a guiding question, offer three concrete hints and show why the solution works plus a habit to remember; progress per theme.
+
+### Fixed
+- A piece that is held or dragged never changes the game, and chess.com move dots and rings are ignored.
+- Marks while dragging only appear where the piece would really be lost, naming the attacker.
+- A move after a longer drag is no longer missed; a stuck position recovers after three seconds.
+- No false new game after a misread frame, no relearning of pieces on a wrong board area.
+- Windows: no more "Screen capture failed" on short hiccups and no periodic full-screen search that hid the window.
+- Correct wording for forced mates, lower-case possessives mid-sentence, German number format and plurals.
+- Release builds no longer contain local file paths.
+
 ## [0.1.1] - 2026-11-05
 
 ### Added

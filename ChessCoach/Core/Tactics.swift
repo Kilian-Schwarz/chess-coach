@@ -47,6 +47,10 @@ struct PieceAt: Equatable {
     let square: String
 
     func text(_ loc: Loc = .display) -> String { "\(PieceInfo.name(piece, loc)) \(square)" }
+
+    func phrase(_ loc: Loc = .display, accusative: Bool = false) -> String {
+        loc("piece.on", "\(PieceInfo.the(piece, loc, accusative: accusative)) on \(square)")
+    }
 }
 
 struct XRay: Equatable {
@@ -66,6 +70,23 @@ enum PieceInfo {
         case "b": loc("piece.bishop", "Bishop")
         case "n": loc("piece.knight", "Knight")
         default: loc("piece.pawn", "Pawn")
+        }
+    }
+
+    static func the(_ p: Character, _ loc: Loc = .display, accusative: Bool = false) -> String {
+        switch (Character(p.lowercased()), accusative) {
+        case ("k", false): loc("piece.king.the", "the king")
+        case ("k", true): loc("piece.king.theAcc", "the king")
+        case ("q", false): loc("piece.queen.the", "the queen")
+        case ("q", true): loc("piece.queen.theAcc", "the queen")
+        case ("r", false): loc("piece.rook.the", "the rook")
+        case ("r", true): loc("piece.rook.theAcc", "the rook")
+        case ("b", false): loc("piece.bishop.the", "the bishop")
+        case ("b", true): loc("piece.bishop.theAcc", "the bishop")
+        case ("n", false): loc("piece.knight.the", "the knight")
+        case ("n", true): loc("piece.knight.theAcc", "the knight")
+        case (_, false): loc("piece.pawn.the", "the pawn")
+        case (_, true): loc("piece.pawn.theAcc", "the pawn")
         }
     }
 

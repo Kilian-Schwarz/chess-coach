@@ -82,11 +82,10 @@ internal sealed class ScreenCapturer : IScreenCapture, IDisposable
 
     private RgbImage ImageFor(int w, int h)
     {
-        foreach (var img in _images) if (img != null && img.Width == w && img.Height == h) return img;
-        var created = new RgbImage(w, h, new byte[w * h * 4]);
-        _images[_nextSlot] = created;
+        int slot = _nextSlot;
         _nextSlot = (_nextSlot + 1) % _images.Length;
-        return created;
+        if (_images[slot] is { } existing && existing.Width == w && existing.Height == h) return existing;
+        return _images[slot] = new RgbImage(w, h, new byte[w * h * 4]);
     }
 
     private readonly Dictionary<string, string?> _notes = new();

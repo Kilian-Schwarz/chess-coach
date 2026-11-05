@@ -27,22 +27,33 @@ public class FrameDumpTests
     private static string TempFolder() => Path.Combine(Path.GetTempPath(), "chesscoach-frames-" + Guid.NewGuid().ToString("N"));
 
     [Fact]
-    public void DumpWritesPngAndReasonTextAndKeepsSixtyFiles()
+    public void DumpWritesPngAndReasonTextAndKeepsSixtyFrames()
     {
         var folder = TempFolder();
         try
         {
             var dump = new FrameDump(() => true, folder);
             var image = new RgbImage(8, 8, new byte[8 * 8 * 4]);
-            for (int i = 0; i < 35; i++) { dump.Save("Region miss: test " + i, image); Thread.Sleep(2); }
+            for (int i = 0; i < 70; i++) { dump.Save("Region miss: test " + i, image); Thread.Sleep(2); }
             var files = Directory.GetFiles(folder);
-            Assert.Equal(FrameDump.MaxFiles, files.Length);
+            Assert.Equal(FrameDump.MaxFrames * 2, files.Length);
             var last = files.Where(f => f.EndsWith(".txt")).OrderBy(f => f, StringComparer.Ordinal).Last();
-            Assert.Equal("Region miss: test 34\n", File.ReadAllText(last));
+            Assert.Equal("Region miss: test 69\n", File.ReadAllText(last));
             Assert.True(File.Exists(Path.ChangeExtension(last, ".png")));
-            Assert.Matches(@"^\d{8}-\d{6}-\d{3}$", Path.GetFileNameWithoutExtension(last));
+            Assert.Matches(@"^\d{8}-\d{6}-\d{3}-\d{3}$", Path.GetFileNameWithoutExtension(last));
         }
         finally { if (Directory.Exists(folder)) Directory.Delete(folder, true); }
+    }
+
+    [Fact]
+    public void OverlayCoverageMarksArrowPathAndLabelRow()
+    {
+        var state = new Ui.OverlayState { Move = new Ui.OverlayState.Arrow(new Ui.OverlayState.Sq(4, 6), new Ui.OverlayState.Sq(4, 4)), Hint = "x" };
+        var covered = OverlayCoverage.Squares(state);
+        Assert.True(covered[6 * 8 + 4] && covered[5 * 8 + 4] && covered[4 * 8 + 4]);
+        Assert.False(covered[3 * 8 + 4] || covered[6 * 8 + 3]);
+        Assert.True(Enumerable.Range(0, 8).All(c => covered[c]));
+        Assert.DoesNotContain(true, OverlayCoverage.Squares(new Ui.OverlayState()));
     }
 
     [Fact]

@@ -11,11 +11,38 @@ public static class FactCheck
     {
         "attack", "threat", "angriff", "angreif", "greift", "bedroh", "attaqu", "menac", "ataca", "amenaz", "attacc", "minacc", "aanval", "bedreig",
         "atak", "zagra", "atac", "ameaç", "напад", "угрож", "атак", "загрожу", "saldır", "tehdit", "攻撃", "狙", "攻击", "威胁", "공격", "위협",
+        " hit ", " hits ", " hitting ", "pressure", "target", "druck", " zielt ", " trifft ", " eyes ",
+    };
+
+    private static readonly string[] Conditionals =
+    {
+        "when ", "after ", "once ", "if ", "would", "could", "moves", "moving", "uncover", "unmask", "behind",
+        "wenn", "nach ", "sobald", "falls", "würde", "könnte", "zieht", "dahinter", "abzug", "wegzieh",
+    };
+
+    private static readonly string[] CheckPhrases =
+    {
+        "gives check", "give check", "giving check", "is check", "is a check", "with check", "delivers check", "puts the king in check", "checks the king",
+        "would be check", "gibt schach", "ist schach", "bietet schach", "mit schach", "setzt schach", "schach geben", "donne échec", "da jaque", "dà scacco",
+        "geeft schaak", "daje szacha", "dá xeque", "дает шах", "даёт шах", "ставит шах", "şah çeker",
+    };
+
+    private static readonly string[] MatePhrases =
+    {
+        "is checkmate", "is a checkmate", "is mate", "gives checkmate", "delivers checkmate", "checkmates", "gives mate", "delivers mate", "would be mate",
+        "would be checkmate", "ist schachmatt", "ist matt", "setzt matt", "setzt schachmatt", "mattsetzt", "gibt matt", "donne mat", "est mat", "da mate",
+        "dà matto", "geeft mat", "daje mata", "dá mate", "ставит мат", "mat çeker",
+    };
+
+    private static readonly Dictionary<string, char> Declined = new()
+    {
+        ["bauer"] = 'p', ["bauern"] = 'p', ["bauers"] = 'p', ["springer"] = 'n', ["springers"] = 'n', ["springern"] = 'n', ["läufer"] = 'b', ["läufers"] = 'b',
+        ["turm"] = 'r', ["turms"] = 'r', ["türme"] = 'r', ["könig"] = 'k', ["königs"] = 'k', ["dame"] = 'q', ["damen"] = 'q',
     };
 
     private static readonly string[] Blockers =
     {
-        " by ", " von ", "wird", " ist ", " sind ", " is ", " are ", " not ", "n't", "nicht", "kein", " no ", " pas ", " par ", " por ", " door ",
+        " by ", " von ", "wird", " not ", "n't", "nicht", "kein", " no ", " pas ", " par ", " por ", " door ",
         "przez", " не ", "x-ray", "röntgen", "xray", "once ", "if ", "wenn", "falls", "sobald", "would",
     };
 
@@ -28,6 +55,7 @@ public static class FactCheck
         foreach (char kind in Kinds)
             foreach (var culture in new CultureInfo?[] { CoreLocale.English, null })
                 map[PieceInfo.Name(kind, culture).ToLowerInvariant()] = kind;
+        foreach (var (name, kind) in Declined) map[name] = kind;
         return map;
     }
 
@@ -41,7 +69,19 @@ public static class FactCheck
 
     private static string Sq(int f, int r) => UciMove.SquareName(f, r);
 
-    private static void AddAttacks(Placement board, HashSet<string> set)
+    private static string Bare(string san) => san.Trim('+', '#');
+
+    private static void AddMove(string san, ChessPosition next, HashSet<string> set)
+    {
+        string name = Bare(san);
+        set.Add("san:" + san);
+        set.Add("mv:" + name);
+        if (!next.IsCheck) return;
+        set.Add("chk:" + name);
+        if (!next.LegalMoves().Any()) set.Add("mate:" + name);
+    }
+
+    private static void AddAttacks(Placement board, HashSet<string> set, string prefix = "a:")
     {
         for (int r = 0; r < 8; r++) for (int f = 0; f < 8; f++)
         {
@@ -50,9 +90,9 @@ public static class FactCheck
             string from = Sq(f, r);
             foreach (var (tf, tr) in board.Attacks(f, r))
             {
-                set.Add($"a:{kind}{from}>{Sq(tf, tr)}");
+                set.Add($"{prefix}{kind}{from}>{Sq(tf, tr)}");
                 if (board.Squares[tr][tf] is char t && Placement.ColorOf(t) != Placement.ColorOf(p))
-                    set.Add($"a:{kind}{from}>~{char.ToLowerInvariant(t)}");
+                    set.Add($"{prefix}{kind}{from}>~{char.ToLowerInvariant(t)}");
             }
         }
     }
@@ -60,15 +100,18 @@ public static class FactCheck
     public static HashSet<string> Allowed(IEnumerable<ChessPosition> positions, IEnumerable<IReadOnlyList<string>> lines)
     {
         var set = new HashSet<string>();
-        void Add(ChessPosition pos, bool children)
+        void Add(ChessPosition pos, bool children, bool attacks = true)
         {
-            AddAttacks(pos.Board, set);
+            if (attacks) AddAttacks(pos.Board, set);
             if (children)
                 foreach (var side in new[] { pos, pos.NullMove })
                     foreach (var m in side.LegalMoves())
                     {
-                        AddAttacks(side.Board.Applying(m), set);
-                        set.Add("san:" + San.Of(m, side));
+                        string san = San.Of(m, side);
+                        var next = side.Applying(m);
+                        AddAttacks(next.Board, set, "c:");
+                        AddAttacks(next.Board, set, $"a@{Bare(san)}:");
+                        AddMove(san, next, set);
                     }
             for (int r = 0; r < 8; r++) for (int f = 0; f < 8; f++)
                 if (pos.Board.Squares[r][f] is char p) set.Add($"{char.ToLowerInvariant(p)}:{Sq(f, r)}");
@@ -83,12 +126,20 @@ public static class FactCheck
             foreach (var pv in list)
             {
                 var cur = pos;
+                int index = 0;
                 foreach (var u in pv.Take(6))
                 {
                     if (UciMove.Parse(u) is not UciMove m || !cur.IsLegal(m)) break;
-                    set.Add("san:" + San.Of(m, cur));
+                    string san = San.Of(m, cur);
                     cur = cur.Applying(m);
-                    Add(cur, false);
+                    AddMove(san, cur, set);
+                    AddAttacks(cur.Board, set, $"a@{Bare(san)}:");
+                    if (index++ == 0 && cur.IsCheck)
+                    {
+                        set.Add("chk:pv0");
+                        if (!cur.LegalMoves().Any()) set.Add("mate:pv0");
+                    }
+                    Add(cur, false, false);
                 }
             }
         }
@@ -124,10 +175,36 @@ public static class FactCheck
         return (words, found);
     }
 
+    private static List<string> NamedMoves(string sentence, HashSet<string> allowed)
+    {
+        string pieces = CoreLocale.Get("san.pieces", null);
+        var output = new List<string>();
+        foreach (var raw in sentence.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var word = raw.Trim('.', ',', ';', ':', '!', '?', '(', ')', '"', '“', '”', '«', '»', '+', '#');
+            if (word.Length < 3) continue;
+            string bare = Bare(San.Delocalize(word, pieces));
+            if (allowed.Contains("mv:" + bare)) output.Add(bare);
+        }
+        return output;
+    }
+
+    public static bool ContradictsCheckProse(string sentence, HashSet<string> allowed)
+    {
+        var lower = sentence.ToLowerInvariant();
+        bool mate = MatePhrases.Any(lower.Contains);
+        if (!mate && !CheckPhrases.Any(lower.Contains)) return false;
+        string prefix = mate ? "mate:" : "chk:";
+        var moves = NamedMoves(sentence, allowed);
+        return moves.Count == 0 ? !allowed.Contains(prefix + "pv0") : !moves.Any(m => allowed.Contains(prefix + m));
+    }
+
     public static bool ContradictsAttacks(string sentence, HashSet<string> allowed)
     {
         var (words, found) = Mentions(sentence);
         var lower = sentence.ToLowerInvariant();
+        var moves = NamedMoves(sentence, allowed);
+        bool conditional = moves.Count == 0 && Conditionals.Any(lower.Contains);
         for (int i = 0; i + 1 < found.Count; i++)
         {
             var a = found[i];
@@ -137,8 +214,8 @@ public static class FactCheck
             if (lo > hi) continue;
             string between = " " + lower[lo..hi] + " ";
             if (!AttackVerbs.Any(between.Contains) || Blockers.Any(between.Contains)) continue;
-            string key = $"a:{a.Kind}{from}>";
-            bool ok = b.Square is string target ? allowed.Contains(key + target) : allowed.Contains(key + "~" + b.Kind);
+            string piece = $"{a.Kind}{from}>" + (b.Square ?? "~" + b.Kind);
+            bool ok = allowed.Contains("a:" + piece) || (conditional && allowed.Contains("c:" + piece)) || moves.Any(m => allowed.Contains($"a@{m}:" + piece));
             if (!ok) return true;
         }
         return false;
@@ -193,7 +270,7 @@ public static class FactCheck
         return false;
     }
 
-    public static (string? Text, int Removed) Clean(string text, HashSet<string> allowed)
+    public static List<string> Sentences(string text)
     {
         var sentences = new List<string>();
         var current = new StringBuilder();
@@ -206,13 +283,25 @@ public static class FactCheck
             if (end) { sentences.Add(current.ToString()); current.Clear(); }
         }
         if (current.Length > 0) sentences.Add(current.ToString());
+        return sentences;
+    }
+
+    private static (string? Text, int Removed) Filter(string text, Func<string, bool> drop)
+    {
         var kept = new StringBuilder();
         int removed = 0;
-        foreach (var s in sentences)
-        {
-            if (MentionsInvented(s, allowed) || ContradictsAttacks(s, allowed) || ContradictsCheckClaim(s, allowed)) removed++; else kept.Append(s);
-        }
+        foreach (var s in Sentences(text)) { if (drop(s)) removed++; else kept.Append(s); }
         var output = kept.ToString().Trim();
         return (output.Length == 0 ? null : output, removed);
+    }
+
+    public static (string? Text, int Removed) Clean(string text, HashSet<string> allowed) =>
+        Filter(text, s => MentionsInvented(s, allowed) || ContradictsAttacks(s, allowed) || ContradictsCheckClaim(s, allowed) || ContradictsCheckProse(s, allowed));
+
+    public static (string? Text, int Removed) Withholding(string text, UciMove move, string san)
+    {
+        var names = new[] { san, San.Localize(san, null) }.Select(Bare).ToHashSet();
+        return Filter(text, s => Hints.RevealsTarget(s, move)
+            || System.Text.RegularExpressions.Regex.Split(s, @"[^\p{L}\p{N}=-]+").Any(names.Contains));
     }
 }

@@ -47,7 +47,7 @@ extension AppModel {
         regionMisses = 0
         if let f = found {
             let b = f.scan.board
-            boardStabilizer.reset()
+            resetStabilizer()
             relearnGuard.reset()
             let stable = boardStabilizer.accept(BoardRect(x: b.x * f.scale, y: b.y * f.scale, size: b.size * f.scale)).rect
             tracked = (f.display.displayID, f.display.frame, CGRect(x: stable.x, y: stable.y, width: stable.size, height: stable.size))
@@ -68,7 +68,24 @@ extension AppModel {
         return found
     }
 
-    private func locateInRegion(_ tr: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect), templates currentTemplates: PieceTemplates) async throws -> Located? {
+    private func followWindow(_ tr: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect)) -> (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect)? {
+        guard let w = trackedWindow else { return tr }
+        guard let now = ScreenCapture.currentFrame(windowID: w.windowID) else { trackedWindow = nil; return tr }
+        let change = WindowMove.change(from: w.frame, to: now)
+        guard change != .none else { return tr }
+        trackedWindow = nil
+        windowAttemptAt = .distantPast
+        dropCapture()
+        settled = false
+        resetStabilizer()
+        guard case .moved(let dx, let dy) = change, tr.frame.contains(CGPoint(x: now.midX, y: now.midY)) else { return tr }
+        let shifted = (tr.displayID, tr.frame, tr.rect.offsetBy(dx: dx, dy: dy))
+        tracked = shifted
+        return shifted
+    }
+
+    private func locateInRegion(_ first: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect), templates currentTemplates: PieceTemplates) async throws -> Located? {
+        guard let tr = followWindow(first) else { return nil }
         if trackedWindow == nil, boardColors != nil, Date().timeIntervalSince(windowAttemptAt) > Self.windowRetrySeconds { await resolveWindow(tr) }
         let m = max(tr.rect.width * Self.regionMargin, 40)
         let wanted = tr.rect.insetBy(dx: -m, dy: -m)
@@ -91,11 +108,12 @@ extension AppModel {
         }
         let img = d.image, colors = boardColors, origin = (x: Double(d.origin.x), y: Double(d.origin.y))
         var stabilizer = boardStabilizer
+        let epoch = stabilizerEpoch
         let result: RegionObserver.Result? = await Task.detached(priority: .userInitiated) {
             guard let rgb = RGBImage(cgImage: img) else { return nil }
             return RegionObserver.observe(rgb, origin: origin, expected: expected, templates: currentTemplates, colors: colors, stabilizer: &stabilizer)
         }.value
-        boardStabilizer = stabilizer
+        if epoch == stabilizerEpoch { boardStabilizer = stabilizer }
         func accept(_ scan: ScanResult, rect r: BoardRect) -> Located {
             tracked = (tr.displayID, tr.frame, CGRect(x: r.x, y: r.y, width: r.size, height: r.size))
             lastChecksum = BoardChecksum.compute(d.image, board: BoardRect(x: r.x - d.origin.x, y: r.y - d.origin.y, size: r.size))
@@ -173,7 +191,7 @@ extension AppModel {
                 pausedShown = true
                 hideAll()
                 tracked = nil
-                boardStabilizer.reset()
+                resetStabilizer()
                 dropCapture()
                 status = String(localized: "Paused (\(activity.reason))")
                 suggestion = nil
@@ -192,6 +210,7 @@ extension AppModel {
         }
         needsPermission = false
 
+        let downAtStart = Self.mouseDown
         let located: Located?
         do { located = try await locateBoard(); captureFailedSince = nil }
         catch {
@@ -218,8 +237,14 @@ extension AppModel {
             return
         }
         lostSince = nil
+        let held = downAtStart || Self.mouseDown
+        if held { mouseHeld = true; mismatchSince = nil }
         if regionMisses > 0 { observeEnd(missView); return }
-        if loc.unchanged && settled && pendingReview == nil {
+        var recordDisagrees = false
+        if let stable = stablePlacement, let cur = record.current { recordDisagrees = cur.board != stable }
+        if TickGate.canSkip(unchanged: loc.unchanged, settled: settled, pendingReview: pendingReview != nil, forceResync: forceResync,
+                            mouseHeld: mouseHeld, confirmSoon: confirmSoon, recordDisagrees: recordDisagrees,
+                            orientationEvidence: orientation.hasEvidence) {
             if lastView != .readable { observeEnd(lastView) }
             return
         }
@@ -328,7 +353,7 @@ extension AppModel {
         let placement = Placement(screen: scan.screen, whiteAtBottom: whiteAtBottom)
         updateLift(placement: placement, me: me, whiteAtBottom: whiteAtBottom)
 
-        if Self.mouseDown {
+        if held || Self.mouseDown {
             mouseHeld = true
             mismatchSince = nil
             return
@@ -337,16 +362,18 @@ extension AppModel {
             mouseHeld = false
             pendingScreen = nil
             confirmSoon = true
+            dropCapture()
             return
         }
 
         if placement == stablePlacement, let cur = record.current, cur.board != placement {
-            if mismatchSince == nil || Self.mouseDown { mismatchSince = Date() }
+            if mismatchSince == nil { mismatchSince = Date() }
             else if Date().timeIntervalSince(mismatchSince ?? Date()) > Self.stuckSeconds {
                 mismatchSince = nil
                 forceResync = true
                 stablePlacement = nil
                 Log.write("Screen and record disagreed for \(Int(Self.stuckSeconds)) s, resyncing")
+                dropCapture()
                 return
             }
         } else {
@@ -395,7 +422,7 @@ extension AppModel {
         if let o = sideOverride, o != pos.turn { pos = flipped(pos, to: o) }
         else if effectiveAlwaysMyTurn && !duoTraining && pos.turn != me { pos = flipped(pos, to: me) }
 
-        observeEnd(.readable, result: record.current?.result)
+        observeEnd(.readable, result: record.decidedResult)
 
         let toMove = pos.turn
         guard isCoached(toMove, me: me) else {

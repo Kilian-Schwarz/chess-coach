@@ -8,17 +8,17 @@
   <data name="color.white" xml:space="preserve"><value>Blancs</value></data>
   <data name="color.black" xml:space="preserve"><value>Noirs</value></data>
   <data name="piece.king" xml:space="preserve"><value>Roi</value></data>
-  <data name="piece.king.your" xml:space="preserve"><value>Ton roi</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>Votre roi</value></data>
   <data name="piece.queen" xml:space="preserve"><value>Dame</value></data>
-  <data name="piece.queen.your" xml:space="preserve"><value>Ta dame</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>Votre dame</value></data>
   <data name="piece.rook" xml:space="preserve"><value>Tour</value></data>
-  <data name="piece.rook.your" xml:space="preserve"><value>Ta tour</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>Votre tour</value></data>
   <data name="piece.bishop" xml:space="preserve"><value>Fou</value></data>
-  <data name="piece.bishop.your" xml:space="preserve"><value>Ton fou</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>Votre fou</value></data>
   <data name="piece.knight" xml:space="preserve"><value>Cavalier</value></data>
-  <data name="piece.knight.your" xml:space="preserve"><value>Ton cavalier</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>Votre cavalier</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Pion</value></data>
-  <data name="piece.pawn.your" xml:space="preserve"><value>Ton pion</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>Votre pion</value></data>
   <data name="problem.kings" xml:space="preserve"><value>Rois non reconnus clairement. Le jeu de pièces a changé ? Menu : Réapprendre les pièces</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Pion détecté sur la première rangée</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Trop de pions détectés</value></data>
@@ -41,8 +41,8 @@
   <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
   <data name="move.promotes" xml:space="preserve"><value>, promotion en {0}</value></data>
   <data name="move.check" xml:space="preserve"><value>, échec</value></data>
-  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} est attaqué et non défendu</value></data>
-  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} est attaqué par une pièce plus faible</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} est attaquée et non protégée</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} est attaquée par une pièce moins chère</value></data>
   <data name="rating.best" xml:space="preserve"><value>Meilleur coup</value></data>
   <data name="rating.good" xml:space="preserve"><value>Bon coup</value></data>
   <data name="rating.inaccuracy" xml:space="preserve"><value>Imprécision</value></data>
@@ -84,32 +84,32 @@
   <data name="theme.kingActivate" xml:space="preserve"><value>Activer le roi</value></data>
   <data name="theme.pawnMove" xml:space="preserve"><value>Coup de pion</value></data>
   <data name="theme.improvePiece" xml:space="preserve"><value>Améliorer une pièce</value></data>
-  <data name="hint.stage1.mate" xml:space="preserve"><value>Ici, on peut mater l'adversaire.</value></data>
-  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Ici, on peut gagner du matériel.</value></data>
-  <data name="hint.stage1.fork" xml:space="preserve"><value>Cherche une fourchette : un coup qui attaque deux pièces à la fois.</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Vous pouvez mater l’adversaire ici.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Vous pouvez gagner du matériel ici.</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>Cherchez une fourchette : un coup qui attaque deux pièces à la fois.</value></data>
   <data name="hint.stage1.check" xml:space="preserve"><value>Un échec est fort ici.</value></data>
-  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Fais attention à la menace de l'adversaire.</value></data>
-  <data name="hint.stage1.castle" xml:space="preserve"><value>Mets ton roi à l'abri.</value></data>
-  <data name="hint.stage1.develop" xml:space="preserve"><value>Développe une pièce.</value></data>
-  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Active ton roi.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Attention à la menace de l’adversaire.</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>Mettez votre roi en sécurité.</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>Développez une pièce.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activez votre roi.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Un coup de pion convient bien ici.</value></data>
-  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Améliore ta pire pièce.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Joue le roi qui se trouve en {0}.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Joue la dame qui se trouve en {0}.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Joue la tour qui se trouve en {0}.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Joue le fou qui se trouve en {0}.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Joue le cavalier qui se trouve en {0}.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Joue le pion qui se trouve en {0}.</value></data>
-  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} peut mater l'adversaire.</value></data>
-  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} peut prendre une pièce adverse et gagner du matériel.</value></data>
-  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} peut attaquer deux pièces adverses à la fois en un seul coup.</value></data>
-  <data name="hint.stage3.check" xml:space="preserve"><value>{0} peut donner échec au roi adverse, ce qui te donne un avantage.</value></data>
-  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>L'adversaire menace quelque chose. {0} peut parer la menace.</value></data>
-  <data name="hint.stage3.castle" xml:space="preserve"><value>Ton roi est encore au centre. Le roque le met à l'abri et active la tour.</value></data>
-  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} est encore sur la première rangée. Amène cette pièce sur une case active d'où elle contrôle plus de cases.</value></data>
-  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>En finale, le roi est une pièce forte. Rapproche-le des pions et du centre.</value></data>
-  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Un coup de pion améliore ici ta position : il gagne de l'espace ou ouvre des lignes pour tes pièces.</value></data>
-  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} n'est pas idéalement placé. Trouve une case où cette pièce est plus utile.</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Améliorez votre pire pièce.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Jouez le roi qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Jouez la dame qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Jouez la tour qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Jouez le fou qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Jouez le cavalier qui se trouve en {0}.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Jouez le pion qui se trouve en {0}.</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} peut mater l’adversaire.</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} peut capturer une pièce adverse et gagner du matériel.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} peut attaquer deux pièces adverses à la fois.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} peut donner échec, et cela vous aide.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Votre adversaire menace quelque chose. {0} peut le parer.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Votre roi est encore au centre. Le roque le met à l’abri et active la tour.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} est encore sur la première rangée. Amenez-la sur une case active où elle contrôle plus de cases.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>En finale, le roi est une pièce forte. Rapprochez-le des pions et du centre.</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Un coup de pion améliore ici votre position : il gagne de l’espace ou ouvre des lignes pour vos pièces.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} est mal placée. Trouvez une case où elle fait plus.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Meilleur coup : {0} (évaluation {1}).</value></data>
   <data name="hint.takeawayLabel" xml:space="preserve"><value>À retenir</value></data>
   <data name="threat.text" xml:space="preserve"><value>Menace : {0}</value></data>
@@ -161,9 +161,9 @@
   <data name="puzzle.progress" xml:space="preserve"><value>{0} : {1}/{2} résolus</value></data>
   <data name="puzzle.source.date" xml:space="preserve"><value>De votre partie du {0}.</value></data>
   <data name="puzzle.source.move" xml:space="preserve"><value>De votre partie du {0}, coup {1} : vous avez joué {2} ({3}).</value></data>
-  <data name="puzzle.ask.mate" xml:space="preserve"><value>Le roi adverse manque de cases sûres. Quels échecs pourraient mettre fin à la partie ?</value></data>
-  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Le dernier coup de votre adversaire a laissé quelque chose sans défense. Que pouvez-vous attaquer ?</value></data>
-  <data name="puzzle.ask.fork" xml:space="preserve"><value>Deux pièces adverses sont sur des cases qu'une seule pièce peut atteindre. Un coup peut-il attaquer les deux ?</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Y a-t-il une victoire forcée ici ? Quels échecs pourraient mettre fin à la partie ?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Pouvez-vous gagner du matériel ici ? Qu'est-ce qui est libre ou plus attaqué que défendu ?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Quelles pièces adverses ne sont pas en sécurité en ce moment ?</value></data>
   <data name="puzzle.ask.check" xml:space="preserve"><value>Quels échecs sont possibles, et que force chacun d'eux ?</value></data>
   <data name="puzzle.ask.promotion" xml:space="preserve"><value>Un pion est proche de la dernière rangée. Qu'est-ce qui l'arrête, et pouvez-vous dégager la voie ?</value></data>
   <data name="puzzle.ask.discovered" xml:space="preserve"><value>Une de vos pièces se trouve devant une tour, un fou ou la dame. Et si elle bouge en créant une menace ?</value></data>
@@ -202,6 +202,27 @@
   <data name="puzzle.area.rank" xml:space="preserve"><value>Elle va vers la rangée {0}.</value></data>
   <data name="puzzle.area.file" xml:space="preserve"><value>Elle va vers la colonne {0}.</value></data>
   <data name="puzzle.fail.mate" xml:space="preserve"><value>Cela permet l'échec et mat.</value></data>
-  <data name="puzzle.fail.loss" xml:space="preserve"><value>Cela perd {0} en {1}.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Votre adversaire répond {0} et vous avez {1} points de matériel de moins.</value></data>
   <data name="puzzle.fail.miss" xml:space="preserve"><value>Il rate l'idée ici : {0}.</value></data>
+  <data name="hint.stage1.mateForced" xml:space="preserve"><value>Vous avez un mat forcé.</value></data>
+  <data name="hint.stage3.mateForced" xml:space="preserve"><value>{0} lance un mat forcé.</value></data>
+  <data name="hint.stage3.captureLine" xml:space="preserve"><value>{0} peut jouer un coup qui gagne du matériel quelques coups plus tard.</value></data>
+  <data name="puzzle.fail.idea" xml:space="preserve"><value>L'idée était : {0}</value></data>
+  <data name="puzzle.fail.loss.one" xml:space="preserve"><value>Votre adversaire répond {0} et vous avez 1 point de matériel de moins.</value></data>
+  <data name="puzzle.why.gain.one" xml:space="preserve"><value>Variante principale : {0}. Vous gagnez 1 point de matériel.</value></data>
+  <data name="threat.opportunity" xml:space="preserve"><value>Votre adversaire a une menace, mais vous pouvez d’abord gagner du matériel.</value></data>
+  <data name="puzzle.area.unpin" xml:space="preserve"><value>Cloué : {0} contre {1}, par {2}.</value></data>
+  <data name="piece.on" xml:space="preserve"><value>{0} en {1}</value></data>
+  <data name="piece.king.the" xml:space="preserve"><value>Roi</value></data>
+  <data name="piece.king.theAcc" xml:space="preserve"><value>Roi</value></data>
+  <data name="piece.queen.the" xml:space="preserve"><value>Dame</value></data>
+  <data name="piece.queen.theAcc" xml:space="preserve"><value>Dame</value></data>
+  <data name="piece.rook.the" xml:space="preserve"><value>Tour</value></data>
+  <data name="piece.rook.theAcc" xml:space="preserve"><value>Tour</value></data>
+  <data name="piece.bishop.the" xml:space="preserve"><value>Fou</value></data>
+  <data name="piece.bishop.theAcc" xml:space="preserve"><value>Fou</value></data>
+  <data name="piece.knight.the" xml:space="preserve"><value>Cavalier</value></data>
+  <data name="piece.knight.theAcc" xml:space="preserve"><value>Cavalier</value></data>
+  <data name="piece.pawn.the" xml:space="preserve"><value>Pion</value></data>
+  <data name="piece.pawn.theAcc" xml:space="preserve"><value>Pion</value></data>
 </root>

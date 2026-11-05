@@ -50,14 +50,14 @@ enum PuzzleCoach {
 
     static func evaluation(_ cp: Int) -> String {
         if abs(cp) >= 9_000 { return cp > 0 ? "+M" : "−M" }
-        return String(format: "%+.1f", Double(cp) / 100).replacingOccurrences(of: "-", with: "−")
+        return String(format: "%+.1f", locale: Loc.display.locale, Double(cp) / 100).replacingOccurrences(of: "-", with: "−")
     }
 
     static func question(_ t: HintTheme, _ loc: Loc = .display) -> String {
         switch t {
-        case .mate: loc("puzzle.ask.mate", "The enemy king looks short of safe squares. Which checks could end the game?")
-        case .captureGain: loc("puzzle.ask.captureGain", "Your opponent's last move left something undefended. What can you attack?")
-        case .fork: loc("puzzle.ask.fork", "Two enemy pieces stand on squares one piece can reach. Can one move attack both?")
+        case .mate: loc("puzzle.ask.mate", "Is there a forcing win here? Which checks could end the game?")
+        case .captureGain: loc("puzzle.ask.captureGain", "Can you win material here? What is loose or attacked more often than defended?")
+        case .fork: loc("puzzle.ask.fork", "Which enemy pieces are not safe right now?")
         case .check: loc("puzzle.ask.check", "Which checks are available, and what does each one force?")
         case .promotion: loc("puzzle.ask.promotion", "A pawn is close to the last rank. What stops it, and can you clear the way?")
         case .discovered: loc("puzzle.ask.discovered", "One of your pieces stands in front of a rook, bishop or queen. What if it moves with a threat?")
@@ -107,16 +107,17 @@ enum PuzzleCoach {
         switch theme(p) {
         case .discovered:
             guard let x = pos.board.discoveredTargets(by: best, color: me).first else { return nil }
-            return loc("puzzle.why.discovered", "\(x.blocker.text(loc)) moves away, so \(x.slider.text(loc)) attacks \(x.target.text(loc)).")
+            return loc("puzzle.why.discovered", "\(x.blocker.phrase(loc).capitalizedFirst) moves away, so \(x.slider.phrase(loc)) attacks \(x.target.phrase(loc, accusative: true)).")
         case .pin:
             guard let pin = pos.board.createdPins(by: best, against: me.opposite).first else { return nil }
             let pinned = PieceAt(piece: pin.piece, square: pin.square), behind = PieceAt(piece: pin.target, square: pin.targetSquare)
-            return loc("puzzle.why.pin", "\(pinned.text(loc)) is now pinned in front of \(behind.text(loc)).")
+            return loc("puzzle.why.pin", "\(pinned.phrase(loc).capitalizedFirst) is now pinned in front of \(behind.phrase(loc)).")
         case .fork:
             let targets = forkTargets(pos, best)
             guard targets.count >= 2, let mover = pos.board.piece(best.fromFile, best.fromRank) else { return nil }
-            let list = targets.prefix(3).map { $0.text(loc) }.joined(separator: ", ")
-            return loc("puzzle.why.fork", "\(PieceAt(piece: mover, square: UCIMove.squareName(best.toFile, best.toRank)).text(loc)) attacks \(list) at once.")
+            let list = targets.prefix(3).map { $0.phrase(loc, accusative: true) }.joined(separator: ", ")
+            let subject = PieceAt(piece: mover, square: UCIMove.squareName(best.toFile, best.toRank)).phrase(loc).capitalizedFirst
+            return loc("puzzle.why.fork", "\(subject) attacks \(list) at once.")
         default:
             return nil
         }
@@ -142,7 +143,8 @@ enum PuzzleCoach {
             if let o = PositionFacts.outcome(pv: line, from: pos, me: pos.turn) {
                 let text = displayLine(o.line)
                 if o.line.hasSuffix("#") { parts.append(loc("puzzle.why.mate", "Main line: \(text). That is checkmate.")) }
-                else if o.delta > 0 { parts.append(loc("puzzle.why.gain", "Main line: \(text). You win \(o.delta) points of material.")) }
+                else if o.delta == 1 { parts.append(loc("puzzle.why.gain.one", "Main line: \(text). You win 1 point of material.")) }
+                else if o.delta > 1 { parts.append(loc("puzzle.why.gain", "Main line: \(text). You win \(o.delta) points of material.")) }
                 else { parts.append(loc("puzzle.why.line", "Main line: \(text).")) }
             }
         }
@@ -158,8 +160,12 @@ enum PuzzleCoach {
     static func areaClause(_ h: HintSet, position pos: ChessPosition, _ loc: Loc) -> String? {
         let best = h.move, me = pos.turn
         let dest = UCIMove.squareName(best.toFile, best.toRank)
+        if h.theme == .unpin, let pin = pos.board.unpinned(by: best, color: me).first {
+            let pinned = PieceAt(piece: pin.piece, square: pin.square).text(loc), behind = PieceAt(piece: pin.target, square: pin.targetSquare).text(loc)
+            return loc("puzzle.area.unpin", "Pinned: \(pinned) against \(behind), by \(PieceAt(piece: pin.pinner, square: pin.pinnerSquare).text(loc)).")
+        }
         if h.theme == .discovered, let x = pos.board.discoveredTargets(by: best, color: me).first(where: { $0.target.square != dest }) {
-            return loc("puzzle.area.discovered", "Behind it, \(x.slider.text(loc)) then attacks \(x.target.text(loc)).")
+            return loc("puzzle.area.discovered", "Behind it, \(x.slider.phrase(loc)) then attacks \(x.target.phrase(loc, accusative: true)).")
         }
         let after = pos.board.applying(best)
         let enemy = after.attacks(file: best.toFile, rank: best.toRank).compactMap { f, r -> String? in
@@ -176,9 +182,14 @@ enum PuzzleCoach {
         let me = after.turn.opposite
         if let o = PositionFacts.outcome(pv: pv, from: after, me: me) {
             if o.line.hasSuffix("#") { return loc("puzzle.fail.mate", "That allows checkmate.") }
-            if o.delta < 0, let c = o.captures.first(where: { $0.by != me }) {
-                return loc("puzzle.fail.loss", "That loses \(PieceInfo.name(c.victim, loc)) on \(c.square).")
+            if o.delta < 0, let reply = o.played.first {
+                let move = SAN.localize(SAN.san(reply.move, in: after))
+                return o.delta == -1 ? loc("puzzle.fail.loss.one", "Your opponent answers \(move) and you end up 1 point of material down.")
+                    : loc("puzzle.fail.loss", "Your opponent answers \(move) and you end up \(-o.delta) points of material down.")
             }
+        }
+        if let pos = ChessPosition(fen: p.fen), let best = bestMove(p), let idea = mechanism(p, position: pos, best: best, loc) {
+            return loc("puzzle.fail.idea", "The idea was: \(idea)")
         }
         return loc("puzzle.fail.miss", "It misses the idea here: \(theme(p).title(loc)).")
     }

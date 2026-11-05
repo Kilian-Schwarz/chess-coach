@@ -28,7 +28,7 @@ public static class FenReader
     }
 }
 
-public sealed record ThreatFact(UciMove Move, int Gain, string Text, string? EnglishText = null)
+public sealed record ThreatFact(UciMove Move, int Gain, string Text, string? EnglishText = null, IReadOnlyList<PieceAt>? Lost = null)
 {
     public string PromptText => EnglishText ?? Text;
 
@@ -45,13 +45,15 @@ public sealed record ThreatFact(UciMove Move, int Gain, string Text, string? Eng
             string head = CoreLocale.Format("threat.text", c, placement.DescribeMove(m, c));
             return analysis.Reason(nullResult.Lines[0].MateIn, c) is { } r ? head + ". " + r : head;
         }
-        return new ThreatFact(m, gain, Compose(null), Compose(CoreLocale.English));
+        var lost = (nullResult.Lines[0].MateIn ?? 0) > 0 ? null : analysis.Lost;
+        return new ThreatFact(m, gain, Compose(null), Compose(CoreLocale.English), lost);
     }
 
     public bool IsParried(UciMove answer, Placement placement)
     {
         var after = placement.Applying(answer);
         var victim = placement.Piece(Move.ToFile, Move.ToRank);
+        if (victim == null && after.Piece(Move.ToFile, Move.ToRank) != null) return true;
         if (victim == null && placement.Piece(Move.FromFile, Move.FromRank) is char mover && char.ToLowerInvariant(mover) == 'p')
             return after.Piece(Move.FromFile, Move.FromRank) != mover || after.Piece(Move.ToFile, Move.ToRank) != null;
         bool attackerStays = after.Piece(Move.FromFile, Move.FromRank) == placement.Piece(Move.FromFile, Move.FromRank);
@@ -61,6 +63,8 @@ public sealed record ThreatFact(UciMove Move, int Gain, string Text, string? Eng
         return !after.Attacks(Move.FromFile, Move.FromRank).Contains((Move.ToFile, Move.ToRank));
     }
 }
+
+public enum HintVariant { Standard, ForcedMate, Line }
 
 public enum HintTheme { Mate, Promotion, Discovered, CaptureGain, Fork, Check, Pin, Unpin, ParryThreat, Castle, Develop, KingActivate, PawnMove, ImprovePiece, Convert }
 
@@ -78,11 +82,12 @@ public static class HintThemeExt
 
     public static string Title(this HintTheme t, CultureInfo? culture = null) => CoreLocale.Get("theme." + t.Raw(), culture);
 
-    public static string Stage1Text(this HintTheme t, CultureInfo? culture = null) => CoreLocale.Get("hint.stage1." + t.Raw(), culture);
+    public static string Stage1Text(this HintTheme t, CultureInfo? culture = null, HintVariant variant = HintVariant.Standard) =>
+        CoreLocale.Get("hint.stage1." + t.Raw() + (t == HintTheme.Mate && variant == HintVariant.ForcedMate ? "Forced" : ""), culture);
 }
 
 public sealed record HintSet(UciMove Move, HintTheme Theme, ThreatFact? Threat, string Stage1, string Stage2Square, string Stage2,
-    string Stage3Fallback, string Stage3Prompt, string Stage4)
+    string Stage3Fallback, string Stage3Prompt, string Stage4, HintVariant Variant = HintVariant.Standard, bool Opportunity = false)
 {
     public string Text(int level) => level switch { 1 => Stage1, 2 => Stage2, 3 => Stage3Fallback, _ => Stage4 };
 }
@@ -137,22 +142,56 @@ public static class Hints
     public static string Stage2Text(char piece, string square, CultureInfo? culture = null) =>
         CoreLocale.Format("hint.stage2." + PieceInfo.Key(piece), culture, square);
 
-    public static string Stage3Fallback(HintTheme theme, char piece, CultureInfo? culture = null) =>
-        CoreLocale.Format("hint.stage3." + theme.Raw(), culture, PieceInfo.Your(piece, culture));
+    public static HintVariant Variant(HintTheme theme, Placement board, PieceColor player, UciMove best)
+    {
+        switch (theme)
+        {
+            case HintTheme.Mate:
+                var next = new ChessPosition(board, player, CastlingRights.None).Applying(best);
+                return next.IsCheck && !next.LegalMoves().Any() ? HintVariant.Standard : HintVariant.ForcedMate;
+            case HintTheme.CaptureGain:
+                return board.Piece(best.ToFile, best.ToRank) == null ? HintVariant.Line : HintVariant.Standard;
+            default:
+                return HintVariant.Standard;
+        }
+    }
+
+    public static string Stage3Fallback(HintTheme theme, char piece, CultureInfo? culture = null, HintVariant variant = HintVariant.Standard)
+    {
+        string me = PieceInfo.Your(piece, culture);
+        string key = theme switch
+        {
+            HintTheme.Mate when variant == HintVariant.ForcedMate => "hint.stage3.mateForced",
+            HintTheme.CaptureGain when variant == HintVariant.Line => "hint.stage3.captureLine",
+            _ => "hint.stage3." + theme.Raw(),
+        };
+        if (theme == HintTheme.Discovered) me = char.ToLower(me[0], culture ?? CoreLocale.Culture) + me[1..];
+        return CoreLocale.Format(key, culture, me);
+    }
+
+    public static string OpportunityText(CultureInfo? culture = null) => CoreLocale.Get("threat.opportunity", culture);
+
+    public static bool OutranksThreat(ThreatFact threat, ChessPosition pos, IReadOnlyList<string> pv) =>
+        threat.Lost is { Count: > 0 } lost && PositionFacts.OutcomeOf(pv, pos, pos.Turn) is { } o
+        && o.Delta >= Math.Max(lost.Sum(l => PieceInfo.Value(l.Piece)), 2);
 
     public static bool RevealsTarget(string answer, UciMove move) =>
         answer.ToLowerInvariant().Contains(UciMove.SquareName(move.ToFile, move.ToRank));
 
     public static HintSet? Build(Placement placement, PieceColor player, EngineResult result, EngineResult? threatResult = null,
-        PlayerContext? context = null)
+        PlayerContext? context = null, HintTheme? themeOverride = null)
     {
         if (result.Lines.Count == 0) return null;
         var first = result.Lines[0];
         if (UciMove.Parse(result.BestMove.Length == 0 ? first.Move : result.BestMove) is not { } best
             || placement.Piece(best.FromFile, best.FromRank) is not char piece) return null;
         var en = CoreLocale.English;
-        var threat = ThreatFact.Detect(placement, player, result.Value, threatResult);
-        var theme = Theme(placement, best, player, threat, (first.MateIn ?? 0) > 0, first.Pv, first.Value);
+        var rawThreat = ThreatFact.Detect(placement, player, result.Value, threatResult);
+        var theme = themeOverride ?? Theme(placement, best, player, rawThreat, (first.MateIn ?? 0) > 0, first.Pv, first.Value);
+        var position = new ChessPosition(placement, player, CastlingRights.None);
+        bool opportunity = rawThreat != null && OutranksThreat(rawThreat, position, first.Pv);
+        var threat = opportunity ? null : rawThreat;
+        var variant = Variant(theme, placement, player, best);
         var from = UciMove.SquareName(best.FromFile, best.FromRank);
         var side = player.Label(en);
 
@@ -163,9 +202,8 @@ public static class Hints
             $"Theme of the best move: {theme.Title(en)}.",
             $"The piece that should move: {PieceInfo.Name(piece, en)} on {from}.",
         };
-        if (threat != null) facts.Add($"{threat.PromptText}.");
-        var position = new ChessPosition(placement, player, CastlingRights.None);
-        facts.AddRange(PositionFacts.Reasons(position, best, threat));
+        if (threat != null) facts.Add(threat.PromptText.EndsWith('.') ? threat.PromptText : threat.PromptText + ".");
+        facts.AddRange(PositionFacts.Reasons(position, best, threat).Where(r => !r.StartsWith("The best move captures", StringComparison.Ordinal)));
         facts.AddRange(PositionFacts.PurposeLines(position, best));
         var pins = placement.Pins(player).Concat(placement.Pins(player.Opposite())).ToList();
         if (pins.Count > 0) facts.Add("Pins: " + string.Join("; ", pins.Select(p => p.Text(en))) + ".");
@@ -177,7 +215,7 @@ public static class Hints
         var prompt = string.Join("\n", facts) + $"\n\nGive the {side} player a short, concrete hint (piece, file or rank, purpose) without naming the target square.";
 
         var solution = CoreLocale.Format("hint.stage4", null, placement.DescribeMove(best), first.ScoreText);
-        return new HintSet(best, theme, threat, theme.Stage1Text(), from, Stage2Text(piece, from, IsCastling(best, piece)),
-            Stage3Fallback(theme, piece), prompt, solution);
+        return new HintSet(best, theme, threat, theme.Stage1Text(null, variant), from, Stage2Text(piece, from, IsCastling(best, piece)),
+            Stage3Fallback(theme, piece, null, variant), prompt, solution, variant, opportunity);
     }
 }

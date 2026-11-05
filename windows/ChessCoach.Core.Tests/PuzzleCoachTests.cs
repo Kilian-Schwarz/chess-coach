@@ -41,7 +41,7 @@ public class PuzzleCoachTests
     public void LessonExplainsTheDiscoveredAttackFromTheLine()
     {
         var lesson = PuzzleCoach.Lesson(Disc());
-        Assert.Contains("Knight e5 moves away, so Rook e1 attacks Queen e6", lesson.Why);
+        Assert.Contains("The knight on e5 moves away, so the rook on e1 attacks the queen on e6", lesson.Why);
         Assert.Contains("9.Nxc6 bxc6 10.Rxe6 fxe6", lesson.Why);
         Assert.Contains("win 4 points", lesson.Why);
         Assert.Contains("in front of your long-range pieces", lesson.Habit);
@@ -66,7 +66,7 @@ public class PuzzleCoachTests
         var pos = Pos(DiscFen);
         var step2 = Hints.Stage2Text('N', "e5");
         var step3 = PuzzleCoach.Hint3(HintTheme.Discovered, M("e5c6"), pos);
-        Assert.Contains("Rook e1 then attacks Queen e6", step3);
+        Assert.Contains("the rook on e1 then attacks the queen on e6", step3);
         foreach (var text in new[] { HintTheme.Discovered.Stage1Text(), step2, step3, PuzzleCoach.Question(HintTheme.Discovered) })
         {
             Assert.DoesNotContain("c6", text);
@@ -79,8 +79,10 @@ public class PuzzleCoachTests
     {
         var p = Disc();
         var pos = Pos(DiscFen);
-        Assert.Contains("That loses", PuzzleCoach.FailReason(p, pos.Applying(M("b5c6")), new[] { "b7c6", "e1e6" }));
-        Assert.Contains("Discovered attack", PuzzleCoach.FailReason(p, pos.Applying(M("a2a3")), new[] { "a7a6" }));
+        var loss = PuzzleCoach.FailReason(p, pos.Applying(M("b5c6")), new[] { "b7c6", "e1e6" });
+        Assert.Contains("answers bxc6", loss);
+        Assert.Contains("3 points of material down", loss);
+        Assert.StartsWith("The idea was: The knight on e5 moves away", PuzzleCoach.FailReason(p, pos.Applying(M("a2a3")), new[] { "a7a6" }));
     }
 
     [Fact]
@@ -99,7 +101,7 @@ public class PuzzleCoachTests
     public void LlmRequestCarriesTheGroundedFacts()
     {
         var req = PuzzleCoach.WhyRequest(Disc(), new PlayerContext(PlayerLevel.Intermediate, null, new List<string>()), new ExplanationStyle())!;
-        Assert.Contains("Knight e5 moves away", req.User);
+        Assert.Contains("The knight on e5 moves away", req.User);
         Assert.Contains("Theme: Discovered attack", req.User);
         Assert.Contains("9.Nxc6", req.User);
     }

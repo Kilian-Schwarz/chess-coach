@@ -75,6 +75,7 @@ struct GameRecord {
 
     var isEmpty: Bool { moves.isEmpty }
     var segmentMoves: Int { moves.count - (breaks.last ?? 0) }
+    var decidedResult: GameResult? { isEstimatedStart && segmentMoves == 0 ? nil : current?.result }
 
     var positions: [ChessPosition] {
         guard let s = startPosition else { return [] }

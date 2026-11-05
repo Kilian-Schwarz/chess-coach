@@ -142,12 +142,25 @@ internal sealed partial class AppModel
         _session.Start();
         Invalidate();
         _loop?.Cancel();
+        _foreground?.Dispose();
+        _foreground = new ForegroundWatcher(Wake);
         var cts = _loop = new CancellationTokenSource();
         _ = RunLoopAsync(cts.Token);
     }
 
+    private readonly SemaphoreSlim _wake = new(0, 1);
+    private ForegroundWatcher? _foreground;
+
+    private void Wake()
+    {
+        _lastChangeAt = DateTime.UtcNow;
+        try { _wake.Release(); } catch (SemaphoreFullException) { }
+    }
+
     private void Stop()
     {
+        _foreground?.Dispose();
+        _foreground = null;
         _loop?.Cancel();
         _loop = null;
         if (_book.Plies >= 2) FinishGame(new GameEnd(GameEndReason.Manual, "*", true));
@@ -187,7 +200,7 @@ internal sealed partial class AppModel
                     continue;
                 }
                 await TickAsync(ct);
-                await Task.Delay(NextDelay(), ct);
+                await _wake.WaitAsync(NextDelay(), ct);
             }
             catch (OperationCanceledException) { return; }
             catch (Exception e)

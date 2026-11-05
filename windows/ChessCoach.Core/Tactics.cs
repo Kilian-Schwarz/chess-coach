@@ -16,12 +16,18 @@ public static class PieceInfo
         Letters.IndexOf(char.ToLowerInvariant(p)) < 0 ? "?" : CoreLocale.Get("piece." + Key(p), culture);
 
     public static string Your(char p, CultureInfo? culture = null) => CoreLocale.Get("piece." + Key(p) + ".your", culture);
+
+    public static string The(char p, CultureInfo? culture = null, bool accusative = false) =>
+        CoreLocale.Get("piece." + Key(p) + (accusative ? ".theAcc" : ".the"), culture);
     public static int Value(char p) => Values.GetValueOrDefault(char.ToLowerInvariant(p), 0);
 }
 
 public readonly record struct PieceAt(char Piece, string Square)
 {
     public string Text(CultureInfo? culture = null) => $"{PieceInfo.Name(Piece, culture)} {Square}";
+
+    public string Phrase(CultureInfo? culture = null, bool accusative = false) =>
+        CoreLocale.Format("piece.on", culture, PieceInfo.The(Piece, culture, accusative), Square);
 }
 
 public readonly record struct XRay(PieceAt Slider, PieceAt Blocker, PieceAt Target);

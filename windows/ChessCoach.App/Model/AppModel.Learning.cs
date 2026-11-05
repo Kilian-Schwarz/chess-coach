@@ -133,7 +133,8 @@ internal sealed partial class AppModel
 
     private string HintTopicText(HintContext ctx) => HintSetFor(ctx)?.Stage1 ?? Loc.T("hint.fallbackTopic");
     private string HintStage2Text(HintContext ctx) => HintSetFor(ctx)?.Stage2 ?? Loc.T("hint.fallbackPiece");
-    private string HintIdeaFallback(HintContext ctx) => HintSetFor(ctx)?.Stage3Fallback ?? Loc.T("hint.fallbackIdea");
+    private string HintIdeaFallback(HintContext ctx) =>
+        HintSetFor(ctx) is { } hs ? PuzzleCoach.Hint3(hs.Theme, hs.Move, ctx.Position) : Loc.T("hint.fallbackIdea");
     private Coach.ExplanationRequest? HintRequestFor(HintContext ctx) =>
         HintSetFor(ctx) is { } hs ? Coach.HintRequest(hs, ContextFor(ctx.ToMove)) : null;
 

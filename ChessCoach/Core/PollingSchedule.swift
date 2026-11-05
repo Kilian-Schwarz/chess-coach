@@ -6,10 +6,10 @@ enum PollingSchedule {
     static let activeMs = 400
     static let activeUntil = 3.0
     static let rampSeconds = 12.0
-    static let calmMs = 1500
+    static let calmMs = 800
     static let idleAfter = 120.0
-    static let idleMs = 4000
-    static let searchSteps: [(after: Double, ms: Int)] = [(300, 8000), (120, 4000), (30, 2000), (0, 1000)]
+    static let idleMs = 1500
+    static let searchSteps: [(after: Double, ms: Int)] = [(30, 2000), (0, 1000)]
     static let lowPowerFactor = 2
 
     static func delayMs(paused: Bool, confirmSoon: Bool, tracked: Bool, lostFor: Double, calmFor: Double, lowPower: Bool) -> Int {

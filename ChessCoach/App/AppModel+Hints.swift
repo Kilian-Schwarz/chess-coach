@@ -57,9 +57,14 @@ extension AppModel {
         var state = OverlayState()
         state.unsafe = lift?.marks ?? []
 
+        let threat = ctx.hints.opportunity ? nil : ctx.threat
         var newThreatCard: CoachCard?
         if threatShown {
-            newThreatCard = ctx.threat.map { CoachCard(id: ctx.fen + "|threat", kind: .threat, title: String(localized: "Threat"), text: $0.text) }
+            newThreatCard = threat.map { CoachCard(id: ctx.fen + "|threat", kind: .threat, title: String(localized: "Threat"), text: $0.text) }
+            if newThreatCard == nil, ctx.hints.opportunity, ctx.threat != nil {
+                newThreatCard = CoachCard(id: ctx.fen + "|opportunity", kind: .hint, title: String(localized: "Threat"),
+                                          text: Hints.opportunityText())
+            }
             if newThreatCard == nil, threatRequested.contains(ctx.fen) {
                 newThreatCard = CoachCard(id: ctx.fen + "|nothreat", kind: .hint, title: String(localized: "Threat"),
                                           text: String(localized: "No immediate threat found."))
@@ -67,7 +72,7 @@ extension AppModel {
         }
         if threatCard != newThreatCard { threatCard = newThreatCard }
         panel.model.canShowThreat = showThreats && level == 0 && !threatShown
-        if threatShown, let t = ctx.threat {
+        if threatShown, let t = threat {
             let tp = screenPoint(t.move, whiteAtBottom: ctx.whiteAtBottom)
             state.threatArrow = .init(from: tp.from, to: tp.to)
         }
@@ -88,6 +93,7 @@ extension AppModel {
             state.partnerHighlight = ctx.partner
             state.hint = prefix + String(localized: "Hint 2: this piece")
             setHintCard(id: ctx.fen + "|h2", title: String(localized: "Hint 2: piece"), lines: [ctx.hints.stage2])
+            prefetchIdea(ctx)
         case 3:
             suggestion = String(localized: "Hint 3 of 4")
             state.highlight = .init(col: sq.from.col, row: sq.from.row)
@@ -116,18 +122,19 @@ extension AppModel {
         tasks[.suggestion]?.cancel()
         var card = CoachCard(id: id, kind: .hint, title: String(localized: "Hint 3: idea"))
         if let cached = ideaCache[ctx.fen] { card.text = cached }
-        else if !llmConfigured { card.text = ctx.hints.stage3Fallback }
+        else if !llmConfigured { card.text = PuzzleCoach.hint3(ctx.hints, position: ctx.position) }
         else { card.isLoading = true }
         suggestionCard = card
         if card.isLoading { prefetchIdea(ctx) }
     }
 
     func prefetchIdea(_ ctx: HintContext) {
-        guard llmConfigured, ideaCache[ctx.fen] == nil, ideaFen != ctx.fen else { return }
+        guard llmConfigured, hintLevel >= 2, ideaCache[ctx.fen] == nil, ideaFen != ctx.fen else { return }
         ideaTask?.cancel()
         ideaFen = ctx.fen
         let context = store.profile(id: ctx.profileId)?.promptContext ?? PlayerContext.neutral
-        let fen = ctx.fen, move = ctx.hints.move, fallback = ctx.hints.stage3Fallback
+        let fen = ctx.fen, move = ctx.hints.move, fallback = PuzzleCoach.hint3(ctx.hints, position: ctx.position)
+        let allowed = FactCheck.allowed(positions: [ctx.position], lines: ctx.result.lines.map(\.pv))
         let show: @MainActor (AppModel, String, Bool) -> Void = { model, text, done in
             guard model.suggestionCard?.id == fen + "|idea" else { return }
             model.suggestionCard?.text = text
@@ -135,7 +142,8 @@ extension AppModel {
         }
         ideaTask = stream(Coach.hintRequest(ctx.hints, context: context, language: Language.englishName), update: { [weak self] text, done in
             guard let self else { return }
-            let safe = Hints.revealsTarget(text, move: move) ? nil : text
+            var safe = Hints.revealsTarget(text, move: move) ? nil : text
+            if done, let checked = safe { safe = FactCheck.clean(checked, allowed: allowed).text }
             if done {
                 let final = safe ?? fallback
                 self.ideaCache[fen] = final

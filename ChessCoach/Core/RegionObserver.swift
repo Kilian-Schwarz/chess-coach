@@ -19,6 +19,9 @@ enum RegionObserver {
             if stable.outcome != .pending { return .scanned(scan, rect: stable.rect, changed: stable.outcome == .changed) }
             reason = "rect change to \(Int(b.size)) px at \(Int(found.x)),\(Int(found.y)) not confirmed yet (colours match: \(colorsMatch))"
         }
+        if expected.x < -1 || expected.y < -1 || expected.x + expected.size > Double(crop.width) + 1 || expected.y + expected.size > Double(crop.height) + 1 {
+            return .failed(reason)
+        }
         let atExpected = BoardScanner.analyze(crop, board: expected, templates: templates)
         switch BoardReadability.verify(atExpected.features, colors: colors) {
         case .matched: return .verified(atExpected)

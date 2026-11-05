@@ -61,16 +61,16 @@ public static class PositionFacts
         return new Outcome(line.Played, captures, delta, line.Text);
     }
 
-    public static (string Text, int Delta)? Consequence(IReadOnlyList<string> pv, ChessPosition start, PieceColor me)
+    public static (string Text, int Delta)? Consequence(IReadOnlyList<string> pv, ChessPosition start, PieceColor me, bool opponentOnly = false)
     {
         if (OutcomeOf(pv, start, me) is not { } o) return null;
-        var captures = o.Captures.Select(c => $"{c.By.Label(En)} captures {Placement.ColorOf(c.Victim).Label(En)} {PieceInfo.Name(c.Victim, En)} {c.Square}").ToList();
+        var captures = o.Captures.Where(c => !opponentOnly || c.By != me).Select(c => $"{c.By.Label(En)} captures {Placement.ColorOf(c.Victim).Label(En)} {PieceInfo.Name(c.Victim, En)} {c.Square}").ToList();
         string net = $"Net material change for {me.Label(En)}: {o.Delta:+0;-0;+0} (pawn 1, knight or bishop 3, rook 5, queen 9)";
         string text = captures.Count == 0 ? "No material changes hands in that line." : $"In that line: {string.Join("; ", captures)}. {net}.";
-        return (o.Line + ". " + text, o.Delta);
+        return ((opponentOnly ? SanLine(pv, start, 1).Text : o.Line) + ". " + text, o.Delta);
     }
 
-    public static List<string> ThreatLines(ChessPosition pos, EngineResult? nullResult)
+    public static List<string> ThreatLines(ChessPosition pos, EngineResult? nullResult, bool revealBest = true)
     {
         var output = new List<string>();
         if (pos.IsCheck || nullResult is null || nullResult.Lines.Count == 0) return output;
@@ -78,7 +78,7 @@ public static class PositionFacts
         var me = pos.Turn;
         var nullPos = pos.NullMove;
         if (line.Pv.Count == 0 || UciMove.Parse(line.Pv[0]) is not UciMove first || !nullPos.IsLegal(first)) return output;
-        if (Consequence(line.Pv, nullPos, me) is not { } result) return output;
+        if (Consequence(line.Pv, nullPos, me, !revealBest) is not { } result) return output;
         var afterFirst = nullPos.Board.Applying(first);
         var known = pos.Board.Hanging(me).Select(h => h.Square).ToHashSet();
         var pinsAfter = afterFirst.Pins(me);
@@ -111,6 +111,11 @@ public static class PositionFacts
         var before = pos.Board.Pins(me.Opposite());
         foreach (var pin in after.Board.Pins(me.Opposite()))
             if (!before.Contains(pin)) output.Add($"The best move creates a pin: {pin.Text(En)}.");
+        foreach (var x in pos.Board.DiscoveredTargets(best, me))
+            output.Add($"Moving the {PieceInfo.Name(x.Blocker.Piece, En)} uncovers an attack by {x.Slider.Text(En)} on {x.Target.Text(En)}.");
+        var forks = PuzzleCoach.ForkTargets(pos, best);
+        if (forks.Count >= 2 && pos.Board.Piece(best.FromFile, best.FromRank) is char mover && char.ToLowerInvariant(mover) != 'k')
+            output.Add($"The best move forks: {string.Join(", ", forks.Take(3).Select(f => f.Text(En)))}.");
         if (threat is { } t && t.IsParried(best, pos.Board)) output.Add($"The best move deals with the opponent's threat ({t.PromptText}).");
         if (pos.Board.Piece(best.ToFile, best.ToRank) is char victim)
             output.Add($"The best move captures {PieceInfo.Name(victim, En)} {UciMove.SquareName(best.ToFile, best.ToRank)}.");
@@ -173,7 +178,7 @@ public static class PositionFacts
         }
         var checks = pos.LegalMoves().Where(m => pos.Applying(m).IsCheck).Take(5).Select(m => San.Of(m, pos)).ToList();
         if (checks.Count > 0) lines.Add($"Checks available to {name}: {string.Join(", ", checks)}.");
-        var threatFacts = ThreatLines(pos, nullResult);
+        var threatFacts = ThreatLines(pos, nullResult, revealBest);
         if (threatFacts.Count > 0)
         {
             lines.AddRange(threatFacts);

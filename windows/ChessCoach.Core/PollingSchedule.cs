@@ -2,10 +2,10 @@ namespace ChessCoach.Core;
 
 public static class PollingSchedule
 {
-    public const int PausedMs = 3000, ConfirmMs = 200, ActiveMs = 400, CalmMs = 1500, IdleMs = 4000, BatteryFactor = 2;
+    public const int PausedMs = 3000, ConfirmMs = 200, ActiveMs = 400, CalmMs = 800, IdleMs = 1500, BatteryFactor = 2;
     public const double ActiveUntil = 3, RampSeconds = 12, IdleAfter = 120;
 
-    private static readonly (double After, int Ms)[] SearchSteps = { (300, 8000), (120, 4000), (30, 2000), (0, 1000) };
+    private static readonly (double After, int Ms)[] SearchSteps = { (30, 2000), (0, 1000) };
 
     public static int DelayMs(bool paused, bool confirmSoon, bool tracked, double lostFor, double calmFor, bool onBattery)
     {

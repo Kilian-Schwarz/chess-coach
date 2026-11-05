@@ -11,6 +11,9 @@ internal sealed class OverlayWindow : Window
     private readonly OverlayVisual _visual = new();
     private IntPtr _hwnd;
     private (int x, int y, int w, int h) _bounds;
+    private volatile bool[] _covered = new bool[64];
+
+    public bool[] Covered => _covered;
 
     public OverlayWindow()
     {
@@ -44,11 +47,13 @@ internal sealed class OverlayWindow : Window
             Native.SetWindowPos(_hwnd, Native.HWND_TOPMOST, b.Item1, b.Item2, b.Item3, b.Item4,
                 Native.SWP_NOACTIVATE | Native.SWP_SHOWWINDOW | Native.SWP_NOOWNERZORDER);
         }
+        _covered = OverlayCoverage.Squares(state);
         _visual.SetState(state);
     }
 
     public void HideOverlay()
     {
+        _covered = new bool[64];
         if (IsVisible) Hide();
         _bounds = default;
     }

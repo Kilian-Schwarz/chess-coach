@@ -4,9 +4,11 @@ public sealed class BoardFingerprint
 {
     public const int PerSquare = 5;
     public byte[] Samples { get; } = new byte[64 * PerSquare];
+    private readonly bool[] _mask = new bool[64];
 
-    public void Compute(RgbImage img, BoardRect board)
+    public void Compute(RgbImage img, BoardRect board, bool[]? mask = null)
     {
+        if (mask is { Length: 64 }) Array.Copy(mask, _mask, 64); else Array.Clear(_mask);
         double s = board.Square, o = s * 0.18;
         int k = 0;
         for (int r = 0; r < 8; r++)
@@ -34,10 +36,18 @@ public sealed class BoardFingerprint
 
     public bool Differs(BoardFingerprint other, int tolerance = 12)
     {
+        bool sameMask = _mask.AsSpan().SequenceEqual(other._mask);
         for (int i = 0; i < Samples.Length; i++)
+        {
+            if (!sameMask && (_mask[i / PerSquare] || other._mask[i / PerSquare])) continue;
             if (Math.Abs(Samples[i] - other.Samples[i]) > tolerance) return true;
+        }
         return false;
     }
 
-    public void CopyFrom(BoardFingerprint other) => Array.Copy(other.Samples, Samples, Samples.Length);
+    public void CopyFrom(BoardFingerprint other)
+    {
+        Array.Copy(other.Samples, Samples, Samples.Length);
+        Array.Copy(other._mask, _mask, 64);
+    }
 }

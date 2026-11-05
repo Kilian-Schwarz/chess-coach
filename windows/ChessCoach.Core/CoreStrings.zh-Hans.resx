@@ -42,7 +42,7 @@
   <data name="move.promotes" xml:space="preserve"><value>，升变为{0}</value></data>
   <data name="move.check" xml:space="preserve"><value>，将军</value></data>
   <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} 受到攻击且无保护</value></data>
-  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} 被价值更低的棋子攻击</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} 受到价值更低的棋子攻击</value></data>
   <data name="rating.best" xml:space="preserve"><value>最佳着法</value></data>
   <data name="rating.good" xml:space="preserve"><value>好棋</value></data>
   <data name="rating.inaccuracy" xml:space="preserve"><value>不精确</value></data>
@@ -84,13 +84,13 @@
   <data name="theme.kingActivate" xml:space="preserve"><value>激活王</value></data>
   <data name="theme.pawnMove" xml:space="preserve"><value>走兵</value></data>
   <data name="theme.improvePiece" xml:space="preserve"><value>改善棋子</value></data>
-  <data name="hint.stage1.mate" xml:space="preserve"><value>这里可以将杀对手。</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>这里可以将死对手。</value></data>
   <data name="hint.stage1.captureGain" xml:space="preserve"><value>这里可以赢子。</value></data>
-  <data name="hint.stage1.fork" xml:space="preserve"><value>找找捉双：一步同时攻击两个棋子的着法。</value></data>
-  <data name="hint.stage1.check" xml:space="preserve"><value>这里将军很有力。</value></data>
-  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>注意对手的威胁。</value></data>
-  <data name="hint.stage1.castle" xml:space="preserve"><value>让你的王安全。</value></data>
-  <data name="hint.stage1.develop" xml:space="preserve"><value>出动一个棋子。</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>找找双重攻击：同时攻击两枚棋子的着法。</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>这里将军很强。</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>当心对手的威胁。</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>让你的王进入安全位置。</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>出动一枚棋子。</value></data>
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>激活你的王。</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>这里走兵很合适。</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>改善你最差的棋子。</value></data>
@@ -100,20 +100,20 @@
   <data name="hint.stage2.bishop" xml:space="preserve"><value>走 {0} 上的象。</value></data>
   <data name="hint.stage2.knight" xml:space="preserve"><value>走 {0} 上的马。</value></data>
   <data name="hint.stage2.pawn" xml:space="preserve"><value>走 {0} 上的兵。</value></data>
-  <data name="hint.stage3.mate" xml:space="preserve"><value>{0}可以将杀对手。</value></data>
-  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}可以吃掉对方一个棋子并赢子。</value></data>
-  <data name="hint.stage3.fork" xml:space="preserve"><value>{0}可以一步同时攻击对方两个棋子。</value></data>
-  <data name="hint.stage3.check" xml:space="preserve"><value>{0}可以将对方的王，这会给你带来优势。</value></data>
-  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>对手在威胁着什么。{0}可以化解这个威胁。</value></data>
-  <data name="hint.stage3.castle" xml:space="preserve"><value>你的王还在中心。易位可以让它安全，并激活车。</value></data>
-  <data name="hint.stage3.develop" xml:space="preserve"><value>{0}还在底线。把这个棋子走到能控制更多格子的活跃位置。</value></data>
-  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>在残局中，王是一枚强子。让它靠近兵并走向中心。</value></data>
-  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>这里走兵能改善你的局面：争取空间，或为你的棋子打开线路。</value></data>
-  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}的位置不理想。找一个能让这个棋子发挥更大作用的格子。</value></data>
-  <data name="hint.stage4" xml:space="preserve"><value>最佳着法：{0}（评估 {1}）。</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0}可以将死对手。</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}可以吃掉对方一枚棋子并赢子。</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0}可以同时攻击对方两枚棋子。</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0}可以将军，这对你有利。</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>对手正在威胁什么。{0}可以化解它。</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>你的王还在中心。易位能让它更安全，并激活车。</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0}还在底线。把它调到更活跃、能控制更多格子的位置。</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>残局中王是一枚强子。把它靠近兵和中心。</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>这里走兵能改善局面：夺取空间或为你的棋子打开线路。</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}位置不佳。找一个能发挥更大作用的格子。</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>最佳着法：{0}(评估 {1})。</value></data>
   <data name="hint.takeawayLabel" xml:space="preserve"><value>要点</value></data>
   <data name="threat.text" xml:space="preserve"><value>威胁：{0}</value></data>
-  <data name="threat.mate" xml:space="preserve"><value>威胁：{0}，{1}步杀</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>威胁：{0}，{1} 步将死</value></data>
   <data name="profile.placement" xml:space="preserve"><value>定级进行中：第 {0} 局，共 {1} 局</value></data>
   <data name="profile.defaultName" xml:space="preserve"><value>玩家</value></data>
   <data name="report.moveLabel" xml:space="preserve"><value>第 {0} 步，{1}</value></data>
@@ -161,9 +161,9 @@
   <data name="puzzle.progress" xml:space="preserve"><value>{0}：已解决 {1}/{2}</value></data>
   <data name="puzzle.source.date" xml:space="preserve"><value>来自你在 {0} 的对局。</value></data>
   <data name="puzzle.source.move" xml:space="preserve"><value>来自你在 {0} 的对局，第 {1} 步：你走了 {2}（{3}）。</value></data>
-  <data name="puzzle.ask.mate" xml:space="preserve"><value>对方的王缺少安全的格子。哪些将军可以结束对局？</value></data>
-  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>对手上一步留下了无人保护的子。你可以攻击什么？</value></data>
-  <data name="puzzle.ask.fork" xml:space="preserve"><value>对方两个子位于同一个子能到达的格子上。一步棋能同时攻击它们吗？</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>这里有强制取胜的办法吗？哪些将军可以结束对局？</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>这里能赢子吗？哪些子没有保护，或者被攻击的次数多于保护的次数？</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>对方现在有哪些子不安全？</value></data>
   <data name="puzzle.ask.check" xml:space="preserve"><value>有哪些将军？每一个将军会迫使对方怎么应对？</value></data>
   <data name="puzzle.ask.promotion" xml:space="preserve"><value>一个兵接近底线。什么在阻止它，你能清除障碍吗？</value></data>
   <data name="puzzle.ask.discovered" xml:space="preserve"><value>你的一个子挡在车、象或后的前面。如果它带着威胁走开会怎样？</value></data>
@@ -202,6 +202,27 @@
   <data name="puzzle.area.rank" xml:space="preserve"><value>它前往第 {0} 横线。</value></data>
   <data name="puzzle.area.file" xml:space="preserve"><value>它前往 {0} 线。</value></data>
   <data name="puzzle.fail.mate" xml:space="preserve"><value>这会让对方将死你。</value></data>
-  <data name="puzzle.fail.loss" xml:space="preserve"><value>这会丢掉 {1} 上的{0}。</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>对手回应 {0}，你会少 {1} 分子力。</value></data>
   <data name="puzzle.fail.miss" xml:space="preserve"><value>这没有抓住此局面的要点：{0}。</value></data>
+  <data name="hint.stage1.mateForced" xml:space="preserve"><value>你有一个强制将死。</value></data>
+  <data name="hint.stage3.mateForced" xml:space="preserve"><value>{0}开始一个强制将死。</value></data>
+  <data name="hint.stage3.captureLine" xml:space="preserve"><value>{0}走出的一步棋会在几步之后赢子。</value></data>
+  <data name="puzzle.fail.idea" xml:space="preserve"><value>要点是：{0}</value></data>
+  <data name="puzzle.fail.loss.one" xml:space="preserve"><value>对手回应 {0}，你会少 1 分子力。</value></data>
+  <data name="puzzle.why.gain.one" xml:space="preserve"><value>主要变化：{0}。你赢得 1 分子力。</value></data>
+  <data name="threat.opportunity" xml:space="preserve"><value>对手有威胁，但你可以先赢子。</value></data>
+  <data name="puzzle.area.unpin" xml:space="preserve"><value>牵制：{0} 被 {2} 牵制在 {1} 前。</value></data>
+  <data name="piece.on" xml:space="preserve"><value>{1} 的{0}</value></data>
+  <data name="piece.king.the" xml:space="preserve"><value>王</value></data>
+  <data name="piece.king.theAcc" xml:space="preserve"><value>王</value></data>
+  <data name="piece.queen.the" xml:space="preserve"><value>后</value></data>
+  <data name="piece.queen.theAcc" xml:space="preserve"><value>后</value></data>
+  <data name="piece.rook.the" xml:space="preserve"><value>车</value></data>
+  <data name="piece.rook.theAcc" xml:space="preserve"><value>车</value></data>
+  <data name="piece.bishop.the" xml:space="preserve"><value>象</value></data>
+  <data name="piece.bishop.theAcc" xml:space="preserve"><value>象</value></data>
+  <data name="piece.knight.the" xml:space="preserve"><value>马</value></data>
+  <data name="piece.knight.theAcc" xml:space="preserve"><value>马</value></data>
+  <data name="piece.pawn.the" xml:space="preserve"><value>兵</value></data>
+  <data name="piece.pawn.theAcc" xml:space="preserve"><value>兵</value></data>
 </root>

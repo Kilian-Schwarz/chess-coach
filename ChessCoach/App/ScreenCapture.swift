@@ -36,6 +36,12 @@ enum ScreenCapture {
         return CapturedDisplay(displayID: displayID, frame: frame, image: image, origin: r.origin)
     }
 
+    static func currentFrame(windowID: CGWindowID) -> CGRect? {
+        guard let info = CGWindowListCopyWindowInfo([.optionIncludingWindow], windowID) as? [[String: Any]],
+              let bounds = info.first?[kCGWindowBounds as String] as? NSDictionary else { return nil }
+        return CGRect(dictionaryRepresentation: bounds as CFDictionary)
+    }
+
     static func windowCandidates(displayFrame: CGRect, rect: CGRect) async throws -> [SCWindow] {
         let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: true)
         let own = Bundle.main.bundleIdentifier

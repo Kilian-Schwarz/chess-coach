@@ -86,34 +86,34 @@
   <data name="theme.improvePiece" xml:space="preserve"><value>駒の改善</value></data>
   <data name="hint.stage1.mate" xml:space="preserve"><value>ここで相手をチェックメイトできます。</value></data>
   <data name="hint.stage1.captureGain" xml:space="preserve"><value>ここで駒得できます。</value></data>
-  <data name="hint.stage1.fork" xml:space="preserve"><value>フォークを探しましょう：2つの駒を同時に攻撃する手です。</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>フォークを探しましょう。二つの駒を同時に攻撃する手です。</value></data>
   <data name="hint.stage1.check" xml:space="preserve"><value>ここではチェックが有力です。</value></data>
-  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>相手の脅威に注意しましょう。</value></data>
-  <data name="hint.stage1.castle" xml:space="preserve"><value>キングを安全にしましょう。</value></data>
-  <data name="hint.stage1.develop" xml:space="preserve"><value>駒を展開しましょう。</value></data>
-  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>キングを活性化しましょう。</value></data>
-  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>ここではポーンの動きが合っています。</value></data>
-  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>いちばん悪い駒を改善しましょう。</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>相手の脅威に注意してください。</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>キングを安全な場所へ移しましょう。</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>駒を一つ展開しましょう。</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>キングを活用しましょう。</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>ここはポーンの手が合っています。</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>一番悪い駒を改善しましょう。</value></data>
   <data name="hint.stage2.king" xml:space="preserve"><value>{0} にあるキングを動かします。</value></data>
   <data name="hint.stage2.queen" xml:space="preserve"><value>{0} にあるクイーンを動かします。</value></data>
   <data name="hint.stage2.rook" xml:space="preserve"><value>{0} にあるルークを動かします。</value></data>
   <data name="hint.stage2.bishop" xml:space="preserve"><value>{0} にあるビショップを動かします。</value></data>
   <data name="hint.stage2.knight" xml:space="preserve"><value>{0} にあるナイトを動かします。</value></data>
   <data name="hint.stage2.pawn" xml:space="preserve"><value>{0} にあるポーンを動かします。</value></data>
-  <data name="hint.stage3.mate" xml:space="preserve"><value>{0}は相手をチェックメイトできます。</value></data>
-  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}は相手の駒を取って駒得できます。</value></data>
-  <data name="hint.stage3.fork" xml:space="preserve"><value>{0}は一手で相手の2つの駒を同時に攻撃できます。</value></data>
-  <data name="hint.stage3.check" xml:space="preserve"><value>{0}は相手のキングにチェックをかけられ、有利になります。</value></data>
-  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>相手が何かを狙っています。{0}でその脅威をかわせます。</value></data>
-  <data name="hint.stage3.castle" xml:space="preserve"><value>あなたのキングはまだ中央にいます。キャスリングで安全になり、ルークも活性化します。</value></data>
-  <data name="hint.stage3.develop" xml:space="preserve"><value>{0}はまだ最後列にいます。この駒を、より多くのマスを支配できる活発なマスへ動かしましょう。</value></data>
-  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>エンドゲームではキングは強い駒です。ポーンや中央に近づけましょう。</value></data>
-  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>ここではポーンの動きで局面が良くなります：スペースを得るか、駒のラインを開けます。</value></data>
-  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}は理想的な位置ではありません。この駒がより働くマスを探しましょう。</value></data>
-  <data name="hint.stage4" xml:space="preserve"><value>最善手：{0}（評価 {1}）。</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0}で相手をチェックメイトできます。</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0}で相手の駒を取って駒得できます。</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0}で相手の二つの駒を同時に攻撃できます。</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0}でチェックでき、それはあなたに有利です。</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>相手が何かを狙っています。{0}で防げます。</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>キングはまだ中央にいます。キャスリングで安全になり、ルークも働きます。</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0}はまだ初期の段にいます。より多くのマスを支配できる活発なマスに動かしましょう。</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>エンドゲームではキングは強い駒です。ポーンと中央に近づけましょう。</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>ここではポーンの手が局面を良くします。スペースを得たり、駒の筋を開いたりできます。</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0}の配置が良くありません。もっと働けるマスを探しましょう。</value></data>
+  <data name="hint.stage4" xml:space="preserve"><value>最善手：{0}(評価 {1})。</value></data>
   <data name="hint.takeawayLabel" xml:space="preserve"><value>ポイント</value></data>
-  <data name="threat.text" xml:space="preserve"><value>狙い：{0}</value></data>
-  <data name="threat.mate" xml:space="preserve"><value>狙い：{0}、{1}手でメイト</value></data>
+  <data name="threat.text" xml:space="preserve"><value>脅威：{0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>脅威：{0}、{1} 手詰め</value></data>
   <data name="profile.placement" xml:space="preserve"><value>レーティング判定中：{1}局中{0}局目</value></data>
   <data name="profile.defaultName" xml:space="preserve"><value>プレイヤー</value></data>
   <data name="report.moveLabel" xml:space="preserve"><value>{0}手目、{1}</value></data>
@@ -161,9 +161,9 @@
   <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} 解決</value></data>
   <data name="puzzle.source.date" xml:space="preserve"><value>{0} の対局から。</value></data>
   <data name="puzzle.source.move" xml:space="preserve"><value>{0} の対局、{1}手目: ここであなたは {2} を指しました ({3})。</value></data>
-  <data name="puzzle.ask.mate" xml:space="preserve"><value>相手のキングは安全なマスが少なくなっています。どのチェックで決着をつけられますか？</value></data>
-  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>相手の直前の手で守られていない駒ができました。何を攻撃できますか？</value></data>
-  <data name="puzzle.ask.fork" xml:space="preserve"><value>相手の駒2つが、1つの駒で届くマスにいます。1手で両方を攻撃できますか？</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>ここに強制的な勝ちはありますか？どのチェックで決着をつけられますか？</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>ここで駒得できますか？守りのない駒や、守りより攻めが多い駒はありますか？</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>今、安全でない相手の駒はどれですか？</value></data>
   <data name="puzzle.ask.check" xml:space="preserve"><value>どんなチェックがあり、それぞれ何を強制しますか？</value></data>
   <data name="puzzle.ask.promotion" xml:space="preserve"><value>ポーンが最終段に近づいています。何が止めていて、道を開けられますか？</value></data>
   <data name="puzzle.ask.discovered" xml:space="preserve"><value>あなたの駒の1つがルーク、ビショップ、クイーンの前に立っています。脅威を伴って動いたらどうなりますか？</value></data>
@@ -202,6 +202,27 @@
   <data name="puzzle.area.rank" xml:space="preserve"><value>{0}段目へ向かいます。</value></data>
   <data name="puzzle.area.file" xml:space="preserve"><value>{0}ファイルへ向かいます。</value></data>
   <data name="puzzle.fail.mate" xml:space="preserve"><value>それではチェックメイトを許してしまいます。</value></data>
-  <data name="puzzle.fail.loss" xml:space="preserve"><value>それでは {1} の {0} を失います。</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>相手が {0} と応じ、駒の損失は {1} ポイントになります。</value></data>
   <data name="puzzle.fail.miss" xml:space="preserve"><value>この局面の狙いを外しています: {0}。</value></data>
+  <data name="hint.stage1.mateForced" xml:space="preserve"><value>強制的なチェックメイトがあります。</value></data>
+  <data name="hint.stage3.mateForced" xml:space="preserve"><value>{0}で強制的なチェックメイトが始まります。</value></data>
+  <data name="hint.stage3.captureLine" xml:space="preserve"><value>{0}の動きで、数手後に駒得できます。</value></data>
+  <data name="puzzle.fail.idea" xml:space="preserve"><value>狙いはこうでした: {0}</value></data>
+  <data name="puzzle.fail.loss.one" xml:space="preserve"><value>相手が {0} と応じ、駒の損失は 1 ポイントになります。</value></data>
+  <data name="puzzle.why.gain.one" xml:space="preserve"><value>主変化: {0}。駒得は 1 ポイントです。</value></data>
+  <data name="threat.opportunity" xml:space="preserve"><value>相手に脅威がありますが、先にこちらが駒得できます。</value></data>
+  <data name="puzzle.area.unpin" xml:space="preserve"><value>ピン: {0} が {2} により {1} に対してピンされています。</value></data>
+  <data name="piece.on" xml:space="preserve"><value>{1}の{0}</value></data>
+  <data name="piece.king.the" xml:space="preserve"><value>キング</value></data>
+  <data name="piece.king.theAcc" xml:space="preserve"><value>キング</value></data>
+  <data name="piece.queen.the" xml:space="preserve"><value>クイーン</value></data>
+  <data name="piece.queen.theAcc" xml:space="preserve"><value>クイーン</value></data>
+  <data name="piece.rook.the" xml:space="preserve"><value>ルーク</value></data>
+  <data name="piece.rook.theAcc" xml:space="preserve"><value>ルーク</value></data>
+  <data name="piece.bishop.the" xml:space="preserve"><value>ビショップ</value></data>
+  <data name="piece.bishop.theAcc" xml:space="preserve"><value>ビショップ</value></data>
+  <data name="piece.knight.the" xml:space="preserve"><value>ナイト</value></data>
+  <data name="piece.knight.theAcc" xml:space="preserve"><value>ナイト</value></data>
+  <data name="piece.pawn.the" xml:space="preserve"><value>ポーン</value></data>
+  <data name="piece.pawn.theAcc" xml:space="preserve"><value>ポーン</value></data>
 </root>

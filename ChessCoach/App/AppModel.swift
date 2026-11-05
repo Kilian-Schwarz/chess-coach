@@ -75,6 +75,9 @@ final class AppModel: ObservableObject {
     var tracked: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect)?
     var lastChecksum: UInt64?
     var boardStabilizer = RectStabilizer()
+    var stabilizerEpoch = 0
+    var wakeRequested = false
+    var napTask: Task<Void, Never>?
     var regionMisses = 0
     var verifyFailedSince: Date?
     var captureFailedSince: Date?
@@ -226,6 +229,7 @@ final class AppModel: ObservableObject {
         panel.model.onAsk = { [weak self] q in self?.ask(q) }
         panel.model.onFinish = { [weak self] in self?.endGameNow() }
         activity.onChange = { [weak self] in self?.invalidate() }
+        activity.onActivate = { [weak self] in self?.wake() }
         bindStore()
         bindPreferences()
         if !defaults.bool(forKey: "welcomeShown") {
@@ -255,9 +259,28 @@ final class AppModel: ObservableObject {
                 guard let self else { return }
                 await self.tick()
                 self.stopIdleEngine()
-                try? await Task.sleep(for: self.nextDelay())
+                await self.nap(self.nextDelay())
             }
         }
+    }
+
+    func wake() {
+        lastChangeAt = Date()
+        wakeRequested = true
+        napTask?.cancel()
+    }
+
+    func nap(_ delay: Duration) async {
+        if wakeRequested { wakeRequested = false; return }
+        let task = Task<Void, Never> { try? await Task.sleep(for: delay) }
+        napTask = task
+        await task.value
+        wakeRequested = false
+    }
+
+    func resetStabilizer() {
+        boardStabilizer.reset()
+        stabilizerEpoch += 1
     }
 
     func stop() {
@@ -281,7 +304,7 @@ final class AppModel: ObservableObject {
         pendingScreen = nil
         stablePlacement = nil
         pendingReview = nil
-        boardStabilizer.reset()
+        resetStabilizer()
         relearnGuard.reset()
         mismatchSince = nil
         forceResync = false

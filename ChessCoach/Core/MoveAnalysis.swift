@@ -99,7 +99,7 @@ enum MoveAnalyzer {
         if let best = r.best {
             theme = Hints.theme(placement: r.before, best: best, player: me, threat: threat, bestMate: (lines.first?.mateIn ?? 0) > 0, pv: lines.first?.pv ?? [], value: lines.first?.value ?? 0)
         }
-        let lossText = String(format: "%.1f", Double(loss) / 100)
+        let lossText = String(format: "%.1f", locale: Loc.display.locale, Double(loss) / 100)
         return MoveAnalysis(observations: obs, mistakeType: mistake,
                             example: mistake == nil ? nil : Loc.display("mistake.example", "\(r.playedText()) (loss \(lossText))"),
                             theme: theme, threat: threat, accuracy: acc, loss: loss, phase: ph)

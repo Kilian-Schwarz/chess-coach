@@ -76,10 +76,22 @@ if let path = StockfishEngine.findBinary(), let engine = try? StockfishEngine(pa
         check(text.contains("Best move per engine: O-O"), "facts contain the best move")
         check(text.contains("Pins:") && text.contains("White Knight e5 is pinned against White King e1 by Black Queen e7"), "facts contain the pin")
         check(text.contains("Opponent's threat") && text.contains("7...f6"), "facts contain the threat consequence")
+        let threatLine = text.split(separator: "\n").first { $0.hasPrefix("Opponent's threat") }.map(String.init) ?? ""
+        check(threatLine.contains("8."), "level 1 threat line keeps the full line: \(threatLine)")
         check(threat == nil || threat?.reason()?.contains("Knight e5") == true, "threat reason names the knight: \(threat?.text ?? "nil")")
         check(text.contains("pinned against King e1, so it cannot move away"), "facts say the attacked knight cannot move away")
         let hidden = PositionFacts.build(position: pinPos, result: cur, nullResult: nul, threat: threat, revealBest: false)
         check(!hidden.lines.joined(separator: "\n").contains("Best move per engine"), "best move hidden without a hint")
+        let hiddenThreat = hidden.lines.first { $0.hasPrefix("Opponent's threat") } ?? ""
+        check(hiddenThreat.contains("7...f6") && !hiddenThreat.contains("O-O") && !hiddenThreat.contains("8."), "level 0 threat line withholds the answer: \(hiddenThreat)")
+        if let hs = Hints.build(placement: pinPos.board, player: .white, result: cur, threatResult: nul) {
+            check(hs.theme == .unpin, "FEN 1 theme: \(hs.theme)")
+            let h3 = PuzzleCoach.hint3(hs, position: pinPos)
+            check(h3.contains("Pinned: Knight e5 against King e1, by Queen e7."), "hint 3 names the pin: \(h3)")
+            print("FEN1 hint1: \(hs.stage1) | hint2: \(hs.stage2) | hint3: \(h3) | hint4: \(hs.stage4)")
+            print("FEN1 threat: \(threat?.text ?? "none") opportunity \(hs.opportunity)")
+            check(!hs.stage3Prompt.contains(".."), "no double full stop in the hint prompt")
+        }
         check(PositionFacts.mentionedMove(in: "why not Bxc6?", position: pinPos) == UCIMove("b5c6"), "mentioned move parsed")
         if let m = UCIMove("b5c6"), let after = await engine.analyze(fen: pinPos.applying(m).fen, movetimeMs: 300) {
             let mention = PositionFacts.mentionedLines(position: pinPos, move: m, after: after, best: cur.lines.first)
@@ -104,6 +116,12 @@ if let path = StockfishEngine.findBinary(), let engine = try? StockfishEngine(pa
     if let cur = await engine.analyze(fen: discPos.fen, movetimeMs: 600), let nullFen = Threats.nullMoveFEN(discPos),
        let nul = await engine.analyze(fen: nullFen, movetimeMs: 300) {
         let th = Threats.detect(in: discPos, current: cur, opponent: nul)
+        let dg = PositionFacts.build(position: discPos, result: cur, nullResult: nul, threat: th, revealBest: true)
+        check(dg.lines.contains { $0.contains("Moving the Knight uncovers an attack by Rook e1 on Queen e6") }, "discovered attack in the facts: \(dg.lines)")
+        if let hs = Hints.build(placement: discPos.board, player: .white, result: cur, threatResult: nul) {
+            print("FEN2 hint1: \(hs.stage1) | hint2: \(hs.stage2) | hint3: \(PuzzleCoach.hint3(hs, position: discPos)) | hint4: \(hs.stage4)")
+            check(hs.stage3Prompt.contains("uncovers an attack by Rook e1 on Queen e6") && !hs.stage3Prompt.contains("captures Knight c6"), "hint 3 prompt: reason without the captured piece")
+        }
         print("disc threat: \(th?.text ?? "none") best \(cur.bestMove) \(cur.scoreText)")
         check(th == nil || th?.reason() != nil, "a shown threat always has a reason")
         if let hints = Hints.build(placement: discPos.board, player: .white, result: cur, threatResult: nul) {
@@ -114,6 +132,20 @@ if let path = StockfishEngine.findBinary(), let engine = try? StockfishEngine(pa
     engine.stop()
 }
 
+check(Hints.stage3Fallback(theme: .discovered, piece: "N") == "When your knight moves, a piece behind it suddenly attacks something valuable.", "mid-sentence possessive is lower case")
+check(Hints.stage3Fallback(theme: .mate, piece: "Q", variant: .forcedMate) == "Your queen starts a forced mate." && HintTheme.mate.stage1Text(variant: .forcedMate) == "You have a forced mate.", "forced mate texts")
+let mateBoard = ChessPosition(fen: "6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1")!.board
+check(Hints.variant(theme: .mate, board: mateBoard, player: .white, best: UCIMove("a1a8")!) == .standard, "mate in one keeps the checkmate wording")
+check(Hints.variant(theme: .mate, board: mateBoard, player: .white, best: UCIMove("e1d2")!) == .forcedMate, "longer mates use the forced mate wording")
+check(Hints.variant(theme: .captureGain, board: mateBoard, player: .white, best: UCIMove("e1d2")!) == .line, "quiet move gets the line wording")
+check(Hints.stage3Fallback(theme: .captureGain, piece: "N", variant: .line) != Hints.stage3Fallback(theme: .captureGain, piece: "N"), "line wording differs from the capture wording")
+let queenWin = ChessPosition(fen: "rnb1kbnr/pppp1ppp/8/8/4P2q/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1")!
+let queenThreat = Threats.Threat(move: UCIMove("h4e4")!, line: ["h4e4"], gain: 300, mateIn: nil, board: queenWin.board, lost: [PieceAt(piece: "P", square: "e4")])
+check(Hints.outranksThreat(queenThreat, position: queenWin, pv: ["f3h4"]), "winning the queen outranks the threat")
+check(!Hints.outranksThreat(queenThreat, position: queenWin, pv: ["a2a3"]), "a quiet move does not outrank the threat")
+let blocker = ChessPosition(fen: "4k3/8/8/8/8/3q4/8/R3K2R w - - 0 1")!
+let slide = Threats.Threat(move: UCIMove("d3d1")!, line: ["d3d1"], gain: 300, mateIn: nil, board: blocker.board)
+check(slide.isParried(by: UCIMove("a1d1")!), "occupying the target square parries a quiet threat")
 let kingFEN = "1B2k2r/p3b1p1/b3pn2/3p3p/3P1B2/2N5/PPP2PPP/R2Q2K1 w - - 0 1"
 if let kp = ChessPosition(fen: kingFEN), kp.board.problem(sideToMove: .white) == nil, let path = StockfishEngine.findBinary(), let engine = try? StockfishEngine(path: path) {
     if let cur = await engine.analyze(fen: kp.fen, movetimeMs: 500), let nullFen = Threats.nullMoveFEN(kp), let nul = await engine.analyze(fen: nullFen, movetimeMs: 300) {

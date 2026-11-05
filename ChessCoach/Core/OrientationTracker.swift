@@ -6,6 +6,8 @@ struct OrientationTracker {
     private(set) var whiteAtBottom: Bool?
     private var contrary = 0
 
+    var hasEvidence: Bool { contrary > 0 }
+
     mutating func set(_ value: Bool?) {
         whiteAtBottom = value
         contrary = 0

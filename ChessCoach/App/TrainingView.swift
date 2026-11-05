@@ -232,7 +232,7 @@ final class TrainingSession: ObservableObject {
                     result = EngineResult(fen: result.fen, bestMove: first, lines: [line] + result.lines)
                 }
             }
-            hints = Hints.build(placement: pos.board, player: pos.turn, result: result)
+            hints = Hints.build(placement: pos.board, player: pos.turn, result: result, themeOverride: ply == 0 ? puzzle.map(PuzzleCoach.theme) : nil)
         }
         guard let hints else { return }
         hintLevel = hintLevel == 0 ? Curriculum.firstHintLevel : hintLevel + 1
@@ -242,15 +242,19 @@ final class TrainingSession: ObservableObject {
     private func startIdea(_ h: HintSet, position pos: ChessPosition) {
         let fallback = PuzzleCoach.hint3(h, position: pos)
         ideaText = fallback
-        guard app.llmConfigured else { return }
-        ideaText = nil
         ideaTask?.cancel()
-        ideaTask = Task {
-            let request = Coach.hintRequest(h, context: profile.promptContext, language: Language.englishName)
-            let text = try? await app.completeText(request) { _ in }
-            guard !Task.isCancelled else { return }
-            if let text, !text.isEmpty, !Hints.revealsTarget(text, move: h.move) { ideaText = text } else { ideaText = fallback }
-        }
+        guard app.llmConfigured else { return }
+        let allowed = FactCheck.allowed(positions: [pos], lines: [[h.move.uci]])
+        let level = hintLevel
+        ideaTask = app.stream(Coach.hintRequest(h, context: profile.promptContext, language: Language.englishName), update: { [weak self] text, done in
+            guard let self, self.hintLevel == level, self.hints?.move == h.move else { return }
+            if !done {
+                if !text.isEmpty, !Hints.revealsTarget(text, move: h.move) { self.ideaText = text }
+                return
+            }
+            let checked = Hints.revealsTarget(text, move: h.move) ? nil : FactCheck.clean(text, allowed: allowed).text
+            self.ideaText = checked ?? fallback
+        }, failed: { _ in })
     }
 
     var solutionText: String {
@@ -317,7 +321,7 @@ struct TrainingView: View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Task \(session.index + 1) of \(session.queue.count)").font(.title2.bold())
-                if let p = session.puzzle { Text(PuzzleCoach.theme(p).title()).font(.caption.bold()).foregroundStyle(.tint) }
+                if let p = session.puzzle, session.phase != .asking { Text(PuzzleCoach.theme(p).title()).font(.caption.bold()).foregroundStyle(.tint) }
                 Text(start.turn == .white ? "Find the best move for White." : "Find the best move for Black.")
                 if let p = session.puzzle, session.phase == .asking {
                     Text(PuzzleCoach.question(PuzzleCoach.theme(p)))

@@ -26074,7 +26074,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Gegner droht etwas. %1$@ kann es abwehren."
+            "value": "Dein Gegner hat eine Drohung. %1$@ kann sie abwehren."
           }
         },
         "en": {
@@ -26134,7 +26134,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Соперник что-то угрожает. %1$@ может это отразить."
+            "value": "У соперника есть угроза. %1$@ может её отразить."
           }
         },
         "tr": {
@@ -26146,7 +26146,7 @@
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Суперник щось загрожує. %1$@ може це відбити."
+            "value": "У суперника є загроза. %1$@ може її відбити."
           }
         },
         "zh-Hans": {
@@ -30963,85 +30963,85 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your opponent's last move left something undefended. What can you attack?"
+            "value": "Can you win material here? What is loose or attacked more often than defended?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der letzte Zug deines Gegners hat etwas ungedeckt gelassen. Was kannst du angreifen?"
+            "value": "Kannst du hier Material gewinnen? Was steht ungedeckt oder wird öfter angegriffen als gedeckt?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La última jugada de tu rival dejó algo sin defender. ¿Qué puedes atacar?"
+            "value": "¿Puedes ganar material aquí? ¿Qué está suelto o atacado más veces de las que está defendido?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le dernier coup de votre adversaire a laissé quelque chose sans défense. Que pouvez-vous attaquer ?"
+            "value": "Pouvez-vous gagner du matériel ici ? Qu'est-ce qui est libre ou plus attaqué que défendu ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'ultima mossa dell'avversario ha lasciato qualcosa indifeso. Cosa puoi attaccare?"
+            "value": "Puoi guadagnare materiale qui? Cosa è libero o attaccato più volte di quanto sia difeso?"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "相手の直前の手で守られていない駒ができました。何を攻撃できますか？"
+            "value": "ここで駒得できますか？守りのない駒や、守りより攻めが多い駒はありますか？"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "상대의 마지막 수로 지켜지지 않는 기물이 생겼습니다. 무엇을 공격할 수 있을까요?"
+            "value": "여기서 기물을 얻을 수 있을까요? 지켜지지 않거나 수비보다 공격이 많은 기물은 무엇인가요?"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "De laatste zet van je tegenstander liet iets onbeschermd. Wat kun je aanvallen?"
+            "value": "Kun je hier materiaal winnen? Wat staat los of wordt vaker aangevallen dan verdedigd?"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ostatni ruch przeciwnika zostawił coś bez obrony. Co możesz zaatakować?"
+            "value": "Czy możesz tu zyskać materiał? Co stoi bez obrony albo jest atakowane częściej, niż jest bronione?"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O último lance do seu adversário deixou algo sem defesa. O que você pode atacar?"
+            "value": "Você consegue ganhar material aqui? O que está solto ou é mais atacado do que defendido?"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Последний ход соперника оставил что-то без защиты. Что можно атаковать?"
+            "value": "Можно ли здесь выиграть материал? Что стоит без защиты или атаковано чаще, чем защищено?"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rakibinin son hamlesi bir şeyi korumasız bıraktı. Neye saldırabilirsin?"
+            "value": "Burada materyal kazanabilir misin? Neyin koruması yok ya da korunandan fazla saldırı altında?"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Останній хід суперника залишив щось без захисту. Що можна атакувати?"
+            "value": "Чи можна тут виграти матеріал? Що стоїть без захисту або атаковане частіше, ніж захищене?"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "对手上一步留下了无人保护的子。你可以攻击什么？"
+            "value": "这里能赢子吗？哪些子没有保护，或者被攻击的次数多于保护的次数？"
           }
         }
       }
@@ -31497,85 +31497,85 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Two enemy pieces stand on squares one piece can reach. Can one move attack both?"
+            "value": "Which enemy pieces are not safe right now?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zwei gegnerische Figuren stehen auf Feldern, die eine Figur erreichen kann. Greift ein Zug beide an?"
+            "value": "Welche gegnerischen Figuren stehen gerade nicht sicher?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dos piezas rivales están en casillas que una sola pieza puede alcanzar. ¿Puede una jugada atacar a ambas?"
+            "value": "¿Qué piezas rivales no están seguras ahora mismo?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deux pièces adverses sont sur des cases qu'une seule pièce peut atteindre. Un coup peut-il attaquer les deux ?"
+            "value": "Quelles pièces adverses ne sont pas en sécurité en ce moment ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Due pezzi avversari stanno su case che un solo pezzo può raggiungere. Una mossa può attaccarli entrambi?"
+            "value": "Quali pezzi avversari non sono al sicuro in questo momento?"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "相手の駒2つが、1つの駒で届くマスにいます。1手で両方を攻撃できますか？"
+            "value": "今、安全でない相手の駒はどれですか？"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "상대 기물 두 개가 한 기물이 닿을 수 있는 칸에 있습니다. 한 수로 둘 다 공격할 수 있을까요?"
+            "value": "지금 안전하지 않은 상대 기물은 무엇인가요?"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Twee vijandelijke stukken staan op velden die één stuk kan bereiken. Kan één zet beide aanvallen?"
+            "value": "Welke vijandelijke stukken staan nu niet veilig?"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dwie figury przeciwnika stoją na polach, do których dotrze jedna figura. Czy jeden ruch zaatakuje obie?"
+            "value": "Które figury przeciwnika nie są teraz bezpieczne?"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Duas peças inimigas estão em casas que uma só peça alcança. Um lance consegue atacar as duas?"
+            "value": "Quais peças inimigas não estão seguras agora?"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Две фигуры соперника стоят на полях, до которых может дойти одна фигура. Можно ли атаковать обе одним ходом?"
+            "value": "Какие фигуры соперника сейчас не в безопасности?"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "İki rakip taş, tek bir taşın ulaşabileceği karelerde duruyor. Tek hamle ikisine de saldırabilir mi?"
+            "value": "Rakibin hangi taşları şu an güvende değil?"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Дві фігури суперника стоять на полях, до яких може дістатися одна фігура. Чи можна атакувати обидві одним ходом?"
+            "value": "Які фігури суперника зараз не в безпеці?"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "对方两个子位于同一个子能到达的格子上。一步棋能同时攻击它们吗？"
+            "value": "对方现在有哪些子不安全？"
           }
         }
       }
@@ -31764,85 +31764,85 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The enemy king looks short of safe squares. Which checks could end the game?"
+            "value": "Is there a forcing win here? Which checks could end the game?"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dem gegnerischen König gehen die sicheren Felder aus. Welche Schachs könnten die Partie beenden?"
+            "value": "Gibt es hier einen erzwungenen Gewinn? Welche Schachgebote könnten die Partie beenden?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Al rey rival le faltan casillas seguras. ¿Qué jaques podrían acabar la partida?"
+            "value": "¿Hay una victoria forzada aquí? ¿Qué jaques podrían acabar la partida?"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le roi adverse manque de cases sûres. Quels échecs pourraient mettre fin à la partie ?"
+            "value": "Y a-t-il une victoire forcée ici ? Quels échecs pourraient mettre fin à la partie ?"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Al re avversario mancano case sicure. Quali scacchi potrebbero chiudere la partita?"
+            "value": "C'è una vittoria forzata qui? Quali scacchi potrebbero chiudere la partita?"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "相手のキングは安全なマスが少なくなっています。どのチェックで決着をつけられますか？"
+            "value": "ここに強制的な勝ちはありますか？どのチェックで決着をつけられますか？"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "상대 킹의 안전한 칸이 부족합니다. 어떤 체크로 승부를 끝낼 수 있을까요?"
+            "value": "여기에 강제 승리가 있을까요? 어떤 체크로 승부를 끝낼 수 있을까요?"
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "De vijandelijke koning heeft weinig veilige velden. Welke schaakjes kunnen de partij beslissen?"
+            "value": "Is er hier een gedwongen winst? Welke schaakjes kunnen de partij beslissen?"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wrogi król ma mało bezpiecznych pól. Które szachy mogą zakończyć partię?"
+            "value": "Czy jest tu wymuszona wygrana? Które szachy mogą zakończyć partię?"
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "O rei adversário tem poucas casas seguras. Quais xeques podem encerrar a partida?"
+            "value": "Existe uma vitória forçada aqui? Quais xeques podem encerrar a partida?"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "У короля соперника мало безопасных полей. Какие шахи могут решить партию?"
+            "value": "Есть ли здесь форсированный выигрыш? Какие шахи могут решить партию?"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rakip şahın güvenli karesi azalıyor. Hangi şahlar oyunu bitirebilir?"
+            "value": "Burada zorunlu bir galibiyet var mı? Hangi şahlar oyunu bitirebilir?"
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "У короля суперника мало безпечних полів. Які шахи можуть закінчити партію?"
+            "value": "Чи є тут форсований виграш? Які шахи можуть закінчити партію?"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "对方的王缺少安全的格子。哪些将军可以结束对局？"
+            "value": "这里有强制取胜的办法吗？哪些将军可以结束对局？"
           }
         }
       }
@@ -32298,85 +32298,85 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "That loses %1$@ on %2$@."
+            "value": "Your opponent answers %1$@ and you end up %2$lld points of material down."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Das verliert %1$@ auf %2$@."
+            "value": "Dein Gegner antwortet mit %1$@, und du liegst %2$lld Punkte Material zurück."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eso pierde %1$@ en %2$@."
+            "value": "Tu rival responde %1$@ y quedas %2$lld puntos de material por debajo."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cela perd %1$@ en %2$@."
+            "value": "Votre adversaire répond %1$@ et vous avez %2$lld points de matériel de moins."
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "Così perdi %1$@ in %2$@."
+            "value": "Il tuo avversario risponde %1$@ e resti sotto di %2$lld punti di materiale."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "それでは %2$@ の %1$@ を失います。"
+            "value": "相手が %1$@ と応じ、駒の損失は %2$lld ポイントになります。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "그러면 %2$@의 %1$@을(를) 잃습니다."
+            "value": "상대가 %1$@(으)로 응수하면 기물이 %2$lld점 모자라게 됩니다."
           }
         },
         "nl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daarmee verlies je %1$@ op %2$@."
+            "value": "Je tegenstander antwoordt met %1$@ en je staat %2$lld punten materiaal achter."
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "To traci %1$@ na %2$@."
+            "value": "Przeciwnik odpowiada %1$@ i tracisz %2$lld pkt materiału."
           }
         },
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Isso perde %1$@ em %2$@."
+            "value": "Seu adversário responde %1$@ e você fica %2$lld pontos de material atrás."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Это теряет %1$@ на %2$@."
+            "value": "Соперник отвечает %1$@, и вы теряете %2$lld очк. материала."
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bu, %2$@ karesindeki %1$@ taşını kaybettirir."
+            "value": "Rakibin %1$@ oynar ve %2$lld puan materyal geride kalırsın."
           }
         },
         "uk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Це втрачає %1$@ на %2$@."
+            "value": "Суперник відповідає %1$@, і ви втрачаєте %2$lld очк. матеріалу."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "这会丢掉 %2$@ 上的%1$@。"
+            "value": "对手回应 %1$@，你会少 %2$lld 分子力。"
           }
         }
       }
@@ -34173,7 +34173,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ macht den Weg frei, damit %2$@ %3$@ angreift."
+            "value": "%1$@ zieht weg und gibt die Linie frei, sodass %2$@ jetzt %3$@ angreift."
           }
         },
         "es": {
@@ -34351,7 +34351,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hauptvariante: %1$@. Du gewinnst %2$lld Punkte Material."
+            "value": "Hauptvariante: %1$@. Du gewinnst Material im Wert von %2$lld Bauern."
           }
         },
         "es": {
@@ -34618,7 +34618,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ ist jetzt vor %2$@ gefesselt."
+            "value": "%1$@ ist jetzt gefesselt: Dahinter steht %2$@."
           }
         },
         "es": {
@@ -40375,6 +40375,1875 @@
           "stringUnit": {
             "state": "translated",
             "value": "−%lld cp"
+          }
+        }
+      }
+    },
+    "hint.stage1.mateForced": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have a forced mate."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du hast ein erzwungenes Matt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tienes un mate forzado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous avez un mat forcé."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hai un matto forzato."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "強制的なチェックメイトがあります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "강제 체크메이트가 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je hebt een gedwongen mat."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masz wymuszony mat."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você tem um xeque-mate forçado."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У вас есть форсированный мат."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zorunlu bir mat var."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У вас є форсований мат."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你有一个强制将死。"
+          }
+        }
+      }
+    },
+    "hint.stage3.mateForced": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ starts a forced mate."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ leitet ein erzwungenes Matt ein."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ inicia un mate forzado."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ lance un mat forcé."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ avvia un matto forzato."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@で強制的なチェックメイトが始まります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@(으)로 강제 체크메이트를 시작할 수 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ start een gedwongen mat."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ rozpoczyna wymuszony mat."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ inicia um xeque-mate forçado."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ начинает форсированный мат."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ zorunlu bir mat başlatır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ починає форсований мат."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@开始一个强制将死。"
+          }
+        }
+      }
+    },
+    "hint.stage3.captureLine": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ can make a move that wins material a few moves later."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kann einen Zug machen, der wenige Züge später Material gewinnt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ puede hacer una jugada que gana material unas jugadas después."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ peut jouer un coup qui gagne du matériel quelques coups plus tard."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ può fare una mossa che guadagna materiale qualche mossa dopo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@の動きで、数手後に駒得できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@(으)로 둔 수가 몇 수 뒤에 기물을 얻게 해 줍니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kan een zet doen die een paar zetten later materiaal wint."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ może wykonać ruch, który kilka ruchów później zyska materiał."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ pode fazer um lance que ganha material alguns lances depois."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ может сделать ход, который через несколько ходов выиграет материал."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ ile yapılacak bir hamle birkaç hamle sonra materyal kazandırır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ може зробити хід, який за кілька ходів виграє матеріал."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@走出的一步棋会在几步之后赢子。"
+          }
+        }
+      }
+    },
+    "puzzle.fail.idea": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The idea was: %1$@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Idee war: %1$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La idea era: %1$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'idée était : %1$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'idea era: %1$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "狙いはこうでした: %1$@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "핵심은 이랬습니다: %1$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het idee was: %1$@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pomysł był taki: %1$@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ideia era: %1$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Идея была такой: %1$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fikir şuydu: %1$@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ідея була такою: %1$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要点是：%1$@"
+          }
+        }
+      }
+    },
+    "puzzle.fail.loss.one": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your opponent answers %1$@ and you end up 1 point of material down."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Gegner antwortet mit %1$@, und du liegst einen Punkt Material zurück."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rival responde %1$@ y quedas 1 punto de material por debajo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre adversaire répond %1$@ et vous avez 1 point de matériel de moins."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo avversario risponde %1$@ e resti sotto di 1 punto di materiale."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "相手が %1$@ と応じ、駒の損失は 1 ポイントになります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상대가 %1$@(으)로 응수하면 기물이 1점 모자라게 됩니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je tegenstander antwoordt met %1$@ en je staat 1 punt materiaal achter."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przeciwnik odpowiada %1$@ i tracisz 1 pkt materiału."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu adversário responde %1$@ e você fica 1 ponto de material atrás."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Соперник отвечает %1$@, и вы теряете 1 очк. материала."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rakibin %1$@ oynar ve 1 puan materyal geride kalırsın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Суперник відповідає %1$@, і ви втрачаєте 1 очк. матеріалу."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "对手回应 %1$@，你会少 1 分子力。"
+          }
+        }
+      }
+    },
+    "puzzle.why.gain.one": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main line: %1$@. You win 1 point of material."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hauptvariante: %1$@. Du gewinnst Material im Wert von einem Bauern."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Línea principal: %1$@. Ganas 1 punto de material."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Variante principale : %1$@. Vous gagnez 1 point de matériel."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Variante principale: %1$@. Guadagni 1 punto di materiale."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主変化: %1$@。駒得は 1 ポイントです。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주요 변화: %1$@. 기물 1점을 얻습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoofdvariant: %1$@. Je wint 1 punt materiaal."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Główny wariant: %1$@. Zyskujesz 1 pkt materiału."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linha principal: %1$@. Você ganha 1 ponto de material."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Главный вариант: %1$@. Вы выигрываете 1 очк. материала."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ana varyant: %1$@. 1 puan materyal kazanırsın."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Головний варіант: %1$@. Ви вигруєте 1 очк. матеріалу."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主要变化：%1$@。你赢得 1 分子力。"
+          }
+        }
+      }
+    },
+    "threat.opportunity": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your opponent has a threat, but you can win material yourself first."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Gegner hat eine Drohung, aber du kannst zuerst selbst Material gewinnen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu rival tiene una amenaza, pero tú puedes ganar material antes."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre adversaire a une menace, mais vous pouvez d’abord gagner du matériel."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il tuo avversario ha una minaccia, ma tu puoi prima guadagnare materiale."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "相手に脅威がありますが、先にこちらが駒得できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상대에게 위협이 있지만, 먼저 내가 기물을 얻을 수 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je tegenstander heeft een dreiging, maar jij kunt eerst zelf materiaal winnen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Przeciwnik ma groźbę, ale ty możesz najpierw sam zyskać materiał."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu adversário tem uma ameaça, mas você pode ganhar material primeiro."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У соперника есть угроза, но вы можете сначала сами выиграть материал."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rakibin bir tehdidi var, ama önce sen materyal kazanabilirsin."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У суперника є загроза, але ви можете першими виграти матеріал."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "对手有威胁，但你可以先赢子。"
+          }
+        }
+      }
+    },
+    "puzzle.area.unpin": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned: %1$@ against %2$@, by %3$@."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gefesselt: %1$@ gegen %2$@, durch %3$@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clavado: %1$@ contra %2$@, por %3$@."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloué : %1$@ contre %2$@, par %3$@."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inchiodato: %1$@ contro %2$@, da %3$@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ピン: %1$@ が %3$@ により %2$@ に対してピンされています。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "묶임: %3$@에 의해 %1$@이(가) %2$@ 앞에서 묶여 있습니다."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vastgepind: %1$@ tegen %2$@, door %3$@."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Związanie: %1$@ przed %2$@, przez %3$@."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cravado: %1$@ contra %2$@, por %3$@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Связка: %1$@ перед %2$@, фигурой %3$@."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bağlı: %1$@, %2$@ önünde, %3$@ tarafından."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зв’язка: %1$@ перед %2$@, фігурою %3$@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "牵制：%1$@ 被 %3$@ 牵制在 %2$@ 前。"
+          }
+        }
+      }
+    },
+    "piece.on": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ on %2$@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ auf %2$@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ en %2$@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ en %2$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ in %2$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@の%1$@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@의 %1$@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ op %2$@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ na %2$@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ em %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ на %2$@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ karesindeki %1$@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ на %2$@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ 的%1$@"
+          }
+        }
+      }
+    },
+    "piece.king.the": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the king"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "der König"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rey"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "킹"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koning"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Król"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rei"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Король"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şah"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Король"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "王"
+          }
+        }
+      }
+    },
+    "piece.king.theAcc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the king"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "den König"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rey"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "킹"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koning"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Król"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rei"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Король"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şah"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Король"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "王"
+          }
+        }
+      }
+    },
+    "piece.queen.the": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the queen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "die Dame"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dama"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dame"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donna"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クイーン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "퀸"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dame"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hetman"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dama"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ферзь"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vezir"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ферзь"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "后"
+          }
+        }
+      }
+    },
+    "piece.queen.theAcc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the queen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "die Dame"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dama"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dame"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donna"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クイーン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "퀸"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dame"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hetman"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dama"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ферзь"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vezir"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ферзь"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "后"
+          }
+        }
+      }
+    },
+    "piece.rook.the": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the rook"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "der Turm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torre"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tour"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torre"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ルーク"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "룩"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toren"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wieża"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torre"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ладья"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kale"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тура"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "车"
+          }
+        }
+      }
+    },
+    "piece.rook.theAcc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the rook"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "den Turm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torre"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tour"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torre"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ルーク"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "룩"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toren"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wieża"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torre"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ладья"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kale"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тура"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "车"
+          }
+        }
+      }
+    },
+    "piece.bishop.the": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the bishop"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "der Läufer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fou"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alfiere"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ビショップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비숍"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loper"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goniec"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bispo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слон"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fil"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слон"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "象"
+          }
+        }
+      }
+    },
+    "piece.bishop.theAcc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the bishop"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "den Läufer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alfil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fou"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alfiere"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ビショップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비숍"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loper"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goniec"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bispo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слон"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fil"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Слон"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "象"
+          }
+        }
+      }
+    },
+    "piece.knight.the": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the knight"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "der Springer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caballo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavalier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavallo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ナイト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나이트"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paard"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skoczek"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavalo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конь"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Кінь"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "马"
+          }
+        }
+      }
+    },
+    "piece.knight.theAcc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the knight"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "den Springer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caballo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavalier"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavallo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ナイト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나이트"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paard"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skoczek"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavalo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конь"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Кінь"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "马"
+          }
+        }
+      }
+    },
+    "piece.pawn.the": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the pawn"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "der Bauer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peón"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedone"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポーン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폰"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pion"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pionek"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peão"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пешка"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piyon"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пішак"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "兵"
+          }
+        }
+      }
+    },
+    "piece.pawn.theAcc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the pawn"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "den Bauern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peón"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pion"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedone"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポーン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폰"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pion"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pionek"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peão"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пешка"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Piyon"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пішак"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "兵"
           }
         }
       }

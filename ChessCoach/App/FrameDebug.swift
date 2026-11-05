@@ -4,7 +4,8 @@ import ImageIO
 import UniformTypeIdentifiers
 
 enum FrameDebug {
-    static let maxFiles = 60
+    static let maxFrames = 60
+    private static var counter = 0
     private static let queue = DispatchQueue(label: "chesscoach.frames")
     private static let directory = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Logs/ChessCoach/frames", isDirectory: true)
     private static let formatter: DateFormatter = {
@@ -15,7 +16,8 @@ enum FrameDebug {
 
     static func save(_ image: CGImage, reason: String) {
         guard enabled else { return }
-        let name = formatter.string(from: Date())
+        counter += 1
+        let name = formatter.string(from: Date()) + String(format: "-%03d", counter % 1000)
         queue.async {
             let fm = FileManager.default
             try? fm.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -25,8 +27,8 @@ enum FrameDebug {
                 CGImageDestinationFinalize(dest)
             }
             try? Data((reason + "\n").utf8).write(to: directory.appendingPathComponent(name + ".txt"))
-            let files = ((try? fm.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []).sorted { $0.lastPathComponent < $1.lastPathComponent }
-            for old in files.dropLast(maxFiles) { try? fm.removeItem(at: old) }
+            let names = ((try? fm.contentsOfDirectory(atPath: directory.path)) ?? [])
+            for old in FrameRetention.stale(names, keepFrames: maxFrames) { try? fm.removeItem(at: directory.appendingPathComponent(old)) }
         }
     }
 }

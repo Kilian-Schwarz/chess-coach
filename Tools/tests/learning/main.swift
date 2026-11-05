@@ -745,7 +745,7 @@ for t in HintTheme.allCases {
     check(PuzzleCoach.question(t) != PuzzleCoach.habit(t), "question differs from habit for \(t)")
 }
 let lesson = PuzzleCoach.lesson(disc)
-check(lesson.why.contains("Knight e5 moves away, so Rook e1 attacks Queen e6"), "mechanism: \(lesson.why)")
+check(lesson.why.contains("The knight on e5 moves away, so the rook on e1 attacks the queen on e6"), "mechanism: \(lesson.why)")
 check(lesson.why.contains("9.Nxc6 bxc6 10.Rxe6 fxe6") && lesson.why.contains("win 4 points"), "line and gain: \(lesson.why)")
 check(lesson.habit.contains("in front of your long-range pieces"), "habit for discovered attack")
 var mated = puzzle("6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1", accepted: ["a1a8"])
@@ -757,7 +757,7 @@ check(PuzzleCoach.classify(disc, result: result) == .discovered, "classifier fin
 let hintSet = Hints.build(placement: discPos.board, player: .white, result: result)!
 check(hintSet.stage2.contains("knight") && hintSet.stage2.contains("e5"), "step 2 names the piece: \(hintSet.stage2)")
 let step3 = PuzzleCoach.hint3(hintSet, position: discPos)
-check(step3.contains("Rook e1 then attacks Queen e6"), "step 3 names the purpose: \(step3)")
+check(step3.contains("the rook on e1 then attacks the queen on e6"), "step 3 names the purpose: \(step3)")
 for text in [hintSet.stage1, hintSet.stage2, step3, PuzzleCoach.question(.discovered)] {
     check(!text.contains("c6") && !text.contains("Nxc6"), "no solution leak: \(text)")
 }
@@ -765,9 +765,19 @@ var quiet = disc
 quiet.theme = "pawnMove"
 check(!PuzzleCoach.lesson(quiet).why.contains("moves away"), "mechanism only for matching themes")
 let afterBad = discPos.applying(UCIMove("b5c6")!)
-check(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]).contains("That loses"), "fail reason names the loss: \(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]))")
+check(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]).contains("answers bxc6") && PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]).contains("3 points of material down"), "fail reason names the loss: \(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]))")
 let quietAfter = discPos.applying(UCIMove("a2a3")!)
-check(PuzzleCoach.failReason(disc, after: quietAfter, refutation: ["a7a6"]).contains("Discovered attack"), "fail reason falls back to the theme")
+check(PuzzleCoach.failReason(disc, after: quietAfter, refutation: ["a7a6"]).hasPrefix("The idea was: The knight on e5 moves away"), "fail reason falls back to the idea of the best move")
+let pawnWin = puzzle("4k3/8/8/3p4/8/4N3/8/4K3 w - - 0 1", accepted: ["e3d5"])
+var pawnPuzzle = pawnWin
+pawnPuzzle.bestLine = ["e3d5"]
+pawnPuzzle.theme = "pawnMove"
+check(PuzzleCoach.lesson(pawnPuzzle).why.contains("win 1 point of material"), "singular gain: \(PuzzleCoach.lesson(pawnPuzzle).why)")
+check(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6"]).contains("answers bxc6"), "fail reason uses the reply")
+for t in [HintTheme.mate, .captureGain, .fork] {
+    let q = PuzzleCoach.question(t).lowercased()
+    check(!q.contains("looks short") && !q.contains("last move left") && !q.contains("two enemy pieces stand"), "question states no unverified fact for \(t): \(q)")
+}
 var themes = (0..<5).map { i -> Puzzle in var q = puzzle(); q.id = "t\(i)"; q.theme = "discovered"; return q }
 themes[0].box = 2
 themes[1].mastered = true
@@ -778,7 +788,7 @@ let prog = PuzzleCoach.progress(themes + [forkOne])
 check(prog.first == ThemeProgress(theme: .discovered, solved: 2, total: 5), "progress counts solved per theme")
 check(prog.first?.text() == "Discovered attack: 2/5 solved", "progress line: \(prog.first?.text() ?? "")")
 let req = PuzzleCoach.whyRequest(disc, context: .neutral, style: ExplanationStyle())!
-check(req.user.contains("Knight e5 moves away") && req.user.contains("Theme: Discovered attack") && req.user.contains("9.Nxc6"), "LLM request carries the grounded facts")
+check(req.user.contains("The knight on e5 moves away") && req.user.contains("Theme: Discovered attack") && req.user.contains("9.Nxc6"), "LLM request carries the grounded facts")
 let oldJSON = "{\"id\":\"o\",\"fen\":\"x\",\"acceptedMoves\":[],\"bestLine\":[],\"theme\":\"fork\",\"mistakeType\":\"other\",\"createdAt\":0,\"box\":1,\"dueAt\":0,\"attempts\":[],\"mastered\":false}"
 let old = try? JSONDecoder().decode(Puzzle.self, from: Data(oldJSON.utf8))
 check(old != nil && old?.sourceDate == nil && PuzzleCoach.needsThemeCheck(old!), "old puzzle files still load")

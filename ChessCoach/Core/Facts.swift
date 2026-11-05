@@ -59,20 +59,20 @@ enum PositionFacts {
         return Outcome(played: line.played, captures: captures, delta: delta, line: line.text)
     }
 
-    static func consequence(pv: [String], from start: ChessPosition, me: PieceColor) -> (text: String, delta: Int)? {
+    static func consequence(pv: [String], from start: ChessPosition, me: PieceColor, opponentOnly: Bool = false) -> (text: String, delta: Int)? {
         guard let o = outcome(pv: pv, from: start, me: me) else { return nil }
-        let captures = o.captures.map { "\($0.by.title(.facts)) captures \(Placement.color(of: $0.victim).title(.facts)) \(PieceInfo.name($0.victim, .facts)) \($0.square)" }
+        let captures = o.captures.filter { !opponentOnly || $0.by != me }.map { "\($0.by.title(.facts)) captures \(Placement.color(of: $0.victim).title(.facts)) \(PieceInfo.name($0.victim, .facts)) \($0.square)" }
         let net = "Net material change for \(me.title(.facts)): \(String(format: "%+d", o.delta)) (pawn 1, knight or bishop 3, rook 5, queen 9)"
         let text = captures.isEmpty ? "No material changes hands in that line." : "In that line: \(captures.joined(separator: "; ")). \(net)."
-        return (o.line + ". " + text, o.delta)
+        return ((opponentOnly ? sanLine(pv, from: start, plies: 1).text : o.line) + ". " + text, o.delta)
     }
 
-    static func threatLines(position pos: ChessPosition, nullResult: EngineResult?) -> [String] {
+    static func threatLines(position pos: ChessPosition, nullResult: EngineResult?, revealBest: Bool = true) -> [String] {
         guard !pos.isCheck, let line = nullResult?.lines.first else { return [] }
         let me = pos.turn, opponent = me.opposite
         let nullPos = pos.nullMove
         guard let first = line.pv.first.flatMap({ UCIMove($0) }), nullPos.isLegal(first),
-              let result = consequence(pv: line.pv, from: nullPos, me: me) else { return [] }
+              let result = consequence(pv: line.pv, from: nullPos, me: me, opponentOnly: !revealBest) else { return [] }
         var out: [String] = []
         let afterFirst = nullPos.board.applying(first)
         let known = Set(pos.board.hanging(of: me).map(\.square))
@@ -104,6 +104,13 @@ enum PositionFacts {
         let before = pos.board.pins(of: me.opposite)
         for pin in after.board.pins(of: me.opposite) where !before.contains(pin) {
             out.append("The best move creates a pin: \(pin.text(.facts)).")
+        }
+        for x in pos.board.discoveredTargets(by: best, color: me) {
+            out.append("Moving the \(PieceInfo.name(x.blocker.piece, .facts)) uncovers an attack by \(x.slider.text(.facts)) on \(x.target.text(.facts)).")
+        }
+        let forks = PuzzleCoach.forkTargets(pos, best)
+        if forks.count >= 2, let mover = pos.board.piece(best.fromFile, best.fromRank), Character(mover.lowercased()) != "k" {
+            out.append("The best move forks: \(forks.prefix(3).map { $0.text(.facts) }.joined(separator: ", ")).")
         }
         if let threat, threat.isParried(by: best) { out.append("The best move deals with the opponent's threat (\(threat.text(.facts))).") }
         if let victim = pos.board.piece(best.toFile, best.toRank) {
@@ -167,7 +174,7 @@ enum PositionFacts {
         }
         let checks = pos.legalMoves().filter { pos.applying($0).isCheck }.prefix(5).map { SAN.san($0, in: pos) }
         if !checks.isEmpty { lines.append("Checks available to \(name): \(checks.joined(separator: ", ")).") }
-        let threatFacts = threatLines(position: pos, nullResult: nullResult)
+        let threatFacts = threatLines(position: pos, nullResult: nullResult, revealBest: revealBest)
         if !threatFacts.isEmpty {
             lines += threatFacts
             positions.append(pos.nullMove)

@@ -8,17 +8,17 @@
   <data name="color.white" xml:space="preserve"><value>Beyaz</value></data>
   <data name="color.black" xml:space="preserve"><value>Siyah</value></data>
   <data name="piece.king" xml:space="preserve"><value>Şah</value></data>
-  <data name="piece.king.your" xml:space="preserve"><value>Şahın</value></data>
+  <data name="piece.king.your" xml:space="preserve"><value>Şahınız</value></data>
   <data name="piece.queen" xml:space="preserve"><value>Vezir</value></data>
-  <data name="piece.queen.your" xml:space="preserve"><value>Vezirin</value></data>
+  <data name="piece.queen.your" xml:space="preserve"><value>Vezirınız</value></data>
   <data name="piece.rook" xml:space="preserve"><value>Kale</value></data>
-  <data name="piece.rook.your" xml:space="preserve"><value>Kalen</value></data>
+  <data name="piece.rook.your" xml:space="preserve"><value>Kaleniz</value></data>
   <data name="piece.bishop" xml:space="preserve"><value>Fil</value></data>
-  <data name="piece.bishop.your" xml:space="preserve"><value>Filin</value></data>
+  <data name="piece.bishop.your" xml:space="preserve"><value>Filiniz</value></data>
   <data name="piece.knight" xml:space="preserve"><value>At</value></data>
-  <data name="piece.knight.your" xml:space="preserve"><value>Atın</value></data>
+  <data name="piece.knight.your" xml:space="preserve"><value>Atınız</value></data>
   <data name="piece.pawn" xml:space="preserve"><value>Piyon</value></data>
-  <data name="piece.pawn.your" xml:space="preserve"><value>Piyonun</value></data>
+  <data name="piece.pawn.your" xml:space="preserve"><value>Piyonunuz</value></data>
   <data name="problem.kings" xml:space="preserve"><value>Şahlar net olarak tanınmadı. Taş seti değişti mi? Menü: Taşları yeniden öğren</value></data>
   <data name="problem.backRankPawn" xml:space="preserve"><value>Son sırada piyon algılandı</value></data>
   <data name="problem.tooManyPawns" xml:space="preserve"><value>Çok fazla piyon algılandı</value></data>
@@ -41,8 +41,8 @@
   <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
   <data name="move.promotes" xml:space="preserve"><value>, {0} olur</value></data>
   <data name="move.check" xml:space="preserve"><value>, şah</value></data>
-  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} saldırı altında ve korunmuyor</value></data>
-  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} daha zayıf bir taş tarafından tehdit ediliyor</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} saldırı altında ve korumasız</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1}, daha değersiz bir taş tarafından saldırı altında</value></data>
   <data name="rating.best" xml:space="preserve"><value>En iyi hamle</value></data>
   <data name="rating.good" xml:space="preserve"><value>İyi hamle</value></data>
   <data name="rating.inaccuracy" xml:space="preserve"><value>Hatalı hamle</value></data>
@@ -84,32 +84,32 @@
   <data name="theme.kingActivate" xml:space="preserve"><value>Şahı aktifleştir</value></data>
   <data name="theme.pawnMove" xml:space="preserve"><value>Piyon hamlesi</value></data>
   <data name="theme.improvePiece" xml:space="preserve"><value>Taşı iyileştir</value></data>
-  <data name="hint.stage1.mate" xml:space="preserve"><value>Burada rakibe mat yapılabilir.</value></data>
-  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Burada materyal kazanılabilir.</value></data>
-  <data name="hint.stage1.fork" xml:space="preserve"><value>Bir çatal ara: aynı anda iki taşa saldıran bir hamle.</value></data>
-  <data name="hint.stage1.check" xml:space="preserve"><value>Burada bir şah güçlü olur.</value></data>
-  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Rakibin tehdidine dikkat et.</value></data>
-  <data name="hint.stage1.castle" xml:space="preserve"><value>Şahını güvene al.</value></data>
-  <data name="hint.stage1.develop" xml:space="preserve"><value>Bir taş geliştir.</value></data>
-  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Şahını aktifleştir.</value></data>
-  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Burada bir piyon hamlesi iyi olur.</value></data>
-  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>En kötü taşını iyileştir.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>{0} karesindeki şahı oyna.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>{0} karesindeki veziri oyna.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>{0} karesindeki kaleyi oyna.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>{0} karesindeki fili oyna.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>{0} karesindeki atı oyna.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>{0} karesindeki piyonu oyna.</value></data>
-  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} rakibe mat yapabilir.</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Burada rakibi mat edebilirsiniz.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Burada materyal kazanabilirsiniz.</value></data>
+  <data name="hint.stage1.fork" xml:space="preserve"><value>Bir çatal arayın: aynı anda iki taşa saldıran bir hamle.</value></data>
+  <data name="hint.stage1.check" xml:space="preserve"><value>Burada şah çekmek güçlü.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Rakibin tehdidine dikkat edin.</value></data>
+  <data name="hint.stage1.castle" xml:space="preserve"><value>Şahınızı güvene alın.</value></data>
+  <data name="hint.stage1.develop" xml:space="preserve"><value>Bir taş geliştirin.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Şahınızı aktifleştirin.</value></data>
+  <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Burada bir piyon hamlesi uygun.</value></data>
+  <data name="hint.stage1.improvePiece" xml:space="preserve"><value>En kötü taşınızı iyileştirin.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>{0} karesindeki şahı oynayın.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>{0} karesindeki veziri oynayın.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>{0} karesindeki kaleyi oynayın.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>{0} karesindeki fili oynayın.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>{0} karesindeki atı oynayın.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>{0} karesindeki piyonu oynayın.</value></data>
+  <data name="hint.stage3.mate" xml:space="preserve"><value>{0} rakibi mat edebilir.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} rakibin bir taşını alıp materyal kazanabilir.</value></data>
-  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} tek hamlede rakibin iki taşına aynı anda saldırabilir.</value></data>
-  <data name="hint.stage3.check" xml:space="preserve"><value>{0} rakip şaha şah çekebilir ve bu sana avantaj sağlar.</value></data>
-  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Rakip bir şey tehdit ediyor. {0} bu tehdidi savuşturabilir.</value></data>
-  <data name="hint.stage3.castle" xml:space="preserve"><value>Şahın hâlâ merkezde. Rok yaparak onu güvene alır ve kaleyi aktifleştirirsin.</value></data>
-  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} hâlâ son sırada. Bu taşı daha fazla kareyi kontrol ettiği aktif bir kareye getir.</value></data>
-  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>Oyun sonunda şah güçlü bir taştır. Onu piyonlara ve merkeze yaklaştır.</value></data>
-  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Burada bir piyon hamlesi konumunu iyileştirir: alan kazanır ya da taşların için hatlar açar.</value></data>
-  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} ideal yerde değil. Bu taşın daha etkili olacağı bir kare bul.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} aynı anda rakibin iki taşına saldırabilir.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} şah çekebilir ve bu size yardımcı olur.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Rakibiniz bir şey tehdit ediyor. {0} bunu savuşturabilir.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Şahınız hâlâ merkezde. Rok yapmak onu güvene alır ve kaleyi aktifleştirir.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} hâlâ ilk sırada. Daha fazla kareyi kontrol edeceği aktif bir kareye getirin.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>Oyun sonunda şah güçlü bir taştır. Onu piyonlara ve merkeze yaklaştırın.</value></data>
+  <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Burada bir piyon hamlesi konumunuzu iyileştirir: alan kazandırır veya taşlarınız için hatlar açar.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} iyi yerleşmemiş. Daha etkili olacağı bir kare bulun.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>En iyi hamle: {0} (değerlendirme {1}).</value></data>
   <data name="hint.takeawayLabel" xml:space="preserve"><value>Çıkarım</value></data>
   <data name="threat.text" xml:space="preserve"><value>Tehdit: {0}</value></data>
@@ -161,9 +161,9 @@
   <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} çözüldü</value></data>
   <data name="puzzle.source.date" xml:space="preserve"><value>{0} tarihli oyunundan.</value></data>
   <data name="puzzle.source.move" xml:space="preserve"><value>{0} tarihli oyunundan, {1}. hamle: orada {2} oynadın ({3}).</value></data>
-  <data name="puzzle.ask.mate" xml:space="preserve"><value>Rakip şahın güvenli karesi azalıyor. Hangi şahlar oyunu bitirebilir?</value></data>
-  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Rakibinin son hamlesi bir şeyi korumasız bıraktı. Neye saldırabilirsin?</value></data>
-  <data name="puzzle.ask.fork" xml:space="preserve"><value>İki rakip taş, tek bir taşın ulaşabileceği karelerde duruyor. Tek hamle ikisine de saldırabilir mi?</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Burada zorunlu bir galibiyet var mı? Hangi şahlar oyunu bitirebilir?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Burada materyal kazanabilir misin? Neyin koruması yok ya da korunandan fazla saldırı altında?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Rakibin hangi taşları şu an güvende değil?</value></data>
   <data name="puzzle.ask.check" xml:space="preserve"><value>Hangi şahlar mümkün ve her biri neyi zorluyor?</value></data>
   <data name="puzzle.ask.promotion" xml:space="preserve"><value>Bir piyon son sıraya yakın. Onu ne durduruyor ve yolu açabilir misin?</value></data>
   <data name="puzzle.ask.discovered" xml:space="preserve"><value>Taşlarından biri bir kale, fil veya vezirin önünde duruyor. Tehditle yer değiştirirse ne olur?</value></data>
@@ -202,6 +202,27 @@
   <data name="puzzle.area.rank" xml:space="preserve"><value>{0}. sıraya gider.</value></data>
   <data name="puzzle.area.file" xml:space="preserve"><value>{0} sütununa gider.</value></data>
   <data name="puzzle.fail.mate" xml:space="preserve"><value>Bu, şah mata izin verir.</value></data>
-  <data name="puzzle.fail.loss" xml:space="preserve"><value>Bu, {1} karesindeki {0} taşını kaybettirir.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Rakibin {0} oynar ve {1} puan materyal geride kalırsın.</value></data>
   <data name="puzzle.fail.miss" xml:space="preserve"><value>Buradaki fikri kaçırıyor: {0}.</value></data>
+  <data name="hint.stage1.mateForced" xml:space="preserve"><value>Zorunlu bir mat var.</value></data>
+  <data name="hint.stage3.mateForced" xml:space="preserve"><value>{0} zorunlu bir mat başlatır.</value></data>
+  <data name="hint.stage3.captureLine" xml:space="preserve"><value>{0} ile yapılacak bir hamle birkaç hamle sonra materyal kazandırır.</value></data>
+  <data name="puzzle.fail.idea" xml:space="preserve"><value>Fikir şuydu: {0}</value></data>
+  <data name="puzzle.fail.loss.one" xml:space="preserve"><value>Rakibin {0} oynar ve 1 puan materyal geride kalırsın.</value></data>
+  <data name="puzzle.why.gain.one" xml:space="preserve"><value>Ana varyant: {0}. 1 puan materyal kazanırsın.</value></data>
+  <data name="threat.opportunity" xml:space="preserve"><value>Rakibin bir tehdidi var, ama önce sen materyal kazanabilirsin.</value></data>
+  <data name="puzzle.area.unpin" xml:space="preserve"><value>Bağlı: {0}, {1} önünde, {2} tarafından.</value></data>
+  <data name="piece.on" xml:space="preserve"><value>{1} karesindeki {0}</value></data>
+  <data name="piece.king.the" xml:space="preserve"><value>Şah</value></data>
+  <data name="piece.king.theAcc" xml:space="preserve"><value>Şah</value></data>
+  <data name="piece.queen.the" xml:space="preserve"><value>Vezir</value></data>
+  <data name="piece.queen.theAcc" xml:space="preserve"><value>Vezir</value></data>
+  <data name="piece.rook.the" xml:space="preserve"><value>Kale</value></data>
+  <data name="piece.rook.theAcc" xml:space="preserve"><value>Kale</value></data>
+  <data name="piece.bishop.the" xml:space="preserve"><value>Fil</value></data>
+  <data name="piece.bishop.theAcc" xml:space="preserve"><value>Fil</value></data>
+  <data name="piece.knight.the" xml:space="preserve"><value>At</value></data>
+  <data name="piece.knight.theAcc" xml:space="preserve"><value>At</value></data>
+  <data name="piece.pawn.the" xml:space="preserve"><value>Piyon</value></data>
+  <data name="piece.pawn.theAcc" xml:space="preserve"><value>Piyon</value></data>
 </root>

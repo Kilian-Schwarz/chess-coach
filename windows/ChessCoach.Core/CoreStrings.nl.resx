@@ -42,7 +42,7 @@
   <data name="move.promotes" xml:space="preserve"><value>, wordt {0}</value></data>
   <data name="move.check" xml:space="preserve"><value>, schaak</value></data>
   <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} wordt aangevallen en is onbeschermd</value></data>
-  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} wordt aangevallen door een zwakker stuk</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} wordt aangevallen door een goedkoper stuk</value></data>
   <data name="rating.best" xml:space="preserve"><value>Beste zet</value></data>
   <data name="rating.good" xml:space="preserve"><value>Goede zet</value></data>
   <data name="rating.inaccuracy" xml:space="preserve"><value>Onnauwkeurigheid</value></data>
@@ -88,32 +88,32 @@
   <data name="hint.stage1.captureGain" xml:space="preserve"><value>Hier kun je materiaal winnen.</value></data>
   <data name="hint.stage1.fork" xml:space="preserve"><value>Zoek een vork: een zet die twee stukken tegelijk aanvalt.</value></data>
   <data name="hint.stage1.check" xml:space="preserve"><value>Een schaakzet is hier sterk.</value></data>
-  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Let op de dreiging van de tegenstander.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Let op de dreiging van je tegenstander.</value></data>
   <data name="hint.stage1.castle" xml:space="preserve"><value>Breng je koning in veiligheid.</value></data>
   <data name="hint.stage1.develop" xml:space="preserve"><value>Ontwikkel een stuk.</value></data>
   <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activeer je koning.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Een pionzet past hier goed.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Verbeter je slechtste stuk.</value></data>
-  <data name="hint.stage2.king" xml:space="preserve"><value>Zet de koning die op {0} staat.</value></data>
-  <data name="hint.stage2.queen" xml:space="preserve"><value>Zet de dame die op {0} staat.</value></data>
-  <data name="hint.stage2.rook" xml:space="preserve"><value>Zet de toren die op {0} staat.</value></data>
-  <data name="hint.stage2.bishop" xml:space="preserve"><value>Zet de loper die op {0} staat.</value></data>
-  <data name="hint.stage2.knight" xml:space="preserve"><value>Zet het paard dat op {0} staat.</value></data>
-  <data name="hint.stage2.pawn" xml:space="preserve"><value>Zet de pion die op {0} staat.</value></data>
+  <data name="hint.stage2.king" xml:space="preserve"><value>Verzet de koning die op {0} staat.</value></data>
+  <data name="hint.stage2.queen" xml:space="preserve"><value>Verzet de dame die op {0} staat.</value></data>
+  <data name="hint.stage2.rook" xml:space="preserve"><value>Verzet de toren die op {0} staat.</value></data>
+  <data name="hint.stage2.bishop" xml:space="preserve"><value>Verzet de loper die op {0} staat.</value></data>
+  <data name="hint.stage2.knight" xml:space="preserve"><value>Verzet het paard dat op {0} staat.</value></data>
+  <data name="hint.stage2.pawn" xml:space="preserve"><value>Verzet de pion die op {0} staat.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} kan de tegenstander mat zetten.</value></data>
-  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kan een stuk van de tegenstander slaan en zo materiaal winnen.</value></data>
-  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kan in één zet twee stukken van de tegenstander tegelijk aanvallen.</value></data>
-  <data name="hint.stage3.check" xml:space="preserve"><value>{0} kan de koning van de tegenstander schaak geven, en dat geeft je een voordeel.</value></data>
-  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>De tegenstander dreigt iets. {0} kan de dreiging afweren.</value></data>
-  <data name="hint.stage3.castle" xml:space="preserve"><value>Je koning staat nog in het centrum. Met de rokade breng je hem in veiligheid en activeer je de toren.</value></data>
-  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} staat nog op de grondlijn. Breng dit stuk naar een actief veld waar het meer velden controleert.</value></data>
-  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>In het eindspel is de koning een sterk stuk. Breng hem dichter bij de pionnen en naar het centrum.</value></data>
+  <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} kan een stuk van de tegenstander slaan en materiaal winnen.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} kan twee stukken van de tegenstander tegelijk aanvallen.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} kan schaak geven en dat helpt je.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Je tegenstander dreigt iets. {0} kan dat afweren.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Je koning staat nog in het centrum. Rokeren brengt hem in veiligheid en activeert de toren.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} staat nog op de grondlijn. Breng het naar een actief veld waar het meer velden controleert.</value></data>
+  <data name="hint.stage3.kingActivate" xml:space="preserve"><value>In het eindspel is de koning een sterk stuk. Breng hem dichter bij de pionnen en het centrum.</value></data>
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Een pionzet verbetert hier je stelling: hij wint ruimte of opent lijnen voor je stukken.</value></data>
-  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} staat niet ideaal. Zoek een veld waar dit stuk meer doet.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} staat niet goed. Zoek een veld waar het meer doet.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Beste zet: {0} (beoordeling {1}).</value></data>
   <data name="hint.takeawayLabel" xml:space="preserve"><value>Onthoud</value></data>
-  <data name="threat.text" xml:space="preserve"><value>Dreigt: {0}</value></data>
-  <data name="threat.mate" xml:space="preserve"><value>Dreigt: {0}, mat in {1}</value></data>
+  <data name="threat.text" xml:space="preserve"><value>Dreiging: {0}</value></data>
+  <data name="threat.mate" xml:space="preserve"><value>Dreiging: {0}, mat in {1}</value></data>
   <data name="profile.placement" xml:space="preserve"><value>Inschaling bezig: partij {0} van {1}</value></data>
   <data name="profile.defaultName" xml:space="preserve"><value>Speler</value></data>
   <data name="report.moveLabel" xml:space="preserve"><value>Zet {0}, {1}</value></data>
@@ -161,9 +161,9 @@
   <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} opgelost</value></data>
   <data name="puzzle.source.date" xml:space="preserve"><value>Uit je partij van {0}.</value></data>
   <data name="puzzle.source.move" xml:space="preserve"><value>Uit je partij van {0}, zet {1}: je speelde daar {2} ({3}).</value></data>
-  <data name="puzzle.ask.mate" xml:space="preserve"><value>De vijandelijke koning heeft weinig veilige velden. Welke schaakjes kunnen de partij beslissen?</value></data>
-  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>De laatste zet van je tegenstander liet iets onbeschermd. Wat kun je aanvallen?</value></data>
-  <data name="puzzle.ask.fork" xml:space="preserve"><value>Twee vijandelijke stukken staan op velden die één stuk kan bereiken. Kan één zet beide aanvallen?</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Is er hier een gedwongen winst? Welke schaakjes kunnen de partij beslissen?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Kun je hier materiaal winnen? Wat staat los of wordt vaker aangevallen dan verdedigd?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Welke vijandelijke stukken staan nu niet veilig?</value></data>
   <data name="puzzle.ask.check" xml:space="preserve"><value>Welke schaakjes zijn er en wat dwingt elk af?</value></data>
   <data name="puzzle.ask.promotion" xml:space="preserve"><value>Een pion staat dicht bij de laatste rij. Wat houdt hem tegen en kun je de weg vrijmaken?</value></data>
   <data name="puzzle.ask.discovered" xml:space="preserve"><value>Een van je stukken staat voor een toren, loper of dame. Wat als het met dreiging wegspringt?</value></data>
@@ -202,6 +202,27 @@
   <data name="puzzle.area.rank" xml:space="preserve"><value>Ze gaat naar rij {0}.</value></data>
   <data name="puzzle.area.file" xml:space="preserve"><value>Ze gaat naar de {0}-lijn.</value></data>
   <data name="puzzle.fail.mate" xml:space="preserve"><value>Daarmee sta je schaakmat toe.</value></data>
-  <data name="puzzle.fail.loss" xml:space="preserve"><value>Daarmee verlies je {0} op {1}.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Je tegenstander antwoordt met {0} en je staat {1} punten materiaal achter.</value></data>
   <data name="puzzle.fail.miss" xml:space="preserve"><value>Het mist het idee hier: {0}.</value></data>
+  <data name="hint.stage1.mateForced" xml:space="preserve"><value>Je hebt een gedwongen mat.</value></data>
+  <data name="hint.stage3.mateForced" xml:space="preserve"><value>{0} start een gedwongen mat.</value></data>
+  <data name="hint.stage3.captureLine" xml:space="preserve"><value>{0} kan een zet doen die een paar zetten later materiaal wint.</value></data>
+  <data name="puzzle.fail.idea" xml:space="preserve"><value>Het idee was: {0}</value></data>
+  <data name="puzzle.fail.loss.one" xml:space="preserve"><value>Je tegenstander antwoordt met {0} en je staat 1 punt materiaal achter.</value></data>
+  <data name="puzzle.why.gain.one" xml:space="preserve"><value>Hoofdvariant: {0}. Je wint 1 punt materiaal.</value></data>
+  <data name="threat.opportunity" xml:space="preserve"><value>Je tegenstander heeft een dreiging, maar jij kunt eerst zelf materiaal winnen.</value></data>
+  <data name="puzzle.area.unpin" xml:space="preserve"><value>Vastgepind: {0} tegen {1}, door {2}.</value></data>
+  <data name="piece.on" xml:space="preserve"><value>{0} op {1}</value></data>
+  <data name="piece.king.the" xml:space="preserve"><value>Koning</value></data>
+  <data name="piece.king.theAcc" xml:space="preserve"><value>Koning</value></data>
+  <data name="piece.queen.the" xml:space="preserve"><value>Dame</value></data>
+  <data name="piece.queen.theAcc" xml:space="preserve"><value>Dame</value></data>
+  <data name="piece.rook.the" xml:space="preserve"><value>Toren</value></data>
+  <data name="piece.rook.theAcc" xml:space="preserve"><value>Toren</value></data>
+  <data name="piece.bishop.the" xml:space="preserve"><value>Loper</value></data>
+  <data name="piece.bishop.theAcc" xml:space="preserve"><value>Loper</value></data>
+  <data name="piece.knight.the" xml:space="preserve"><value>Paard</value></data>
+  <data name="piece.knight.theAcc" xml:space="preserve"><value>Paard</value></data>
+  <data name="piece.pawn.the" xml:space="preserve"><value>Pion</value></data>
+  <data name="piece.pawn.theAcc" xml:space="preserve"><value>Pion</value></data>
 </root>

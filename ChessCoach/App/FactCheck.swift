@@ -8,8 +8,14 @@ enum FactCheck {
         for kind in kinds {
             for loc in [Loc.facts, Loc.display] { map[PieceInfo.name(kind, loc).lowercased()] = kind }
         }
+        for (name, kind) in declined { map[name] = kind }
         return map
     }()
+
+    private static let declined: [String: Character] = [
+        "bauer": "p", "bauern": "p", "bauers": "p", "springer": "n", "springers": "n", "springern": "n", "läufer": "b", "läufers": "b",
+        "turm": "r", "turms": "r", "türme": "r", "könig": "k", "königs": "k", "dame": "q", "damen": "q",
+    ]
 
     private static let letters: [Character: Character] = {
         var map: [Character: Character] = [:]
@@ -21,8 +27,19 @@ enum FactCheck {
 
     private static let attackVerbs = ["attack", "threat", "angriff", "angreif", "greift", "bedroh", "attaqu", "menac", "ataca", "amenaz",
                                       "attacc", "minacc", "aanval", "bedreig", "atak", "zagra", "atac", "ameaç", "напад", "угрож",
-                                      "атак", "загрожу", "saldır", "tehdit", "攻撃", "狙", "攻击", "威胁", "공격", "위협"]
-    private static let blockers = [" by ", " von ", "wird", " ist ", " sind ", " is ", " are ", " not ", "n't", "nicht", "kein", " no ", " pas ",
+                                      "атак", "загрожу", "saldır", "tehdit", "攻撃", "狙", "攻击", "威胁", "공격", "위협",
+                                      " hit ", " hits ", " hitting ", "pressure", "target", "druck", " zielt ", " trifft ", " eyes "]
+    private static let conditionals = ["when ", "after ", "once ", "if ", "would", "could", "moves", "moving", "uncover", "unmask", "behind",
+                                       "wenn", "nach ", "sobald", "falls", "würde", "könnte", "zieht", "dahinter", "abzug", "wegzieh"]
+    private static let checkPhrases = ["gives check", "give check", "giving check", "is check", "is a check", "with check", "delivers check",
+                                       "puts the king in check", "checks the king", "would be check", "gibt schach", "ist schach", "bietet schach",
+                                       "mit schach", "setzt schach", "schach geben", "donne échec", "da jaque", "dà scacco", "geeft schaak",
+                                       "daje szacha", "dá xeque", "дает шах", "даёт шах", "ставит шах", "şah çeker"]
+    private static let matePhrases = ["is checkmate", "is a checkmate", "is mate", "gives checkmate", "delivers checkmate", "checkmates", "gives mate",
+                                      "delivers mate", "would be mate", "would be checkmate", "ist schachmatt", "ist matt", "setzt matt", "setzt schachmatt",
+                                      "mattsetzt", "gibt matt", "donne mat", "est mat", "da mate", "dà matto", "geeft mat", "daje mata", "dá mate",
+                                      "ставит мат", "mat çeker"]
+    private static let blockers = [" by ", " von ", "wird", " not ", "n't", "nicht", "kein", " no ", " pas ",
                                    " par ", " por ", " door ", "przez", " не ", "x-ray", "röntgen", "xray", "once ", "if ", "wenn", "falls", "sobald", "would"]
     private static let prepositions: Set<String> = ["on", "auf", "en", "sur", "su", "op", "na", "em", "на", "de", "à", "a", "in", "an", "bei", "sulla", "sul", "в"]
 
@@ -63,18 +80,31 @@ enum FactCheck {
         return (words, found)
     }
 
+    private static func namedMoves(_ sentence: String, allowed: Set<String>) -> [String] {
+        sentence.split(whereSeparator: { $0.isWhitespace }).compactMap { raw in
+            let word = String(raw).trimmingCharacters(in: CharacterSet(charactersIn: ".,;:!?()\"“”«»+#"))
+            guard word.count >= 3 else { return nil }
+            let bare = SAN.delocalize(word).trimmingCharacters(in: CharacterSet(charactersIn: "+#"))
+            return allowed.contains("mv:" + bare) ? bare : nil
+        }
+    }
+
     static func contradictsAttacks(_ sentence: String, allowed: Set<String>) -> Bool {
         let parsed = mentions(sentence)
         let lower = sentence.lowercased()
         guard parsed.found.count >= 2 else { return false }
+        let moves = namedMoves(sentence, allowed: allowed)
+        let conditional = moves.isEmpty && conditionals.contains { lower.contains($0) }
         for (a, b) in zip(parsed.found, parsed.found.dropFirst()) {
             guard let from = a.square, a.end + 1 < parsed.words.count, b.start > a.end else { continue }
             let lo = parsed.words[a.end].1.upperBound, hi = parsed.words[b.start].1.lowerBound
             guard lo <= hi else { continue }
             let between = " " + lower[lo..<hi] + " "
             guard attackVerbs.contains(where: { between.contains($0) }), !blockers.contains(where: { between.contains($0) }) else { continue }
-            let key = "a:\(a.kind)\(from)>"
-            let ok = b.square.map { allowed.contains(key + $0) } ?? allowed.contains(key + "~\(b.kind)")
+            let tail = b.square ?? "~\(b.kind)"
+            let piece = "\(a.kind)\(from)>" + tail
+            let ok = allowed.contains("a:" + piece) || (conditional && allowed.contains("c:" + piece))
+                || moves.contains { allowed.contains("a@\($0):" + piece) }
             if !ok { return true }
         }
         return false
@@ -93,14 +123,35 @@ enum FactCheck {
         return false
     }
 
-    private static func addAttacks(_ board: Placement, to set: inout Set<String>) {
+    static func contradictsCheckProse(_ sentence: String, allowed: Set<String>) -> Bool {
+        let lower = sentence.lowercased()
+        let mate = matePhrases.contains { lower.contains($0) }
+        guard mate || checkPhrases.contains(where: { lower.contains($0) }) else { return false }
+        let prefix = mate ? "mate:" : "chk:"
+        let moves = namedMoves(sentence, allowed: allowed)
+        return moves.isEmpty ? !allowed.contains(prefix + "pv0") : !moves.contains { allowed.contains(prefix + $0) }
+    }
+
+    private static func bare(_ san: String) -> String { san.trimmingCharacters(in: CharacterSet(charactersIn: "+#")) }
+
+    private static func addMove(_ san: String, to next: ChessPosition, set: inout Set<String>) {
+        let name = bare(san)
+        set.insert("san:" + san)
+        set.insert("mv:" + name)
+        if next.isCheck {
+            set.insert("chk:" + name)
+            if next.legalMoves().isEmpty { set.insert("mate:" + name) }
+        }
+    }
+
+    private static func addAttacks(_ board: Placement, prefix: String = "a:", to set: inout Set<String>) {
         for r in 0..<8 { for f in 0..<8 {
             guard let p = board.squares[r][f] else { continue }
             let kind = Character(p.lowercased()), from = UCIMove.squareName(f, r)
             for (tf, tr) in board.attacks(file: f, rank: r) {
-                set.insert("a:\(kind)\(from)>\(UCIMove.squareName(tf, tr))")
+                set.insert("\(prefix)\(kind)\(from)>\(UCIMove.squareName(tf, tr))")
                 if let t = board.squares[tr][tf], Placement.color(of: t) != Placement.color(of: p) {
-                    set.insert("a:\(kind)\(from)>~\(Character(t.lowercased()))")
+                    set.insert("\(prefix)\(kind)\(from)>~\(Character(t.lowercased()))")
                 }
             }
         } }
@@ -108,11 +159,13 @@ enum FactCheck {
 
     static func allowed(positions: [ChessPosition], lines: [[String]]) -> Set<String> {
         var set = Set<String>()
-        func add(_ pos: ChessPosition, children: Bool = false) {
-            addAttacks(pos.board, to: &set)
+        func add(_ pos: ChessPosition, children: Bool = false, attacks: Bool = true) {
+            if attacks { addAttacks(pos.board, to: &set) }
             if children { for side in [pos, pos.nullMove] { for m in side.legalMoves() {
-                addAttacks(side.board.applying(m), to: &set)
-                set.insert("san:" + SAN.san(m, in: side))
+                let san = SAN.san(m, in: side), next = side.applying(m)
+                addAttacks(next.board, prefix: "c:", to: &set)
+                addAttacks(next.board, prefix: "a@\(bare(san)):", to: &set)
+                addMove(san, to: next, set: &set)
             } } }
             for rank in 0..<8 { for file in 0..<8 {
                 if let p = pos.board.squares[rank][file] {
@@ -131,11 +184,17 @@ enum FactCheck {
             add(pos, children: true)
             for pv in lines {
                 var cur = pos
-                for u in pv.prefix(6) {
+                for (i, u) in pv.prefix(6).enumerated() {
                     guard let m = UCIMove(u), cur.isLegal(m) else { break }
-                    set.insert("san:" + SAN.san(m, in: cur))
+                    let san = SAN.san(m, in: cur)
                     cur = cur.applying(m)
-                    add(cur)
+                    addMove(san, to: cur, set: &set)
+                    addAttacks(cur.board, prefix: "a@\(bare(san)):", to: &set)
+                    if i == 0, cur.isCheck {
+                        set.insert("chk:pv0")
+                        if cur.legalMoves().isEmpty { set.insert("mate:pv0") }
+                    }
+                    add(cur, attacks: false)
                 }
             }
         }
@@ -171,7 +230,7 @@ enum FactCheck {
         return false
     }
 
-    static func clean(_ text: String, allowed: Set<String>) -> (text: String?, removed: Int) {
+    static func sentences(_ text: String) -> [String] {
         var sentences: [String] = []
         var current = ""
         let chars = Array(text)
@@ -182,12 +241,29 @@ enum FactCheck {
             if isEnd { sentences.append(current); current = "" }
         }
         if !current.isEmpty { sentences.append(current) }
+        return sentences
+    }
+
+    private static func filter(_ text: String, drop: (String) -> Bool) -> (text: String?, removed: Int) {
         var kept: [String] = []
         var removed = 0
-        for s in sentences {
-            if mentionsInvented(s, allowed: allowed) || contradictsAttacks(s, allowed: allowed) || contradictsCheckClaim(s, allowed: allowed) { removed += 1 } else { kept.append(s) }
-        }
+        for s in sentences(text) { if drop(s) { removed += 1 } else { kept.append(s) } }
         let out = kept.joined().trimmingCharacters(in: .whitespacesAndNewlines)
         return (out.isEmpty ? nil : out, removed)
+    }
+
+    static func clean(_ text: String, allowed: Set<String>) -> (text: String?, removed: Int) {
+        filter(text) {
+            mentionsInvented($0, allowed: allowed) || contradictsAttacks($0, allowed: allowed)
+                || contradictsCheckClaim($0, allowed: allowed) || contradictsCheckProse($0, allowed: allowed)
+        }
+    }
+
+    static func withholding(_ text: String, move: UCIMove, san: String) -> (text: String?, removed: Int) {
+        let names = Set([san, SAN.localize(san)].map(bare))
+        return filter(text) { s in
+            Hints.revealsTarget(s, move: move) || s.split(whereSeparator: { !($0.isLetter || $0.isNumber || $0 == "-" || $0 == "=") })
+                .contains { names.contains(String($0)) }
+        }
     }
 }

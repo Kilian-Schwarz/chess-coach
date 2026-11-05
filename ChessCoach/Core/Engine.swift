@@ -5,7 +5,7 @@ enum Score: Equatable {
 
     func text(_ loc: Loc = .display) -> String {
         switch self {
-        case .cp(let v): String(format: "%+.1f", Double(v) / 100)
+        case .cp(let v): String(format: "%+.1f", locale: loc.locale, Double(v) / 100)
         case .mate(0), .checkmate: loc("score.checkmate", "Checkmate")
         case .mate(let m) where m > 0: loc("score.mateIn", "Mate in \(m)")
         case .mate(let m): loc("score.matedIn", "mated in \(-m)")

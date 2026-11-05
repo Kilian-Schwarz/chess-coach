@@ -41,8 +41,8 @@
   <data name="move.plain" xml:space="preserve"><value>{0} {1}–{2}</value></data>
   <data name="move.promotes" xml:space="preserve"><value>, se corona {0}</value></data>
   <data name="move.check" xml:space="preserve"><value>, jaque</value></data>
-  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} está atacado y sin defensa</value></data>
-  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} está atacado por una pieza más débil</value></data>
+  <data name="hanging.unprotected" xml:space="preserve"><value>{0} {1} está atacada y sin protección</value></data>
+  <data name="hanging.cheaper" xml:space="preserve"><value>{0} {1} es atacada por una pieza de menor valor</value></data>
   <data name="rating.best" xml:space="preserve"><value>Mejor jugada</value></data>
   <data name="rating.good" xml:space="preserve"><value>Buena jugada</value></data>
   <data name="rating.inaccuracy" xml:space="preserve"><value>Imprecisión</value></data>
@@ -84,14 +84,14 @@
   <data name="theme.kingActivate" xml:space="preserve"><value>Activar al rey</value></data>
   <data name="theme.pawnMove" xml:space="preserve"><value>Jugada de peón</value></data>
   <data name="theme.improvePiece" xml:space="preserve"><value>Mejorar una pieza</value></data>
-  <data name="hint.stage1.mate" xml:space="preserve"><value>Aquí se puede dar mate al rival.</value></data>
-  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Aquí se puede ganar material.</value></data>
+  <data name="hint.stage1.mate" xml:space="preserve"><value>Aquí puedes dar mate al rival.</value></data>
+  <data name="hint.stage1.captureGain" xml:space="preserve"><value>Aquí puedes ganar material.</value></data>
   <data name="hint.stage1.fork" xml:space="preserve"><value>Busca una horquilla: una jugada que ataque dos piezas a la vez.</value></data>
   <data name="hint.stage1.check" xml:space="preserve"><value>Un jaque es fuerte aquí.</value></data>
-  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Atención a la amenaza del rival.</value></data>
+  <data name="hint.stage1.parryThreat" xml:space="preserve"><value>Cuidado con la amenaza del rival.</value></data>
   <data name="hint.stage1.castle" xml:space="preserve"><value>Pon a tu rey a salvo.</value></data>
   <data name="hint.stage1.develop" xml:space="preserve"><value>Desarrolla una pieza.</value></data>
-  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activa a tu rey.</value></data>
+  <data name="hint.stage1.kingActivate" xml:space="preserve"><value>Activa tu rey.</value></data>
   <data name="hint.stage1.pawnMove" xml:space="preserve"><value>Una jugada de peón encaja bien aquí.</value></data>
   <data name="hint.stage1.improvePiece" xml:space="preserve"><value>Mejora tu peor pieza.</value></data>
   <data name="hint.stage2.king" xml:space="preserve"><value>Mueve el rey que está en {0}.</value></data>
@@ -102,14 +102,14 @@
   <data name="hint.stage2.pawn" xml:space="preserve"><value>Mueve el peón que está en {0}.</value></data>
   <data name="hint.stage3.mate" xml:space="preserve"><value>{0} puede dar mate al rival.</value></data>
   <data name="hint.stage3.captureGain" xml:space="preserve"><value>{0} puede capturar una pieza rival y ganar material.</value></data>
-  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} puede atacar dos piezas rivales a la vez en una sola jugada.</value></data>
-  <data name="hint.stage3.check" xml:space="preserve"><value>{0} puede dar jaque al rey rival, y eso te da ventaja.</value></data>
-  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>El rival amenaza algo. {0} puede parar la amenaza.</value></data>
-  <data name="hint.stage3.castle" xml:space="preserve"><value>Tu rey sigue en el centro. Con el enroque lo pones a salvo y activas la torre.</value></data>
-  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} sigue en la primera fila. Lleva esta pieza a una casilla activa desde la que controle más casillas.</value></data>
+  <data name="hint.stage3.fork" xml:space="preserve"><value>{0} puede atacar dos piezas rivales a la vez.</value></data>
+  <data name="hint.stage3.check" xml:space="preserve"><value>{0} puede dar jaque, y eso te ayuda.</value></data>
+  <data name="hint.stage3.parryThreat" xml:space="preserve"><value>Tu rival amenaza algo. {0} puede pararlo.</value></data>
+  <data name="hint.stage3.castle" xml:space="preserve"><value>Tu rey sigue en el centro. El enroque lo pone a salvo y activa la torre.</value></data>
+  <data name="hint.stage3.develop" xml:space="preserve"><value>{0} sigue en la primera fila. Llévala a una casilla activa donde controle más casillas.</value></data>
   <data name="hint.stage3.kingActivate" xml:space="preserve"><value>En el final el rey es una pieza fuerte. Acércalo a los peones y al centro.</value></data>
   <data name="hint.stage3.pawnMove" xml:space="preserve"><value>Una jugada de peón mejora aquí tu posición: gana espacio o abre líneas para tus piezas.</value></data>
-  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} no está bien colocado. Busca una casilla donde esta pieza sea más útil.</value></data>
+  <data name="hint.stage3.improvePiece" xml:space="preserve"><value>{0} no está bien colocada. Busca una casilla donde haga más.</value></data>
   <data name="hint.stage4" xml:space="preserve"><value>Mejor jugada: {0} (evaluación {1}).</value></data>
   <data name="hint.takeawayLabel" xml:space="preserve"><value>Para recordar</value></data>
   <data name="threat.text" xml:space="preserve"><value>Amenaza: {0}</value></data>
@@ -161,9 +161,9 @@
   <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} resueltos</value></data>
   <data name="puzzle.source.date" xml:space="preserve"><value>De tu partida del {0}.</value></data>
   <data name="puzzle.source.move" xml:space="preserve"><value>De tu partida del {0}, jugada {1}: jugaste {2} ({3}).</value></data>
-  <data name="puzzle.ask.mate" xml:space="preserve"><value>Al rey rival le faltan casillas seguras. ¿Qué jaques podrían acabar la partida?</value></data>
-  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>La última jugada de tu rival dejó algo sin defender. ¿Qué puedes atacar?</value></data>
-  <data name="puzzle.ask.fork" xml:space="preserve"><value>Dos piezas rivales están en casillas que una sola pieza puede alcanzar. ¿Puede una jugada atacar a ambas?</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>¿Hay una victoria forzada aquí? ¿Qué jaques podrían acabar la partida?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>¿Puedes ganar material aquí? ¿Qué está suelto o atacado más veces de las que está defendido?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>¿Qué piezas rivales no están seguras ahora mismo?</value></data>
   <data name="puzzle.ask.check" xml:space="preserve"><value>¿Qué jaques hay y qué fuerza cada uno?</value></data>
   <data name="puzzle.ask.promotion" xml:space="preserve"><value>Un peón está cerca de la última fila. ¿Qué lo detiene y puedes despejar el camino?</value></data>
   <data name="puzzle.ask.discovered" xml:space="preserve"><value>Una de tus piezas está delante de una torre, un alfil o la dama. ¿Y si se mueve con una amenaza?</value></data>
@@ -202,6 +202,27 @@
   <data name="puzzle.area.rank" xml:space="preserve"><value>Va hacia la fila {0}.</value></data>
   <data name="puzzle.area.file" xml:space="preserve"><value>Va hacia la columna {0}.</value></data>
   <data name="puzzle.fail.mate" xml:space="preserve"><value>Eso permite el jaque mate.</value></data>
-  <data name="puzzle.fail.loss" xml:space="preserve"><value>Eso pierde {0} en {1}.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Tu rival responde {0} y quedas {1} puntos de material por debajo.</value></data>
   <data name="puzzle.fail.miss" xml:space="preserve"><value>No aprovecha la idea de aquí: {0}.</value></data>
+  <data name="hint.stage1.mateForced" xml:space="preserve"><value>Tienes un mate forzado.</value></data>
+  <data name="hint.stage3.mateForced" xml:space="preserve"><value>{0} inicia un mate forzado.</value></data>
+  <data name="hint.stage3.captureLine" xml:space="preserve"><value>{0} puede hacer una jugada que gana material unas jugadas después.</value></data>
+  <data name="puzzle.fail.idea" xml:space="preserve"><value>La idea era: {0}</value></data>
+  <data name="puzzle.fail.loss.one" xml:space="preserve"><value>Tu rival responde {0} y quedas 1 punto de material por debajo.</value></data>
+  <data name="puzzle.why.gain.one" xml:space="preserve"><value>Línea principal: {0}. Ganas 1 punto de material.</value></data>
+  <data name="threat.opportunity" xml:space="preserve"><value>Tu rival tiene una amenaza, pero tú puedes ganar material antes.</value></data>
+  <data name="puzzle.area.unpin" xml:space="preserve"><value>Clavado: {0} contra {1}, por {2}.</value></data>
+  <data name="piece.on" xml:space="preserve"><value>{0} en {1}</value></data>
+  <data name="piece.king.the" xml:space="preserve"><value>Rey</value></data>
+  <data name="piece.king.theAcc" xml:space="preserve"><value>Rey</value></data>
+  <data name="piece.queen.the" xml:space="preserve"><value>Dama</value></data>
+  <data name="piece.queen.theAcc" xml:space="preserve"><value>Dama</value></data>
+  <data name="piece.rook.the" xml:space="preserve"><value>Torre</value></data>
+  <data name="piece.rook.theAcc" xml:space="preserve"><value>Torre</value></data>
+  <data name="piece.bishop.the" xml:space="preserve"><value>Alfil</value></data>
+  <data name="piece.bishop.theAcc" xml:space="preserve"><value>Alfil</value></data>
+  <data name="piece.knight.the" xml:space="preserve"><value>Caballo</value></data>
+  <data name="piece.knight.theAcc" xml:space="preserve"><value>Caballo</value></data>
+  <data name="piece.pawn.the" xml:space="preserve"><value>Peón</value></data>
+  <data name="piece.pawn.theAcc" xml:space="preserve"><value>Peón</value></data>
 </root>

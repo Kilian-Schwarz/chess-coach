@@ -13,16 +13,15 @@ public class ReliabilityTests
         Assert.Equal(3000, D(paused: true));
         Assert.Equal(200, D(soon: true));
         Assert.Equal(400, D(calm: 1));
-        Assert.InRange(D(calm: 9), 401, 1499);
-        Assert.Equal(1500, D(calm: 60));
-        Assert.Equal(4000, D(calm: 120));
-        Assert.Equal(4000, D(calm: 3600));
-        Assert.Equal(8000, D(calm: 3600, battery: true));
+        Assert.InRange(D(calm: 9), 401, 799);
+        Assert.Equal(800, D(calm: 60));
+        Assert.Equal(1500, D(calm: 120));
+        Assert.Equal(1500, D(calm: 3600));
+        Assert.Equal(3000, D(calm: 3600, battery: true));
         Assert.Equal(1000, D(tracked: false, lost: 5));
         Assert.Equal(2000, D(tracked: false, lost: 60));
-        Assert.Equal(4000, D(tracked: false, lost: 200));
-        Assert.Equal(8000, D(tracked: false, lost: 400));
-        Assert.Equal(16000, D(tracked: false, lost: 400, battery: true));
+        Assert.Equal(2000, D(tracked: false, lost: 400));
+        Assert.Equal(4000, D(tracked: false, lost: 400, battery: true));
     }
 
     [Fact]

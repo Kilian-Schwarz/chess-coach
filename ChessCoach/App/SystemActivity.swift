@@ -7,6 +7,7 @@ final class SystemActivity {
     private(set) var displaysAsleep = false
     private(set) var systemAsleep = false
     var onChange: (() -> Void)?
+    var onActivate: (() -> Void)?
 
     var isPaused: Bool { locked || screensaver || displaysAsleep || systemAsleep }
     var reason: String {
@@ -31,6 +32,12 @@ final class SystemActivity {
         observe(ws, NSWorkspace.screensDidWakeNotification.rawValue) { $0.displaysAsleep = false }
         observe(ws, NSWorkspace.willSleepNotification.rawValue) { $0.systemAsleep = true }
         observe(ws, NSWorkspace.didWakeNotification.rawValue) { $0.systemAsleep = false }
+        for name in [NSWorkspace.didActivateApplicationNotification, NSWorkspace.activeSpaceDidChangeNotification] {
+            let token = ws.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.onActivate?() }
+            }
+            tokens.append((ws, token))
+        }
     }
 
     func stop() {

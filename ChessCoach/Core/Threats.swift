@@ -37,8 +37,9 @@ enum Threats {
             let from = (move.fromFile, move.fromRank), to = (move.toFile, move.toRank)
             if after.piece(from.0, from.1) != board.piece(from.0, from.1) { return true }
             if let victim = board.piece(to.0, to.1), after.piece(to.0, to.1) != victim { return true }
-            if board.piece(to.0, to.1) == nil, Character((board.piece(from.0, from.1) ?? " ").lowercased()) == "p" {
-                return after.piece(to.0, to.1) != nil
+            if board.piece(to.0, to.1) == nil {
+                if after.piece(to.0, to.1) != nil { return true }
+                if Character((board.piece(from.0, from.1) ?? " ").lowercased()) == "p" { return false }
             }
             return !after.attacks(file: from.0, rank: from.1).contains { $0 == to }
         }
