@@ -66,6 +66,7 @@ public sealed class StockfishEngine : IDisposable
     private readonly Process _process = new();
     private readonly object _gate = new();
     private readonly Dictionary<int, EngineLine> _lines = new();
+    private List<EngineLine> _previous = new();
     private string _currentFen = "";
     private TaskCompletionSource<EngineResult?>? _completion;
     private int _ignoredBestMoves;
@@ -164,6 +165,7 @@ public sealed class StockfishEngine : IDisposable
             }
             _currentFen = fen;
             _lines.Clear();
+            _previous = new();
             id = ++_searchId;
             tcs = new TaskCompletionSource<EngineResult?>(TaskCreationOptions.RunContinuationsAsynchronously);
             _completion = tcs;
@@ -222,6 +224,7 @@ public sealed class StockfishEngine : IDisposable
             int? value = int.TryParse(parts[i + 2], out var v) ? v : null;
             int pvi = Array.IndexOf(parts, "pv");
             var pv = pvi >= 0 ? parts[(pvi + 1)..] : Array.Empty<string>();
+            if (index == 1 && _lines.Count > 0) { _previous = Merged(); _lines.Clear(); }
             _lines[index] = new EngineLine(pv.Length > 0 ? pv[0] : "",
                 parts[i + 1] == "cp" ? value : null, parts[i + 1] == "mate" ? value : null, pv);
         }
@@ -230,10 +233,15 @@ public sealed class StockfishEngine : IDisposable
             if (_ignoredBestMoves > 0) { _ignoredBestMoves--; return; }
             string move = parts[1] == "(none)" ? "" : parts[1];
 
-            var seen = new HashSet<string>();
-            var sorted = _lines.Keys.OrderBy(k => k).Select(k => _lines[k]).Where(l => seen.Add(l.Move)).ToList();
-            Finish(new EngineResult(_currentFen, move, sorted));
+            Finish(new EngineResult(_currentFen, move, Merged()));
         }
+    }
+
+    private List<EngineLine> Merged()
+    {
+        var seen = new HashSet<string>();
+        return _lines.Keys.OrderBy(k => k).Select(k => _lines[k]).Concat(_previous)
+            .Where(l => seen.Add(l.Move)).Take(Math.Max(_lines.Count, _previous.Count)).ToList();
     }
 }
 

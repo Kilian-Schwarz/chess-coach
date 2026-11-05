@@ -66,6 +66,7 @@ final class StockfishEngine: @unchecked Sendable {
     private let queue = DispatchQueue(label: "stockfish.io")
     private var lineBuffer = ""
     private var lines: [Int: EngineLine] = [:]
+    private var previous: [EngineLine] = []
     private var currentFen = ""
     private var completion: ((EngineResult?) -> Void)?
     private var ignoredBestMoves = 0
@@ -136,6 +137,7 @@ final class StockfishEngine: @unchecked Sendable {
                 }
                 self.currentFen = fen
                 self.lines = [:]
+                self.previous = []
                 self.searchID += 1
                 let id = self.searchID
                 self.completion = { cont.resume(returning: $0) }
@@ -175,6 +177,7 @@ final class StockfishEngine: @unchecked Sendable {
             if let mpv = parts.firstIndex(of: "multipv"), mpv + 1 < parts.count { index = Int(parts[mpv + 1]) ?? 1 }
             let value = Int(parts[i + 2])
             let pv = parts.firstIndex(of: "pv").map { Array(parts[($0 + 1)...]) } ?? []
+            if index == 1, !lines.isEmpty { previous = merged(); lines = [:] }
             lines[index] = EngineLine(move: pv.first ?? "",
                                       scoreCP: parts[i + 1] == "cp" ? value : nil,
                                       mateIn: parts[i + 1] == "mate" ? value : nil,
@@ -182,9 +185,13 @@ final class StockfishEngine: @unchecked Sendable {
         } else if head == "bestmove", parts.count >= 2 {
             if ignoredBestMoves > 0 { ignoredBestMoves -= 1; return }
             let move = parts[1] == "(none)" ? "" : parts[1]
-            var seen = Set<String>()
-            let sorted = lines.keys.sorted().compactMap { lines[$0] }.filter { seen.insert($0.move).inserted }
-            finish(EngineResult(fen: currentFen, bestMove: move, lines: sorted))
+            finish(EngineResult(fen: currentFen, bestMove: move, lines: merged()))
         }
+    }
+
+    private func merged() -> [EngineLine] {
+        var seen = Set<String>()
+        let all = lines.keys.sorted().compactMap { lines[$0] } + previous
+        return Array(all.filter { seen.insert($0.move).inserted }.prefix(max(lines.count, previous.count)))
     }
 }
