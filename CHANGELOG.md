@@ -4,10 +4,6 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
-### Added
-- Windows installer `ChessCoach-<version>-setup.exe`: per-user install without administrator rights, Start menu and optional desktop shortcut, entry under Settings, Apps, in-place upgrade, uninstall that can keep or delete your data, silent mode (`/S`).
-- macOS: the DMG opens as a drag-to-Applications window with the app icon as volume icon, and the app offers once to move itself to Applications when it runs from elsewhere.
-
 ## [0.1.2] - 2026-11-05
 
 ### Changed
