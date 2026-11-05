@@ -66,6 +66,7 @@ public sealed class GameReport
     public string? Summary { get; set; }
     public string? Result { get; set; }
     public string? EndReason { get; set; }
+    public bool EngineAssisted { get; set; }
 
     public const int BookMoves = 6;
     public const int EvalClamp = 600, AssistedHintLevel = 3;

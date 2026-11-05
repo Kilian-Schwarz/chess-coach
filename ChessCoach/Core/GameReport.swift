@@ -63,6 +63,7 @@ struct GameReport: Codable, Equatable {
     var result: String?
     var endReason: String?
     var takeaways: [Takeaway]? = nil
+    var engineAssisted: Bool? = nil
 
     static let bookMoves = 6
     static let evalClamp = 600

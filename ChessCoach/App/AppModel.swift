@@ -103,6 +103,7 @@ final class AppModel: ObservableObject {
     var entries: [MoveEntry] = []
     var gameId = UUID().uuidString.lowercased()
     var gameFinished = false
+    var assist = AssistGate()
     var countedProfiles = Set<String>()
     var usedHint: [String: Int] = [:]
     var gameMistakes: [GameMistake] = []
@@ -161,7 +162,17 @@ final class AppModel: ObservableObject {
         var unchanged: Bool
     }
 
-    func invalidate() { settled = false; lastChangeAt = Date() }
+    func invalidate() {
+        settled = false
+        lastChangeAt = Date()
+        observeAssist()
+    }
+
+    func observeAssist() {
+        let before = assist.tainted
+        assist.observe(assisted: effectiveShowBest || effectiveAlwaysMyTurn, started: !entries.isEmpty)
+        if assist.tainted != before { updateInfoLines() }
+    }
 
 
     init() {
@@ -267,6 +278,7 @@ final class AppModel: ObservableObject {
         gameFinished = false
         overlayEnd = nil
         gameId = UUID().uuidString.lowercased()
+        assist.begin(assisted: effectiveShowBest || effectiveAlwaysMyTurn)
         forgetHints()
         panel.model.canHint = false
         panel.model.canExplain = false

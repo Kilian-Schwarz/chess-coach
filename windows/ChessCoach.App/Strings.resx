@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>Collapse panel</value></data>
   <data name="panel.expand" xml:space="preserve"><value>Expand panel</value></data>
   <data name="panel.opening" xml:space="preserve"><value>Opening: {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>Not counted for your profile</value></data>
   <data name="panel.record" xml:space="preserve"><value>Player record</value></data>
   <data name="panel.training" xml:space="preserve"><value>Training</value></data>
   <data name="panel.report" xml:space="preserve"><value>Evaluation</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>no opening</value></data>
   <data name="report.empty" xml:space="preserve"><value>No recaps yet. A recap appears when a game ends.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Opening: {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>This game does not count toward your profile.</value></data>
   <data name="report.white" xml:space="preserve"><value>White</value></data>
   <data name="report.black" xml:space="preserve"><value>Black</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>Accuracy {0} % · average loss {1} · performance {2}</value></data>

@@ -202,6 +202,7 @@ internal sealed partial class AppModel
         if (_openingName != null) parts.Add(Loc.T("panel.opening", _openingName));
         var p = Active;
         parts.Add(p.PlacementText ?? Curriculum.FocusLabel(p.FocusSkill));
+        if (_book.Assist.Tainted) parts.Add(Loc.T("panel.notCounted"));
         return string.Join(" · ", parts);
     }
 
@@ -322,11 +323,10 @@ internal sealed partial class AppModel
         if (Threats.NullMoveFen(pm.Before) is { } nf) threatRes = await _engine.AnalyzeAsync(nf, ms, false);
         var analysis = MoveAnalyzer.Analyze(new MoveAnalysisInput(review, before, after, threatRes, pm.MoveNumber));
         int hint = book.HintUsed.GetValueOrDefault(pm.FenBefore);
-        prof.Apply(analysis, Curriculum.GainWeight(hint));
-        prof.RecordHintUse(hint);
         if (analysis.Theme is { } th && _reviewStyleByFen.TryGetValue(pm.FenBefore, out var st)) _themeStyle[th.Raw()] = st;
+        if (!book.Assist.Record(prof, analysis, hint)) return;
         var puzzle = Puzzle.Make(review, before, analysis.MistakeType, analysis.Theme, prof.Level);
-        bool added = puzzle != null && PuzzlesFor(prof.Id).Add(puzzle);
+        bool added = book.Assist.AddPuzzle(PuzzlesFor(prof.Id), puzzle);
         if (puzzle != null) SavePuzzles(prof.Id);
         if (analysis.MistakeType is { } mt)
         {
@@ -342,6 +342,7 @@ internal sealed partial class AppModel
         _overlayEnd = null;
         var book = _book;
         _book = new GameBook();
+        _book.Assist.Begin(EffectiveShowBest || EffectiveAlwaysMyTurn);
         var pgn = _pgnCache;
         var opening = _openingName;
         if (end.Reason is GameEndReason.BoardGone or GameEndReason.Manual)
@@ -360,6 +361,7 @@ internal sealed partial class AppModel
         _continuedReportId = null;
         report.Result = end.Result;
         report.EndReason = end.ReasonKey;
+        report.EngineAssisted = book.Assist.Tainted;
         SaveReport(report, pgn);
         LastReport = report;
         RecapSelection = report.Id;
@@ -424,9 +426,8 @@ internal sealed partial class AppModel
             foreach (var (prof, c) in new[] { (whiteProf, "w"), (blackProf, "b") })
             {
                 if (prof == null) continue;
-                if (_countedGames.Add(report.Id + prof.Id))
-                    prof.CompleteGame(report.Side(c).Performance, null, report.Side(c).RatedMoves, report.Side(c).AssistedShare);
-                prof.AdjustLearningSpeed(PuzzlesFor(prof.Id).Puzzles);
+                if (_countedGames.Add(report.Id + prof.Id)) book.Assist.Complete(prof, report.Side(c));
+                book.Assist.AdjustLearningSpeed(prof, PuzzlesFor(prof.Id).Puzzles);
                 SaveProfile(prof);
             }
             string color = me == PieceColor.White ? "w" : "b";

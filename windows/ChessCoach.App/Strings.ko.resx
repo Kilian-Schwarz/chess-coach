@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>패널 접기</value></data>
   <data name="panel.expand" xml:space="preserve"><value>패널 펼치기</value></data>
   <data name="panel.opening" xml:space="preserve"><value>오프닝: {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>프로필에 반영되지 않음</value></data>
   <data name="panel.record" xml:space="preserve"><value>플레이어 기록</value></data>
   <data name="panel.training" xml:space="preserve"><value>훈련</value></data>
   <data name="panel.report" xml:space="preserve"><value>분석</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>오프닝 없음</value></data>
   <data name="report.empty" xml:space="preserve"><value>아직 복기가 없습니다. 대국이 끝나면 나타납니다.</value></data>
   <data name="report.opening" xml:space="preserve"><value>오프닝: {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>이 대국은 프로필에 반영되지 않습니다.</value></data>
   <data name="report.white" xml:space="preserve"><value>백</value></data>
   <data name="report.black" xml:space="preserve"><value>흑</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>정확도 {0}% · 평균 손실 {1} · 퍼포먼스 {2}</value></data>

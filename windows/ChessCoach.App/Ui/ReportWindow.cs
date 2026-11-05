@@ -93,6 +93,7 @@ internal sealed class ReportWindow
             _body.Children.Add(Kit.Text(Loc.T("report.progress", progress.Done, progress.Total), 12, muted: true));
             _body.Children.Add(Kit.Bar(progress.Done, Math.Max(1, progress.Total)));
         }
+        if (g.EngineAssisted) _body.Children.Add(Kit.Text(Loc.T("report.notCounted"), 12, muted: true, bottom: 8));
         if (g.Opening != null) _body.Children.Add(Kit.Text(Loc.T("report.opening", g.Opening), 14, true, bottom: 8));
         foreach (var (color, s) in new[] { ("w", g.White), ("b", g.Black) })
         {

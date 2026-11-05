@@ -11,6 +11,7 @@ extension AppModel {
             overlayEnd = nil
             usedHint = [:]
             gameMistakes = []
+            assist.begin(assisted: effectiveShowBest || effectiveAlwaysMyTurn)
             threatRequested = []
             hintNudged = []
             hintFirstSeen = [:]
@@ -24,6 +25,7 @@ extension AppModel {
                 } else {
                     gameId = UUID().uuidString.lowercased()
                     countedProfiles = []
+                    assist.begin(assisted: effectiveShowBest || effectiveAlwaysMyTurn)
                 }
             }
             gameFinished = false
@@ -77,6 +79,7 @@ extension AppModel {
         var lines: [String] = []
         if let o = openingLine { lines.append(String(localized: "Opening: \(o)")) }
         if let t = store.active.placementText() { lines.append(t) }
+        if assist.tainted { lines.append(String(localized: "Not counted for your profile")) }
         panel.model.infoLines = lines
     }
 
@@ -140,7 +143,7 @@ extension AppModel {
             whiteProfile: whiteProfile, blackProfile: blackProfile,
             pgn: record.pgn(white: store.profile(id: whiteProfile)?.name ?? "?", black: store.profile(id: blackProfile)?.name ?? "?",
                             opening: openingLine, result: final.knownResult ? final.result : nil),
-            hints: usedHint, mistakes: gameMistakes)
+            hints: usedHint, mistakes: gameMistakes, assisted: assist.tainted)
         overlayEnd = end.reason == .overlay ? (gameId, record.current?.fen ?? "") : nil
         completeTask = Task { await complete(snapshot, open: open, activate: end.reason == .manual) }
     }
@@ -192,6 +195,7 @@ extension AppModel {
                                      blackProfileId: snap.blackProfile, opening: snap.opening)
             r.result = snap.end.result
             r.endReason = snap.end.reason.rawValue
+            r.engineAssisted = snap.assisted ? true : nil
             r.summary = store.games.first { $0.id == snap.id }?.summary
             let view = perspective(of: r)
             r.takeaways = Takeaway.build(mistakes: gameId == snap.id ? gameMistakes : snap.mistakes, moves: r.moves, color: view.color,
@@ -224,7 +228,7 @@ extension AppModel {
         guard !Task.isCancelled, !reviewed.allSatisfy({ $0 == nil }) else { return }
         let final = report()
         for (color, pid) in [("w", snap.whiteProfile), ("b", snap.blackProfile)] {
-            guard let pid, final.side(color).countsForRating, !countedProfiles.contains(snap.id + pid) else { continue }
+            guard !snap.assisted, let pid, final.side(color).countsForRating, !countedProfiles.contains(snap.id + pid) else { continue }
             countedProfiles.insert(snap.id + pid)
             store.update(pid) { $0.completeGame(summary: final.side(color)) }
         }
@@ -319,15 +323,14 @@ extension AppModel {
         setEntry(id) { $0.before = before; $0.after = after ?? $0.after; $0.triedBefore = true; $0.triedAfter = true; $0.processed = true }
         let outcome = MoveAnalyzer.analyze(MoveAnalysisInput(review: review, beforeResult: before, afterResult: after,
                                                              threatResult: nullResult, moveNumber: played.moveNumber))
-        if let pid, firstTime {
+        if let pid, firstTime, assist.counts {
             let hint = usedHint[played.fenBefore] ?? 0
-            let weight = Curriculum.gainWeight(hintLevel: hint)
-            store.update(pid) { $0.apply(outcome, gainWeight: weight); $0.recordHintUse(level: hint) }
+            let gate = assist
+            store.update(pid) { gate.record(outcome, hint: hint, into: &$0) }
             let level = store.profile(id: pid)?.level ?? .beginner
-            if let puzzle = Puzzle.make(review: review, beforeResult: before, mistakeType: outcome.mistakeType,
-                                        theme: outcome.theme, level: level) {
-                store.updatePuzzles(for: pid) { $0.add(puzzle) }
-            }
+            let puzzle = Puzzle.make(review: review, beforeResult: before, mistakeType: outcome.mistakeType,
+                                     theme: outcome.theme, level: level)
+            if puzzle != nil { store.updatePuzzles(for: pid) { gate.add(puzzle, to: &$0) } }
             if let type = outcome.mistakeType {
                 let puzzleId = store.puzzles(for: pid).puzzles.first { $0.fen == review.before.fen(sideToMove: review.player) }?.id
                 gameMistakes.append(GameMistake(ply: record.moves.firstIndex { $0.fenBefore == played.fenBefore && $0.uci == played.uci }.map { $0 + 1 } ?? 0,

@@ -98,6 +98,7 @@ private struct ReportDetail: View {
                 .foregroundStyle(.secondary)
             Text("\(report.moves.count) half-moves").font(.callout).foregroundStyle(.secondary)
             if let r = report.result, r != "*" { Text("Result: \(r)").font(.callout).foregroundStyle(.secondary) }
+            if report.engineAssisted == true { Text("This game does not count toward your profile.").font(.callout).foregroundStyle(.secondary) }
             if let p = app.recapProgress, p.id == report.id {
                 HStack(spacing: 8) {
                     ProgressView(value: Double(p.done), total: Double(max(p.total, 1))).frame(width: 160)

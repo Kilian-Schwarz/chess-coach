@@ -8,20 +8,37 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 - Windows installer `ChessCoach-<version>-setup.exe`: per-user install without administrator rights, Start menu and optional desktop shortcut, entry under Settings, Apps, in-place upgrade, uninstall that can keep or delete your data, silent mode (`/S`).
 - macOS: the DMG opens as a drag-to-Applications window with the app icon as volume icon, and the app offers once to move itself to Applications when it runs from elsewhere.
 
-## [0.1.1] - 2026-11-04
+## [0.1.1] - 2026-11-05
 
 ### Added
-- Automatic recap: the game end is detected (checkmate, stalemate, a "game over" dialog over the board, a new starting position; a missing board or another tab only pauses the game) and the recap window opens by itself. It shows engine numbers at once, fills in missing move analyses in the background with a progress bar, and streams the AI summary afterwards. New setting "Open recap after a game", menu item "Last recap …", game list in the player file, and a "Finish game & show recap" button in the panel.
-- Hints while dragging: a lifted piece is never counted as a move. Unsafe target squares are marked in red with a short line in the panel. New setting "Hints while dragging".
-- The piece set is learned from positions up to four plies after the start.
+- Installers: a drag-to-Applications disk image for macOS with an offer to move the app into Applications, and a per-user setup program for Windows with Start menu entry, optional desktop shortcut and uninstaller.
+- Automatic recap: the game end is detected (checkmate, stalemate, a dialog over the board, a new starting position) and the recap opens without taking focus. If the game continues after a false end, the end is withdrawn. A missing board or another tab only pauses the game.
+- Recap takeaways: up to three concrete lessons from your own mistakes, with "Train these puzzles" and "Set as focus".
+- Interactive training: click or drag pieces, legal targets, promotion choice, "Not quite, try again", the opponent's refutation after a wrong move, Skip and Show solution.
+- Welcome window on first start and a fair-play notice.
+- Hints while dragging: a lifted piece never counts as a move; unsafe target squares are marked.
+- Short explanations first with a "More" button.
+
+### Changed
+- Moves are rated by the drop in winning chance instead of raw centipawns.
+- The threat warning appears after a hint or on request, so you look for threats yourself first; new players still see it automatically.
+- The first hint is always the gentlest; stronger hints follow a short thinking pause.
+- Puzzles with hints count as assisted; reviews fall due at the start of the day; the daily queue is capped and mixed by theme; equally good alternatives are accepted.
+- Placement and skills need enough moves and data; the learning focus changes with hysteresis.
+- Update notices no longer interrupt a game.
+- New global shortcuts: Control-Option-Command-H/T on macOS, Ctrl+Shift+F8/F9 on Windows, active only while the app is on.
+- Lower energy use while no board is visible.
 
 ### Fixed
-- Only certain moves are rated; moves from a guessed side or an unknown gap are no longer rated.
-- Stage-2 hint texts.
-- German chess terms in explanations.
-- The panel stays where you put it.
-- Windows windows are no longer marked as protected content, which fixes the DRM warning (error S:102) on Shadow and other remote desktops.
-- The board is now read directly from its window, so the overlay and panel never appear in the capture.
+- A new piece set is learned automatically, also in the middle of a game.
+- A move is reviewed only once it is confirmed and the mouse button is up.
+- No false "checkmate" review when the engine gives no result.
+- The game history survives a misread frame or a resync.
+- Light dialogs over the board are recognised.
+- The panel no longer disappears when the board is lost for a moment.
+- Training window layout.
+- Stage-2 hint texts in German and Dutch, German chess terms in explanations.
+- Windows: no more protected-content (S:102) warning on remote desktops, no flicker of the fallback capture, takebacks are reconciled.
 
 ## [0.1.0] - 2026-11-04
 

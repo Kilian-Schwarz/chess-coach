@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>Paneli daralt</value></data>
   <data name="panel.expand" xml:space="preserve"><value>Paneli genişlet</value></data>
   <data name="panel.opening" xml:space="preserve"><value>Açılış: {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>Profiline sayılmaz</value></data>
   <data name="panel.record" xml:space="preserve"><value>Oyuncu dosyası</value></data>
   <data name="panel.training" xml:space="preserve"><value>Antrenman</value></data>
   <data name="panel.report" xml:space="preserve"><value>Değerlendirme</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>açılış yok</value></data>
   <data name="report.empty" xml:space="preserve"><value>Henüz özet yok. Bir oyun bittiğinde görünür.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Açılış: {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>Bu oyun profiline sayılmaz.</value></data>
   <data name="report.white" xml:space="preserve"><value>Beyaz</value></data>
   <data name="report.black" xml:space="preserve"><value>Siyah</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>Doğruluk %{0} · ortalama kayıp {1} · performans {2}</value></data>

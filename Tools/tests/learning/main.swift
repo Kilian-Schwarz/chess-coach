@@ -668,5 +668,62 @@ do {
     check(Coach.review(before: pl, played: UCIMove("h1h2")!, after: pl.applying(UCIMove("h1h2")!), by: sd, beforeResult: res, afterResult: nil) == nil, "no review without an after result")
 }
 
+section("engine-assisted games")
+do {
+    let analysis = MoveAnalysis(observations: [SkillObservation(skill: .pieceSafety, value: 0)], mistakeType: .hangingPiece,
+                                example: "x", theme: nil, threat: nil, accuracy: 10, loss: 500, phase: .middlegame)
+    let puzzle = Puzzle(id: "p1", fen: "4k3/8/8/8/8/8/8/4K3 w - - 0 1", acceptedMoves: ["e1e2"], bestLine: ["e1e2"], theme: "x",
+                        mistakeType: MistakeType.hangingPiece.rawValue, createdAt: t0, dueAt: t0)
+    var longSide = SideSummary()
+    longSide.moves = 30
+    longSide.performance = 1400
+    func play(_ gate: AssistGate, _ profile: inout PlayerProfile, _ puzzles: inout PuzzleSet) {
+        gate.record(analysis, hint: 2, into: &profile)
+        gate.add(puzzle, to: &puzzles)
+        gate.complete(&profile, summary: longSide)
+    }
+    var gate = AssistGate()
+    gate.begin(assisted: true)
+    var profile = PlayerProfile(name: "x")
+    var puzzles = PuzzleSet()
+    let before = profile
+    play(gate, &profile, &puzzles)
+    check(profile == before && puzzles.puzzles.isEmpty, "a tainted game leaves profile and puzzles unchanged")
+    check(profile.gamesPlayed == 0 && profile.ratingHistory.isEmpty && profile.hintStats.levelUses.allSatisfy { $0 == 0 }, "no games, rating or hint stats")
+
+    gate.observe(assisted: false, started: true)
+    check(gate.tainted, "switching off mid-game keeps the game tainted")
+    play(gate, &profile, &puzzles)
+    check(profile == before && puzzles.puzzles.isEmpty, "still unchanged after switching off")
+
+    gate.begin(assisted: false)
+    play(gate, &profile, &puzzles)
+    check(profile.gamesPlayed == 1 && profile.observationCount(.pieceSafety) == 1 && profile.hintStats.levelUses[2] == 1, "the next game counts")
+    check(puzzles.puzzles.count == 1, "the next game creates puzzles")
+
+    var mid = AssistGate()
+    mid.begin(assisted: false)
+    mid.observe(assisted: false, started: true)
+    check(mid.counts, "an unassisted game counts")
+    mid.observe(assisted: true, started: true)
+    check(mid.tainted, "switching on mid-game taints the game")
+    var other = PlayerProfile(name: "y")
+    let otherBefore = other
+    var otherPuzzles = PuzzleSet()
+    play(mid, &other, &otherPuzzles)
+    check(other == otherBefore && otherPuzzles.puzzles.isEmpty, "a mid-game taint stops further updates")
+
+    var idle = AssistGate()
+    idle.observe(assisted: true, started: false)
+    idle.observe(assisted: false, started: false)
+    check(idle.counts, "switching off before the first move starts clean")
+
+    var report = GameReport.build(moves: [])
+    check(report.engineAssisted == nil, "reports default to not assisted")
+    report.engineAssisted = true
+    let decoded = try JSONDecoder().decode(GameReport.self, from: JSONEncoder().encode(report))
+    check(decoded.engineAssisted == true, "the flag survives encoding")
+}
+
 print("\(checks) checks, \(failures) failures")
 exit(failures == 0 ? 0 : 1)

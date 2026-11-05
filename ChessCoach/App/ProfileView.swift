@@ -169,7 +169,7 @@ struct ProfileView: View {
     }
 
     private var recentGames: some View {
-        let games = store.games.filter { $0.whiteProfileId == profile.id || $0.blackProfileId == profile.id }.prefix(30)
+        let games = store.games.filter { ($0.whiteProfileId == profile.id || $0.blackProfileId == profile.id) && $0.engineAssisted != true }.prefix(30)
         return VStack(alignment: .leading, spacing: 6) {
             Text("Recent games").font(.headline)
             if games.isEmpty { Text("No games yet.").foregroundStyle(.secondary) }

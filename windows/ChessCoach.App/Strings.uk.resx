@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>Згорнути панель</value></data>
   <data name="panel.expand" xml:space="preserve"><value>Розгорнути панель</value></data>
   <data name="panel.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>Не враховується у вашому профілі</value></data>
   <data name="panel.record" xml:space="preserve"><value>Картка гравця</value></data>
   <data name="panel.training" xml:space="preserve"><value>Тренування</value></data>
   <data name="panel.report" xml:space="preserve"><value>Розбір</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>без дебюту</value></data>
   <data name="report.empty" xml:space="preserve"><value>Підсумків ще немає. Він з’являється, коли партія завершується.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>Ця партія не враховується у вашому профілі.</value></data>
   <data name="report.white" xml:space="preserve"><value>Білі</value></data>
   <data name="report.black" xml:space="preserve"><value>Чорні</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>Точність {0} % · середня втрата {1} · результативність {2}</value></data>

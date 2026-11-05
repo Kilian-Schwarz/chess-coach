@@ -48,4 +48,5 @@ struct GameSnapshot {
     var pgn: String
     var hints: [String: Int] = [:]
     var mistakes: [GameMistake] = []
+    var assisted = false
 }

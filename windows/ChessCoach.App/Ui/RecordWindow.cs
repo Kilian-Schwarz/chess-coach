@@ -94,7 +94,7 @@ internal sealed class RecordWindow
         _body.Children.Add(Kit.Text($"{p.Style.Length.Raw()} · {p.Style.Depth.Raw()}", 12));
 
         _body.Children.Add(Kit.Text(Loc.T("record.lastGames"), 14, true, bottom: 4).WithMargin(top: 10));
-        foreach (var g in _model.Storage.LoadGames(30).Where(g => g.WhiteProfileId == p.Id || g.BlackProfileId == p.Id).Take(8))
+        foreach (var g in _model.Storage.LoadGames(30).Where(g => !g.EngineAssisted && (g.WhiteProfileId == p.Id || g.BlackProfileId == p.Id)).Take(8))
         {
             var side = g.WhiteProfileId == p.Id ? g.White : g.Black;
             var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 4) };

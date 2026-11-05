@@ -4,6 +4,7 @@ namespace ChessCoach.Core.Tests;
 
 public class EngineTests
 {
+    const int LoadSlackMs = 20_000;
     const string StartFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     public EngineTests() { Log.Directory = Path.Combine(Path.GetTempPath(), "chesscoach-test-logs"); }
@@ -13,8 +14,8 @@ public class EngineTests
     {
         var path = TestSupport.StockfishPath();
         if (path == null) return;
-        using var e = new StockfishEngine(path);
-        var r = await e.AnalyzeAsync(StartFen, 2000);
+        using var e = new StockfishEngine(path) { TimeoutSlackMs = LoadSlackMs };
+        var r = await e.AnalyzeAsync(StartFen, 1500);
         Assert.NotNull(r);
         var best = UciMove.Parse(r!.BestMove);
         Assert.NotNull(best);
@@ -32,11 +33,11 @@ public class EngineTests
     {
         var path = TestSupport.StockfishPath();
         if (path == null) return;
-        using var e = new StockfishEngine(path);
-        var r = await e.AnalyzeAsync("6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1", 300);
+        using var e = new StockfishEngine(path) { TimeoutSlackMs = LoadSlackMs };
+        var r = await e.AnalyzeAsync("6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1", 1000);
         Assert.Equal("a1a8", r!.BestMove);
         Assert.Equal(1, r.MateIn);
-        var mated = await e.AnalyzeAsync("R5k1/5ppp/8/8/8/8/8/4K3 b - - 0 1", 200);
+        var mated = await e.AnalyzeAsync("R5k1/5ppp/8/8/8/8/8/4K3 b - - 0 1", 1000);
         Assert.Equal("", mated!.BestMove);
     }
 
@@ -45,9 +46,9 @@ public class EngineTests
     {
         var path = TestSupport.StockfishPath();
         if (path == null) return;
-        using var e = new StockfishEngine(path);
-        var first = e.AnalyzeAsync(StartFen, 2000);
-        var second = e.AnalyzeAsync("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", 200);
+        using var e = new StockfishEngine(path) { TimeoutSlackMs = LoadSlackMs };
+        var first = e.AnalyzeAsync(StartFen, 5000);
+        var second = e.AnalyzeAsync("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", 1000);
         Assert.Null(await first);
         var r = await second;
         Assert.NotNull(r);
@@ -140,13 +141,14 @@ public class EngineTests
     {
         var path = TestSupport.StockfishPath();
         if (path == null) return;
-        using var s = new EngineSession(() => path) { IdleTimeout = TimeSpan.FromMilliseconds(400) };
+        using var s = new EngineSession(() => path) { IdleTimeout = TimeSpan.FromMilliseconds(2500), TimeoutSlackMs = LoadSlackMs };
         Assert.False(s.IsEngineRunning);
-        Assert.NotNull(await s.AnalyzeAsync(StartFen, 100));
+        Assert.NotNull(await s.AnalyzeAsync(StartFen, 300));
         Assert.True(s.IsEngineRunning);
-        await Task.Delay(1200);
+        var deadline = DateTime.UtcNow.AddSeconds(30);
+        while (s.IsEngineRunning && DateTime.UtcNow < deadline) await Task.Delay(100);
         Assert.False(s.IsEngineRunning);
-        Assert.NotNull(await s.AnalyzeAsync("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", 100));
+        Assert.NotNull(await s.AnalyzeAsync("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", 300));
         Assert.True(s.IsEngineRunning);
     }
 

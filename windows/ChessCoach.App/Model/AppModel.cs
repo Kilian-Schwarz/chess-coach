@@ -205,7 +205,17 @@ internal sealed partial class AppModel
     private static bool OnBattery() =>
         System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Offline;
 
-    private void Invalidate() { _settled = false; _lastChangeAt = DateTime.UtcNow; }
+    private void Invalidate()
+    {
+        _settled = false;
+        _lastChangeAt = DateTime.UtcNow;
+        ObserveAssist();
+    }
+
+    private void ObserveAssist()
+    {
+        if (_book.Assist.Observe(EffectiveShowBest || EffectiveAlwaysMyTurn, _book.Plies > 0)) UpdatePanel();
+    }
 
     private void ClearAnalysisState()
     {

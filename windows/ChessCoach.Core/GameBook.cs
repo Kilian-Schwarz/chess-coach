@@ -8,6 +8,7 @@ public sealed class GameBook
     public Dictionary<string, int> HintUsed { get; } = new();
     public Dictionary<PieceColor, List<GameMistake>> Mistakes { get; } = new();
     public HashSet<string> Seen { get; } = new();
+    public AssistGate Assist { get; } = new();
     public int Plies => Queue.Count + Reviewed.Count;
 
     public static string Key(string fenBefore, string uci) => $"{fenBefore}|{uci}";

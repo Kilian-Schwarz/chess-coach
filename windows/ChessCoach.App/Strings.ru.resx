@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>Свернуть панель</value></data>
   <data name="panel.expand" xml:space="preserve"><value>Развернуть панель</value></data>
   <data name="panel.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>Не учитывается в вашем профиле</value></data>
   <data name="panel.record" xml:space="preserve"><value>Карточка игрока</value></data>
   <data name="panel.training" xml:space="preserve"><value>Тренировка</value></data>
   <data name="panel.report" xml:space="preserve"><value>Разбор</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>без дебюта</value></data>
   <data name="report.empty" xml:space="preserve"><value>Итогов пока нет. Они появляются, когда партия заканчивается.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Дебют: {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>Эта партия не учитывается в вашем профиле.</value></data>
   <data name="report.white" xml:space="preserve"><value>Белые</value></data>
   <data name="report.black" xml:space="preserve"><value>Чёрные</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>Точность {0} % · средняя потеря {1} · результативность {2}</value></data>

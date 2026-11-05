@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>Réduire le panneau</value></data>
   <data name="panel.expand" xml:space="preserve"><value>Agrandir le panneau</value></data>
   <data name="panel.opening" xml:space="preserve"><value>Ouverture : {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>Ne compte pas pour ton profil</value></data>
   <data name="panel.record" xml:space="preserve"><value>Dossier du joueur</value></data>
   <data name="panel.training" xml:space="preserve"><value>Entraînement</value></data>
   <data name="panel.report" xml:space="preserve"><value>Bilan</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>sans ouverture</value></data>
   <data name="report.empty" xml:space="preserve"><value>Aucun bilan pour l’instant. Il apparaît à la fin d’une partie.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Ouverture : {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>Cette partie ne compte pas pour ton profil.</value></data>
   <data name="report.white" xml:space="preserve"><value>Blancs</value></data>
   <data name="report.black" xml:space="preserve"><value>Noirs</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>Précision {0} % · perte moyenne {1} · performance {2}</value></data>

@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>收起面板</value></data>
   <data name="panel.expand" xml:space="preserve"><value>展开面板</value></data>
   <data name="panel.opening" xml:space="preserve"><value>开局：{0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>不计入你的档案</value></data>
   <data name="panel.record" xml:space="preserve"><value>棋手档案</value></data>
   <data name="panel.training" xml:space="preserve"><value>训练</value></data>
   <data name="panel.report" xml:space="preserve"><value>复盘</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>无开局</value></data>
   <data name="report.empty" xml:space="preserve"><value>还没有复盘。对局结束后会出现复盘。</value></data>
   <data name="report.opening" xml:space="preserve"><value>开局：{0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>这局棋不计入你的档案。</value></data>
   <data name="report.white" xml:space="preserve"><value>白方</value></data>
   <data name="report.black" xml:space="preserve"><value>黑方</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>准确率 {0}% · 平均损失 {1} · 表现 {2}</value></data>

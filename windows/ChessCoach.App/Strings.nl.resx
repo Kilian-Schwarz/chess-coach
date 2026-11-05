@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>Paneel inklappen</value></data>
   <data name="panel.expand" xml:space="preserve"><value>Paneel uitklappen</value></data>
   <data name="panel.opening" xml:space="preserve"><value>Opening: {0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>Telt niet mee voor je profiel</value></data>
   <data name="panel.record" xml:space="preserve"><value>Spelersdossier</value></data>
   <data name="panel.training" xml:space="preserve"><value>Training</value></data>
   <data name="panel.report" xml:space="preserve"><value>Analyse</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>geen opening</value></data>
   <data name="report.empty" xml:space="preserve"><value>Nog geen terugblik. Die verschijnt zodra een partij eindigt.</value></data>
   <data name="report.opening" xml:space="preserve"><value>Opening: {0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>Deze partij telt niet mee voor je profiel.</value></data>
   <data name="report.white" xml:space="preserve"><value>Wit</value></data>
   <data name="report.black" xml:space="preserve"><value>Zwart</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>Nauwkeurigheid {0} % · gemiddeld verlies {1} · prestatie {2}</value></data>

@@ -69,6 +69,7 @@
   <data name="panel.collapse" xml:space="preserve"><value>パネルを折りたたむ</value></data>
   <data name="panel.expand" xml:space="preserve"><value>パネルを展開</value></data>
   <data name="panel.opening" xml:space="preserve"><value>オープニング：{0}</value></data>
+  <data name="panel.notCounted" xml:space="preserve"><value>プロフィールには反映されません</value></data>
   <data name="panel.record" xml:space="preserve"><value>プレイヤー記録</value></data>
   <data name="panel.training" xml:space="preserve"><value>トレーニング</value></data>
   <data name="panel.report" xml:space="preserve"><value>総評</value></data>
@@ -143,6 +144,7 @@
   <data name="report.noOpening" xml:space="preserve"><value>オープニングなし</value></data>
   <data name="report.empty" xml:space="preserve"><value>振り返りはまだありません。対局が終わると表示されます。</value></data>
   <data name="report.opening" xml:space="preserve"><value>オープニング：{0}</value></data>
+  <data name="report.notCounted" xml:space="preserve"><value>この対局はプロフィールには反映されません。</value></data>
   <data name="report.white" xml:space="preserve"><value>白</value></data>
   <data name="report.black" xml:space="preserve"><value>黒</value></data>
   <data name="report.sideStats" xml:space="preserve"><value>精度 {0}％ · 平均損失 {1} · パフォーマンス {2}</value></data>
