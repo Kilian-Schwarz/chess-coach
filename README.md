@@ -1,5 +1,10 @@
 # Chess Coach
 
+[![CI](https://github.com/Kilian-Schwarz/chess-coach/actions/workflows/ci.yml/badge.svg)](https://github.com/Kilian-Schwarz/chess-coach/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Kilian-Schwarz/chess-coach)](https://github.com/Kilian-Schwarz/chess-coach/releases/latest)
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)
+
 A chess trainer that sits next to the board you already play on. It reads the board from your screen, lets Stockfish check the position, and explains in plain words what is going on. It does not hand you moves: you get a hint ladder that starts with a theme and ends, only if you ask for it, with the answer.
 
 The app speaks English and German completely and follows your system language. Twelve more languages (French, Spanish, Italian, Portuguese, Dutch, Polish, Turkish, Russian, Ukrainian, Chinese, Japanese, Korean) are machine translations from the same string catalog; fixes are welcome.
