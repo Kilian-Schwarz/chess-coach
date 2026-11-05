@@ -63,19 +63,13 @@ struct OverlayView: View {
                     .strokeBorder(Color.green.opacity(0.55), lineWidth: 2)
 
                 ForEach(model.state.unsafe, id: \.self) { s in
-                    Rectangle()
-                        .fill(Color.red.opacity(0.22))
-                        .overlay(Rectangle().strokeBorder(Color.red.opacity(0.5), lineWidth: max(1.5, sq * 0.03)))
-                        .frame(width: sq, height: sq)
+                    SquareMark(color: .red, fill: 0.22, stroke: 0.5, line: max(1.5, sq * 0.03), size: sq)
                         .offset(x: inset + CGFloat(s.col) * sq, y: inset + CGFloat(s.row) * sq)
                 }
 
                 if let h = model.state.highlight {
                     let c = model.state.partnerHighlight ? Color.blue : Color.yellow
-                    Rectangle()
-                        .fill(c.opacity(0.28))
-                        .overlay(Rectangle().strokeBorder(c.opacity(0.95), lineWidth: max(2, sq * 0.06)))
-                        .frame(width: sq, height: sq)
+                    SquareMark(color: c, fill: 0.28, stroke: 0.95, line: max(2, sq * 0.06), size: sq)
                         .offset(x: inset + CGFloat(h.col) * sq, y: inset + CGFloat(h.row) * sq)
                 }
 
@@ -139,5 +133,20 @@ struct ArrowShape: Shape {
         p.addLine(to: CGPoint(x: start.x - nx * w, y: start.y - ny * w))
         p.closeSubpath()
         return p
+    }
+}
+
+private struct SquareMark: View {
+    let color: Color
+    let fill: Double
+    let stroke: Double
+    let line: CGFloat
+    let size: CGFloat
+
+    var body: some View {
+        Rectangle()
+            .fill(color.opacity(fill))
+            .overlay(Rectangle().strokeBorder(color.opacity(stroke), lineWidth: line))
+            .frame(width: size, height: size)
     }
 }
