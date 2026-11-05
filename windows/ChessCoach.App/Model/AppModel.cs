@@ -18,6 +18,8 @@ internal sealed partial class AppModel
     private readonly HotKeys _hotKeys = new();
     private readonly SessionState _session = new();
     private readonly ScreenCapturer _capturer = new();
+    private readonly FrameGrabber _grabber;
+    private readonly FrameDump _dump;
     private readonly EngineSession _engine;
     private readonly Openings? _openings = Openings.FromAppDirectory(AppPaths.AppDir);
 
@@ -80,6 +82,8 @@ internal sealed partial class AppModel
     public AppModel()
     {
         Settings = AppSettings.Load();
+        _grabber = new FrameGrabber(_capturer, new CaptureHealth(() => DateTime.UtcNow));
+        _dump = new FrameDump(() => Settings.DebugFrames);
         _llmToken = Tokens.Load();
         _engine = new EngineSession(() => StockfishEngine.FindBinary(Settings.StockfishPath, AppPaths.AppDir));
         _panel = new PanelWindow(Settings);
@@ -243,7 +247,7 @@ internal sealed partial class AppModel
         Notify();
     }
 
-    public sealed record MoveCheck(int Loss, string? Line);
+    public sealed record MoveCheck(int Loss, string? Line, IReadOnlyList<string>? Pv = null);
 
     public async Task<MoveCheck?> CheckMoveAsync(string fen, string uci)
     {
@@ -255,7 +259,7 @@ internal sealed partial class AppModel
         var after = await _engine.AnalyzeAsync(next.Fen, 300, false);
         if (after == null) return null;
         string? line = after.Lines.Count > 0 && after.Lines[0].Pv.Count > 0 ? next.Board.DescribeLine(after.Lines[0].Pv, 4) : null;
-        return new MoveCheck(Math.Max(0, before.Value + after.Value), line);
+        return new MoveCheck(Math.Max(0, before.Value + after.Value), line, after.Lines.Count > 0 ? after.Lines[0].Pv : null);
     }
 
     public void SetModel(string id)
@@ -294,8 +298,9 @@ internal sealed partial class AppModel
     private void HideAll()
     {
         ClearLift();
-        _overlay.HideOverlay();
-        _panel.HidePanel();
+        _boardPresent = false;
+        if (_overlay.IsVisible) _overlay.HideOverlay();
+        if (_panel.IsVisible) _panel.HidePanel();
         _hint = null;
         _panel.CanHint = false;
     }

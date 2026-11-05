@@ -3,6 +3,15 @@ import Foundation
 struct SquareFeature: Codable {
     static let n = 32
     static let maxPieceChroma = 80
+    static let overlayRatio = (low: 0.78, high: 0.93)
+    static let overlaySpread = 0.04
+
+    static func isMoveOverlay(_ c: (Int, Int, Int), bg: (Int, Int, Int)) -> Bool {
+        guard min(bg.0, bg.1, bg.2) > 40 else { return false }
+        let ratios = [Double(c.0) / Double(bg.0), Double(c.1) / Double(bg.1), Double(c.2) / Double(bg.2)]
+        guard let lo = ratios.min(), let hi = ratios.max() else { return false }
+        return hi - lo <= overlaySpread && lo >= overlayRatio.low && hi <= overlayRatio.high
+    }
     var mask: [Bool]
     var lum: [UInt8]
     var fill: Double
@@ -14,17 +23,25 @@ struct SquareFeature: Codable {
         let n = SquareFeature.n
 
         var rs: [Int] = [], gs: [Int] = [], bs: [Int] = []
+        var cr: [Int] = [], cg: [Int] = [], cb: [Int] = []
         let inset = max(1.5, s * 0.06)
         let steps = 24
         for i in 0..<steps {
+            let u = Double(i) / Double(steps - 1)
             let t = inset + (s - 2 * inset) * Double(i) / Double(steps - 1)
+            let tc = inset + (s - 2 * inset) * (u < 0.5 ? u * 0.56 : 1 - (1 - u) * 0.56)
             for (px, py) in [(sx + t, sy + inset), (sx + t, sy + s - inset), (sx + inset, sy + t), (sx + s - inset, sy + t)] {
                 let c = img.rgb(Int(px), Int(py))
                 rs.append(c.0); gs.append(c.1); bs.append(c.2)
             }
+            for (px, py) in [(sx + tc, sy + inset), (sx + tc, sy + s - inset), (sx + inset, sy + tc), (sx + s - inset, sy + tc)] {
+                let c = img.rgb(Int(px), Int(py))
+                cr.append(c.0); cg.append(c.1); cb.append(c.2)
+            }
         }
-        rs.sort(); gs.sort(); bs.sort()
+        rs.sort(); gs.sort(); bs.sort(); cr.sort(); cg.sort(); cb.sort()
         let bg = (rs[rs.count / 2], gs[gs.count / 2], bs[bs.count / 2])
+        let maskBg = (cr[cr.count / 2], cg[cg.count / 2], cb[cb.count / 2])
 
         var mask = [Bool](repeating: false, count: n * n)
         var lum = [UInt8](repeating: 0, count: n * n)
@@ -40,7 +57,7 @@ struct SquareFeature: Codable {
                     let py = sy + margin + (Double(j) + (Double(sj) + 0.5) / 3) * span / Double(n)
                     let c = img.rgb(Int(px), Int(py))
                     let chroma = max(c.0, c.1, c.2) - min(c.0, c.1, c.2)
-                    if colorDistance(c, bg) > 45 && chroma <= SquareFeature.maxPieceChroma { hitsInCell += 1 }
+                    if colorDistance(c, maskBg) > 45 && chroma <= SquareFeature.maxPieceChroma && !SquareFeature.isMoveOverlay(c, bg: maskBg) { hitsInCell += 1 }
                     lSum += (c.0 * 299 + c.1 * 587 + c.2 * 114) / 1000
                 } }
                 let isPiece = hitsInCell >= 4

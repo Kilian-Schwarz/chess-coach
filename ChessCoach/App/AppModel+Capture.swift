@@ -6,6 +6,9 @@ extension AppModel {
     static let lostGrace: TimeInterval = 2.5
     static let reviewStableFrames = 4
     static let maxUnclassified = 6
+    static let stuckSeconds = 3.0
+    static let regionMargin = 0.2
+    static let windowRetrySeconds = 3.0
     static var mouseDown: Bool { NSEvent.pressedMouseButtons & 1 != 0 }
 
     func moveConfirmed(_ moves: [PlayedMove], marks: [(file: Int, rank: Int)]) -> Bool {
@@ -28,88 +31,139 @@ extension AppModel {
             tracked = nil
         }
 
-        let displays = try await ScreenCapture.captureDisplays(preferred: tracked?.displayID ?? lastDisplay)
-        let found: Located? = await Task.detached(priority: .userInitiated) {
-            for d in displays {
+        let started = Date()
+        var scanMs = 0
+        let found: Located? = try await ScreenCapture.firstDisplay(preferred: tracked?.displayID ?? lastDisplay) { d in
+            let t0 = Date()
+            let located: Located? = await Task.detached(priority: .userInitiated) {
                 guard let img = RGBImage(cgImage: d.image),
-                      let res = BoardScanner.scan(img, templates: currentTemplates) else { continue }
+                      let res = BoardScanner.scan(img, templates: currentTemplates) else { return nil }
                 return Located(display: d, scan: res, scale: d.frame.width / Double(img.width), unchanged: false)
-            }
-            return nil
-        }.value
+            }.value
+            scanMs += Int(Date().timeIntervalSince(t0) * 1000)
+            return located
+        }
+        let totalMs = Int(Date().timeIntervalSince(started) * 1000)
         regionMisses = 0
         if let f = found {
             let b = f.scan.board
             boardStabilizer.reset()
+            relearnGuard.reset()
             let stable = boardStabilizer.accept(BoardRect(x: b.x * f.scale, y: b.y * f.scale, size: b.size * f.scale)).rect
             tracked = (f.display.displayID, f.display.frame, CGRect(x: stable.x, y: stable.y, width: stable.size, height: stable.size))
             lastChecksum = f.scale == 1 ? BoardChecksum.compute(f.display.image, board: b) : nil
             cachedLocated = f
-            Log.write("Board found on the full screen: \(Int(stable.size)) px at \(Int(stable.x)),\(Int(stable.y))")
+            verifyFailedSince = nil
+            lostLogged = false
+            trackedWindow = nil
+            windowCapture = false
+            windowAttemptAt = .distantPast
+            Log.write("Board found on the full screen: \(Int(stable.size)) px at \(Int(stable.x)),\(Int(stable.y)) in \(totalMs) ms (detection \(scanMs) ms)")
         } else {
             tracked = nil
             cachedLocated = nil
             lastChecksum = nil
+            if totalMs > 300 { Log.write("Full-screen search without a board took \(totalMs) ms (detection \(scanMs) ms)") }
         }
         return found
     }
 
     private func locateInRegion(_ tr: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect), templates currentTemplates: PieceTemplates) async throws -> Located? {
-        var reason = "no capture"
-        var lastCrop: (image: CGImage, expected: BoardRect)?
-        for factor in [0.12, 0.3] {
-            let m = max(tr.rect.width * factor, 40)
-            guard let d = try await ScreenCapture.captureRegion(displayID: tr.displayID, frame: tr.frame,
-                                                                rect: tr.rect.insetBy(dx: -m, dy: -m)) else {
-                reason = "region capture unavailable for \(Int(tr.rect.minX)),\(Int(tr.rect.minY)) \(Int(tr.rect.width)) px"
-                break
-            }
-            let expected = BoardRect(x: tr.rect.minX - d.origin.x, y: tr.rect.minY - d.origin.y, size: tr.rect.width)
-            let sum = BoardChecksum.compute(d.image, board: expected)
-            if factor == 0.12, let sum, sum == lastChecksum, var cached = cachedLocated {
-                cached.unchanged = true
-                regionMisses = 0
-                return cached
-            }
-            let img = d.image
-            lastCrop = (img, expected)
-            let scan: ScanResult? = await Task.detached(priority: .userInitiated) {
-                guard let rgb = RGBImage(cgImage: img) else { return nil }
-                return BoardScanner.scan(rgb, templates: currentTemplates)
-            }.value
-            if let scan {
-                let b = scan.board
-                let stable = boardStabilizer.accept(BoardRect(x: d.origin.x + b.x, y: d.origin.y + b.y, size: b.size))
-                if stable.changed { Log.write("Board moved or resized: \(Int(stable.rect.size)) px at \(Int(stable.rect.x)),\(Int(stable.rect.y))") }
-                let r = stable.rect
-                tracked = (tr.displayID, tr.frame, CGRect(x: r.x, y: r.y, width: r.size, height: r.size))
-                lastChecksum = BoardChecksum.compute(d.image, board: BoardRect(x: r.x - d.origin.x, y: r.y - d.origin.y, size: r.size))
-                let loc = Located(display: d, scan: scan, scale: 1, unchanged: false)
-                cachedLocated = loc
-                regionMisses = 0
-                return loc
-            }
-            reason = "no board in a \(d.image.width)x\(d.image.height) crop (margin \(Int(factor * 100)) %)"
+        if trackedWindow == nil, boardColors != nil, Date().timeIntervalSince(windowAttemptAt) > Self.windowRetrySeconds { await resolveWindow(tr) }
+        let m = max(tr.rect.width * Self.regionMargin, 40)
+        let wanted = tr.rect.insetBy(dx: -m, dy: -m)
+        var captured: CapturedDisplay?
+        if let w = trackedWindow {
+            captured = try? await ScreenCapture.captureWindowRegion(w, displayID: tr.displayID, displayFrame: tr.frame, rect: wanted)
+            if captured == nil { trackedWindow = nil; windowAttemptAt = .distantPast }
         }
+        windowCapture = captured != nil
+        if captured == nil { captured = try await ScreenCapture.captureRegion(displayID: tr.displayID, frame: tr.frame, rect: wanted) }
+        guard let d = captured else {
+            return regionFailed("region capture unavailable", image: nil)
+        }
+        let expected = BoardRect(x: tr.rect.minX - d.origin.x, y: tr.rect.minY - d.origin.y, size: tr.rect.width)
+        if let sum = BoardChecksum.compute(d.image, board: expected), sum == lastChecksum, var cached = cachedLocated {
+            cached.unchanged = true
+            regionMisses = 0
+            verifyFailedSince = nil
+            return cached
+        }
+        let img = d.image, colors = boardColors, origin = (x: Double(d.origin.x), y: Double(d.origin.y))
+        var stabilizer = boardStabilizer
+        let result: RegionObserver.Result? = await Task.detached(priority: .userInitiated) {
+            guard let rgb = RGBImage(cgImage: img) else { return nil }
+            return RegionObserver.observe(rgb, origin: origin, expected: expected, templates: currentTemplates, colors: colors, stabilizer: &stabilizer)
+        }.value
+        boardStabilizer = stabilizer
+        func accept(_ scan: ScanResult, rect r: BoardRect) -> Located {
+            tracked = (tr.displayID, tr.frame, CGRect(x: r.x, y: r.y, width: r.size, height: r.size))
+            lastChecksum = BoardChecksum.compute(d.image, board: BoardRect(x: r.x - d.origin.x, y: r.y - d.origin.y, size: r.size))
+            let loc = Located(display: d, scan: scan, scale: 1, unchanged: false)
+            cachedLocated = loc
+            regionMisses = 0
+            verifyFailedSince = nil
+            return loc
+        }
+        switch result {
+        case .scanned(let scan, let r, let changed)?:
+            if changed {
+                rectUnsettled = true
+                let line = "Board moved or resized: \(Int(r.size)) px at \(Int(r.x)),\(Int(r.y))"
+                Log.write(line)
+                FrameDebug.save(d.image, reason: line)
+            }
+            return accept(scan, rect: BoardRect(x: r.x, y: r.y, size: r.size))
+        case .verified(let scan)?:
+            return accept(scan, rect: BoardRect(x: tr.rect.minX, y: tr.rect.minY, size: tr.rect.width))
+        case .covered?:
+            missView = .covered
+            regionMisses = max(regionMisses, 1)
+            verifyFailedSince = nil
+            if !windowCapture { return regionFailed("board covered, not captured from its own window", image: d.image) }
+            if var cached = cachedLocated { cached.unchanged = true; return cached }
+            return regionFailed("covered without a cached board", image: d.image)
+        case .failed(let reason)?:
+            if windowCapture { trackedWindow = nil; windowAttemptAt = .distantPast }
+            return regionFailed(reason, image: d.image)
+        case nil:
+            return regionFailed("crop unreadable", image: d.image)
+        }
+    }
+
+    private func resolveWindow(_ tr: (displayID: CGDirectDisplayID, frame: CGRect, rect: CGRect)) async {
+        windowAttemptAt = Date()
+        guard let colors = boardColors, let candidates = try? await ScreenCapture.windowCandidates(displayFrame: tr.frame, rect: tr.rect) else { return }
+        let expectedLocal = tr.rect
+        for w in candidates {
+            guard let d = try? await ScreenCapture.captureWindowRegion(w, displayID: tr.displayID, displayFrame: tr.frame, rect: expectedLocal),
+                  abs(Double(d.origin.x) - expectedLocal.minX) < 2, abs(Double(d.origin.y) - expectedLocal.minY) < 2, Double(d.image.width) >= expectedLocal.width - 2 else { continue }
+            let img = d.image, size = tr.rect.width
+            let verdict: BoardReadability.Verification = await Task.detached(priority: .userInitiated) {
+                guard let rgb = RGBImage(cgImage: img) else { return .failed }
+                let scan = BoardScanner.analyze(rgb, board: BoardRect(x: 0, y: 0, size: size), templates: PieceTemplates())
+                return BoardReadability.verify(scan.features, colors: colors)
+            }.value
+            if verdict == .matched {
+                trackedWindow = w
+                Log.write("Board window resolved: \(w.owningApplication?.applicationName ?? "?"), \(Int(w.frame.width))x\(Int(w.frame.height))")
+                return
+            }
+        }
+        trackedWindow = nil
+    }
+
+    private func regionFailed(_ reason: String, image: CGImage?) -> Located? {
         missView = .gone
-        if let crop = lastCrop, let colors = boardColors {
-            let feats: [[SquareFeature]]? = await Task.detached(priority: .userInitiated) {
-                guard let rgb = RGBImage(cgImage: crop.image) else { return nil }
-                return BoardScanner.analyze(rgb, board: crop.expected, templates: PieceTemplates()).features
-            }.value
-            if let feats, BoardReadability.ringMatch(feats, colors) >= BoardReadability.ringShare { missView = .covered }
-        }
-        if missView == .covered, var cached = cachedLocated {
+        if verifyFailedSince == nil { verifyFailedSince = Date() }
+        let failedFor = Date().timeIntervalSince(verifyFailedSince ?? Date())
+        if let image { FrameDebug.save(image, reason: "Region miss: \(reason), verification failed for \(String(format: "%.1f", failedFor)) s") }
+        if failedFor < Self.lostGrace, var cached = cachedLocated {
             regionMisses = max(regionMisses, 1)
             cached.unchanged = true
             return cached
         }
-        regionMisses += 1
-        if regionMisses < 3, var cached = cachedLocated {
-            cached.unchanged = true
-            return cached
-        }
-        Log.write("Board area lost, searching the full screen: \(reason), \(regionMisses) misses in a row")
+        Log.write("Board area lost, searching the full screen: \(reason), verification failed for \(String(format: "%.1f", failedFor)) s")
         return nil
     }
 
@@ -139,9 +193,11 @@ extension AppModel {
         needsPermission = false
 
         let located: Located?
-        do { located = try await locateBoard() }
+        do { located = try await locateBoard(); captureFailedSince = nil }
         catch {
+            if captureFailedSince == nil { captureFailedSince = Date() }
             Log.write("Screen capture failed: \(error.localizedDescription)")
+            guard Date().timeIntervalSince(captureFailedSince ?? Date()) >= Self.lostGrace else { return }
             status = String(localized: "Screen capture failed")
             suggestion = error.localizedDescription
             hideAll()
@@ -151,7 +207,7 @@ extension AppModel {
         guard isActive else { return }
 
         guard let loc = located else {
-            if lostSince == nil { lostSince = Date() }
+            if lostSince == nil { lostSince = verifyFailedSince ?? Date() }
             if lastBoardRect != nil, Date().timeIntervalSince(lostSince ?? Date()) < Self.lostGrace { return }
             observeEnd(.gone)
             status = String(localized: "Looking for a chessboard …")
@@ -179,6 +235,8 @@ extension AppModel {
         let boardRect = cocoaRect(for: BoardRect(x: local.x - display.origin.x, y: local.y - display.origin.y, size: local.size),
                                   on: display, scale: 1)
         lastBoardRect = boardRect
+        boardPresent = true
+        if rectUnsettled { rectUnsettled = false; relearnGuard.reset() }
 
         if scan.looksLikeStart {
             let wb = templates.isEmpty ? nil : BoardScanner.guessWhiteAtBottom(scan.screen)
@@ -197,8 +255,12 @@ extension AppModel {
             }
         }
 
-        if !scan.looksLikeStart, relearnTried != scan.screen, templates.isEmpty || templates.fitsBadly(scan) {
+        let badFit = !scan.looksLikeStart && (templates.isEmpty || templates.fitsBadly(scan))
+        let stableRect = BoardRect(x: local.x, y: local.y, size: local.size)
+        let relearnDue = relearnGuard.observe(bad: badFit && !Self.mouseDown, rect: stableRect, required: templates.isEmpty ? 1 : RelearnGuard.badFrames)
+        if relearnDue, relearnTried != scan.screen {
             relearnTried = scan.screen
+            let why = "bad fit on \(relearnGuard.count) frames at \(Int(local.size)) px at \(Int(local.x)),\(Int(local.y)), \(record.moves.count) plies tracked"
             var t = PieceTemplates()
             if !templates.isEmpty, let tracked = record.current, let wb = t.learnKnown(scan.features, board: tracked.board, preferWhiteAtBottom: autoWhiteAtBottom) {
                 autoWhiteAtBottom = wb
@@ -208,10 +270,12 @@ extension AppModel {
                 stablePlacement = nil
                 dropCapture()
                 status = String(localized: "Pieces learned")
-                Log.write("Pieces relearned from the tracked position: \(tracked.fen)")
+                let line = "Pieces relearned from the tracked position (\(why)): \(tracked.fen)"
+                Log.write(line)
+                FrameDebug.save(display.image, reason: line)
                 return
             }
-            if let found = t.learnEarlyPosition(scan.features) {
+            if record.moves.count <= EarlyStart.maxPlies, let found = t.learnEarlyPosition(scan.features) {
                 autoWhiteAtBottom = found.whiteAtBottom
                 templates = t
                 Self.saveTemplates(t)
@@ -220,7 +284,9 @@ extension AppModel {
                 stablePlacement = nil
                 dropCapture()
                 status = String(localized: "Pieces learned")
-                Log.write("Pieces relearned from an early position: \(found.position.fen)")
+                let line = "Pieces relearned from an early position (\(why)): \(found.position.fen)"
+                Log.write(line)
+                FrameDebug.save(display.image, reason: line)
                 return
             }
         }
@@ -253,18 +319,45 @@ extension AppModel {
         case .white: whiteAtBottom = true
         case .black: whiteAtBottom = false
         case .auto:
-            if let g = BoardScanner.guessWhiteAtBottom(scan.screen) { autoWhiteAtBottom = g }
-            whiteAtBottom = autoWhiteAtBottom ?? true
+            let resolved = orientation.resolve(guess: BoardScanner.guessWhiteAtBottom(scan.screen), screen: scan.screen, isStart: scan.looksLikeStart)
+            if let reason = resolved.reason { Log.write("Orientation changed to \(resolved.whiteAtBottom ? "white" : "black") at the bottom: \(reason)") }
+            whiteAtBottom = resolved.whiteAtBottom
         }
         let me: PieceColor = whiteAtBottom ? .white : .black
         lastMe = me
         let placement = Placement(screen: scan.screen, whiteAtBottom: whiteAtBottom)
         updateLift(placement: placement, me: me, whiteAtBottom: whiteAtBottom)
 
+        if Self.mouseDown {
+            mouseHeld = true
+            mismatchSince = nil
+            return
+        }
+        if mouseHeld {
+            mouseHeld = false
+            pendingScreen = nil
+            confirmSoon = true
+            return
+        }
+
+        if placement == stablePlacement, let cur = record.current, cur.board != placement {
+            if mismatchSince == nil || Self.mouseDown { mismatchSince = Date() }
+            else if Date().timeIntervalSince(mismatchSince ?? Date()) > Self.stuckSeconds {
+                mismatchSince = nil
+                forceResync = true
+                stablePlacement = nil
+                Log.write("Screen and record disagreed for \(Int(Self.stuckSeconds)) s, resyncing")
+                return
+            }
+        } else {
+            mismatchSince = nil
+        }
+
         if placement != stablePlacement {
             if placement.isStartPosition { observeEnd(.readable, isStart: true) }
             let marking = SideToMove.detect(scan: scan, whiteAtBottom: whiteAtBottom, templates: templates)
-            let update = record.update(placement: placement, whiteAtBottom: whiteAtBottom, hintedMover: marking.mover)
+            let update = record.update(placement: placement, whiteAtBottom: whiteAtBottom, hintedMover: marking.mover, forced: forceResync)
+            forceResync = false
             stablePlacement = placement
             sideOverride = nil
             suggestionCard = nil

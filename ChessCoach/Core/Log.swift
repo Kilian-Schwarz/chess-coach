@@ -3,7 +3,8 @@ import Foundation
 enum Log {
     private static let queue = DispatchQueue(label: "chesscoach.log")
     private static let url: URL = {
-        let dir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Logs/ChessCoach", isDirectory: true)
+        let dir = ProcessInfo.processInfo.environment["CHESSCOACH_LOG_DIR"].map { URL(fileURLWithPath: $0, isDirectory: true) }
+            ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Logs/ChessCoach", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir.appendingPathComponent("chesscoach.log")
     }()

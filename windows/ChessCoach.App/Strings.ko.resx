@@ -212,4 +212,8 @@
   <data name="welcome.gotIt" xml:space="preserve"><value>확인</value></data>
   <data name="welcome.switchOn" xml:space="preserve"><value>켜기</value></data>
   <data name="training.after" xml:space="preserve"><value>그 다음: {0}</value></data>
+  <data name="ask.hintExplained" xml:space="preserve"><value>힌트 설명</value></data>
+  <data name="explain.noReliable" xml:space="preserve"><value>신뢰할 만한 설명이 없습니다. “다시 설명”을 눌러 보세요.</value></data>
+  <data name="puzzle.why.title" xml:space="preserve"><value>왜 통하는가</value></data>
+  <data name="puzzle.habit.title" xml:space="preserve"><value>기억할 습관</value></data>
 </root>

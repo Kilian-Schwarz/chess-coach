@@ -86,6 +86,10 @@ extension AppModel {
             prefetchIdea(ctx)
             return
         }
+        if hintCtx != nil, suggestionCard?.kind == .hint, hintLevel >= 1 {
+            ask("Explain the hint on screen again and tell me why it makes sense.", title: String(localized: "Hint explained"))
+            return
+        }
         let slot: Slot = (hintCtx != nil && (effectiveShowBest || hintLevel >= 4) && suggestionCard?.style != nil) ? .suggestion : .review
         guard let c = card(slot), let job = jobs[slot], c.id == job.cardId else { return }
         if let style = c.style, let pid = c.profileId { store.update(pid) { $0.recordFeedback(.askedAgain, usedStyle: style) } }
@@ -93,36 +97,41 @@ extension AppModel {
         startExplanation(slot, job, useCache: false, lengthOverride: card(slot)?.style?.length)
     }
 
-    func ask(_ question: String) {
+    func ask(_ question: String, title: String? = nil) {
         let id = "question|" + question
-        let title = String(localized: "Question")
+        let cardTitle = String(localized: "Question")
         guard let placement = hintCtx?.position.board ?? record.current?.board ?? stablePlacement else {
-            answerCard = CoachCard(id: id, kind: .answer, title: title, note: String(localized: "No position recognised yet."))
+            answerCard = CoachCard(id: id, kind: .answer, title: cardTitle, note: String(localized: "No position recognised yet."))
             return
         }
         guard llmConfigured else {
-            answerCard = CoachCard(id: id, kind: .answer, title: title, note: String(localized: "Set up an AI server in the settings (⌘,) for answers."))
+            answerCard = CoachCard(id: id, kind: .answer, title: cardTitle, note: String(localized: "Set up an AI server in the settings (⌘,) for answers."))
             return
         }
         let color = hintCtx?.toMove ?? record.current?.turn ?? lastMe ?? .white
-        let ctx = hintCtx
-        let showsBest = effectiveShowBest || hintLevel >= 4
-        let request = Coach.questionRequest(
-            placement: placement, toMove: color, question: question,
-            score: ctx?.result.score(.facts),
-            bestMove: showsBest ? ctx.map { $0.position.board.describeMove($0.hints.move, .facts) } : nil,
-            threat: ctx.flatMap { threatVisible($0) ? $0.threat?.text(.facts) : nil },
-            language: Language.englishName)
-        var card = CoachCard(id: id, kind: .answer, title: String(localized: "Your question: \(question)"))
+        let profile = store.profile(id: hintCtx?.profileId ?? store.activeId)
+        var card = CoachCard(id: id, kind: .answer, title: title ?? String(localized: "Your question: \(question)"))
         card.isLoading = true
         answerCard = card
         panel.model.question = ""
         panel.model.isAsking = true
         questionTask?.cancel()
-        questionTask = stream(request, update: { [weak self] text, done in
+        questionTask = stream(prepare: { [weak self] in
+            guard let self else { return nil }
+            let grounding = await self.coachingGrounding(question: question, placement: placement, toMove: color)
+            guard !Task.isCancelled else { return nil }
+            self.questionAllowed = FactCheck.allowed(positions: grounding.positions, lines: grounding.pvs)
+            return Coach.questionRequest(grounding: grounding, question: question, context: profile?.promptContext ?? PlayerContext.neutral,
+                                         style: profile?.style.current ?? ExplanationStyle(), language: Language.englishName)
+        }, update: { [weak self] text, done in
             guard let self, self.answerCard?.id == id else { return }
-            self.answerCard?.text = text
-            if done { self.answerCard?.isLoading = false; self.panel.model.isAsking = false }
+            guard done else { self.answerCard?.text = text; return }
+            let checked = FactCheck.clean(text, allowed: self.questionAllowed)
+            if checked.removed > 0 { Log.write("Answer: removed \(checked.removed) sentence(s) with invented moves") }
+            self.answerCard?.text = checked.text ?? ""
+            if checked.text == nil { self.answerCard?.note = String(localized: "No reliable explanation. Try “Explain again”.") }
+            self.answerCard?.isLoading = false
+            self.panel.model.isAsking = false
         }, failed: { [weak self] msg in
             guard let self, self.answerCard?.id == id else { return }
             self.answerCard?.isLoading = false
@@ -134,9 +143,16 @@ extension AppModel {
     func stream(_ request: Coach.ExplanationRequest,
                         update: @escaping @MainActor (String, Bool) -> Void,
                         failed: @escaping @MainActor (String) -> Void) -> Task<Void, Never> {
+        stream(prepare: { request }, update: update, failed: failed)
+    }
+
+    func stream(prepare: @escaping @MainActor () async -> Coach.ExplanationRequest?,
+                        update: @escaping @MainActor (String, Bool) -> Void,
+                        failed: @escaping @MainActor (String) -> Void) -> Task<Void, Never> {
         let base = llmBase, token = llmToken, model = llmModel
         return Task {
             do {
+                guard let request = await prepare() else { return }
                 let final = try await LLMClient.explain(base: base, token: token, model: model, system: request.system,
                                                         user: request.user, maxTokens: request.maxTokens) { text in
                     update(text, false)

@@ -167,9 +167,7 @@ public class EngineTests
     [Fact]
     public void DefaultLogPathEndsWithChessCoachLogs()
     {
-        Log.Directory = null!;
-        var p = Log.FilePath.Replace('\\', '/');
-        Assert.EndsWith("ChessCoach/Logs/chesscoach.log", p);
-        Log.Directory = Path.Combine(Path.GetTempPath(), "chesscoach-test-logs");
+        Assert.EndsWith("ChessCoach/Logs", Log.DefaultDirectory(null).Replace('\\', '/'));
+        Assert.Equal("/custom/logs", Log.DefaultDirectory("/custom/logs"));
     }
 }

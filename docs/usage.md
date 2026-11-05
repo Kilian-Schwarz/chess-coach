@@ -83,6 +83,10 @@ Settings, field for the server address and token, "Load models", pick a model. T
 
 The app checks for updates at start and then every 24 hours, and installs them in the background. The new version starts the next time you quit and open the app, or after you confirm. "Check for Updates ..." in the menu checks right now; "Install updates automatically" in Settings turns the background install off. Automatic checks never open a dialog or take the focus: a new version shows up as a menu entry at the top ("Restart to update to version X", or "Version X available ..." when the app cannot update itself) and is installed when you quit or click the entry. Only "Check for Updates ..." opens dialogs. A failed automatic check is silent.
 
+## Troubleshooting
+
+The log is `~/Library/Logs/ChessCoach/chesscoach.log`. If the panel or overlay flickers or the board is lost, switch on frame capture and play on: `defaults write de.webschwarz.chesscoach debugFrames -bool YES`. Whenever the board area is missed, the board rectangle changes or the pieces are relearned, the app saves the captured crop as PNG with a one-line reason in `~/Library/Logs/ChessCoach/frames/` (the newest 60 files are kept). Switch it off with `defaults delete de.webschwarz.chesscoach debugFrames`.
+
 ## Where data lives
 
 macOS: `~/Library/Application Support/ChessCoach/`. Windows: `%APPDATA%\ChessCoach\`. The folder holds `profiles`, `puzzles` and `games` as JSON. The formats are the same on both systems, so a profile can be copied between a Mac and a Windows PC.

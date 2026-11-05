@@ -74,6 +74,25 @@ enum BoardReadability {
         return Double(hits) / Double(total)
     }
 
+    static let verifyShare = 0.6
+
+    enum Verification { case matched, covered, failed }
+
+    static func matchShare(_ features: [[SquareFeature]], _ colors: BoardColors) -> Double {
+        var hits = 0
+        for r in 0..<8 { for c in 0..<8 {
+            guard let px = bg(features[r][c]) else { continue }
+            if dist(px, (r + c) % 2 == 1 ? colors.light : colors.dark) <= ringTolerance { hits += 1 }
+        } }
+        return Double(hits) / 64
+    }
+
+    static func verify(_ features: [[SquareFeature]], colors: BoardColors?) -> Verification {
+        guard let colors else { return .failed }
+        if matchShare(features, colors) >= verifyShare { return .matched }
+        return ringMatch(features, colors) >= ringShare ? .covered : .failed
+    }
+
     static func view(_ features: [[SquareFeature]], colors: BoardColors?) -> BoardView {
         if isReadable(features) { return .readable }
         guard let colors else { return .gone }

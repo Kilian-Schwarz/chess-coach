@@ -4,6 +4,8 @@ public enum GameEndReason { Checkmate, Stalemate, Overlay, BoardGone, NewStart, 
 
 public enum BoardSight { Readable, Covered, Gone }
 
+public enum Verification { Matched, Covered, Failed }
+
 public sealed record GameEnd(GameEndReason Reason, string Result, bool Silent = false)
 {
     public bool KnownResult => Result != "*";
@@ -72,6 +74,27 @@ public static class BoardReadability
             }
         return (double)hits / total;
     }
+
+    public const double VerifyShare = 0.6;
+
+    public static double MatchShare(SquareFeature[][] features, BoardColors colors)
+    {
+        int hits = 0;
+        for (int r = 0; r < 8; r++)
+            for (int c = 0; c < 8; c++)
+                if (Background(features[r][c]) is { } px && Dist(px, (r + c) % 2 == 1 ? colors.Light : colors.Dark) <= RingTolerance) hits++;
+        return hits / 64.0;
+    }
+
+    public static Verification Verify(SquareFeature[][] features, BoardColors? colors)
+    {
+        if (colors == null) return Verification.Failed;
+        if (MatchShare(features, colors) >= VerifyShare) return Verification.Matched;
+        return RingMatch(features, colors) >= RingShare ? Verification.Covered : Verification.Failed;
+    }
+
+    public static BoardSight Effective(BoardSight seen, bool windowCapture) =>
+        seen == BoardSight.Covered && !windowCapture ? BoardSight.Gone : seen;
 
     public static BoardSight Sight(SquareFeature[][] features, BoardColors? colors)
     {

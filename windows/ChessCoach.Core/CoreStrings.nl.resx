@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>De server meldt fout {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Op dit adres is geen modellijst gevonden. Voer voor Open WebUI bijvoorbeeld https://openwebui.example.com in, voor vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Kies in de instellingen een server en model voor uitleg.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Pas op: {0} op {1} zou onbeschermd staan.</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Pas op: een minder waardevol stuk bedreigt {0} op {1}.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Let op: {0} op {1} kan worden geslagen door {2} op {3}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Pas op: {0} naar {1} laat {2} op {3} onbeschermd achter.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Pas op: {0} velden zijn onveilig voor {1}, rood gemarkeerd.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>Meest voorkomende fout: {0} ({1}×). Voorbeeld: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} goede zetten op rij.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Voor de volgende partij: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>De server heeft het adres of het model niet gevonden (fout 404).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Breng je koning in veiligheid: rokeer.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Promotie</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Aanval door ontdekking</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Pin</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Pin opheffen</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Voordeel verzilveren</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>Hier kan een pion promoveren.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Zoek een aanval door ontdekking: als je een stuk verzet, valt een ander aan.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Zoek een pin: een stuk dat niet kan zetten zonder een waardevoller stuk bloot te geven.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>Een van je stukken staat in de pin. Zoek een manier om hem te bevrijden.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>Je staat duidelijk voor: ruil stukken, val de koning aan of win meer materiaal.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} kan de laatste rij bereiken en dame worden.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>Als {0} zet, valt een stuk erachter plotseling iets waardevols aan.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} kan een stuk van de tegenstander vastzetten voor een waardevoller stuk.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>Een van je stukken staat in de pin en kan niet vrij zetten. Zoek de zet die hem bevrijdt.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} helpt je te verzilveren: stukken ruilen, de koning najagen of meer materiaal winnen.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>Je zou verliezen: {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} zou worden aangevallen en kan niet weg.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>Het zou aanvallen: {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} opgelost</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>Uit je partij van {0}.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>Uit je partij van {0}, zet {1}: je speelde daar {2} ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>De vijandelijke koning heeft weinig veilige velden. Welke schaakjes kunnen de partij beslissen?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>De laatste zet van je tegenstander liet iets onbeschermd. Wat kun je aanvallen?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Twee vijandelijke stukken staan op velden die één stuk kan bereiken. Kan één zet beide aanvallen?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Welke schaakjes zijn er en wat dwingt elk af?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>Een pion staat dicht bij de laatste rij. Wat houdt hem tegen en kun je de weg vrijmaken?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>Een van je stukken staat voor een toren, loper of dame. Wat als het met dreiging wegspringt?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Staat een vijandelijk stuk op één lijn met iets waardevollers erachter?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>Een van je stukken zit vast in een pen. Hoe maak je het vrij?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>Wat dreigt je tegenstander nu, en hoe stop je dat?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Je koning staat nog in het centrum. Wat is de veiligste manier om dat op te lossen?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Welk van je stukken staat nog thuis en kan meedoen?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Er zijn weinig stukken over. Waar helpt je koning het meest?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Welke pionzet wint ruimte of opent een lijn voor je stukken?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Welk van je stukken doet het minst? Waar zou het meer doen?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>Je staat voor. Hoe verzilver je dat zonder tegenspel toe te laten?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Overloop voor elke zet alle schaakjes, dan alle slagzetten, dan alle dreigingen.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Vraag je voor je zet af welke vijandelijke stukken onbeschermd zijn of vaker aangevallen dan verdedigd.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Zoek velden waarvandaan één stuk twee doelen raakt, vooral met het paard.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Check elk schaakje. Een dwingende zet beslist vaak voordat de tegenstander kan reageren.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Tel de velden tot promotie en wie ze controleert.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Kijk voor je zet naar stukken die voor je langeafstandsstukken staan.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Zoek langs de lijnen naar een vijandelijk stuk met een waardevoller stuk erachter.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Controleer eerst of een van je stukken vastzit in een pen voordat je iets anders plant.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Vraag je af wat je tegenstander straks wil doen voordat je je eigen plan speelt.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Breng de koning vroeg in veiligheid en gebruik daarna de toren.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>Breng elk stuk in het spel voordat je aan een tweede plan begint.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>Breng de koning in het eindspel naar de actie.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Controleer voor een pionzet wat die voor jou en je tegenstander opent.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>Zoek je slechtste stuk en verbeter het.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>Wanneer je voorstaat: ruil stukken en houd de koning veilig in plaats van vuurwerk te zoeken.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} stapt opzij, zodat {1} {2} aanvalt.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} zit nu vast in een pen voor {1}.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} valt tegelijk {1} aan.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Hoofdvariant: {0}. Dat is schaakmat.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Hoofdvariant: {0}. Je wint {1} punten materiaal.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Hoofdvariant: {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>Erachter valt {0} dan {1} aan.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>Vanaf het nieuwe veld valt het aan: {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>Ze gaat naar rij {0}.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>Ze gaat naar de {0}-lijn.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>Daarmee sta je schaakmat toe.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Daarmee verlies je {0} op {1}.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>Het mist het idee hier: {0}.</value></data>
 </root>

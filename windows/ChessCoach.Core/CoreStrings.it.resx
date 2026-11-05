@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>Il server ha segnalato l’errore {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Nessun elenco di modelli trovato a questo indirizzo. Per Open WebUI inserisci ad es. https://openwebui.example.com, per vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Per ottenere spiegazioni, scegli un server e un modello nelle impostazioni.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Attenzione: {0} in {1} resterebbe senza difesa.</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Attenzione: un pezzo di valore minore minaccia {0} in {1}.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Attenzione: {0} in {1} potrebbe essere catturata da {2} in {3}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Attenzione: muovere {0} in {1} lascia {2} in {3} senza protezione.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Attenzione: {0} case non sono sicure per {1}, segnate in rosso.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>Errore più frequente: {0} ({1}×). Esempio: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} buone mosse di fila.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Per la prossima partita: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>Il server non ha trovato l’indirizzo o il modello (errore 404).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Metti il tuo re al sicuro: arrocca.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Promozione</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Attacco di scoperta</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Inchiodatura</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Sciogliere l’inchiodatura</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Sfruttare il vantaggio</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>Qui un pedone può promuovere.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Cerca un attacco di scoperta: muovendo un pezzo ne scopri un altro.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Cerca un’inchiodatura: un pezzo che non può muoversi senza scoprirne uno più prezioso.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>Uno dei tuoi pezzi è inchiodato. Cerca un modo per liberarlo.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>Sei nettamente in vantaggio: scambia pezzi, attacca il re o vinci altro materiale.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} può raggiungere l’ultima traversa e diventare donna.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>Quando {0} si muove, un pezzo dietro attacca all’improvviso qualcosa di prezioso.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} può inchiodare un pezzo avversario davanti a uno più prezioso.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>Uno dei tuoi pezzi è inchiodato e non può muoversi liberamente. Trova la mossa che lo libera.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} ti aiuta a incassare: scambiare pezzi, andare contro il re o vincere altro materiale.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>Perderesti: {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} sarebbe attaccato e non potrebbe spostarsi.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>Attaccherebbe: {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} risolti</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>Dalla tua partita del {0}.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>Dalla tua partita del {0}, mossa {1}: hai giocato {2} ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Al re avversario mancano case sicure. Quali scacchi potrebbero chiudere la partita?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>L'ultima mossa dell'avversario ha lasciato qualcosa indifeso. Cosa puoi attaccare?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Due pezzi avversari stanno su case che un solo pezzo può raggiungere. Una mossa può attaccarli entrambi?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Quali scacchi ci sono e cosa impone ciascuno?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>Un pedone è vicino all'ultima traversa. Cosa lo ferma e puoi liberare la strada?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>Un tuo pezzo sta davanti a una torre, un alfiere o la donna. E se si muove con una minaccia?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Un pezzo avversario è allineato con qualcosa di più prezioso dietro di sé?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>Uno dei tuoi pezzi è inchiodato. Come lo liberi?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>Cosa minaccia l'avversario in questo momento e come lo fermi?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Il tuo re è ancora al centro. Qual è il modo più sicuro per rimediare?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Quale tuo pezzo è ancora a casa e potrebbe entrare in gioco?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Sono rimasti pochi pezzi. Dove può aiutare di più il tuo re?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Quale mossa di pedone guadagna spazio o apre una linea per i tuoi pezzi?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Quale tuo pezzo fa meno? Dove sarebbe più utile?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>Sei in vantaggio. Come lo sfrutti senza concedere controgioco?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Prima di ogni mossa elenca tutti gli scacchi, poi tutte le catture, poi tutte le minacce.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Prima di muovere, chiediti quali pezzi avversari sono indifesi o più attaccati che difesi.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Cerca le case da cui un pezzo colpisce due bersagli, soprattutto con il cavallo.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Controlla ogni scacco. Una mossa forzante spesso decide prima che l'avversario reagisca.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Conta le case fino alla promozione e chi le controlla.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Prima di muovere, controlla i pezzi che stanno davanti ai tuoi pezzi a lungo raggio.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Guarda le linee in cerca di un pezzo avversario con uno più prezioso dietro.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Controlla prima se un tuo pezzo è inchiodato, prima di pianificare altro.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Chiediti cosa vuole fare l'avversario prima di eseguire il tuo piano.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Metti il re al sicuro presto, poi usa la torre.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>Porta ogni pezzo in gioco prima di iniziare un secondo piano.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>Nel finale, porta il re verso l'azione.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Prima di muovere un pedone, controlla cosa apre per te e per l'avversario.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>Trova il tuo pezzo peggiore e miglioralo.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>Quando sei in vantaggio, scambia i pezzi e tieni il re al sicuro invece di cercare fuochi d'artificio.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} si sposta e così {1} attacca {2}.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} è ora inchiodato davanti a {1}.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} attacca contemporaneamente {1}.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Variante principale: {0}. È scacco matto.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Variante principale: {0}. Guadagni {1} punti di materiale.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Variante principale: {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>Dietro, {0} attacca allora {1}.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>Dalla nuova casa attacca: {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>Va verso la traversa {0}.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>Va verso la colonna {0}.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>Così permetti lo scacco matto.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Così perdi {0} in {1}.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>Manca l'idea di questa posizione: {0}.</value></data>
 </root>

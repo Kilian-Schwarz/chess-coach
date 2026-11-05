@@ -16,18 +16,23 @@ internal sealed partial class AppModel
 
     private TrackedBoard? _tracked;
     private readonly RectStabilizer _stabilizer = new();
-    private int _regionMisses;
-    private DateTime _lastFullSearch = DateTime.MinValue;
+    private readonly RelearnGuard _relearn = new();
+    private readonly StuckRecovery _stuck = new();
+    private readonly OrientationTracker _orientation = new();
+    private bool _rectUnsettled, _captureFailedShown, _boardPresent, _mouseHeld, _forceResync, _windowCapture, _regionMissed;
+    private DateTime _lastHiddenSearch = DateTime.MinValue;
+    private DateTime? _verifyFailedSince;
+    private static readonly TimeSpan HiddenSearchGap = TimeSpan.FromSeconds(15);
     private readonly BoardFingerprint _fp = new(), _lastFp = new(), _dirtyFp = new(), _lastDirtyFp = new();
     private bool _hasLastFp;
     private ScanResult? _cached;
+    private RgbImage? _lastImage;
     private string? _lastMonitorKey;
     private char?[][]? _lastScreen;
     private DateTime _lastChangeAt = DateTime.UtcNow;
     private DateTime? _lostSince;
     private bool _settled, _pausedShown, _pausedStatus;
-    private BoardSight _view = BoardSight.Readable;
-    private bool _ringSeen;
+    private BoardSight _view = BoardSight.Readable, _lastView = BoardSight.Readable, _missView = BoardSight.Gone;
     private BoardColors? _colors;
     private readonly GameEndDetector _gameEnd = new();
 
@@ -35,9 +40,16 @@ internal sealed partial class AppModel
     private Placement? _stablePlacement;
     private GameUpdate? _update;
     private PieceColor? _sideToMove, _lastMe;
-    private bool? _autoWhiteAtBottom;
+    private bool? _autoWhiteAtBottom
+    {
+        get => _orientation.WhiteAtBottom;
+        set => _orientation.Set(value);
+    }
     private string? _lastProblemFen;
     private Rectangle _boardRect;
+
+    private const double LostGraceSeconds = 2.5, RegionMargin = 0.2;
+    private char?[][]? _relearnTried;
 
     private void EnterPause()
     {
@@ -59,149 +71,183 @@ internal sealed partial class AppModel
         return true;
     }
 
+    private static bool MouseDown => Native.PrimaryButtonDown();
+
+    private void DropCapture() => _hasLastFp = false;
+
     private async Task<LocateOutcome> LocateAsync()
     {
         var templates = _templates;
-        _view = BoardSight.Readable;
-        _ringSeen = false;
-        if (_tracked is { } tr && (DateTime.UtcNow - _lastFullSearch).TotalSeconds < 5)
+        _regionMissed = false;
+        if (_tracked is { } tr)
         {
             var monRect = new Rectangle(tr.Mon.X, tr.Mon.Y, tr.Mon.Width, tr.Mon.Height);
-            string reason = "no capture";
-            foreach (var factor in new[] { 0.12, 0.3 })
-            {
-                var region = Inflate(tr.Pixels, factor, monRect);
-                bool allowUnchanged = factor == 0.12, hasLast = _hasLastFp, hasCached = _cached != null;
-                var colors = _colors;
-                var probe = await Task.Run(() => ProbeRegion(tr, region, templates, allowUnchanged, hasLast, hasCached, colors));
-                var outcome = ApplyRegion(tr, probe);
-                if (outcome != LocateOutcome.Lost)
-                {
-                    if (outcome == LocateOutcome.Failed) reason = "region capture failed";
-                    else { _regionMisses = 0; return outcome; }
-                    break;
-                }
-                reason = $"no board in a {region.Width}x{region.Height} crop (margin {(int)(factor * 100)} %)";
-            }
-            if (_ringSeen && _cached != null)
-            {
-                _view = BoardSight.Covered;
-                return LocateOutcome.Unchanged;
-            }
-            _regionMisses++;
-            if (_regionMisses < 3 && _cached != null) return LocateOutcome.Unchanged;
-            Log.Write($"Board area lost, searching all screens: {reason}, {_regionMisses} misses in a row");
+            var region = Inflate(tr.Pixels, RegionMargin, monRect);
+            bool hasLast = _hasLastFp, hasCached = _cached != null;
+            var colors = _colors;
+            var probe = await Task.Run(() => ProbeRegion(tr, region, templates, hasLast, hasCached, colors));
+            if (ApplyRegion(tr, probe) is { } outcome) return outcome;
             _tracked = null;
         }
-        _regionMisses = 0;
-        _lastFullSearch = DateTime.UtcNow;
         string? preferred = _lastMonitorKey;
-        var knownColors = _colors;
-        return ApplyFullSearch(await Task.Run(() => FullSearch(templates, preferred, knownColors)));
+        bool allowHide = DateTime.UtcNow - _lastHiddenSearch >= HiddenSearchGap;
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        var found = await Task.Run(() => FullSearch(templates, preferred, allowHide));
+        return ApplyFullSearch(found, (int)clock.ElapsedMilliseconds);
     }
 
-    private sealed record RegionProbe(LocateOutcome Outcome, bool RingSeen, ScanResult? Scan, RgbImage? Image, Rectangle Region, bool ViaScreen);
+    private enum ProbeKind { CaptureFailed, Unchanged, Observed }
 
-    private RegionProbe ProbeRegion(TrackedBoard tr, Rectangle region, PieceTemplates templates, bool allowUnchanged, bool hasLast, bool hasCached, BoardColors? colors)
+    private sealed record RegionProbe(ProbeKind Kind, RegionResult? Result, RgbImage? Image, Rectangle Region, bool ViaScreen);
+
+    private RegionProbe ProbeRegion(TrackedBoard tr, Rectangle region, PieceTemplates templates, bool hasLast, bool hasCached, BoardColors? colors)
     {
-        var img = _capturer.CaptureWindow(ref region);
+        var img = _grabber.Window(ref region);
         var expected = new BoardRect(tr.Board.X - region.X, tr.Board.Y - region.Y, tr.Board.Size);
         bool viaScreen = img == null;
         if (img == null)
         {
-            var visible = _capturer.Capture(region.X, region.Y, region.Width, region.Height);
-            if (visible == null) return new RegionProbe(LocateOutcome.Failed, false, null, null, region, true);
+            var visible = _grabber.Screen(region);
+            if (visible == null) return new RegionProbe(ProbeKind.CaptureFailed, null, null, region, true);
             _dirtyFp.Compute(visible, expected);
-            if (allowUnchanged && hasLast && hasCached && !_dirtyFp.Differs(_lastDirtyFp)) return new RegionProbe(LocateOutcome.Unchanged, false, null, null, region, true);
+            if (hasLast && hasCached && !_dirtyFp.Differs(_lastDirtyFp)) return new RegionProbe(ProbeKind.Unchanged, null, null, region, true);
             img = CaptureScreen(region.X, region.Y, region.Width, region.Height);
-            if (img == null) return new RegionProbe(LocateOutcome.Failed, false, null, null, region, true);
+            if (img == null) return new RegionProbe(ProbeKind.CaptureFailed, null, null, region, true);
             _fp.Compute(img, expected);
         }
         else
         {
             _fp.Compute(img, expected);
-            if (allowUnchanged && hasLast && hasCached && !_fp.Differs(_lastFp)) return new RegionProbe(LocateOutcome.Unchanged, false, null, null, region, false);
+            if (hasLast && hasCached && !_fp.Differs(_lastFp)) return new RegionProbe(ProbeKind.Unchanged, null, null, region, false);
         }
-        var scan = BoardScanner.Scan(img, templates);
-        if (scan == null)
-        {
-            bool covered = BoardReadability.Sight(BoardScanner.Analyze(img, expected, templates).Features, colors) == BoardSight.Covered;
-            return new RegionProbe(LocateOutcome.Lost, covered, null, null, region, viaScreen);
-        }
-        if (!BoardReadability.IsReadable(scan.Features))
-            return new RegionProbe(LocateOutcome.Lost, BoardReadability.Sight(scan.Features, colors) == BoardSight.Covered, null, null, region, viaScreen);
-        return new RegionProbe(LocateOutcome.Changed, false, scan, img, region, viaScreen);
+        var result = RegionObserver.Observe(img, (region.X, region.Y), expected, templates, colors, _stabilizer);
+        return new RegionProbe(ProbeKind.Observed, result, img, region, viaScreen);
     }
 
-    private LocateOutcome ApplyRegion(TrackedBoard tr, RegionProbe probe)
+    private LocateOutcome? ApplyRegion(TrackedBoard tr, RegionProbe probe)
     {
-        _ringSeen |= probe.RingSeen;
-        if (probe.Outcome != LocateOutcome.Changed || probe.Scan is not { } scan || probe.Image is not { } img) return probe.Outcome;
+        if (probe.Kind == ProbeKind.CaptureFailed) return LocateOutcome.Failed;
+        _windowCapture = !probe.ViaScreen;
+        if (probe.Kind == ProbeKind.Unchanged)
+        {
+            _verifyFailedSince = null;
+            return LocateOutcome.Unchanged;
+        }
+        var img = probe.Image!;
+        switch (probe.Result)
+        {
+            case RegionResult.Scanned scanned:
+                if (scanned.Changed)
+                {
+                    _rectUnsettled = true;
+                    string line = $"Board moved or resized: {(int)scanned.Rect.Size} px at {(int)scanned.Rect.X},{(int)scanned.Rect.Y}";
+                    Log.Write(line);
+                    _dump.Save(line, img);
+                }
+                return AcceptRegion(tr, scanned.Rect, scanned.Scan, probe);
+            case RegionResult.Verified verified:
+                return AcceptRegion(tr, tr.Board, verified.Scan, probe);
+            case RegionResult.Covered:
+                _missView = BoardSight.Covered;
+                _verifyFailedSince = null;
+                if (!_windowCapture) return RegionFailed("board covered, not captured from its own window", img);
+                if (_cached == null) return RegionFailed("covered without a cached board", img);
+                _regionMissed = true;
+                return LocateOutcome.Unchanged;
+            case RegionResult.Failed failed:
+                return RegionFailed(failed.Reason, img);
+            default:
+                return RegionFailed("crop unreadable", img);
+        }
+    }
+
+    private LocateOutcome AcceptRegion(TrackedBoard tr, BoardRect rect, ScanResult scan, RegionProbe probe)
+    {
         var region = probe.Region;
-        var b = scan.Board;
-        var stable = _stabilizer.Accept(new BoardRect(region.X + b.X, region.Y + b.Y, b.Size));
-        if (stable.Changed) Log.Write($"Board moved or resized: {(int)stable.Rect.Size} px at {(int)stable.Rect.X},{(int)stable.Rect.Y}");
-        _colors = BoardColors.Learn(scan.Features);
-        _tracked = new TrackedBoard(tr.Mon, stable.Rect);
-        _fp.Compute(img, new BoardRect(stable.Rect.X - region.X, stable.Rect.Y - region.Y, stable.Rect.Size));
+        _tracked = new TrackedBoard(tr.Mon, rect);
+        _fp.Compute(probe.Image!, new BoardRect(rect.X - region.X, rect.Y - region.Y, rect.Size));
         _lastFp.CopyFrom(_fp); _hasLastFp = true;
         if (probe.ViaScreen) _lastDirtyFp.CopyFrom(_dirtyFp);
         _cached = scan;
+        _lastImage = probe.Image;
+        _verifyFailedSince = null;
         return LocateOutcome.Changed;
     }
 
-    private sealed record FullProbe(bool Any, bool Covered, MonitorInfo? Monitor, ScanResult? Scan, RgbImage? Image);
+    private LocateOutcome? RegionFailed(string reason, RgbImage image)
+    {
+        _missView = BoardSight.Gone;
+        _verifyFailedSince ??= DateTime.UtcNow;
+        double failedFor = (DateTime.UtcNow - _verifyFailedSince.Value).TotalSeconds;
+        _dump.Save($"Region miss: {reason}, verification failed for {failedFor:F1} s", image);
+        if (failedFor < LostGraceSeconds && _cached != null)
+        {
+            _regionMissed = true;
+            return LocateOutcome.Unchanged;
+        }
+        Log.Write($"Board area lost, searching the full screen: {reason}, verification failed for {failedFor:F1} s");
+        return null;
+    }
 
-    private FullProbe FullSearch(PieceTemplates templates, string? preferredMonitor, BoardColors? colors)
+    private sealed record FullProbe(bool Any, MonitorInfo? Monitor, ScanResult? Scan, RgbImage? Image, int DetectMs);
+
+    private FullProbe FullSearch(PieceTemplates templates, string? preferredMonitor, bool allowHide)
     {
         var mons = ScreenCapturer.Monitors();
         if (preferredMonitor != null) mons = mons.OrderBy(m => m.Key == preferredMonitor ? 0 : 1).ToList();
-        bool any = false, covered = false;
+        var probe = SearchMonitors(mons, templates);
+        if (probe.Scan != null || !allowHide || !_ui.Invoke(() => _overlay.IsVisible || _panel.IsVisible)) return probe;
+        _lastHiddenSearch = DateTime.UtcNow;
         bool hidden = _ui.Invoke(HideForCapture);
         try
         {
-            foreach (var m in mons)
-            {
-                var img = _capturer.Capture(m.X, m.Y, m.Width, m.Height);
-                if (img == null) continue;
-                any = true;
-                var scan = BoardScanner.Scan(img, templates);
-                if (scan == null) continue;
-                var sight = BoardReadability.Sight(scan.Features, colors);
-                if (sight != BoardSight.Readable)
-                {
-                    covered |= sight == BoardSight.Covered;
-                    continue;
-                }
-                return new FullProbe(true, covered, m, scan, img);
-            }
+            var second = SearchMonitors(mons, templates);
+            return second with { DetectMs = second.DetectMs + probe.DetectMs };
         }
         finally { if (hidden) _ui.Invoke(RestoreAfterCapture); }
-        return new FullProbe(any, covered, null, null, null);
     }
 
-    private LocateOutcome ApplyFullSearch(FullProbe probe)
+    private FullProbe SearchMonitors(List<MonitorInfo> mons, PieceTemplates templates)
     {
-        if (probe.Covered) _view = BoardSight.Covered;
+        bool any = false;
+        int detectMs = 0;
+        foreach (var m in mons)
+        {
+            var img = _grabber.Screen(new Rectangle(m.X, m.Y, m.Width, m.Height));
+            if (img == null) continue;
+            any = true;
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            var scan = BoardScanner.Scan(img, templates);
+            detectMs += (int)clock.ElapsedMilliseconds;
+            if (scan == null) { _dump.Save("Full-screen search without a board", img); continue; }
+            return new FullProbe(true, m, scan, img, detectMs);
+        }
+        return new FullProbe(any, null, null, null, detectMs);
+    }
+
+    private LocateOutcome ApplyFullSearch(FullProbe probe, int totalMs)
+    {
+        _windowCapture = false;
         if (probe.Scan is { } scan && probe.Monitor is { } m && probe.Image is { } img)
         {
-            _colors = BoardColors.Learn(scan.Features);
             var b = scan.Board;
             _stabilizer.Reset();
+            _relearn.Reset();
             var stable = _stabilizer.Accept(new BoardRect(m.X + b.X, m.Y + b.Y, b.Size)).Rect;
             _tracked = new TrackedBoard(m, stable);
-            Log.Write($"Board found on the full screen: {(int)stable.Size} px at {(int)stable.X},{(int)stable.Y}");
-            _fp.Compute(img, b); _lastFp.CopyFrom(_fp); _hasLastFp = true;
+            _fp.Compute(img, new BoardRect(stable.X - m.X, stable.Y - m.Y, stable.Size)); _lastFp.CopyFrom(_fp); _hasLastFp = true;
             _cached = scan;
+            _lastImage = img;
+            _verifyFailedSince = null;
+            string line = $"Board found on the full screen: {(int)stable.Size} px at {(int)stable.X},{(int)stable.Y} in {totalMs} ms (detection {probe.DetectMs} ms)";
+            Log.Write(line);
+            _dump.Save(line, img);
             return LocateOutcome.Changed;
         }
         _tracked = null; _cached = null; _hasLastFp = false;
-        if (_view != BoardSight.Covered) _view = BoardSight.Gone;
+        if (totalMs > 300) Log.Write($"Full-screen search without a board took {totalMs} ms (detection {probe.DetectMs} ms)");
         return probe.Any ? LocateOutcome.Lost : LocateOutcome.Failed;
     }
-
-    private const double BoardGoneGraceSeconds = 2.5;
-    private char?[][]? _relearnTried;
 
     private bool _overlayHidden, _panelHidden;
 
@@ -224,9 +270,18 @@ internal sealed partial class AppModel
     private RgbImage? CaptureScreen(int x, int y, int w, int h)
     {
         bool hidden = _ui.Invoke(HideForCapture);
-        try { return _capturer.Capture(x, y, w, h); }
+        try { return _grabber.Screen(new Rectangle(x, y, w, h)); }
         finally { if (hidden) _ui.Invoke(RestoreAfterCapture); }
     }
+
+    private void ObserveEnd(BoardSight seen, GameResult? result = null, bool isStart = false)
+    {
+        _view = BoardReadability.Effective(seen, _windowCapture);
+        if (_gameEnd.Observe(_view, _book.Plies, result, isStart, DateTime.UtcNow) is { } end) FinishGame(end);
+    }
+
+    private bool RecordDisagrees(Placement placement) =>
+        placement.Equals(_stablePlacement) && _record.Current is { } current && !current.Board.Equals(placement);
 
     private async Task TickAsync(CancellationToken ct)
     {
@@ -245,37 +300,55 @@ internal sealed partial class AppModel
 
         if (outcome == LocateOutcome.Failed)
         {
-            SetStatus(Loc.T("status.captureFailed"));
-            HideAll();
-            _tracked = null;
+            if (!_grabber.Failing) return;
+            if (!_captureFailedShown)
+            {
+                _captureFailedShown = true;
+                SetStatus(Loc.T("status.captureFailed"));
+                HideAll();
+                _tracked = null; _cached = null; _hasLastFp = false;
+            }
             return;
         }
-        if (_view != BoardSight.Readable && _gameEnd.Observe(_view, _book.Plies, null, false, DateTime.UtcNow) is { } hiddenEnd)
-            FinishGame(hiddenEnd);
-        if (outcome == LocateOutcome.Lost || _cached == null || _tracked == null)
+        if (_captureFailedShown) { _captureFailedShown = false; _settled = false; SetStatus(Loc.T("status.searching")); }
+
+        if (outcome == LocateOutcome.Lost)
         {
-            _lostSince ??= DateTime.UtcNow;
-            if (_view == BoardSight.Gone && (DateTime.UtcNow - _lostSince.Value).TotalSeconds >= BoardGoneGraceSeconds)
-            {
-                SetStatus(Loc.T("status.searching"));
-                HideAll();
-            }
+            _lostSince ??= _verifyFailedSince ?? DateTime.UtcNow;
+            if (_boardRect.Width > 0 && (DateTime.UtcNow - _lostSince.Value).TotalSeconds < LostGraceSeconds) return;
+            ObserveEnd(BoardSight.Gone);
+            SetStatus(Loc.T("status.searching"));
+            HideAll();
             _pendingScreen = null;
             _settled = false;
             return;
         }
         _lostSince = null;
-        if (outcome == LocateOutcome.Unchanged && _settled && _pendingMoves.Count == 0)
+        if (_regionMissed)
         {
+            ObserveEnd(_missView);
+            return;
+        }
+        if (outcome == LocateOutcome.Unchanged && _settled && _pendingMoves.Count == 0 && !(_stablePlacement is { } sp && RecordDisagrees(sp)))
+        {
+            if (_lastView != BoardSight.Readable) ObserveEnd(_lastView);
             await BackgroundWorkAsync(ct);
             return;
         }
+        if (_cached is not { } scan || _tracked is not { } tracked) return;
 
-        var scan = _cached;
-        var tracked = _tracked.Value;
         _lastMonitorKey = tracked.Mon.Key;
         if (!SameScreen(_lastScreen, scan.Screen)) { _lastScreen = scan.Screen; _lastChangeAt = DateTime.UtcNow; }
+        _lastView = BoardReadability.Sight(scan.Features, _colors);
+        if (_lastView != BoardSight.Readable)
+        {
+            ObserveEnd(_lastView);
+            return;
+        }
+        _colors = BoardColors.Learn(scan.Features);
         _boardRect = tracked.Pixels;
+        _boardPresent = true;
+        if (_rectUnsettled) { _rectUnsettled = false; _relearn.Reset(); }
 
         if (scan.LooksLikeStart)
         {
@@ -291,38 +364,47 @@ internal sealed partial class AppModel
                 _autoWhiteAtBottom = t.LearnStart(scan.Features);
                 _templates = t;
                 SaveTemplates(t);
-                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false; _sideToMove = null;
+                _pendingScreen = null; _stablePlacement = null; _sideToMove = null;
+                DropCapture();
                 SetStatus(Loc.T("status.learned"));
                 return;
             }
         }
 
-        if (!scan.LooksLikeStart && !SameScreen(_relearnTried, scan.Screen) && (_templates.IsEmpty || _templates.FitsBadly(scan.Features)))
+        bool badFit = !scan.LooksLikeStart && (_templates.IsEmpty || _templates.FitsBadly(scan.Features));
+        bool relearnDue = _relearn.Observe(badFit && !MouseDown, tracked.Board, _templates.IsEmpty ? 1 : RelearnGuard.BadFrames);
+        if (relearnDue && !SameScreen(_relearnTried, scan.Screen))
         {
             _relearnTried = scan.Screen;
-            if (!_templates.IsEmpty && _record.Current is { } trackedPosition)
+            string why = $"bad fit on {_relearn.Count} frames at {(int)tracked.Board.Size} px at {(int)tracked.Board.X},{(int)tracked.Board.Y}, {_record.Moves.Count} plies tracked";
+            var known = new PieceTemplates();
+            if (!_templates.IsEmpty && _record.Current is { } trackedPosition
+                && known.LearnKnown(scan.Features, trackedPosition.Board, _autoWhiteAtBottom) is bool knownWhiteAtBottom)
             {
-                var known = new PieceTemplates();
-                if (known.LearnKnown(scan.Features, trackedPosition.Board, _autoWhiteAtBottom) is bool knownWhiteAtBottom)
-                {
-                    _autoWhiteAtBottom = knownWhiteAtBottom;
-                    _templates = known;
-                    SaveTemplates(known);
-                    _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false;
-                    SetStatus(Loc.T("status.learned"));
-                    Log.Write($"Pieces relearned from the tracked position: {trackedPosition.Fen}");
-                    return;
-                }
-            }
-            if (PieceTemplates.Relearned(scan.Features) is { } relearned)
-            {
-                _autoWhiteAtBottom = relearned.WhiteAtBottom;
-                _templates = relearned.Templates;
-                SaveTemplates(_templates);
-                if (relearned.Position is { } seeded) _record.Seed(seeded);
-                _pendingScreen = null; _stablePlacement = null; _cached = null; _hasLastFp = false; _sideToMove = null;
+                _autoWhiteAtBottom = knownWhiteAtBottom;
+                _templates = known;
+                SaveTemplates(known);
+                _pendingScreen = null; _stablePlacement = null;
+                DropCapture();
                 SetStatus(Loc.T("status.learned"));
-                Log.Write($"Pieces relearned from an early position: {relearned.Position?.Fen}");
+                string line = $"Pieces relearned from the tracked position ({why}): {trackedPosition.Fen}";
+                Log.Write(line);
+                _dump.Save(line, _lastImage);
+                return;
+            }
+            var early = new PieceTemplates();
+            if (_record.Moves.Count <= EarlyStart.MaxPlies && early.LearnEarlyPosition(scan.Features) is { } found)
+            {
+                _autoWhiteAtBottom = found.WhiteAtBottom;
+                _templates = early;
+                SaveTemplates(early);
+                _record.Seed(found.Position);
+                _pendingScreen = null; _stablePlacement = null; _sideToMove = null;
+                DropCapture();
+                SetStatus(Loc.T("status.learned"));
+                string line = $"Pieces relearned from an early position ({why}): {found.Position.Fen}";
+                Log.Write(line);
+                _dump.Save(line, _lastImage);
                 return;
             }
         }
@@ -345,7 +427,7 @@ internal sealed partial class AppModel
         {
             _pendingScreen = scan.Screen;
             _confirmSoon = _tracked != null;
-            _cached = null; _hasLastFp = false;
+            DropCapture();
             return;
         }
         _confirmSoon = false;
@@ -356,27 +438,49 @@ internal sealed partial class AppModel
             case SideChoice.White: whiteAtBottom = true; break;
             case SideChoice.Black: whiteAtBottom = false; break;
             default:
-                if (BoardScanner.GuessWhiteAtBottom(scan.Screen) is bool g) _autoWhiteAtBottom = g;
-                whiteAtBottom = _autoWhiteAtBottom ?? true;
+                var resolved = _orientation.Resolve(BoardScanner.GuessWhiteAtBottom(scan.Screen), scan.Screen, scan.LooksLikeStart);
+                if (resolved.Reason is { } reason) Log.Write($"Orientation changed to {(resolved.WhiteAtBottom ? "white" : "black")} at the bottom: {reason}");
+                whiteAtBottom = resolved.WhiteAtBottom;
                 break;
         }
         var me = whiteAtBottom ? PieceColor.White : PieceColor.Black;
         _lastMe = me;
         var placement = new Placement(scan.Screen, whiteAtBottom);
-        if (HandleLift(placement, me, whiteAtBottom)) return;
-        if (!placement.Equals(_stablePlacement) && Native.PrimaryButtonDown())
+        bool mouseDown = MouseDown;
+        HandleLift(placement, me, whiteAtBottom, mouseDown);
+
+        if (mouseDown)
         {
-            _pendingScreen = null; _cached = null; _hasLastFp = false; _confirmSoon = true;
+            _mouseHeld = true;
+            _stuck.Reset();
+            return;
+        }
+        if (_mouseHeld)
+        {
+            _mouseHeld = false;
+            _pendingScreen = null;
+            _confirmSoon = true;
+            DropCapture();
+            return;
+        }
+
+        if (_stuck.Observe(RecordDisagrees(placement), DateTime.UtcNow))
+        {
+            _forceResync = true;
+            _stablePlacement = null;
+            Log.Write("Screen and record disagreed for 3 s, resyncing");
             return;
         }
 
         if (!placement.Equals(_stablePlacement))
         {
+            if (placement.IsStartPosition) ObserveEnd(BoardSight.Readable, isStart: true);
             var carried = _pendingMoves;
             _pendingMoves = new();
             var marking = SideToMove.Detect(scan, whiteAtBottom, _templates);
             var previousUpdate = _update;
-            var u = _record.Update(placement, whiteAtBottom, marking.Mover);
+            var u = _record.Update(placement, whiteAtBottom, marking.Mover, _forceResync);
+            _forceResync = false;
             foreach (var line in u.Log) Log.Write(line);
             _stablePlacement = placement;
             _update = u;
@@ -388,8 +492,7 @@ internal sealed partial class AppModel
         }
         else if (_pendingMoves.Count > 0)
             ConfirmPending(SideToMove.Detect(scan, whiteAtBottom, _templates), me);
-        if (_view == BoardSight.Readable && _gameEnd.Observe(BoardSight.Readable, _book.Plies, _update?.Result, placement.IsStartPosition, DateTime.UtcNow) is { } end)
-            FinishGame(end);
+        ObserveEnd(BoardSight.Readable, _update?.Result);
 
         var toMove = (EffectiveAlwaysMyTurn && !Settings.DuoTraining) ? me : (_sideToMove ?? me);
         if (_update == null) return;
@@ -502,7 +605,8 @@ internal sealed partial class AppModel
         ClearLift();
         _hint = null; _hintFen = null; _hintLevel = 0;
         _panel.HintLevel = 0; _panel.CanHint = false; _panel.CanExplain = false; _panel.IsAsking = false;
-        _cached = null; _hasLastFp = false; _stabilizer.Reset();
+        _cached = null; _hasLastFp = false; _stabilizer.Reset(); _relearn.Reset(); _stuck.Reset();
+        _mouseHeld = false; _forceResync = false; _verifyFailedSince = null; _colors = null;
         _pendingMoves = new(); _reviewableKeys.Clear(); _reviewSeq++; _confirmSoon = false;
         Invalidate();
     }

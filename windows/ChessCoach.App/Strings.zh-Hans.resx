@@ -212,4 +212,8 @@
   <data name="welcome.gotIt" xml:space="preserve"><value>知道了</value></data>
   <data name="welcome.switchOn" xml:space="preserve"><value>开启</value></data>
   <data name="training.after" xml:space="preserve"><value>之后：{0}</value></data>
+  <data name="ask.hintExplained" xml:space="preserve"><value>提示说明</value></data>
+  <data name="explain.noReliable" xml:space="preserve"><value>没有可靠的讲解。请尝试“再讲解一次”。</value></data>
+  <data name="puzzle.why.title" xml:space="preserve"><value>为什么有效</value></data>
+  <data name="puzzle.habit.title" xml:space="preserve"><value>值得记住的习惯</value></data>
 </root>

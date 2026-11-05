@@ -29,17 +29,19 @@ def parse_fen(fen):
     return board
 
 
-def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None, dots=None, floating=None, popup=None):
-    W, H = 1600, 1000
+def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None, dots=None, floating=None, popup=None,
+           canvas=(1600, 1000), decor=True, arrows=None, cursor=None):
+    W, H = canvas
     img = Image.new("RGB", (W, H), (38, 36, 33))
     d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, 220, H], fill=(28, 27, 25))
-    for i in range(12):
-        d.rectangle([20, 30 + i * 60, 200, 70 + i * 60], fill=(60 + i * 5, 58, 55))
-    d.rectangle([1000, 140, 1500, 716], fill=(48, 46, 43))
-    d.text((1020, 160), "Game vs Opponent123", fill=(220, 220, 220))
-    for i in range(20):
-        d.text((1020, 200 + i * 22), f"{i+1}. e4 e5 Nf3 Nc6", fill=(180, 180, 180))
+    if decor:
+        d.rectangle([0, 0, 220, H], fill=(28, 27, 25))
+        for i in range(12):
+            d.rectangle([20, 30 + i * 60, 200, 70 + i * 60], fill=(60 + i * 5, 58, 55))
+        d.rectangle([1000, 140, 1500, 716], fill=(48, 46, 43))
+        d.text((1020, 160), "Game vs Opponent123", fill=(220, 220, 220))
+        for i in range(20):
+            d.text((1020, 200 + i * 22), f"{i+1}. e4 e5 Nf3 Nc6", fill=(180, 180, 180))
 
     f = font(int(sq * 0.82))
     board = parse_fen(fen)
@@ -78,13 +80,28 @@ def render(fen, white_bottom, path, origin=(310, 140), sq=72, highlight=None, do
         else:
             r = sq * 0.16
             d.ellipse([x + sq / 2 - r, y + sq / 2 - r, x + sq / 2 + r, y + sq / 2 + r], fill=shade)
+    for (ff, fr), (tf, tr) in arrows or []:
+        def centre(file, rank):
+            col = file if white_bottom else 7 - file
+            row = 7 - rank if white_bottom else rank
+            return ox + col * sq + sq / 2, oy + row * sq + sq / 2
+        (x1, y1), (x2, y2) = centre(ff, fr), centre(tf, tr)
+        d.line([x1, y1, x2, y2], fill=(255, 170, 0), width=max(4, sq // 6))
+        d.ellipse([x2 - sq * 0.25, y2 - sq * 0.25, x2 + sq * 0.25, y2 + sq * 0.25], fill=(255, 170, 0))
     if floating:
-        g, (fx, fy) = floating
+        g, (fx, fy), *rest = floating
+        if rest:
+            f = font(int(sq * 0.82 * rest[0]))
         if g.isupper():
             d.text((fx, fy), GLYPH_SOLID[g.lower()], font=f, fill=(250, 250, 250), anchor="mm")
             d.text((fx, fy), GLYPH_OUTLINE[g.lower()], font=f, fill=(20, 20, 20), anchor="mm")
         else:
             d.text((fx, fy), GLYPH_SOLID[g], font=f, fill=(25, 25, 25), anchor="mm")
+    if cursor:
+        cx, cy = cursor
+        pts = [(cx, cy), (cx, cy + sq * 0.38), (cx + sq * 0.1, cy + sq * 0.3), (cx + sq * 0.18, cy + sq * 0.46),
+               (cx + sq * 0.25, cy + sq * 0.43), (cx + sq * 0.17, cy + sq * 0.28), (cx + sq * 0.3, cy + sq * 0.28)]
+        d.polygon(pts, fill=(0, 0, 0), outline=(255, 255, 255))
     if popup:
         box = (ox + 2 * sq, oy + 2 * sq, ox + 6 * sq, oy + 5 * sq)
         if popup == "blur":
@@ -138,6 +155,21 @@ if __name__ == "__main__":
     render(lift_from, True, os.path.join(out, "lift_dots.png"), dots=dots, floating=("B", (310 + 5 * 72 + 36, 140 + 3 * 72 + 20)))
     render(lift_from, True, os.path.join(out, "lift_offgrid.png"), floating=("B", (310 + 8 * 72 + 60, 140 + 3 * 72)))
     render(lift_from, True, os.path.join(out, "lift_dots_only.png"), dots=dots)
+    big = dict(origin=(140, 140), sq=140, canvas=(1400, 1400), decor=False)
+    bigmid = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R"
+    biglift = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/3P1N2/PPP2PPP/RNBQK2R"
+    render(start, True, os.path.join(out, "big_start.png"), **big)
+    render(bigmid, True, os.path.join(out, "big_mid.png"), highlight={(3, 1), (3, 2)}, **big)
+    render(biglift, True, os.path.join(out, "big_drag.png"), highlight={(3, 1), (3, 2)}, dots=dots,
+           floating=("B", (140 + 5 * 140 + 70, 140 + 3 * 140 + 40), 1.35), cursor=(140 + 5 * 140 + 80, 140 + 3 * 140 + 60), **big)
+    render(biglift, True, os.path.join(out, "big_dots.png"), highlight={(2, 3), (5, 2), (4, 5)}, dots=dots, **big)
+    render(bigmid, True, os.path.join(out, "big_arrows.png"), highlight={(3, 1), (3, 2), (1, 4), (6, 5)},
+           arrows=[((4, 3), (4, 6)), ((1, 3), (6, 4))], cursor=(140 + 3 * 140 + 30, 140 + 4 * 140 + 30), **big)
+    render(bigmid, True, os.path.join(out, "big_shifted.png"), origin=(260, 90), sq=140, canvas=(1400, 1400), decor=False)
+    saved = LIGHT, DARK
+    LIGHT, DARK = (240, 217, 181), (181, 136, 99)
+    render(bigmid, True, os.path.join(out, "big_other_theme.png"), **big)
+    LIGHT, DARK = saved
     with open(os.path.join(out, "expected.txt"), "w") as fh:
         fh.write(mid + "\n")
     print("ok")

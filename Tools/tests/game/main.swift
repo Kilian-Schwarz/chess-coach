@@ -87,7 +87,7 @@ do {
     }
     let good = placement(fen)
     var u = rec.update(placement: Placement(), whiteAtBottom: true)
-    check(u.change == .resync && rec.moves.isEmpty, "garbage frame starts a fresh segment: \(u.change) \(rec.moves.count)")
+    check(u.change == .resync && rec.moves.count == 2 && rec.breaks == [2], "garbage frame adds a break, moves kept: \(u.change) \(rec.moves.count)")
     u = rec.update(placement: good, whiteAtBottom: true)
     check(rec.moves.count == 2 && u.change != .newGame, "recovering the board restores the earlier moves: \(rec.moves.count)")
     let next = placement("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2")

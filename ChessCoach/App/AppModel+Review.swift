@@ -148,8 +148,9 @@ extension AppModel {
         completeTask = Task { await complete(snapshot, open: open, activate: end.reason == .manual) }
     }
 
-    func observeEnd(_ view: BoardView, result: GameResult? = nil, isStart: Bool = false) {
+    func observeEnd(_ seen: BoardView, result: GameResult? = nil, isStart: Bool = false) {
         guard !gameFinished else { return }
+        let view: BoardView = seen == .covered && !windowCapture ? .gone : seen
         guard let end = gameEnd.observe(view, plies: record.moves.count, result: result, isStart: isStart, at: Date()) else { return }
         finishGame(end, minPlies: 1, open: !end.silent)
     }
@@ -329,7 +330,7 @@ extension AppModel {
             store.update(pid) { gate.record(outcome, hint: hint, into: &$0) }
             let level = store.profile(id: pid)?.level ?? .beginner
             let puzzle = Puzzle.make(review: review, beforeResult: before, mistakeType: outcome.mistakeType,
-                                     theme: outcome.theme, level: level)
+                                     theme: outcome.theme, level: level, moveNumber: played.moveNumber)
             if puzzle != nil { store.updatePuzzles(for: pid) { gate.add(puzzle, to: &$0) } }
             if let type = outcome.mistakeType {
                 let puzzleId = store.puzzles(for: pid).puzzles.first { $0.fen == review.before.fen(sideToMove: review.player) }?.id

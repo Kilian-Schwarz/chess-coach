@@ -212,4 +212,8 @@
   <data name="welcome.gotIt" xml:space="preserve"><value>OK</value></data>
   <data name="welcome.switchOn" xml:space="preserve"><value>オンにする</value></data>
   <data name="training.after" xml:space="preserve"><value>その後: {0}</value></data>
+  <data name="ask.hintExplained" xml:space="preserve"><value>ヒントの説明</value></data>
+  <data name="explain.noReliable" xml:space="preserve"><value>信頼できる解説がありません。「もう一度説明」を試してください。</value></data>
+  <data name="puzzle.why.title" xml:space="preserve"><value>なぜうまくいくか</value></data>
+  <data name="puzzle.habit.title" xml:space="preserve"><value>覚えておきたい習慣</value></data>
 </root>

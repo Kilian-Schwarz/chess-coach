@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>The server reported error {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>No model list found at this address. For Open WebUI enter e.g. https://openwebui.example.com, for vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>To get explanations, choose a server and model in the settings.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Careful: {0} on {1} would be undefended.</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Careful: {0} on {1} could be taken by a cheaper piece.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Careful: {0} on {1} could be taken by {2} on {3}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Careful: {0} to {1} leaves {2} on {3} hanging.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Careful: {0} squares are unsafe for the {1}, marked in red.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>Most frequent mistake: {0} ({1}×). Example: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} good moves in a row.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>For the next game: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>The server did not find the address or model (error 404).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Bring your king to safety: castle.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Promotion</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Discovered attack</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Pin</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Break the pin</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Convert your advantage</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>A pawn can promote here.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Look for a discovered attack: moving one piece unmasks another.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Look for a pin: a piece that cannot move without exposing a more valuable one.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>One of your pieces is pinned. Look for a way to free it.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>You are clearly ahead: trade pieces, attack the king or win more material.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} can reach the last rank and become a queen.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>When {0} moves, a piece behind it suddenly attacks something valuable.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} can pin an enemy piece so that it is stuck in front of a more valuable one.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>A piece of yours is pinned and cannot move freely. Find the move that frees it.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} helps you cash in: trade pieces, go after the king or win more material.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>You would lose: {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} would be attacked and could not move away.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>It would attack: {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} solved</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>From your game on {0}.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>From your game on {0}, move {1}: you played {2} there ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>The enemy king looks short of safe squares. Which checks could end the game?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Your opponent's last move left something undefended. What can you attack?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Two enemy pieces stand on squares one piece can reach. Can one move attack both?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Which checks are available, and what does each one force?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>A pawn is close to the last rank. What stops it, and can you clear the way?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>One of your pieces stands in front of a rook, bishop or queen. What if it moves with a threat?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Is an enemy piece lined up with something more valuable behind it?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>One of your pieces is tied down. How do you set it free?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>What is your opponent threatening right now, and how do you stop it?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Your king is still in the centre. What is the safest way to fix that?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Which of your pieces is still at home and could join the game?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Few pieces are left. Where can your king help most?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Which pawn move gains space or opens a line for your pieces?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Which of your pieces does the least? Where would it do more?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>You are ahead. How do you cash in without allowing counterplay?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Before every move, list all checks, then all captures, then all threats.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Before moving, ask which enemy pieces are undefended or attacked more often than defended.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Look for squares from which one piece hits two targets, especially with a knight.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Check every check. A forcing move often decides before the opponent can react.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Count the squares to promotion and who controls them.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Before moving, check pieces standing in front of your long-range pieces.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Look along lines for an enemy piece with a more valuable piece behind it.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Check whether one of your pieces is pinned before you plan anything else.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Ask what your opponent wants to do next before you play your own plan.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Bring the king to safety early, then use the rook.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>Bring every piece into play before you start a second plan.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>In the endgame, bring the king toward the action.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Before a pawn move, check what it opens for you and for your opponent.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>Find your worst piece and improve it.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>When ahead, trade pieces and keep the king safe instead of looking for fireworks.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} moves away, so {1} attacks {2}.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} is now pinned in front of {1}.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} attacks {1} at once.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Main line: {0}. That is checkmate.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Main line: {0}. You win {1} points of material.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Main line: {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>Behind it, {0} then attacks {1}.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>From its new square it attacks: {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>It heads for rank {0}.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>It heads for the {0}-file.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>That allows checkmate.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>That loses {0} on {1}.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>It misses the idea here: {0}.</value></data>
 </root>

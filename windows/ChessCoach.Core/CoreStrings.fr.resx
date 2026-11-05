@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>Le serveur a signalé l’erreur {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Aucune liste de modèles trouvée à cette adresse. Pour Open WebUI, saisis p. ex. https://openwebui.example.com, pour vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Pour obtenir des explications, choisis un serveur et un modèle dans les réglages.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Attention : {0} en {1} serait sans défense.</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Attention : une pièce de moindre valeur menace {0} en {1}.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Attention : {0} en {1} pourrait être prise par {2} en {3}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Attention : jouer {0} en {1} laisse {2} en {3} sans protection.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Attention : {0} cases ne sont pas sûres pour {1}, marquées en rouge.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>Erreur la plus fréquente : {0} ({1}×). Exemple : {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} bons coups d'affilée.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Pour la prochaine partie : {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>Le serveur n’a trouvé ni l’adresse ni le modèle (erreur 404).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Mettez votre roi à l’abri : roquez.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Promotion</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Attaque à la découverte</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Clouage</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Rompre le clouage</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Convertir l’avantage</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>Un pion peut promouvoir ici.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Cherchez une attaque à la découverte : en déplaçant une pièce, une autre attaque.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Cherchez un clouage : une pièce qui ne peut pas bouger sans exposer une pièce plus précieuse.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>Une de vos pièces est clouée. Cherchez comment la libérer.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>Vous avez nettement l’avantage : échangez des pièces, attaquez le roi ou gagnez plus de matériel.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} peut atteindre la dernière rangée et devenir une dame.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>Quand {0} bouge, une pièce derrière attaque soudain quelque chose de précieux.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} peut clouer une pièce adverse devant une pièce plus précieuse.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>Une de vos pièces est clouée et ne peut pas bouger librement. Trouvez le coup qui la libère.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} vous aide à concrétiser : échanger des pièces, viser le roi ou gagner plus de matériel.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>Vous perdriez : {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} serait attaqué et ne pourrait pas s’écarter.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>Cela attaquerait : {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0} : {1}/{2} résolus</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>De votre partie du {0}.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>De votre partie du {0}, coup {1} : vous avez joué {2} ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Le roi adverse manque de cases sûres. Quels échecs pourraient mettre fin à la partie ?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Le dernier coup de votre adversaire a laissé quelque chose sans défense. Que pouvez-vous attaquer ?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Deux pièces adverses sont sur des cases qu'une seule pièce peut atteindre. Un coup peut-il attaquer les deux ?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Quels échecs sont possibles, et que force chacun d'eux ?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>Un pion est proche de la dernière rangée. Qu'est-ce qui l'arrête, et pouvez-vous dégager la voie ?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>Une de vos pièces se trouve devant une tour, un fou ou la dame. Et si elle bouge en créant une menace ?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Une pièce adverse est-elle alignée avec une pièce plus précieuse derrière elle ?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>Une de vos pièces est clouée. Comment la libérer ?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>Que menace votre adversaire en ce moment, et comment l'arrêter ?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Votre roi est encore au centre. Quelle est la façon la plus sûre d'y remédier ?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Laquelle de vos pièces est encore chez elle et pourrait entrer dans la partie ?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Il reste peu de pièces. Où votre roi peut-il aider le plus ?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Quel coup de pion gagne de l'espace ou ouvre une ligne pour vos pièces ?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Laquelle de vos pièces fait le moins ? Où serait-elle plus utile ?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>Vous avez l'avantage. Comment le concrétiser sans laisser de contre-jeu ?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Avant chaque coup, listez tous les échecs, puis toutes les captures, puis toutes les menaces.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Avant de jouer, demandez-vous quelles pièces adverses sont sans défense ou plus attaquées que défendues.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Cherchez les cases d'où une pièce attaque deux cibles, surtout avec un cavalier.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Examinez chaque échec. Un coup forcé décide souvent avant que l'adversaire puisse réagir.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Comptez les cases jusqu'à la promotion et qui les contrôle.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Avant de jouer, regardez les pièces placées devant vos pièces à longue portée.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Parcourez les lignes à la recherche d'une pièce adverse avec une pièce plus précieuse derrière.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Vérifiez d'abord si l'une de vos pièces est clouée avant de planifier quoi que ce soit d'autre.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Demandez-vous ce que votre adversaire veut faire ensuite avant de jouer votre propre plan.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Mettez le roi à l'abri tôt, puis utilisez la tour.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>Mettez chaque pièce en jeu avant d'entamer un second plan.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>En finale, amenez le roi vers l'action.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Avant un coup de pion, vérifiez ce qu'il ouvre pour vous et pour votre adversaire.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>Trouvez votre pire pièce et améliorez-la.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>Quand vous êtes devant, échangez les pièces et protégez le roi plutôt que de chercher le feu d'artifice.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} s'écarte, et {1} attaque {2}.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} est maintenant cloué devant {1}.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} attaque en même temps {1}.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Variante principale : {0}. C'est échec et mat.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Variante principale : {0}. Vous gagnez {1} points de matériel.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Variante principale : {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>Derrière, {0} attaque alors {1}.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>Depuis sa nouvelle case, elle attaque : {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>Elle va vers la rangée {0}.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>Elle va vers la colonne {0}.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>Cela permet l'échec et mat.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Cela perd {0} en {1}.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>Il rate l'idée ici : {0}.</value></data>
 </root>

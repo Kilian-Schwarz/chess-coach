@@ -2,6 +2,7 @@
 cd "${0:A:h}/.."
 out=build/tests
 mkdir -p $out
+export CHESSCOACH_LOG_DIR=$PWD/$out/logs
 areas=("$@")
 (( ${#areas} )) || areas=(Tools/tests/*/main.swift(N:h:t))
 failed=0

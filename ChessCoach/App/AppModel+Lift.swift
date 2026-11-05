@@ -10,7 +10,7 @@ extension AppModel {
 
     func updateLift(placement: Placement, me: PieceColor, whiteAtBottom: Bool) {
         guard dragHints, let cur = record.current, cur.board != placement, isCoached(cur.turn, me: me),
-              let piece = LiftedPiece.detect(last: cur, current: placement) else { clearLift(); return }
+              let piece = LiftedPiece.detect(last: cur, current: placement, held: Self.mouseDown) else { clearLift(); return }
         let faded = hintLevel == 0 && (store.profile(id: profileId(for: cur.turn, me: me))?.supportFaded ?? false)
         let key = "\(cur.fen)|\(piece.square)|\(faded)"
         guard lift?.key != key else { return }

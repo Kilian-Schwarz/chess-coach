@@ -106,9 +106,9 @@ public class GameTests
         }
         var good = P(fen);
         var u = rec.Update(new Placement(), true);
-        Assert.True(u.Change == GameChange.Resync && rec.Moves.Count == 0);
+        Assert.True(u.Change == GameChange.Resync && rec.Moves.Count == 2 && rec.Breaks.Count == 1);
         u = rec.Update(good, true);
-        Assert.True(rec.Moves.Count == 2 && u.Change != GameChange.NewGame);
+        Assert.True(rec.Moves.Count == 2 && rec.Breaks.Count == 0 && u.Change != GameChange.NewGame);
         u = rec.Update(P("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"), true);
         Assert.True(u.Change == GameChange.Moves && rec.Moves.Count == 3);
     }

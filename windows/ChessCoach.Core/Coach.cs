@@ -150,6 +150,7 @@ public static class Coach
         };
         if (t.Best != null && r.Rating != MoveRating.Best) facts.Add($"Better was: {t.Best} (evaluation: {t.BestScore}).");
         if (t.ReplyLine.Length > 0) facts.Add($"Best reply for {r.Player.Opposite().Label(en)}: {t.ReplyLine}");
+        facts.AddRange(MoveEffects(r.Before, r.Played, r.Player, "The played move"));
         var hanging = r.Before.Applying(r.Played).HangingPieces(r.Player, en);
         if (hanging.Count > 0) facts.Add($"After the move, {side} has: {string.Join("; ", hanging)}.");
         if (r.Best is UciMove best && r.Rating != MoveRating.Best) AppendTactics(facts, r.Before, best, r.Player, "The better move");
@@ -177,48 +178,51 @@ public static class Coach
         new(Prompts.System, string.Join("\n", facts) + "\n\n" + ask + "\n" + StyleCard(context, style, answerCulture), style.MaxTokens);
 
     public static ExplanationRequest HintRequest(HintSet hint, PlayerContext context, CultureInfo? answerCulture = null) =>
-        new(Prompts.HintSystem, hint.Stage3Prompt + "\n" + ToneInstruction(context) + " " + AnswerIn(answerCulture), 80);
+        new(Prompts.HintSystem, hint.Stage3Prompt + "\n" + ToneInstruction(context) + " " + AnswerIn(answerCulture), 110);
 
-    public static ExplanationRequest QuestionRequest(Placement placement, PieceColor toMove, string question, string? score = null,
-        string? bestMove = null, string? threat = null, CultureInfo? answerCulture = null)
+    public static ExplanationRequest QuestionRequest(Grounding grounding, string question, PlayerContext context, ExplanationStyle style,
+        CultureInfo? answerCulture = null)
     {
-        var en = CoreLocale.English;
-        var name = toMove.Label(en);
-        var facts = new List<string>
-        {
-            $"Position (FEN): {placement.Fen(toMove)}",
-            $"{name} to move. All evaluations are from {name}'s point of view.",
-            $"{name} pieces: {placement.PieceList(toMove)}",
-            $"{toMove.Opposite().Label(en)} pieces: {placement.PieceList(toMove.Opposite())}",
-        };
-        if (score != null) facts.Add($"Evaluation of the position: {score}");
-        if (bestMove != null) facts.Add($"Best move per engine: {bestMove}");
-        if (threat != null) facts.Add(threat);
-        foreach (var c in new[] { toMove, toMove.Opposite() })
-        {
-            var hanging = placement.HangingPieces(c, en);
-            if (hanging.Count > 0) facts.Add($"Unprotected or threatened for {c.Label(en)}: {string.Join("; ", hanging)}");
-        }
-        return new(Prompts.QuestionSystem, string.Join("\n", facts) + $"\n\nPlayer's question: {question}\n{AnswerIn(answerCulture)}", 260);
+        var capped = style.Length == StyleLength.Long ? style with { Length = StyleLength.Medium } : style;
+        return new(Prompts.QuestionSystem, string.Join("\n", grounding.Lines) + $"\n\nPlayer's question: {question}\n" + StyleCard(context, capped, answerCulture),
+            Math.Max(capped.MaxTokens, 160));
     }
 
-    public static void AppendTactics(List<string> facts, Placement before, UciMove move, PieceColor me, string label)
+    public static List<string> MoveEffects(Placement before, UciMove move, PieceColor me, string label)
     {
         var en = CoreLocale.English;
         var after = before.Applying(move);
+        var facts = new List<string>();
         if (before.Piece(move.ToFile, move.ToRank) is char victim)
             facts.Add($"{label} captures {PieceInfo.Name(victim, en)} {UciMove.SquareName(move.ToFile, move.ToRank)}.");
         var targets = new List<string>();
         foreach (var (f, r) in after.Attacks(move.ToFile, move.ToRank))
             if (after.Piece(f, r) is char p && Placement.ColorOf(p) != me)
                 targets.Add($"{PieceInfo.Name(p, en)} {UciMove.SquareName(f, r)}");
-        if (targets.Count > 0) facts.Add($"{label} then attacks: {string.Join(", ", targets)}.");
+        char mover = after.Piece(move.ToFile, move.ToRank) ?? 'p';
+        string name = $"{PieceInfo.Name(mover, en)} {UciMove.SquareName(move.ToFile, move.ToRank)}";
+        facts.Add(targets.Count == 0 ? $"After {label.ToLowerInvariant()}, the {name} attacks no enemy piece directly."
+                                     : $"{label} then attacks directly: {string.Join(", ", targets)}.");
+        foreach (var x in after.XRays(move.ToFile, move.ToRank))
+            facts.Add($"The {x.Slider.Text(en)} only x-rays {x.Target.Text(en)} through its own {x.Blocker.Text(en)}; it does not attack it while that piece stays.");
+        foreach (var d in before.DiscoveredTargets(move, me))
+            facts.Add($"Moving the {d.Blocker.Text(en)} uncovers an attack by {d.Slider.Text(en)} on {d.Target.Text(en)}.");
+        foreach (var pin in before.Unpinned(move, me))
+            facts.Add($"It ends the pin on {PieceInfo.Name(pin.Piece, en)} {pin.Square}.");
+        foreach (var pin in before.CreatedPins(move, me.Opposite())) facts.Add($"It creates a pin: {pin.Text(en)}.");
+        if (after.IsInCheck(me.Opposite())) facts.Add($"{label} gives check.");
+        return facts;
+    }
+
+    public static void AppendTactics(List<string> facts, Placement before, UciMove move, PieceColor me, string label)
+    {
+        var en = CoreLocale.English;
+        facts.AddRange(MoveEffects(before, move, me, label));
         foreach (var color in new[] { me, me.Opposite() })
         {
             var hanging = before.HangingPieces(color, en);
             if (hanging.Count > 0) facts.Add($"Before the move, {color.Label(en)} has: {string.Join("; ", hanging)}.");
         }
-        if (after.IsInCheck(me.Opposite())) facts.Add($"{label} gives check.");
     }
 
     public static string CleanAnswer(string text)

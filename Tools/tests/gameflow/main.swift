@@ -52,14 +52,23 @@ for v in flow["unsafe"] as! [[String: Any]] {
     var got: [String: String] = [:]
     for u in lifted.unsafeSquares(in: pos) {
         switch u.reason {
-        case .undefended: got[u.square] = "undefended"
-        case .cheaperAttacker: got[u.square] = "cheaperAttacker"
+        case .attacked(_, let from): got[u.square] = "attacked:\(from)"
         case .leavesHanging(let s, _): got[u.square] = "leavesHanging:\(s)"
         }
     }
     check(got == (v["unsafe"] as! [String: String]), "\(fen) \(v["from"]!): \(got)")
 }
 do {
+    let quiet = ChessPosition(fen: "4k3/8/8/8/8/2N5/8/4K3 w - - 0 1")!
+    check(LiftedPiece(file: 2, rank: 2, piece: "N").unsafeSquares(in: quiet).isEmpty, "nothing attacks: no marks for undefended squares")
+    let e2Knight = ChessPosition(fen: "4k3/8/8/3p3p/3P1B2/8/PPP1NPPP/R5K1 w - - 0 1")!
+    check(LiftedPiece(file: 4, rank: 1, piece: "N").unsafeSquares(in: e2Knight).isEmpty, "knight e2: c1, c3 and g3 are not attacked, so nothing is marked")
+    let pawnGuard = ChessPosition(fen: "4k3/8/8/3p4/8/2N5/8/4K3 w - - 0 1")!
+    check(LiftedPiece(file: 2, rank: 2, piece: "N").unsafeSquares(in: pawnGuard).map(\.square) == ["e4"], "capturing the pawn on d5 is no loss, e4 is")
+    let lostKnight = ChessPosition(fen: "4k3/8/8/3b4/8/2N5/8/4K3 w - - 0 1")!
+    let lostKnightSquares = LiftedPiece(file: 2, rank: 2, piece: "N").unsafeSquares(in: lostKnight)
+    check(lostKnightSquares.map(\.square).sorted() == ["a2", "e4"], "squares attacked by the bishop: \(lostKnightSquares.map(\.square))")
+    check(lostKnightSquares.first?.text(piece: "N", Loc.facts) == "Careful: Knight on a2 could be taken by Bishop on d5." || lostKnightSquares.first?.text(piece: "N", Loc.facts) == "Careful: Knight on e4 could be taken by Bishop on d5.", "attacker named")
     let pos = ChessPosition(fen: "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 1")!
     let l = LiftedPiece(file: 2, rank: 3, piece: "B")
     let u = l.unsafeSquares(in: pos)
@@ -68,7 +77,7 @@ do {
     check(one.isEmpty, "pawn e4 has no unsafe squares: \(one)")
     let nd = ChessPosition(fen: "4k3/8/3p4/8/4P3/8/8/4K3 w - - 0 1")!
     let s = LiftedPiece.summary(LiftedPiece(file: 4, rank: 3, piece: "P").unsafeSquares(in: nd), piece: "P", Loc.facts)
-    check(s == "Careful: Pawn on e5 would be undefended.", "text \(s ?? "nil")")
+    check(s == "Careful: Pawn on e5 could be taken by Pawn on d6.", "text \(s ?? "nil")")
     check(LiftedPiece(file: 4, rank: 0, piece: "K").unsafeSquares(in: pos).map(\.square) == ["d2"], "king d2 leaves f2 hanging")
     check(LiftedPiece(file: 2, rank: 3, piece: "B").unsafeSquares(in: ChessPosition(fen: pos.fen.replacingOccurrences(of: " w ", with: " b "))!).isEmpty, "wrong side")
 }

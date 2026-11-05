@@ -139,6 +139,65 @@ func runStartFixture(_ name: String, image: String, whiteBottom: Bool) {
     check(got == startPlacement, "\(name): placement \(got)")
 }
 
+func runOrientation() {
+    print("--- orientation tracker")
+    let start = Array("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR".split(separator: "/")).map { row -> [Character?] in
+        row.flatMap { ch -> [Character?] in ch.isNumber ? Array(repeating: nil, count: ch.wholeNumberValue!) : [ch] }
+    }
+    let flipped: [[Character?]] = start.reversed().map { Array($0.reversed()) }
+    var t = OrientationTracker()
+    check(t.resolve(guess: true, screen: start, isStart: true).whiteAtBottom && t.whiteAtBottom == true, "first guess adopted")
+    for _ in 0..<30 { check(t.resolve(guess: false, screen: start, isStart: false).whiteAtBottom, "a wrong guess must not flip a settled game") }
+    let seen = t.resolve(guess: false, screen: flipped, isStart: true)
+    check(!seen.whiteAtBottom && seen.reason != nil, "a start position with the other orientation switches")
+}
+runOrientation()
+
+func runDragFixture(start: String, image: String) {
+    print("--- drag fixture: rings and dots over pieces")
+    let startImg = load(start)
+    guard let rect = BoardDetector.detect(startImg) else { check(false, "drag: no board in the start image"); return }
+    var templates = PieceTemplates()
+    templates.learnStart(BoardScanner.analyze(startImg, board: rect, templates: templates).features)
+    let res = BoardScanner.analyze(load(image), board: BoardRect(x: 18, y: 66, size: 1136), templates: templates)
+    check(res.screen[2][2] == "n", "drag: knight under the ring on c6 read as \(String(describing: res.screen[2][2]))")
+    check(res.screen[1][5] == "p", "drag: pawn under the ring on f7 read as \(String(describing: res.screen[1][5]))")
+    check(res.screen[1][4] == "b" && res.screen[0][4] == "k", "drag: pieces next to the markings")
+    for (r, c) in [(1, 3), (4, 5), (5, 6)] { check(res.screen[r][c] == nil, "drag: dot on row \(r) col \(c) read as a piece \(String(describing: res.screen[r][c]))") }
+    guard let pos = ChessPosition(fen: "r1b1k1nr/pp2bppp/2n1q3/1B1pN3/3P4/8/PPP2PPP/RNBQR1K1 w kq - 7 9") else { check(false, "drag: fen"); return }
+    var lifted = pos.board
+    lifted.squares[4][4] = nil
+    lifted.squares[3][6] = "N"
+    guard let piece = LiftedPiece.detect(last: pos, current: lifted, held: true) else { check(false, "drag: lifted knight not found"); return }
+    check(piece.square == "e5" && piece.piece == "N", "drag: lifted \(piece.square) \(piece.piece)")
+    let targets: Set<String> = ["c4", "d7", "g6", "g4", "d3", "f3", "c6", "f7"]
+    let unsafe = piece.unsafeSquares(in: pos).map(\.square)
+    check(Set(unsafe).isSubset(of: targets), "drag: unsafe squares \(unsafe) are not knight targets")
+    check(LiftedPiece.detect(last: pos, current: lifted) == nil, "drag: a finished move is not a lift")
+    var wrongSquare = pos.board
+    wrongSquare.squares[4][4] = nil
+    wrongSquare.squares[3][1] = "N"
+    check(LiftedPiece.detect(last: pos, current: wrongSquare, held: true)?.square == "e5", "drag: the hover square must not decide the lifted piece")
+}
+
+func runEndgameFixture(start: String, image: String) {
+    print("--- endgame orientation")
+    let startImg = load(start)
+    guard let rect = BoardDetector.detect(startImg) else { check(false, "endgame: no board in the start image"); return }
+    var templates = PieceTemplates()
+    templates.learnStart(BoardScanner.analyze(startImg, board: rect, templates: templates).features)
+    let img = load(image)
+    guard let res = BoardScanner.scan(img, templates: templates) else { check(false, "endgame: no board"); return }
+    let got = placement(of: res, whiteBottom: true)
+    check(got == "7r/5Kp1/8/p7/Pk1b2P1/1P6/8/8", "endgame: read with white at the bottom \(got)")
+    var tracker = OrientationTracker()
+    tracker.set(true)
+    for i in 0..<20 {
+        let r = tracker.resolve(guess: false, screen: res.screen, isStart: false)
+        check(r.whiteAtBottom && r.reason == nil, "endgame: orientation flipped on frame \(i) by a wrong guess")
+    }
+}
+
 let startPlacement = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 runEarly("d4", image: "\(boards)/early_d4_white.png", expected: "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: true)
 runEarly("e4 e5", image: "\(boards)/early_e4e5_black.png", expected: "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR", whiteBottom: false)
@@ -204,6 +263,8 @@ if FileManager.default.fileExists(atPath: privateDir) {
                expected: "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: true)
     runEarly("World Chess d4 with arrow", image: "\(privateDir)/worldchess_d4_black_arrow.png",
              expected: "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR", whiteBottom: false)
+    runDragFixture(start: "\(privateDir)/chesscom_start_white.png", image: "\(privateDir)/chesscom_drag_knight_e5_over_g4.png")
+    runEndgameFixture(start: "\(privateDir)/chesscom_start_white.png", image: "\(privateDir)/chesscom_endgame_flipped_orientation.png")
 } else {
     print("private fixtures absent, skipped")
 }

@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>服务器报告错误 {0}。</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>在此地址未找到模型列表。Open WebUI 请填写例如 https://openwebui.example.com，vLLM 请填写 http://host:8000/v1。</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>要获得讲解，请在设置中选择服务器和模型。</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>注意：{0}走到{1}后将无人保护。</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>注意：{0}在{1}可能被价值更低的棋子吃掉。</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>小心：{1} 上的{0} 可能被 {3} 上的{2} 吃掉。</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>注意：{0}走到{1}会让{3}上的{2}失去保护。</value></data>
   <data name="lift.many" xml:space="preserve"><value>注意：有{0}个格子对{1}不安全，已用红色标出。</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>最常见的错误：{0}（{1} 次）。示例：{2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>连续 {0} 步好棋。</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>下一局：{0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>服务器未找到该地址或模型（错误 404）。</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>把王送到安全的位置：易位。</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>升变</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>闪击</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>牵制</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>解除牵制</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>把优势转化为胜势</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>这里有一个兵可以升变。</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>寻找闪击：移动一个棋子，让另一个棋子露出攻击。</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>寻找牵制：一个棋子一动就会暴露更有价值的棋子。</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>你的一个棋子被牵制了。想办法解除牵制。</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>你明显占优：兑子、攻王或赢取更多子力。</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} 可以走到底线并升变为后。</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>{0} 一动，后面的棋子就突然攻击到有价值的目标。</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} 可以牵制对方的一个棋子，使它被钉在更有价值的棋子前。</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>你的一个棋子被牵制，无法自由移动。找出解除牵制的着法。</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} 有助于把优势变现：兑子、追王或赢取更多子力。</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>你会失去：{0}。</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} 会受到攻击且无法逃走。</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>它会攻击：{0}。</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}：已解决 {1}/{2}</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>来自你在 {0} 的对局。</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>来自你在 {0} 的对局，第 {1} 步：你走了 {2}（{3}）。</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>对方的王缺少安全的格子。哪些将军可以结束对局？</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>对手上一步留下了无人保护的子。你可以攻击什么？</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>对方两个子位于同一个子能到达的格子上。一步棋能同时攻击它们吗？</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>有哪些将军？每一个将军会迫使对方怎么应对？</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>一个兵接近底线。什么在阻止它，你能清除障碍吗？</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>你的一个子挡在车、象或后的前面。如果它带着威胁走开会怎样？</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>对方的某个子身后是否在同一条线上有更值钱的子？</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>你的一个子被牵制了。怎样解除牵制？</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>对手现在在威胁什么？你怎样阻止？</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>你的王还在中心。最安全的解决办法是什么？</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>你的哪个子还在原位，可以投入战斗？</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>剩下的子不多了。你的王在哪里最有用？</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>哪步兵棋能夺取空间或为你的子打开线路？</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>你的哪个子作用最小？放到哪里作用更大？</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>你占优。怎样在不给对方反击机会的前提下兑现优势？</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>每步棋之前，依次列出所有将军、所有吃子和所有威胁。</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>走棋前先问：对方哪些子没有保护，或被攻击的次数多于保护的次数？</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>寻找一个子能同时攻击两个目标的格子，尤其是用马。</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>检查每一个将军。强制性的着法常常在对手来得及反应之前就决定了胜负。</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>数一数离升变还有几格，以及谁控制着这些格子。</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>走棋前，检查站在你远程子力前面的子。</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>沿着各条线寻找身后有更值钱的子的对方棋子。</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>在做其他计划之前，先检查你的子是否被牵制。</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>执行自己的计划之前，先问对手接下来想做什么。</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>尽早让王安全，再发挥车的作用。</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>开始第二个计划之前，先让每个子都投入战斗。</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>残局中，让王走向战斗发生的地方。</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>走兵之前，先看它为你和对手打开了什么。</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>找出你最差的子，并改善它。</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>占优时，不要追求花哨，而是兑子并保证王的安全。</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} 让开后，{1} 攻击 {2}。</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} 现在被牵制在 {1} 的前面。</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} 同时攻击 {1}。</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>主要变化：{0}。这是将死。</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>主要变化：{0}。你赢得 {1} 分子力。</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>主要变化：{0}。</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>它身后的 {0} 随即攻击 {1}。</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>从新的格子出发，它攻击：{0}。</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>它前往第 {0} 横线。</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>它前往 {0} 线。</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>这会让对方将死你。</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>这会丢掉 {1} 上的{0}。</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>这没有抓住此局面的要点：{0}。</value></data>
 </root>

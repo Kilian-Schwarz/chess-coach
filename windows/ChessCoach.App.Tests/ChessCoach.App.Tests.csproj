@@ -11,11 +11,16 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChessCoach.Core\ChessCoach.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ChessCoach.App\Platform\Updater.cs" Link="Updater.cs" />
     <Compile Include="..\ChessCoach.App\Platform\CaptureMath.cs" Link="CaptureMath.cs" />
+    <Compile Include="..\ChessCoach.App\Platform\PngWriter.cs" Link="PngWriter.cs" />
+    <Compile Include="..\ChessCoach.App\Platform\FrameDump.cs" Link="FrameDump.cs" />
     <Compile Include="..\ChessCoach.App\Model\AppPaths.cs" Link="AppPaths.cs" />
     <Compile Include="..\ChessCoach.Setup\InstallLayout.cs" Link="InstallLayout.cs" />
     <Compile Include="..\ChessCoach.Setup\Payload.cs" Link="Payload.cs" />

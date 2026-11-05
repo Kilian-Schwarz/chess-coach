@@ -12,6 +12,11 @@ internal sealed class TrainingWindow
     private readonly BoardView _board = new() { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, MinWidth = 320, MinHeight = 320 };
     private readonly TextBlock _progress = Kit.Text("", 13, true, bottom: 6);
     private readonly TextBlock _info = Kit.Text("", 14, bottom: 8);
+    private readonly TextBlock _theme = Kit.Text("", 12, true, bottom: 4);
+    private readonly TextBlock _question = Kit.Text("", 14, bottom: 4);
+    private readonly TextBlock _source = Kit.Text("", 12, muted: true, bottom: 8);
+    private readonly TextBlock _lesson = Kit.Text("", 13, bottom: 8);
+    private readonly Dictionary<string, PuzzleLesson> _lessons = new();
     private readonly TextBlock _hint = Kit.Text("", 13, muted: true, bottom: 8);
     private readonly TextBlock _instruction = Kit.Text(Loc.T("training.instruction"), 13, muted: true, bottom: 10);
     private readonly TextBlock _stats = Kit.Text("", 12, muted: true);
@@ -39,13 +44,13 @@ internal sealed class TrainingWindow
         var buttons = new WrapPanel { Margin = new Thickness(0, 4, 0, 0) };
         buttons.Children.Add(_hintBtn); buttons.Children.Add(_solutionBtn); buttons.Children.Add(_nextBtn);
         var top = new StackPanel();
-        top.Children.Add(_progress); top.Children.Add(_instruction); top.Children.Add(_info); top.Children.Add(_hint);
+        top.Children.Add(_progress); top.Children.Add(_theme); top.Children.Add(_question); top.Children.Add(_source); top.Children.Add(_instruction); top.Children.Add(_info); top.Children.Add(_hint); top.Children.Add(_lesson);
         var side = new Grid { Margin = new Thickness(16, 0, 0, 0), Width = 300 };
-        side.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        side.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         side.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         side.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        side.Children.Add(top);
+        side.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        side.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        side.Children.Add(new ScrollViewer { Content = top, VerticalScrollBarVisibility = ScrollBarVisibility.Auto });
         Grid.SetRow(buttons, 1); side.Children.Add(buttons);
         Grid.SetRow(_stats, 3); side.Children.Add(_stats);
         var grid = new Grid { Margin = new Thickness(14) };
@@ -83,7 +88,7 @@ internal sealed class TrainingWindow
             _board.Set(new Placement(), true);
             _progress.Text = "";
             _info.Text = _queue.Count == 0 ? Loc.T("training.noneDue") : Loc.T("training.done");
-            _hint.Text = "";
+            _hint.Text = ""; _lesson.Text = ""; _theme.Text = ""; _question.Text = ""; _source.Text = "";
             SetButtons(false);
             ShowStats();
             return;
@@ -97,12 +102,54 @@ internal sealed class TrainingWindow
         _board.Set(_position.Board, _whiteAtBottom);
         _progress.Text = Loc.T("training.progress", _index + 1, _queue.Count);
         _info.Text = Loc.T("training.find", _position.Turn.Label());
-        _hint.Text = "";
+        _hint.Text = ""; _lesson.Text = "";
+        ShowIntro(_puzzle);
         SetButtons(true);
         ShowStats();
+        Prepare(_puzzle);
+        if (_index + 1 < _queue.Count) Prepare(_queue[_index + 1]);
     }
 
-    private void ShowStats() => _stats.Text = _queue.Count == 0 ? "" : Loc.T("training.stats", _solved, _attempted);
+    private void ShowIntro(Puzzle p)
+    {
+        _theme.Text = PuzzleCoach.ThemeOf(p).Title();
+        _question.Text = PuzzleCoach.Question(PuzzleCoach.ThemeOf(p));
+        _source.Text = PuzzleCoach.Source(p);
+    }
+
+    private async void Prepare(Puzzle p)
+    {
+        if (_profile == null || _lessons.ContainsKey(p.Id)) return;
+        var profile = _profile;
+        _lessons[p.Id] = PuzzleCoach.Lesson(p);
+        if (PuzzleCoach.NeedsThemeCheck(p) && await _model.AnalyzePuzzleAsync(p.Fen) is { } result && PuzzleCoach.Classify(p, result) is { } theme)
+        {
+            p.Theme = theme.Raw();
+            p.ThemeChecked = true;
+            _model.SavePuzzles(profile.Id);
+            _lessons[p.Id] = PuzzleCoach.Lesson(p);
+            if (_puzzle == p) ShowIntro(p);
+        }
+        _model.RequestPuzzleWhy(p, profile, text =>
+        {
+            _lessons[p.Id] = _lessons[p.Id] with { Why = text };
+            if (_finished && _puzzle == p) ShowLesson(p);
+        });
+    }
+
+    private void ShowLesson(Puzzle p)
+    {
+        if (!_lessons.TryGetValue(p.Id, out var l)) return;
+        _lesson.Text = Loc.T("puzzle.why.title") + "\n" + l.Why + "\n\n" + Loc.T("puzzle.habit.title") + "\n" + l.Habit;
+    }
+
+    private void ShowStats()
+    {
+        if (_queue.Count == 0) { _stats.Text = ""; return; }
+        var lines = new List<string> { Loc.T("training.stats", _solved, _attempted) };
+        if (_profile != null) lines.AddRange(PuzzleCoach.Progress(_model.PuzzlesFor(_profile.Id).Puzzles).Take(4).Select(t => t.Text(Loc.Culture)));
+        _stats.Text = string.Join("\n", lines);
+    }
 
     private void SetButtons(bool active)
     {
@@ -160,16 +207,18 @@ internal sealed class TrainingWindow
         bool correct = _lineIndex == 0 ? _puzzle!.Accepts(uci) : _puzzle!.BestLine.Count > _lineIndex && uci == _puzzle.BestLine[_lineIndex];
         Select(null);
         string? line = null;
+        AppModel.MoveCheck? check = null;
         if (!correct)
         {
-            var check = await CheckAsync(uci);
+            check = await CheckAsync(uci);
             line = check?.Line;
             if (check != null && _lineIndex == 0 && !_recorded && _puzzle!.TryAcceptAlternative(uci, check.Loss)) correct = true;
         }
         if (!correct)
         {
             if (!_recorded) { _recorded = true; _attempted++; Record(false); ShowStats(); }
-            _info.Text = line == null ? Loc.T("training.wrong") : Loc.T("training.wrong") + "\n" + Loc.T("training.after", line);
+            string reason = check?.Pv is { Count: > 0 } pv ? "\n" + PuzzleCoach.FailReason(_puzzle!, _position!.Applying(move), pv) : "";
+            _info.Text = line == null ? Loc.T("training.wrong") : Loc.T("training.wrong") + "\n" + Loc.T("training.after", line) + reason;
             return;
         }
         string described = _position!.Board.DescribeMove(move);
@@ -197,6 +246,7 @@ internal sealed class TrainingWindow
         if (_hintLevel == 0) _solved++;
         ShowStats();
         _info.Text = Loc.T("training.correct", described);
+        ShowLesson(_puzzle);
         SetButtons(false);
     }
 
@@ -244,7 +294,7 @@ internal sealed class TrainingWindow
                 _hint.Text = Hints.Stage2Text(piece, UciMove.SquareName(m.FromFile, m.FromRank));
                 _board.Mark((m.FromFile, m.FromRank), null);
                 break;
-            case 3: _hint.Text = Hints.Stage3Fallback(theme, piece); break;
+            case 3: _hint.Text = PuzzleCoach.Hint3(theme, m, _position); break;
             default: ShowSolution(); break;
         }
     }
@@ -260,6 +310,7 @@ internal sealed class TrainingWindow
         _board.Mark((m.FromFile, m.FromRank), (m.ToFile, m.ToRank));
         _hint.Text = Loc.T("training.best", _position.Board.DescribeMove(m));
         _info.Text = "";
+        ShowLesson(_puzzle);
         SetButtons(false);
     }
 }

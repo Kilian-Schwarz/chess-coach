@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>Der Server meldet Fehler {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Unter dieser Adresse wurde keine Modellliste gefunden. Für Open WebUI z. B. https://openwebui.example.com eintragen, für vLLM http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Für Erklärungen in den Einstellungen Server und Modell wählen.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Achtung: {0} auf {1} wäre ungedeckt.</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Achtung: {0} auf {1} könnte von einer geringerwertigen Figur geschlagen werden.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Vorsicht: {0} auf {1} könnte von {2} auf {3} geschlagen werden.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Achtung: {0} nach {1} lässt {2} auf {3} ungedeckt.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Achtung: {0} Felder sind für {1} unsicher, rot markiert.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>Häufigster Fehler: {0} ({1}×). Beispiel: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>{0} gute Züge in Folge.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Fürs nächste Spiel: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>Der Server hat die Adresse oder das Modell nicht gefunden (Fehler 404).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Bring deinen König in Sicherheit: Rochiere.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Umwandlung</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Abzugsangriff</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Fesselung</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Fesselung lösen</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Vorteil verwerten</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>Hier kann ein Bauer umwandeln.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Such einen Abzugsangriff: Zieht eine Figur weg, greift eine andere an.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Such eine Fesselung: Eine Figur kann nicht ziehen, ohne eine wertvollere preiszugeben.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>Eine deiner Figuren ist gefesselt. Such einen Weg, sie zu befreien.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>Du stehst klar besser: Tausche Figuren, greife den König an oder gewinne mehr Material.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} kann die letzte Reihe erreichen und zur Dame werden.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>Wenn {0} zieht, greift plötzlich eine Figur dahinter etwas Wertvolles an.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} kann eine gegnerische Figur fesseln, sodass sie vor einer wertvolleren feststeckt.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>Eine deiner Figuren ist gefesselt und kann nicht frei ziehen. Finde den Zug, der sie befreit.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} hilft dir, den Vorteil zu verwerten: Figuren tauschen, den König jagen oder mehr Material gewinnen.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>Du würdest verlieren: {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} würde angegriffen und könnte nicht ausweichen.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>Es würde angreifen: {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} gelöst</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>Aus deiner Partie vom {0}.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>Aus deiner Partie vom {0}, Zug {1}: Du hast dort {2} gespielt ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Dem gegnerischen König gehen die sicheren Felder aus. Welche Schachs könnten die Partie beenden?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Der letzte Zug deines Gegners hat etwas ungedeckt gelassen. Was kannst du angreifen?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Zwei gegnerische Figuren stehen auf Feldern, die eine Figur erreichen kann. Greift ein Zug beide an?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Welche Schachgebote gibt es, und was erzwingt jedes davon?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>Ein Bauer steht kurz vor der letzten Reihe. Was hält ihn auf, und kannst du den Weg freiräumen?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>Eine deiner Figuren steht vor einem Turm, Läufer oder einer Dame. Was, wenn sie mit einer Drohung wegzieht?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Steht eine gegnerische Figur in einer Linie mit etwas Wertvollerem dahinter?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>Eine deiner Figuren ist gefesselt. Wie befreist du sie?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>Was droht dein Gegner gerade, und wie stoppst du es?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Dein König steht noch in der Mitte. Wie bringst du ihn am sichersten in Sicherheit?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Welche deiner Figuren steht noch zu Hause und könnte ins Spiel kommen?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Es sind nur wenige Figuren übrig. Wo hilft dein König am meisten?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Welcher Bauernzug gewinnt Raum oder öffnet eine Linie für deine Figuren?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Welche deiner Figuren tut am wenigsten? Wo würde sie mehr bewirken?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>Du stehst besser. Wie verwertest du den Vorteil, ohne Gegenspiel zuzulassen?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Zähle vor jedem Zug alle Schachs auf, dann alle Schlagzüge, dann alle Drohungen.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Frag dich vor dem Ziehen, welche gegnerischen Figuren ungedeckt oder öfter angegriffen als gedeckt sind.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Suche Felder, von denen aus eine Figur zwei Ziele trifft, besonders mit dem Springer.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Prüfe jedes Schachgebot. Ein erzwingender Zug entscheidet oft, bevor der Gegner reagieren kann.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Zähle die Felder bis zur Umwandlung und wer sie kontrolliert.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Prüfe vor dem Ziehen die Figuren, die vor deinen weitreichenden Figuren stehen.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Suche entlang der Linien nach einer gegnerischen Figur mit einer wertvolleren dahinter.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Prüfe zuerst, ob eine deiner Figuren gefesselt ist, bevor du etwas anderes planst.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Frag dich, was dein Gegner als Nächstes vorhat, bevor du deinen eigenen Plan spielst.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Bring den König früh in Sicherheit, dann nutze den Turm.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>Bring jede Figur ins Spiel, bevor du einen zweiten Plan beginnst.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>Führe im Endspiel den König zum Geschehen.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Prüfe vor einem Bauernzug, was er für dich und für deinen Gegner öffnet.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>Finde deine schlechteste Figur und verbessere sie.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>Wenn du vorn liegst, tausche Figuren und halte den König sicher, statt nach Feuerwerk zu suchen.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} macht den Weg frei, damit {1} {2} angreift.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} ist jetzt vor {1} gefesselt.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} greift gleichzeitig {1} an.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Hauptvariante: {0}. Das ist Schachmatt.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Hauptvariante: {0}. Du gewinnst {1} Punkte Material.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Hauptvariante: {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>Dahinter greift dann {0} {1} an.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>Von ihrem neuen Feld aus greift sie an: {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>Sie zieht auf die {0}. Reihe.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>Sie zieht auf die {0}-Linie.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>Das lässt Schachmatt zu.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Das verliert {0} auf {1}.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>Er verpasst die Idee dieser Stellung: {0}.</value></data>
 </root>

@@ -212,4 +212,8 @@
   <data name="welcome.gotIt" xml:space="preserve"><value>Compris</value></data>
   <data name="welcome.switchOn" xml:space="preserve"><value>Activer</value></data>
   <data name="training.after" xml:space="preserve"><value>Ensuite : {0}</value></data>
+  <data name="ask.hintExplained" xml:space="preserve"><value>Indice expliqué</value></data>
+  <data name="explain.noReliable" xml:space="preserve"><value>Aucune explication fiable. Essayez « Réexpliquer ».</value></data>
+  <data name="puzzle.why.title" xml:space="preserve"><value>Pourquoi ça marche</value></data>
+  <data name="puzzle.habit.title" xml:space="preserve"><value>Habitude à retenir</value></data>
 </root>

@@ -19,6 +19,32 @@ public static class PieceInfo
     public static int Value(char p) => Values.GetValueOrDefault(char.ToLowerInvariant(p), 0);
 }
 
+public readonly record struct PieceAt(char Piece, string Square)
+{
+    public string Text(CultureInfo? culture = null) => $"{PieceInfo.Name(Piece, culture)} {Square}";
+}
+
+public readonly record struct XRay(PieceAt Slider, PieceAt Blocker, PieceAt Target);
+
+public readonly record struct Pin(char Piece, int File, int Rank, char Pinner, int PinnerFile, int PinnerRank, char Target, int TargetFile, int TargetRank)
+{
+    public bool Absolute => char.ToLowerInvariant(Target) == 'k';
+    public string Square => UciMove.SquareName(File, Rank);
+    public string PinnerSquare => UciMove.SquareName(PinnerFile, PinnerRank);
+    public string TargetSquare => UciMove.SquareName(TargetFile, TargetRank);
+
+    public string Text(CultureInfo? culture = null)
+    {
+        culture ??= CoreLocale.English;
+        string owner = Placement.ColorOf(Piece).Label(culture), enemy = Placement.ColorOf(Pinner).Label(culture);
+        string me = $"{owner} {PieceInfo.Name(Piece, culture)} {Square}", by = $"{enemy} {PieceInfo.Name(Pinner, culture)} {PinnerSquare}";
+        string against = $"{owner} {PieceInfo.Name(Target, culture)} {TargetSquare}";
+        return Absolute
+            ? $"{me} is pinned against {against} by {by}: it cannot leave the line without exposing the king"
+            : $"{me} is pinned against {against} by {by}: moving it would lose the queen";
+    }
+}
+
 public static class Tactics
 {
     public readonly record struct Attacker(char Piece, int File, int Rank);
@@ -117,6 +143,126 @@ public static class Tactics
             if (att.Count == 0) continue;
             bool unprotected = friends[r][f].Count == 0;
             if (unprotected || att.Min(a => PieceInfo.Value(a.Piece)) < PieceInfo.Value(p)) output.Add(new HangingPiece(p, f, r, unprotected));
+        }
+        return output;
+    }
+
+    public static string HangingText(this HangingPiece h, CultureInfo? culture = null) =>
+        CoreLocale.Format(h.Unprotected ? "hanging.unprotected" : "hanging.cheaper", culture, PieceInfo.Name(h.Piece, culture), h.Square);
+
+    private static readonly (int, int)[] AllDirs = { (1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1) };
+
+    public static List<Pin> Pins(this Placement self, PieceColor color)
+    {
+        var output = new List<Pin>();
+        for (int tr = 0; tr < 8; tr++) for (int tf = 0; tf < 8; tf++)
+        {
+            if (self.Squares[tr][tf] is not char target || Placement.ColorOf(target) != color) continue;
+            char kind = char.ToLowerInvariant(target);
+            if (kind != 'k' && kind != 'q') continue;
+            foreach (var (df, dr) in AllDirs)
+            {
+                bool diagonal = df != 0 && dr != 0;
+                int f = tf + df, r = tr + dr;
+                (char P, int F, int R)? shield = null;
+                while (OnBoard(f, r))
+                {
+                    if (self.Squares[r][f] is char p)
+                    {
+                        if (shield == null)
+                        {
+                            if (Placement.ColorOf(p) != color || !(kind == 'k' || PieceInfo.Value(p) < PieceInfo.Value(target))) break;
+                            shield = (p, f, r);
+                        }
+                        else
+                        {
+                            char k = char.ToLowerInvariant(p);
+                            bool slides = k == 'q' ? kind != 'q' : (diagonal ? k == 'b' : k == 'r');
+                            if (Placement.ColorOf(p) != color && slides)
+                                output.Add(new Pin(shield.Value.P, shield.Value.F, shield.Value.R, p, f, r, target, tf, tr));
+                            break;
+                        }
+                    }
+                    f += df; r += dr;
+                }
+            }
+        }
+        return output;
+    }
+
+    public static List<Pin> Unpinned(this Placement self, UciMove move, PieceColor color)
+    {
+        var after = self.Applying(move).Pins(color);
+        return self.Pins(color).Where(p => !(p.File == move.FromFile && p.Rank == move.FromRank) && !after.Contains(p)).ToList();
+    }
+
+    public static List<Pin> CreatedPins(this Placement self, UciMove move, PieceColor against)
+    {
+        var before = self.Pins(against);
+        return self.Applying(move).Pins(against).Where(p => !before.Contains(p)).ToList();
+    }
+
+    public static int Material(this Placement self, PieceColor color)
+    {
+        int sum = 0;
+        for (int r = 0; r < 8; r++) for (int f = 0; f < 8; f++)
+            if (self.Squares[r][f] is char p && Placement.ColorOf(p) == color && char.ToLowerInvariant(p) != 'k') sum += PieceInfo.Value(p);
+        return sum;
+    }
+
+    public static List<XRay> XRays(this Placement self, int file, int rank)
+    {
+        var output = new List<XRay>();
+        if (self.Piece(file, rank) is not char p) return output;
+        char kind = char.ToLowerInvariant(p);
+        var dirs = new List<(int, int)>();
+        if (kind == 'r' || kind == 'q') dirs.AddRange(Orth);
+        if (kind == 'b' || kind == 'q') dirs.AddRange(Diag);
+        foreach (var (df, dr) in dirs)
+        {
+            int f = file + df, r = rank + dr;
+            (char P, int F, int R)? blocker = null;
+            while (OnBoard(f, r))
+            {
+                if (self.Squares[r][f] is char q)
+                {
+                    if (blocker == null)
+                    {
+                        if (Placement.ColorOf(q) != Placement.ColorOf(p)) break;
+                        blocker = (q, f, r);
+                    }
+                    else
+                    {
+                        if (Placement.ColorOf(q) != Placement.ColorOf(p))
+                            output.Add(new XRay(new PieceAt(p, UciMove.SquareName(file, rank)),
+                                new PieceAt(blocker.Value.P, UciMove.SquareName(blocker.Value.F, blocker.Value.R)), new PieceAt(q, UciMove.SquareName(f, r))));
+                        break;
+                    }
+                }
+                f += df; r += dr;
+            }
+        }
+        return output;
+    }
+
+    public static List<XRay> DiscoveredTargets(this Placement self, UciMove move, PieceColor color)
+    {
+        var after = self.Applying(move);
+        var defenders = after.Attackers(color.Opposite());
+        var output = new List<XRay>();
+        for (int r = 0; r < 8; r++) for (int f = 0; f < 8; f++)
+        {
+            if (self.Squares[r][f] is not char p || Placement.ColorOf(p) != color || "brq".IndexOf(char.ToLowerInvariant(p)) < 0
+                || (f == move.FromFile && r == move.FromRank)) continue;
+            var known = self.Attacks(f, r).ToHashSet();
+            foreach (var (tf, tr) in after.Attacks(f, r))
+            {
+                if (known.Contains((tf, tr)) || after.Piece(tf, tr) is not char t || Placement.ColorOf(t) == color) continue;
+                if (!(char.ToLowerInvariant(t) == 'k' || PieceInfo.Value(t) > PieceInfo.Value(p) || defenders[tr][tf].Count == 0)) continue;
+                output.Add(new XRay(new PieceAt(p, UciMove.SquareName(f, r)),
+                    new PieceAt(self.Piece(move.FromFile, move.FromRank) ?? p, UciMove.SquareName(move.FromFile, move.FromRank)),
+                    new PieceAt(t, UciMove.SquareName(tf, tr))));
+            }
         }
         return output;
     }

@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>サーバーがエラー {0} を返しました。</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>このアドレスにモデル一覧が見つかりません。Open WebUI なら例えば https://openwebui.example.com、vLLM なら http://host:8000/v1 を入力してください。</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>解説を表示するには、設定でサーバーとモデルを選んでください。</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>注意：{1}の{0}は守られません。</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>注意：{1}の{0}は、価値の低い駒に取られる可能性があります。</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>注意: {1} の {0} は {3} の {2} に取られる可能性があります。</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>注意：{0}を{1}に動かすと、{3}の{2}が無防備になります。</value></data>
   <data name="lift.many" xml:space="preserve"><value>注意：{1}にとって安全でないマスが{0}か所あります（赤で表示）。</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>最も多いミス: {0}({1}回)。例: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>良い手が{0}手連続。</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>次の対局に向けて: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>サーバーがアドレスまたはモデルを見つけられませんでした（エラー 404）。</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>キングを安全にしましょう：キャスリングです。</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>プロモーション</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>ディスカバードアタック</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>ピン</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>ピンを外す</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>優位を活かす</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>ここでポーンがプロモーションできます。</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>ディスカバードアタックを探しましょう：1つの駒を動かすと別の駒が利きます。</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>ピンを探しましょう：動くとより価値の高い駒が危険になる駒です。</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>あなたの駒の1つがピンされています。解く方法を探しましょう。</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>明らかに優勢です：駒を交換するか、キングを攻めるか、さらに駒得を狙いましょう。</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} は最終段に届いてクイーンになれます。</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>{0} が動くと、後ろの駒が突然価値の高い駒に利きます。</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} は相手の駒をピンして、より価値の高い駒の前で動けなくできます。</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>あなたの駒の1つがピンされて自由に動けません。解く手を見つけましょう。</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} が優位を活かす助けになります：駒の交換、キング攻め、さらなる駒得。</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>失うもの：{0}。</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} が攻撃され、逃げられません。</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>狙われるもの：{0}。</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} 解決</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>{0} の対局から。</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>{0} の対局、{1}手目: ここであなたは {2} を指しました ({3})。</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>相手のキングは安全なマスが少なくなっています。どのチェックで決着をつけられますか？</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>相手の直前の手で守られていない駒ができました。何を攻撃できますか？</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>相手の駒2つが、1つの駒で届くマスにいます。1手で両方を攻撃できますか？</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>どんなチェックがあり、それぞれ何を強制しますか？</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>ポーンが最終段に近づいています。何が止めていて、道を開けられますか？</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>あなたの駒の1つがルーク、ビショップ、クイーンの前に立っています。脅威を伴って動いたらどうなりますか？</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>相手の駒の後ろに、より価値の高い駒が一直線に並んでいませんか？</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>あなたの駒の1つが動けなくなっています。どうすれば解放できますか？</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>相手は今何を狙っていますか？ それをどう止めますか？</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>あなたのキングはまだ中央にいます。最も安全に解決するには？</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>まだ初期位置にいて、参戦できる駒はどれですか？</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>駒が少なくなりました。キングはどこで最も役に立ちますか？</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>どのポーンの動きでスペースを得たり、駒のラインを開けたりできますか？</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>最も働いていない駒はどれですか？ どこなら役に立ちますか？</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>あなたが優勢です。反撃を許さずに優位を活かすには？</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>毎手の前に、すべてのチェック、次にすべての駒取り、最後にすべての脅威を確認しましょう。</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>指す前に、守られていない相手の駒や、守りより攻めが多い駒がないか確認しましょう。</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>1つの駒が2つの標的を同時に狙えるマスを探しましょう。特にナイトで。</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>すべてのチェックを検討しましょう。強制的な手は、相手が対応する前に勝負を決めることがあります。</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>昇格までのマス数と、そのマスを誰が支配しているかを数えましょう。</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>指す前に、射程の長い駒の前に立っている駒を確認しましょう。</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>ラインに沿って、後ろにより価値の高い駒を従えた相手の駒を探しましょう。</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>他の計画を立てる前に、自分の駒がピンされていないか確認しましょう。</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>自分の計画を進める前に、相手が次に何をしたいかを考えましょう。</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>早めにキングを安全にし、それからルークを活用しましょう。</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>2つ目の計画に入る前に、すべての駒を働かせましょう。</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>終盤では、キングを戦いの場へ向かわせましょう。</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>ポーンを動かす前に、それが自分と相手に何を開くかを確認しましょう。</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>最も働いていない駒を見つけて、改善しましょう。</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>優勢なときは、派手な手を探さず、駒交換をしてキングを安全に保ちましょう。</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} がどくことで、{1} が {2} を攻撃します。</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} は {1} の前でピンされました。</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} が {1} を同時に攻撃します。</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>主変化: {0}。これでチェックメイトです。</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>主変化: {0}。駒得は {1} ポイントです。</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>主変化: {0}。</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>その後ろで {0} が {1} を攻撃します。</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>新しいマスから攻撃するのは: {0}。</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>{0}段目へ向かいます。</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>{0}ファイルへ向かいます。</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>それではチェックメイトを許してしまいます。</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>それでは {1} の {0} を失います。</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>この局面の狙いを外しています: {0}。</value></data>
 </root>

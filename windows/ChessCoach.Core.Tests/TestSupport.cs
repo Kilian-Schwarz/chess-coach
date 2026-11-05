@@ -8,7 +8,11 @@ namespace ChessCoach.Core.Tests;
 public static class TestSupport
 {
     [ModuleInitializer]
-    public static void UseEnglish() => CoreLocale.Culture = CoreLocale.English;
+    public static void UseEnglish()
+    {
+        CoreLocale.Culture = CoreLocale.English;
+        Environment.SetEnvironmentVariable("CHESSCOACH_LOG_DIR", Path.Combine(FindRoot(), "build", "tests", "logs"));
+    }
 
     public static readonly string Root = FindRoot();
     public static string TestData => Path.Combine(Root, "Tools", "testdata");
@@ -20,6 +24,19 @@ public static class TestSupport
         return d?.FullName ?? throw new InvalidOperationException("Project root (Tools/testdata) not found");
     }
 
+    public static RgbImage Crop(RgbImage img, int x, int y, int w, int h)
+    {
+        var px = new byte[w * h * 4];
+        for (int yy = 0; yy < h; yy++)
+            for (int xx = 0; xx < w; xx++)
+            {
+                var (r, g, b) = img.Rgb(x + xx, y + yy);
+                int i = (yy * w + xx) * 4;
+                px[i] = (byte)r; px[i + 1] = (byte)g; px[i + 2] = (byte)b; px[i + 3] = 255;
+            }
+        return new RgbImage(w, h, px);
+    }
+
     public static RgbImage LoadPng(string path)
     {
         using var s = File.OpenRead(path);
@@ -28,7 +45,7 @@ public static class TestSupport
     }
 
     private static bool Complete(string dir) =>
-        File.Exists(Path.Combine(dir, "mid_black.png")) && File.Exists(Path.Combine(dir, "lift_dots_only.png"));
+        File.Exists(Path.Combine(dir, "mid_black.png")) && File.Exists(Path.Combine(dir, "lift_dots_only.png")) && File.Exists(Path.Combine(dir, "big_arrows.png"));
 
     public static string? SyntheticDir()
     {

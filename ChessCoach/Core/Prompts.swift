@@ -9,28 +9,38 @@ extension Coach {
     }
 
     static let systemPrompt = """
-    You are a patient chess coach for a hobby player. You receive facts computed by a chess engine. \
-    They are correct: rely only on them, never invent moves, variations or threats, and do not calculate yourself. \
-    Leave out what the facts do not support. Explain the idea behind the move, not every move one by one. \
-    Name pieces and squares exactly as the facts and the answer-language line write them. Address the player as "you", with no heading and no bullet list. \
+    You are a patient chess coach talking directly to a hobby player who sits at the board. \
+    Everything in the message about the position, the moves and the evaluations comes from a chess engine and is correct: \
+    rely only on it, never invent moves, variations or threats, and do not calculate yourself. \
+    Speak as the coach who sees the board yourself; never refer to notes, lists, engine output or material you were given. \
+    Leave out what you cannot support. State the concrete purpose of a move from the lines; if it has none there, say in one short sentence that it keeps the advantage or the position sound, \
+    and never list generic benefits such as covering squares, protecting pawns or king safety. \
+    Say that a move gives check only if the message says so. Explain the idea behind the move, not every move one by one. \
+    Name pieces and squares exactly as the message and the answer-language line write them. Address the player as "you", with no heading and no bullet list. \
     The message ends with a style card: follow its length, depth, tone and language strictly and respect the word limit. \
     Write a line "Takeaway: ..." only if the style card lists "takeaway", using the label given there.
     """
 
     static let hintSystemPrompt = """
     You are a patient chess coach. The player asked for a hint, not for the solution. \
-    You receive facts computed by a chess engine. They are correct. \
-    Write exactly one sentence of at most 30 words that hints at the idea of the best move. \
-    Do not name the target square or the move, give no move notation and do not reveal which piece is captured. \
-    Invent nothing that is not in the facts. Address the player as "you".
+    Everything in the message comes from a chess engine and is correct. \
+    Write one or two sentences of at most 40 words in total that tell the player exactly what to look for on the board: \
+    name the piece that should move, the file, rank or area it should head for, and the purpose with the concrete pieces and squares \
+    named in the message (what it attacks, protects or frees). \
+    Do not name the exact destination square or the move, give no move notation and do not reveal which piece is captured. \
+    Invent nothing beyond what the message states. Address the player as "you".
     """
 
     static let questionSystemPrompt = """
-    You are a patient chess coach for a hobby player. You receive facts about the current position, \
-    computed by a chess engine, and a question from the player. The facts are correct. \
-    Answer the question in simple words and rely only on these facts. Do not invent moves, variations or threats. \
-    If the answer is not in the facts, say so honestly. Do not name a best move unless the facts contain one. \
-    At most 120 words, no heading, no takeaway.
+    You are a patient chess coach talking directly to a hobby player about the position on the board. \
+    The message describes the position as a chess engine sees it: evaluation, best line, the opponent's threat and what it would win, \
+    pins, loose pieces, checks, and what the player's current hint shows. All of it is correct. \
+    Use it, never invent moves, variations or threats, and speak as the coach who sees the board yourself: \
+    never refer to notes, lists, engine output or material you were given. \
+    If the player asks why, answer with the concrete reason in simple words: which piece is pinned, what is threatened and what it would cost, \
+    what a move frees or stops. Say that a move gives check only if the message says so. Follow the hint rule in the message. \
+    If the position truly gives no reason, say so briefly in your own words. Address the player as "you", with no heading and no takeaway. \
+    Respect the word limit and the language in the last lines.
     """
 
     static let summarySystemPrompt = """
@@ -99,6 +109,7 @@ extension Coach {
         if let best = r.bestText(.facts), r.rating != .best { facts.append("Better was: \(best) (evaluation: \(r.bestScore.text(.facts))).") }
         let reply = r.replyLine(.facts)
         if !reply.isEmpty { facts.append("Best reply for \(opponent): \(reply)") }
+        facts += moveEffects(before: r.before, move: r.played, me: r.player, label: "The played move")
         let hanging = r.before.applying(r.played).hangingPieces(of: r.player, .facts)
         if !hanging.isEmpty { facts.append("After the move, \(name) has: \(hanging.joined(separator: "; ")).") }
         if let best = r.best, r.rating != .best { facts += tacticFacts(before: r.before, move: best, me: r.player, label: "The better move") }
@@ -109,26 +120,17 @@ extension Coach {
     }
 
     static func hintRequest(_ hint: HintSet, context: PlayerContext, language: String = "English") -> ExplanationRequest {
-        ExplanationRequest(system: hintSystemPrompt, user: "\(hint.stage3Prompt)\n\(tone(for: context.level)) \(answerIn(language))", maxTokens: 80)
+        ExplanationRequest(system: hintSystemPrompt, user: "\(hint.stage3Prompt)\n\(tone(for: context.level)) \(answerIn(language))", maxTokens: 110)
     }
 
-    static func questionRequest(placement: Placement, toMove: PieceColor, question: String, score: String? = nil, bestMove: String? = nil,
-                                threat: String? = nil, language: String = "English") -> ExplanationRequest {
-        let name = toMove.title(.facts)
-        var facts = [
-            "Position (FEN): \(placement.fen(sideToMove: toMove))",
-            "\(name) to move. All evaluations are from \(name)'s point of view.",
-            "\(name) pieces: \(placement.pieceList(toMove))",
-            "\(toMove.opposite.title(.facts)) pieces: \(placement.pieceList(toMove.opposite))",
-        ]
-        if let score { facts.append("Evaluation of the position: \(score)") }
-        if let bestMove { facts.append("Best move per engine: \(bestMove)") }
-        if let threat { facts.append(threat) }
-        for c in [toMove, toMove.opposite] {
-            let hanging = placement.hangingPieces(of: c, .facts)
-            if !hanging.isEmpty { facts.append("Unprotected or threatened for \(c.title(.facts)): \(hanging.joined(separator: "; "))") }
-        }
-        return ExplanationRequest(system: questionSystemPrompt, user: facts.joined(separator: "\n") + "\n\nPlayer's question: \(question)\n\(answerIn(language))", maxTokens: 260)
+    static func questionRequest(grounding: PositionFacts.Grounding, question: String, context: PlayerContext, style: ExplanationStyle,
+                                language: String = "English") -> ExplanationRequest {
+        var capped = style
+        if capped.length == .long { capped.length = .medium }
+        return ExplanationRequest(system: questionSystemPrompt,
+                                  user: grounding.lines.joined(separator: "\n") + "\n\nPlayer's question: \(question)\n"
+                                      + styleCard(context: context, style: capped, language: language),
+                                  maxTokens: max(capped.maxTokens, 160))
     }
 
     private static func request(_ facts: [String], ask: String, context: PlayerContext, style: ExplanationStyle, language: String) -> ExplanationRequest {
@@ -137,7 +139,7 @@ extension Coach {
                            maxTokens: style.maxTokens)
     }
 
-    private static func tacticFacts(before: Placement, move: UCIMove, me: PieceColor, label: String) -> [String] {
+    static func moveEffects(before: Placement, move: UCIMove, me: PieceColor, label: String) -> [String] {
         let after = before.applying(move)
         var facts: [String] = []
         if let victim = before.piece(move.toFile, move.toRank) {
@@ -147,12 +149,30 @@ extension Coach {
             guard let p = after.piece(f, r), Placement.color(of: p) != me else { return nil }
             return "\(PieceInfo.name(p, .facts)) \(UCIMove.squareName(f, r))"
         }
-        if !targets.isEmpty { facts.append("\(label) then attacks: \(targets.joined(separator: ", ")).") }
+        let mover = after.piece(move.toFile, move.toRank) ?? "p"
+        let name = "\(PieceInfo.name(mover, .facts)) \(UCIMove.squareName(move.toFile, move.toRank))"
+        facts.append(targets.isEmpty ? "After \(label.lowercased()), the \(name) attacks no enemy piece directly."
+                                     : "\(label) then attacks directly: \(targets.joined(separator: ", ")).")
+        for x in after.xrays(file: move.toFile, rank: move.toRank) {
+            facts.append("The \(x.slider.text(.facts)) only x-rays \(x.target.text(.facts)) through its own \(x.blocker.text(.facts)); it does not attack it while that piece stays.")
+        }
+        for d in before.discoveredTargets(by: move, color: me) {
+            facts.append("Moving the \(d.blocker.text(.facts)) uncovers an attack by \(d.slider.text(.facts)) on \(d.target.text(.facts)).")
+        }
+        for pin in before.unpinned(by: move, color: me) {
+            facts.append("It ends the pin on \(PieceInfo.name(pin.piece, .facts)) \(pin.square).")
+        }
+        for pin in before.createdPins(by: move, against: me.opposite) { facts.append("It creates a pin: \(pin.text(.facts)).") }
+        if after.isInCheck(me.opposite) { facts.append("\(label) gives check.") }
+        return facts
+    }
+
+    static func tacticFacts(before: Placement, move: UCIMove, me: PieceColor, label: String) -> [String] {
+        var facts = moveEffects(before: before, move: move, me: me, label: label)
         for color in [me, me.opposite] {
             let hanging = before.hangingPieces(of: color, .facts)
             if !hanging.isEmpty { facts.append("Before the move, \(color.title(.facts)) has: \(hanging.joined(separator: "; ")).") }
         }
-        if after.isInCheck(me.opposite) { facts.append("\(label) gives check.") }
         return facts
     }
 }

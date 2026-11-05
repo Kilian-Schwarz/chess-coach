@@ -10,10 +10,13 @@ public static class Log
 
     public static string Directory
     {
-        get => _directory ??= System.IO.Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ChessCoach", "Logs");
+        get => _directory ??= DefaultDirectory(Environment.GetEnvironmentVariable("CHESSCOACH_LOG_DIR"));
         set => _directory = value;
     }
+
+    public static string DefaultDirectory(string? overrideDirectory) => overrideDirectory is { Length: > 0 }
+        ? overrideDirectory
+        : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ChessCoach", "Logs");
 
     public static string FilePath => System.IO.Path.Combine(Directory, "chesscoach.log");
 

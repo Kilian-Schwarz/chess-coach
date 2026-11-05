@@ -1,4 +1,5 @@
 import AppKit
+import ScreenCaptureKit
 import Combine
 import SwiftUI
 
@@ -51,7 +52,11 @@ final class AppModel: ObservableObject {
     var templates = PieceTemplates() { didSet { hasTemplates = !templates.isEmpty } }
 
     var lastDisplay: CGDirectDisplayID?
-    var autoWhiteAtBottom: Bool?
+    var orientation = OrientationTracker()
+    var autoWhiteAtBottom: Bool? {
+        get { orientation.whiteAtBottom }
+        set { orientation.set(newValue) }
+    }
     var pendingScreen: [[Character?]]?
     var relearnTried: [[Character?]]?
     var stablePlacement: Placement?
@@ -71,6 +76,18 @@ final class AppModel: ObservableObject {
     var lastChecksum: UInt64?
     var boardStabilizer = RectStabilizer()
     var regionMisses = 0
+    var verifyFailedSince: Date?
+    var captureFailedSince: Date?
+    var rectUnsettled = false
+    var relearnGuard = RelearnGuard()
+    var mismatchSince: Date?
+    var forceResync = false
+    var mouseHeld = false
+    var trackedWindow: SCWindow?
+    var windowCapture = false
+    var windowAttemptAt = Date.distantPast
+    var boardPresent = false
+    var lostLogged = false
     var confirmSoon = false
     var reviewSeq = 0
     var pendingReview: (moves: [PlayedMove], frames: Int)?
@@ -132,6 +149,8 @@ final class AppModel: ObservableObject {
     var lastExplanation: (style: ExplanationStyle, profileId: String, at: Date)?
     var openingLine: String?
     var questionTask: Task<Void, Never>?
+    var factsCache: [String: PositionFacts.Grounding] = [:]
+    var questionAllowed = Set<String>()
 
     struct HintContext {
         var position: ChessPosition
@@ -263,6 +282,11 @@ final class AppModel: ObservableObject {
         stablePlacement = nil
         pendingReview = nil
         boardStabilizer.reset()
+        relearnGuard.reset()
+        mismatchSince = nil
+        forceResync = false
+        verifyFailedSince = nil
+        trackedWindow = nil
         autoWhiteAtBottom = nil
         cancelAllTasks()
         reviewCard = nil
@@ -298,14 +322,15 @@ final class AppModel: ObservableObject {
     }
 
     func updatePanelCards() {
-        guard let rect = lastBoardRect, isActive else { return }
+        guard let rect = lastBoardRect, isActive, boardPresent else { return }
         let review = displayedReviewCard()
         let reviewIsOld = review.map { $0.reviewPly != nil && $0.reviewPly! < record.moves.count } ?? false
         let cards = (reviewIsOld ? [liftCard, reportCard, suggestionCard, threatCard, answerCard, review] : [liftCard, reportCard, review, threatCard, suggestionCard, answerCard]).compactMap { $0 }
-        if cards.isEmpty { panel.hide() } else { panel.show(nextTo: rect, cards: cards) }
+        panel.show(nextTo: rect, cards: cards)
     }
 
     func hideAll() {
+        boardPresent = false
         overlay.hide()
         panel.hide()
         hintCtx = nil

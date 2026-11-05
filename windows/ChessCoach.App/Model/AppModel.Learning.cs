@@ -325,7 +325,7 @@ internal sealed partial class AppModel
         int hint = book.HintUsed.GetValueOrDefault(pm.FenBefore);
         if (analysis.Theme is { } th && _reviewStyleByFen.TryGetValue(pm.FenBefore, out var st)) _themeStyle[th.Raw()] = st;
         if (!book.Assist.Record(prof, analysis, hint)) return;
-        var puzzle = Puzzle.Make(review, before, analysis.MistakeType, analysis.Theme, prof.Level);
+        var puzzle = Puzzle.Make(review, before, analysis.MistakeType, analysis.Theme, prof.Level, moveNumber: pm.MoveNumber);
         bool added = book.Assist.AddPuzzle(PuzzlesFor(prof.Id), puzzle);
         if (puzzle != null) SavePuzzles(prof.Id);
         if (analysis.MistakeType is { } mt)

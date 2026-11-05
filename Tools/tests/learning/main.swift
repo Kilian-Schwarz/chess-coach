@@ -545,7 +545,7 @@ do {
           && Coach.styleCard(context: PlayerContext(level: .strong, focus: nil), style: ExplanationStyle(), language: "German").contains("technical terms fine. Answer in German. Use exactly: king=King"), "tone per level and language")
     check(Coach.styleCard(context: PlayerContext(level: .beginner, focus: nil), style: ExplanationStyle(length: .long, depth: .principle), language: "German").contains("; label=Takeaway."), "takeaway label in glossary")
     check(!Coach.styleCard(context: PlayerContext(level: .beginner, focus: nil), style: ExplanationStyle()).contains("Use exactly"), "no glossary in English")
-    check(Coach.systemPrompt.hasPrefix("You are a patient chess coach for a hobby player. You receive facts computed by a chess engine."), "fixed system prompt")
+    check(Coach.systemPrompt.hasPrefix("You are a patient chess coach talking directly to a hobby player"), "fixed system prompt")
     let p = parse(ChessPosition.startFEN).placement
     let r1 = MoveReview(before: p, played: UCIMove("e2e4")!, best: UCIMove("e2e4"), bestScore: .cp(30), playedScore: .cp(30),
                         rating: .best, loss: 0, replyMoves: [], player: .white)
@@ -556,9 +556,11 @@ do {
     check(q1.maxTokens == 120 && q2.maxTokens == 400, "max_tokens passed through")
     let hint = HintSet(move: UCIMove("g1f3")!, theme: .develop, threat: nil, stage1: "", stage2Square: "g1", stage2: "", stage3Fallback: "", stage3Prompt: "facts", stage4: "")
     let hr = Coach.hintRequest(hint, context: ctx, language: "French")
-    check(hr.system == Coach.hintSystemPrompt && hr.user.contains("Answer in French. Use exactly:") && hr.maxTokens == 80, "hint request")
-    let qr = Coach.questionRequest(placement: p, toMove: .white, question: "Why castle?", language: "Spanish")
-    check(qr.system == Coach.questionSystemPrompt && qr.user.contains("Player's question: Why castle?\nAnswer in Spanish. Use exactly:") && qr.user.contains("White pieces: King e1, Queen d1, Rooks a1 h1"), "question request: \(qr.user)")
+    check(hr.system == Coach.hintSystemPrompt && hr.user.contains("Answer in French. Use exactly:") && hr.maxTokens == 110, "hint request")
+    let qg = PositionFacts.build(position: ChessPosition(fen: ChessPosition.startFEN)!, result: nil, nullResult: nil, threat: nil, revealBest: false)
+    let qr = Coach.questionRequest(grounding: qg, question: "Why castle?", context: ctx, style: ExplanationStyle(), language: "Spanish")
+    check(qr.system == Coach.questionSystemPrompt && qr.user.contains("Player's question: Why castle?\nPlayer:") && qr.user.contains("Answer in Spanish. Use exactly:")
+          && qr.user.contains("White pieces: King e1, Queen d1, Rooks a1 h1"), "question request: \(qr.user)")
     check(Coach.cleanAnswer("<think>x</think> Hello") == "Hello" && Coach.cleanAnswer("a<think>b") == "a" && Coach.cleanAnswer("x</think>y") == "y", "think blocks removed")
 }
 
@@ -724,6 +726,63 @@ do {
     let decoded = try JSONDecoder().decode(GameReport.self, from: JSONEncoder().encode(report))
     check(decoded.engineAssisted == true, "the flag survives encoding")
 }
+
+section("puzzle teaching")
+let discFen = "r1b1k1nr/pp2bppp/2n1q3/1B1pN3/3P4/8/PPP2PPP/RNBQR1K1 w kq - 7 9"
+var disc = Puzzle(id: "d", fen: discFen, acceptedMoves: ["e5c6"], bestLine: ["e5c6", "b7c6", "e1e6", "f7e6"], theme: "discovered", mistakeType: "missedTactic", createdAt: t0, dueAt: t0)
+disc.sourceDate = t0
+disc.sourceMove = 9
+disc.playedMove = "b5c6"
+disc.playedValue = -320
+disc.themeChecked = true
+let discPos = ChessPosition(fen: discFen)!
+let src = PuzzleCoach.source(disc)
+check(src.contains("move 9") && src.contains("Bxc6") && src.contains("−3.2"), "source line: \(src)")
+check(!src.contains("Nxc6"), "source line does not leak the solution")
+check(PuzzleCoach.source(puzzle()).hasPrefix("From your game on"), "old puzzles show the date only")
+for t in HintTheme.allCases {
+    check(!PuzzleCoach.question(t).isEmpty && !PuzzleCoach.habit(t).isEmpty, "question and habit for \(t)")
+    check(PuzzleCoach.question(t) != PuzzleCoach.habit(t), "question differs from habit for \(t)")
+}
+let lesson = PuzzleCoach.lesson(disc)
+check(lesson.why.contains("Knight e5 moves away, so Rook e1 attacks Queen e6"), "mechanism: \(lesson.why)")
+check(lesson.why.contains("9.Nxc6 bxc6 10.Rxe6 fxe6") && lesson.why.contains("win 4 points"), "line and gain: \(lesson.why)")
+check(lesson.habit.contains("in front of your long-range pieces"), "habit for discovered attack")
+var mated = puzzle("6k1/5ppp/8/8/8/8/8/R3K3 w - - 0 1", accepted: ["a1a8"])
+mated.bestLine = ["a1a8"]
+check(PuzzleCoach.lesson(mated).why.contains("checkmate"), "mate line says checkmate: \(PuzzleCoach.lesson(mated).why)")
+let line = [EngineLine(move: "e5c6", scoreCP: 400, mateIn: nil, pv: disc.bestLine)]
+let result = EngineResult(fen: discFen, bestMove: "e5c6", lines: line)
+check(PuzzleCoach.classify(disc, result: result) == .discovered, "classifier finds the discovered attack")
+let hintSet = Hints.build(placement: discPos.board, player: .white, result: result)!
+check(hintSet.stage2.contains("knight") && hintSet.stage2.contains("e5"), "step 2 names the piece: \(hintSet.stage2)")
+let step3 = PuzzleCoach.hint3(hintSet, position: discPos)
+check(step3.contains("Rook e1 then attacks Queen e6"), "step 3 names the purpose: \(step3)")
+for text in [hintSet.stage1, hintSet.stage2, step3, PuzzleCoach.question(.discovered)] {
+    check(!text.contains("c6") && !text.contains("Nxc6"), "no solution leak: \(text)")
+}
+var quiet = disc
+quiet.theme = "pawnMove"
+check(!PuzzleCoach.lesson(quiet).why.contains("moves away"), "mechanism only for matching themes")
+let afterBad = discPos.applying(UCIMove("b5c6")!)
+check(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]).contains("That loses"), "fail reason names the loss: \(PuzzleCoach.failReason(disc, after: afterBad, refutation: ["b7c6", "e1e6"]))")
+let quietAfter = discPos.applying(UCIMove("a2a3")!)
+check(PuzzleCoach.failReason(disc, after: quietAfter, refutation: ["a7a6"]).contains("Discovered attack"), "fail reason falls back to the theme")
+var themes = (0..<5).map { i -> Puzzle in var q = puzzle(); q.id = "t\(i)"; q.theme = "discovered"; return q }
+themes[0].box = 2
+themes[1].mastered = true
+themes[1].attempts = [PuzzleAttempt(date: t0, correct: true, hintLevel: 0)]
+themes[0].attempts = [PuzzleAttempt(date: t0, correct: true, hintLevel: 0)]
+var forkOne = puzzle(); forkOne.id = "f"; forkOne.theme = "fork"
+let prog = PuzzleCoach.progress(themes + [forkOne])
+check(prog.first == ThemeProgress(theme: .discovered, solved: 2, total: 5), "progress counts solved per theme")
+check(prog.first?.text() == "Discovered attack: 2/5 solved", "progress line: \(prog.first?.text() ?? "")")
+let req = PuzzleCoach.whyRequest(disc, context: .neutral, style: ExplanationStyle())!
+check(req.user.contains("Knight e5 moves away") && req.user.contains("Theme: Discovered attack") && req.user.contains("9.Nxc6"), "LLM request carries the grounded facts")
+let oldJSON = "{\"id\":\"o\",\"fen\":\"x\",\"acceptedMoves\":[],\"bestLine\":[],\"theme\":\"fork\",\"mistakeType\":\"other\",\"createdAt\":0,\"box\":1,\"dueAt\":0,\"attempts\":[],\"mastered\":false}"
+let old = try? JSONDecoder().decode(Puzzle.self, from: Data(oldJSON.utf8))
+check(old != nil && old?.sourceDate == nil && PuzzleCoach.needsThemeCheck(old!), "old puzzle files still load")
+check(!PuzzleCoach.needsThemeCheck(disc), "checked puzzles are not analysed again")
 
 print("\(checks) checks, \(failures) failures")
 exit(failures == 0 ? 0 : 1)

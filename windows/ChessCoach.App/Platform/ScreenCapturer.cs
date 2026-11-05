@@ -10,7 +10,7 @@ internal sealed record MonitorInfo(IntPtr Handle, int X, int Y, int Width, int H
     public string Key => Device;
 }
 
-internal sealed class ScreenCapturer : IDisposable
+internal sealed class ScreenCapturer : IScreenCapture, IDisposable
 {
     private IntPtr _screenDc, _memDc, _dib, _oldBitmap, _bits;
     private int _capW, _capH;
@@ -45,6 +45,11 @@ internal sealed class ScreenCapturer : IDisposable
             }
             return true;
         }, IntPtr.Zero);
+        if (list.Count == 0)
+        {
+            var (w, h) = Native.PrimarySize();
+            if (w > 0 && h > 0) list.Add(new MonitorInfo(IntPtr.Zero, 0, 0, w, h, 0, 0, w, h, "primary", true, 1));
+        }
         list.Sort((a, b) => b.Primary.CompareTo(a.Primary));
         return list;
     }
@@ -84,13 +89,45 @@ internal sealed class ScreenCapturer : IDisposable
         return created;
     }
 
+    private readonly Dictionary<string, string?> _notes = new();
+
+    private RgbImage? Problem(string api, string? reason)
+    {
+        _notes.TryGetValue(api, out var previous);
+        if (previous == reason) return null;
+        _notes[api] = reason;
+        Log.Write(reason == null ? $"{api} capture recovered" : $"{api} capture problem: {reason}");
+        return null;
+    }
+
+    private void ResetScreenDc()
+    {
+        ReleaseBitmap();
+        if (_memDc != IntPtr.Zero) { Native.DeleteDC(_memDc); _memDc = IntPtr.Zero; }
+        if (_screenDc != IntPtr.Zero) { Native.ReleaseDC(IntPtr.Zero, _screenDc); _screenDc = IntPtr.Zero; }
+    }
+
     public RgbImage? Capture(int x, int y, int w, int h)
     {
         lock (_sync)
         {
-            if (_disposed || w < 16 || h < 16 || !Ensure(w, h)) return null;
-            if (!Native.BitBlt(_memDc, 0, 0, w, h, _screenDc, x, y, Native.SRCCOPY | Native.CAPTUREBLT)) return null;
-            return ToImage(0, 0, w, h);
+            if (_disposed || w < 16 || h < 16) return null;
+            string reason = "";
+            foreach (uint rop in new[] { Native.SRCCOPY | Native.CAPTUREBLT, Native.SRCCOPY })
+            {
+                if (!Ensure(w, h)) { reason = $"cannot create a {w}x{h} bitmap (error {Marshal.GetLastWin32Error()})"; break; }
+                if (!Native.BitBlt(_memDc, 0, 0, w, h, _screenDc, x, y, rop))
+                {
+                    reason = $"BitBlt failed (error {Marshal.GetLastWin32Error()}, rop {rop:X}, {w}x{h} at {x},{y})";
+                    continue;
+                }
+                var img = ToImage(0, 0, w, h);
+                if (CaptureMath.IsBlack(img.Pixels, w * h)) { reason = $"BitBlt returned a black image (rop {rop:X}, {w}x{h} at {x},{y})"; continue; }
+                Problem("BitBlt", null);
+                return img;
+            }
+            ResetScreenDc();
+            return Problem("BitBlt", reason);
         }
     }
 
@@ -107,17 +144,18 @@ internal sealed class ScreenCapturer : IDisposable
         var windowRect = Rectangle.FromLTRB(wr.Left, wr.Top, wr.Right, wr.Bottom);
         var crop = CaptureMath.WindowCrop(region, windowRect, out var clipped);
         if (crop.Width < 16 || crop.Height < 16 || !Ensure(windowRect.Width, windowRect.Height)) return null;
-        if (!Native.PrintWindow(_target, _memDc, Native.PW_RENDERFULLCONTENT)) return Fail("PrintWindow failed");
+        if (!Native.PrintWindow(_target, _memDc, Native.PW_RENDERFULLCONTENT)) return Fail($"PrintWindow failed (error {Marshal.GetLastWin32Error()})", windowRect);
         var img = ToImage(crop.X, crop.Y, crop.Width, crop.Height);
-        if (CaptureMath.IsUniform(img.Pixels, crop.Width * crop.Height)) return Fail("PrintWindow returned a blank image");
+        if (CaptureMath.IsUniform(img.Pixels, crop.Width * crop.Height)) return Fail("PrintWindow returned a blank image", windowRect);
         _failedTarget = IntPtr.Zero;
+        Problem("PrintWindow", null);
         region = clipped;
         return img;
     }
 
-    private RgbImage? Fail(string reason)
+    private RgbImage? Fail(string reason, Rectangle windowRect)
     {
-        if (_failedTarget != _target) Log.Write($"Window capture unavailable ({reason}), using screen capture for this window");
+        Problem("PrintWindow", $"{reason}, window class {Native.ClassName(_target)}, {windowRect.Width}x{windowRect.Height}, using screen capture for 30 s");
         _failedTarget = _target;
         _failedAt = DateTime.UtcNow;
         return null;
@@ -177,9 +215,7 @@ internal sealed class ScreenCapturer : IDisposable
         lock (_sync)
         {
             _disposed = true;
-            ReleaseBitmap();
-            if (_memDc != IntPtr.Zero) { Native.DeleteDC(_memDc); _memDc = IntPtr.Zero; }
-            if (_screenDc != IntPtr.Zero) { Native.ReleaseDC(IntPtr.Zero, _screenDc); _screenDc = IntPtr.Zero; }
+            ResetScreenDc();
         }
     }
 }

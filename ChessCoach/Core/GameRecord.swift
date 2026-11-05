@@ -82,7 +82,7 @@ struct GameRecord {
     }
 
     @discardableResult
-    mutating func update(placement: Placement, whiteAtBottom: Bool, hintedMover: PieceColor? = nil) -> GameUpdate {
+    mutating func update(placement: Placement, whiteAtBottom: Bool, hintedMover: PieceColor? = nil, forced: Bool = false) -> GameUpdate {
         if placement.isStartPosition {
             if let c = current, c.board == placement, moves.isEmpty, !isEstimatedStart {
                 return makeUpdate(.unchanged, [])
@@ -134,23 +134,25 @@ struct GameRecord {
             }
         }
         let missing = cur.board.missingPieces(in: placement)
-        if missing > 0, missing <= 2 {
+        if !forced, missing > 0, missing <= 2 {
             return makeUpdate(.unchanged, [], log: ["Partial frame ignored: \(missing) piece(s) missing"])
         }
-        if moves.isEmpty, let s = stash, ResyncContinuity.isPlausible(from: s.current.board, to: placement) {
+        if let s = stash, moves.count == s.moves.count, ResyncContinuity.isPlausible(from: s.current.board, to: placement) {
             restore(s)
-            return update(placement: placement, whiteAtBottom: whiteAtBottom, hintedMover: hintedMover)
+            return update(placement: placement, whiteAtBottom: whiteAtBottom, hintedMover: hintedMover, forced: forced)
         }
         let pos = estimate(placement, previous: cur, whiteAtBottom: whiteAtBottom, hint: hintedMover)
-        if !moves.isEmpty, ResyncContinuity.isPlausible(from: cur.board, to: placement) {
-            breaks.append(moves.count)
-            segmentStart = pos; current = pos; isEstimatedStart = true
-            return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), segment break at ply \(moves.count), now \(pos.fen)"])
+        guard !moves.isEmpty else {
+            reset(to: pos, estimated: true, keepStash: true)
+            return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), new game segment at \(pos.fen)"])
         }
-        stash = moves.isEmpty ? stash : Stash(moves: moves, breaks: breaks, start: startPosition, segmentStart: segmentStart,
-                                              estimated: isEstimatedStart, current: cur)
-        reset(to: pos, estimated: true, keepStash: true)
-        return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), new game segment at \(pos.fen)"])
+        let plausible = ResyncContinuity.isPlausible(from: cur.board, to: placement)
+        if !plausible {
+            stash = Stash(moves: moves, breaks: breaks, start: startPosition, segmentStart: segmentStart, estimated: isEstimatedStart, current: cur)
+        }
+        breaks.append(moves.count)
+        segmentStart = pos; current = pos; isEstimatedStart = true
+        return makeUpdate(.resync, [], gap: true, log: ["Resync: board not reachable within 2 plies from \(cur.fen), segment break at ply \(moves.count), now \(pos.fen)"])
     }
 
     private func moveLog(_ found: (moves: [PlayedMove], unique: Bool)) -> String {

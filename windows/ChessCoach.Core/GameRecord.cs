@@ -98,7 +98,7 @@ public sealed class GameRecord
         }
     }
 
-    public GameUpdate Update(Placement placement, bool whiteAtBottom, PieceColor? hintedMover = null)
+    public GameUpdate Update(Placement placement, bool whiteAtBottom, PieceColor? hintedMover = null, bool forced = false)
     {
         var none = Array.Empty<PlayedMove>();
         if (placement.IsStartPosition)
@@ -169,27 +169,27 @@ public sealed class GameRecord
         }
 
         int missing = cur.Board.MissingPieces(placement);
-        if (missing is > 0 and <= 2)
+        if (!forced && missing is > 0 and <= 2)
             return MakeUpdate(GameChange.Unchanged, none, log: new[] { $"Partial frame ignored: {missing} piece(s) missing" });
 
-        if (_moves.Count == 0 && _stash is { } s && ResyncContinuity.IsPlausible(s.Current.Board, placement))
+        if (_stash is { } s && _moves.Count == s.Moves.Count && ResyncContinuity.IsPlausible(s.Current.Board, placement))
         {
             Restore(s);
-            return Update(placement, whiteAtBottom, hintedMover);
+            return Update(placement, whiteAtBottom, hintedMover, forced);
         }
         var est = Estimate(placement, cur, whiteAtBottom, hintedMover);
-        if (_moves.Count > 0 && ResyncContinuity.IsPlausible(cur.Board, placement))
+        if (_moves.Count == 0)
         {
-            _breaks.Add(_moves.Count);
-            _segmentStart = est; Current = est; IsEstimatedStart = true;
+            Reset(est, true, keepStash: true);
             return MakeUpdate(GameChange.Resync, none, gap: true,
-                log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, segment break at ply {_moves.Count}, now {est.Fen}" });
+                log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, new game segment at {est.Fen}" });
         }
-        if (_moves.Count > 0)
+        if (!ResyncContinuity.IsPlausible(cur.Board, placement))
             _stash = new Stash(new List<PlayedMove>(_moves), new List<int>(_breaks), StartPosition, _segmentStart, IsEstimatedStart, cur);
-        Reset(est, true, keepStash: true);
+        _breaks.Add(_moves.Count);
+        _segmentStart = est; Current = est; IsEstimatedStart = true;
         return MakeUpdate(GameChange.Resync, none, gap: true,
-            log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, new game segment at {est.Fen}" });
+            log: new[] { $"Resync: board not reachable within 2 plies from {cur.Fen}, segment break at ply {_moves.Count}, now {est.Fen}" });
     }
 
     private static string MoveLog((List<PlayedMove> Moves, bool Unique) found)

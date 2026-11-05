@@ -53,7 +53,7 @@ extension AppModel {
         let move = ctx.hints.move
         let sq = screenPoint(move, whiteAtBottom: ctx.whiteAtBottom)
         let prefix = duoTraining ? ctx.who + ": " : ""
-        panel.model.canExplain = level >= 3 || reviewCard != nil
+        panel.model.canExplain = level >= 1 || reviewCard != nil
         var state = OverlayState()
         state.unsafe = lift?.marks ?? []
 

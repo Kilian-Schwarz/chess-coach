@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>Sunucu {0} hatası bildirdi.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>Bu adreste model listesi bulunamadı. Open WebUI için örneğin https://openwebui.example.com, vLLM için http://host:8000/v1 gir.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Açıklama almak için ayarlarda bir sunucu ve model seç.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Dikkat: {0}, {1} karesinde korumasız kalır.</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Dikkat: {0}, {1} karesinde daha değersiz bir taş tarafından alınabilir.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Dikkat: {1} karesindeki {0}, {3} karesindeki {2} tarafından alınabilir.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Dikkat: {0} taşını {1} karesine oynamak, {3} karesindeki {2} taşını korumasız bırakır.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Dikkat: {0} kare {1} için güvensiz, kırmızıyla işaretli.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>En sık hata: {0} ({1}×). Örnek: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>Art arda {0} iyi hamle.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>Sonraki oyun için: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>Sunucu adresi veya modeli bulamadı (404 hatası).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Şahınızı güvene alın: rok yapın.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Terfi</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Açılmış saldırı</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Çivileme</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Çivilemeyi kır</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Üstünlüğü değerlendir</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>Burada bir piyon terfi edebilir.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Açılmış saldırı arayın: bir taşı oynatınca arkasındaki taş saldırır.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Çivileme arayın: oynarsa daha değerli bir taşı açıkta bırakacak bir taş.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>Taşlarınızdan biri çivilenmiş. Onu serbest bırakmanın yolunu arayın.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>Açıkça öndesiniz: taş değişin, şaha saldırın veya daha fazla materyal kazanın.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} son sıraya ulaşıp vezir olabilir.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>{0} oynayınca arkasındaki taş birden değerli bir taşa saldırır.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} rakip bir taşı daha değerli bir taşın önünde çivileyebilir.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>Taşlarınızdan biri çivilenmiş ve serbestçe oynayamıyor. Onu kurtaran hamleyi bulun.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} üstünlüğü değerlendirmenize yardım eder: taş değişin, şahı kovalayın ya da materyal kazanın.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>Kaybedersiniz: {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} saldırıya uğrar ve kaçamaz.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>Şuna saldırır: {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: {1}/{2} çözüldü</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>{0} tarihli oyunundan.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>{0} tarihli oyunundan, {1}. hamle: orada {2} oynadın ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>Rakip şahın güvenli karesi azalıyor. Hangi şahlar oyunu bitirebilir?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Rakibinin son hamlesi bir şeyi korumasız bıraktı. Neye saldırabilirsin?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>İki rakip taş, tek bir taşın ulaşabileceği karelerde duruyor. Tek hamle ikisine de saldırabilir mi?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Hangi şahlar mümkün ve her biri neyi zorluyor?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>Bir piyon son sıraya yakın. Onu ne durduruyor ve yolu açabilir misin?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>Taşlarından biri bir kale, fil veya vezirin önünde duruyor. Tehditle yer değiştirirse ne olur?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Rakip bir taşın arkasında daha değerli bir taş aynı hatta mı duruyor?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>Taşlarından biri bağlanmış durumda. Onu nasıl serbest bırakırsın?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>Rakibin şu anda neyi tehdit ediyor ve bunu nasıl durdurursun?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Şahın hâlâ merkezde. Bunu düzeltmenin en güvenli yolu nedir?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Hangi taşın hâlâ evinde ve oyuna katılabilir?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Az taş kaldı. Şahın en çok nerede işe yarar?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Hangi piyon hamlesi alan kazandırır veya taşların için bir hat açar?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Hangi taşın en az iş görüyor? Nerede daha çok işe yarar?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>Öndesin. Karşı oyuna izin vermeden avantajı nasıl değerlendirirsin?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Her hamleden önce tüm şahları, sonra tüm alma hamlelerini, sonra tüm tehditleri say.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Hamle yapmadan önce hangi rakip taşların korumasız veya korunandan çok saldırı altında olduğuna bak.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Tek bir taşın iki hedefi birden vurduğu kareleri ara, özellikle atla.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Her şahı kontrol et. Zorlayıcı bir hamle çoğu zaman rakip tepki veremeden sonucu belirler.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Terfiye kalan kareleri ve onları kimin kontrol ettiğini say.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Hamle yapmadan önce uzun menzilli taşlarının önünde duran taşlara bak.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Hatlar boyunca arkasında daha değerli bir taş olan rakip taşı ara.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Başka bir şey planlamadan önce taşlarından birinin bağlı olup olmadığına bak.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Kendi planını oynamadan önce rakibin sıradaki hamlede ne yapmak istediğini sor.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Şahı erken güvene al, sonra kaleyi kullan.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>İkinci bir plana başlamadan önce her taşı oyuna sok.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>Oyun sonunda şahı olayların olduğu yere götür.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Bir piyon hamlesinden önce bunun senin ve rakibin için ne açtığına bak.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>En kötü taşını bul ve onu iyileştir.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>Öndeyken havai fişek aramak yerine taşları değiş ve şahı güvende tut.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} çekilir ve böylece {1}, {2} taşına saldırır.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0}, artık {1} önünde bağlandı.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} aynı anda {1} taşlarına saldırır.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Ana varyant: {0}. Bu şah mat.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Ana varyant: {0}. {1} puan materyal kazanırsın.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Ana varyant: {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>Arkasında {0}, o zaman {1} taşına saldırır.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>Yeni karesinden saldırdığı taşlar: {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>{0}. sıraya gider.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>{0} sütununa gider.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>Bu, şah mata izin verir.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Bu, {1} karesindeki {0} taşını kaybettirir.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>Buradaki fikri kaçırıyor: {0}.</value></data>
 </root>

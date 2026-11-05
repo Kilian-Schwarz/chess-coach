@@ -252,7 +252,7 @@ internal sealed partial class AppModel
         var from = Placement.ScreenSquare(ctx.Move.FromFile, ctx.Move.FromRank, ctx.WhiteAtBottom);
         var to = Placement.ScreenSquare(ctx.Move.ToFile, ctx.Move.ToRank, ctx.WhiteAtBottom);
         string prefix = Settings.DuoTraining ? ctx.Who + ": " : "";
-        _panel.CanExplain = level >= 3 || _reviewCard != null;
+        _panel.CanExplain = level >= 1 || _reviewCard != null;
         OverlayState.Arrow? threatArrow = null;
         if (_threat is { } th && ThreatVisible)
         {
@@ -416,6 +416,10 @@ internal sealed partial class AppModel
             _suggestionCard = null;
             RenderHints(ctx);
         }
+        else if (_hint != null && _hintLevel >= 1 && _suggestionCard is { Kind: CardKind.Hint })
+        {
+            AskCore("Explain the hint on screen again and tell me why it makes sense.", Loc.T("ask.hintExplained"));
+        }
         else if (_lastReviewReq is { } again && _reviewCard != null && LlmConfigured)
         {
             string id = _reviewCard.Id;
@@ -426,7 +430,47 @@ internal sealed partial class AppModel
         }
     }
 
-    public void Ask(string question)
+    private readonly Dictionary<string, Grounding> _groundingCache = new();
+    private HashSet<string> _questionAllowed = new();
+
+    private async Task<Grounding> GroundingAsync(string question, Placement placement, PieceColor color, HintContext? hint, int level, HintSet? hints,
+        CancellationToken ct)
+    {
+        if (hint is not { } ctx)
+        {
+            var pos = new ChessPosition(placement, color, CastlingRights.None);
+            var plain = await _engine.AnalyzeAsync(pos.Fen, 300);
+            var g = PositionFacts.Build(pos, plain, null, null, false);
+            g.Lines.Add("Hint rule: the player has not asked for a hint. Do not name or hint at the best move.");
+            return g;
+        }
+        string key = ctx.Fen + "|" + (level >= 1 ? "1" : "0");
+        if (!_groundingCache.TryGetValue(key, out var baseFacts))
+        {
+            EngineResult? nullResult = null;
+            if (Threats.NullMoveFen(ctx.Position) is { } nullFen) nullResult = await _engine.AnalyzeAsync(nullFen, 300);
+            ct.ThrowIfCancellationRequested();
+            baseFacts = PositionFacts.Build(ctx.Position, ctx.Result, nullResult, hints?.Threat, level >= 1);
+            if (_groundingCache.Count > 40) _groundingCache.Clear();
+            _groundingCache[key] = baseFacts;
+        }
+        var grounding = new Grounding(new List<string>(baseFacts.Lines), new List<ChessPosition>(baseFacts.Positions), new List<IReadOnlyList<string>>(baseFacts.Pvs));
+        grounding.Lines.AddRange(PositionFacts.HintLines(level, hints, ctx.Position));
+        if (PositionFacts.MentionedMove(question, ctx.Position) is { } move && (level >= 1 || move != ctx.Move)
+            && await _engine.AnalyzeAsync(ctx.Position.Applying(move).Fen, 300) is { } after)
+        {
+            ct.ThrowIfCancellationRequested();
+            var mentioned = PositionFacts.MentionedLines(ctx.Position, move, after, ctx.Result.Lines.Count > 0 ? ctx.Result.Lines[0] : null);
+            grounding.Lines.AddRange(mentioned.Lines);
+            grounding.Positions.Add(mentioned.Position);
+            grounding.Pvs.Add(mentioned.Pv);
+        }
+        return grounding;
+    }
+
+    public void Ask(string question) => AskCore(question, null);
+
+    private void AskCore(string question, string? title)
     {
         string id = "ask|" + question;
         var placement = _hint?.Placement ?? _stablePlacement;
@@ -443,31 +487,59 @@ internal sealed partial class AppModel
             return;
         }
         var color = _hint?.ToMove ?? _sideToMove ?? _lastMe ?? PieceColor.White;
-        string? score = null, best = null;
-        if (_hint is { } ctx)
-        {
-            if (ctx.Result.Lines.Count > 0) score = ctx.Result.Lines[0].ScoreTextEnglish;
-            if (EffectiveShowBest || _hintLevel >= 4) best = placement.DescribeMove(ctx.Move, CoreLocale.English);
-        }
-        var req = Coach.QuestionRequest(placement, color, question, score, best, _threat is { } th ? "Opponent threatens: " + placement.DescribeMove(th.Move, CoreLocale.English) : null);
-        _answerCard = new CoachCard(id, CardKind.Answer, Loc.T("ask.cardTitle", question)) { IsLoading = true };
+        var profile = ProfileFor(color) ?? Active;
+        var context = profile.PromptContext;
+        var style = profile.Style.Current;
+        var hintCtx = _hint;
+        int level = EffectiveShowBest ? 4 : _hintLevel;
+        var hintSet = hintCtx != null ? HintSetFor(hintCtx) : null;
+        _answerCard = new CoachCard(id, CardKind.Answer, title ?? Loc.T("ask.cardTitle", question)) { IsLoading = true };
         _panel.ClearQuestion();
         _panel.IsAsking = true;
         UpdatePanel();
         _questionCts?.Cancel();
-        _questionCts = Explain(req.System, req.User, req.MaxTokens, (text, done) =>
+        var gate = new CancellationTokenSource();
+        _questionCts = gate;
+        _ = Task.Run(async () =>
         {
-            if (_answerCard?.Id != id) return;
-            _answerCard = _answerCard with { Text = text, IsLoading = !done, AllowFeedback = done, StyleKey = CurrentStyleKey };
-            if (done) _panel.IsAsking = false;
-            UpdatePanel();
-        }, msg =>
-        {
-            if (_answerCard?.Id != id) return;
-            _answerCard = _answerCard with { IsLoading = false, Note = msg };
-            _panel.IsAsking = false;
-            UpdatePanel();
+            Coach.ExplanationRequest req;
+            try
+            {
+                var grounding = await GroundingAsync(question, placement, color, hintCtx, level, hintSet, gate.Token);
+                if (gate.IsCancellationRequested) return;
+                _questionAllowed = FactCheck.Allowed(grounding.Positions, grounding.Pvs);
+                req = Coach.QuestionRequest(grounding, question, context, style);
+            }
+            catch (OperationCanceledException) { return; }
+            RunOnUi(() =>
+            {
+                if (gate.IsCancellationRequested) return;
+                _questionCts = Explain(req.System, req.User, req.MaxTokens, (text, done) => AnswerUpdate(id, text, done), msg =>
+                {
+                    if (_answerCard?.Id != id) return;
+                    _answerCard = _answerCard with { IsLoading = false, Note = msg };
+                    _panel.IsAsking = false;
+                    UpdatePanel();
+                });
+            });
         });
+    }
+
+    private void AnswerUpdate(string id, string text, bool done)
+    {
+        if (_answerCard?.Id != id) return;
+        string shown = text;
+        string? note = null;
+        if (done)
+        {
+            var cleaned = FactCheck.Clean(text, _questionAllowed);
+            if (cleaned.Removed > 0) Log.Write($"Answer: removed {cleaned.Removed} sentence(s) with invented moves");
+            shown = cleaned.Text ?? "";
+            if (cleaned.Text == null) note = Loc.T("explain.noReliable");
+        }
+        _answerCard = _answerCard with { Text = shown, IsLoading = !done, AllowFeedback = done && note == null, StyleKey = CurrentStyleKey, Note = note ?? _answerCard.Note };
+        if (done) _panel.IsAsking = false;
+        UpdatePanel();
     }
 
     private CancellationTokenSource Explain(string system, string prompt, int maxTokens, Action<string, bool> update, Action<string> failed)
@@ -499,7 +571,7 @@ internal sealed partial class AppModel
         _ui.BeginInvoke(() =>
         {
             _panelDirty = false;
-            if (!IsActive || _boardRect.Width == 0) return;
+            if (!IsActive || !_boardPresent || _boardRect.Width == 0) return;
             var cards = new List<CoachCard>(5);
             if (_liftCard != null) cards.Add(_liftCard);
             var review = _reviewCard;
@@ -519,7 +591,6 @@ internal sealed partial class AppModel
                 if (_suggestionCard != null) cards.Add(_suggestionCard);
                 if (_answerCard != null) cards.Add(_answerCard);
             }
-            if (_hint == null && cards.Count == 0 && _update == null) { _panel.HidePanel(); return; }
             _panel.CanFinish = CanFinish;
             _panel.CanShowThreat = _hint != null && Settings.ShowThreats && !ThreatShown;
             _panel.FocusText = PanelSubtitle();

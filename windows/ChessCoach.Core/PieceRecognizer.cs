@@ -4,6 +4,7 @@ public sealed class SquareFeature
 {
     public const int N = 32;
     public const int MaxPieceChroma = 80;
+    public const double OverlayLow = 0.78, OverlayHigh = 0.93, OverlaySpread = 0.04;
     public bool[] Mask { get; set; } = new bool[N * N];
     public byte[] Lum { get; set; } = new byte[N * N];
 
@@ -13,28 +14,45 @@ public sealed class SquareFeature
 
     public int[]? Bg { get; set; }
 
+    public static bool IsMoveOverlay((int R, int G, int B) c, (int R, int G, int B) bg)
+    {
+        if (Math.Min(bg.R, Math.Min(bg.G, bg.B)) <= 40) return false;
+        double r = (double)c.R / bg.R, g = (double)c.G / bg.G, b = (double)c.B / bg.B;
+        double lo = Math.Min(r, Math.Min(g, b)), hi = Math.Max(r, Math.Max(g, b));
+        return hi - lo <= OverlaySpread && lo >= OverlayLow && hi <= OverlayHigh;
+    }
+
     public static SquareFeature Extract(RgbImage img, BoardRect board, int col, int row)
     {
         var (sx, sy, s) = board.SquareRect(col, row);
         int n = N;
 
         Span<int> rs = stackalloc int[96], gs = stackalloc int[96], bs = stackalloc int[96];
+        Span<int> cr = stackalloc int[96], cg = stackalloc int[96], cb = stackalloc int[96];
         int cnt = 0;
         double inset = Math.Max(1.5, s * 0.06);
         const int steps = 24;
         for (int i = 0; i < steps; i++)
         {
-            double t = inset + (s - 2 * inset) * i / (steps - 1);
+            double u = (double)i / (steps - 1);
+            double t = inset + (s - 2 * inset) * u;
+            double tc = inset + (s - 2 * inset) * (u < 0.5 ? u * 0.56 : 1 - (1 - u) * 0.56);
             for (int side = 0; side < 4; side++)
             {
                 double px = side switch { 0 => sx + t, 1 => sx + t, 2 => sx + inset, _ => sx + s - inset };
                 double py = side switch { 0 => sy + inset, 1 => sy + s - inset, 2 => sy + t, _ => sy + t };
                 var c = img.Rgb((int)px, (int)py);
-                rs[cnt] = c.R; gs[cnt] = c.G; bs[cnt] = c.B; cnt++;
+                rs[cnt] = c.R; gs[cnt] = c.G; bs[cnt] = c.B;
+                double qx = side switch { 0 => sx + tc, 1 => sx + tc, 2 => sx + inset, _ => sx + s - inset };
+                double qy = side switch { 0 => sy + inset, 1 => sy + s - inset, 2 => sy + tc, _ => sy + tc };
+                var d = img.Rgb((int)qx, (int)qy);
+                cr[cnt] = d.R; cg[cnt] = d.G; cb[cnt] = d.B;
+                cnt++;
             }
         }
-        rs.Sort(); gs.Sort(); bs.Sort();
+        rs.Sort(); gs.Sort(); bs.Sort(); cr.Sort(); cg.Sort(); cb.Sort();
         var bg = (R: rs[cnt / 2], G: gs[cnt / 2], B: bs[cnt / 2]);
+        var maskBg = (R: cr[cnt / 2], G: cg[cnt / 2], B: cb[cnt / 2]);
 
         var mask = new bool[n * n];
         var lum = new byte[n * n];
@@ -54,7 +72,7 @@ public sealed class SquareFeature
                     var c = img.Rgb((int)px, (int)py);
 
                     int chroma = Math.Max(c.R, Math.Max(c.G, c.B)) - Math.Min(c.R, Math.Min(c.G, c.B));
-                    if (RgbImage.ColorDistance(c, bg) > 45 && chroma <= MaxPieceChroma) hitsInCell++;
+                    if (RgbImage.ColorDistance(c, maskBg) > 45 && chroma <= MaxPieceChroma && !IsMoveOverlay(c, maskBg)) hitsInCell++;
                     lSum += (c.R * 299 + c.G * 587 + c.B * 114) / 1000;
                 }
                 bool isPiece = hitsInCell >= 4;

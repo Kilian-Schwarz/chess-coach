@@ -213,5 +213,149 @@ if FileManager.default.fileExists(atPath: privateDir) {
     }
 }
 
+print("--- verification instead of re-detection")
+let bigStart = load("\(dir)/big_start.png")
+let bigRect = BoardDetector.detect(bigStart)!
+var bigTemplates = PieceTemplates()
+bigTemplates.learnStart(BoardScanner.analyze(bigStart, board: bigRect, templates: bigTemplates).features)
+let learnedColors = BoardColors.learn(BoardScanner.analyze(bigStart, board: bigRect, templates: bigTemplates).features)
+let margin = Int(bigRect.size * 0.2)
+let cropX = Int(bigRect.x) - margin, cropY = Int(bigRect.y) - margin
+func regionCrop(_ img: RGBImage) -> RGBImage { img.crop(x: cropX, y: cropY, width: Int(bigRect.size) + 2 * margin, height: Int(bigRect.size) + 2 * margin) }
+let expectedInCrop = BoardRect(x: bigRect.x - Double(cropX), y: bigRect.y - Double(cropY), size: bigRect.size)
+let cropOrigin = (x: Double(cropX), y: Double(cropY))
+
+func tracker() -> RectStabilizer {
+    var st = RectStabilizer()
+    _ = st.accept(bigRect)
+    return st
+}
+
+func observe(_ name: String, _ st: inout RectStabilizer, colors: BoardColors? = learnedColors) -> RegionObserver.Result {
+    RegionObserver.observe(regionCrop(load("\(dir)/\(name).png")), origin: cropOrigin, expected: expectedInCrop, templates: bigTemplates, colors: colors, stabilizer: &st)
+}
+
+func isKept(_ r: RegionObserver.Result) -> Bool {
+    switch r {
+    case .scanned(_, _, let changed): return !changed
+    case .verified, .covered: return true
+    case .failed: return false
+    }
+}
+
+for name in ["big_start", "big_mid", "big_drag", "big_dots", "big_arrows"] {
+    var st = tracker()
+    let r = observe(name, &st)
+    check(isKept(r), "\(name): board lost instead of kept (\(r))")
+    check(st.accepted == tracker().accepted, "\(name): rect changed to \(String(describing: st.accepted))")
+}
+
+do {
+    var st = tracker()
+    let blank = RGBImage(width: expectedInCrop.size > 0 ? Int(bigRect.size) + 2 * margin : 1, height: Int(bigRect.size) + 2 * margin,
+                         pixels: [UInt8](repeating: 40, count: (Int(bigRect.size) + 2 * margin) * (Int(bigRect.size) + 2 * margin) * 4))
+    let r = RegionObserver.observe(blank, origin: cropOrigin, expected: expectedInCrop, templates: bigTemplates, colors: learnedColors, stabilizer: &st)
+    if case .failed = r {} else { check(false, "an empty area must fail verification: \(r)") }
+    let noColors = RegionObserver.observe(regionCrop(load("\(dir)/big_drag.png")), origin: cropOrigin, expected: expectedInCrop, templates: bigTemplates, colors: nil, stabilizer: &st)
+    check(isKept(noColors), "without learned colours the detected grid is still used: \(noColors)")
+}
+
+print("--- transient wrong rectangle")
+do {
+    var st = tracker()
+    let wrongRect = observe("big_shifted", &st)
+    check(st.accepted == tracker().accepted, "one shifted frame changed the rect to \(String(describing: st.accepted))")
+    switch wrongRect {
+    case .scanned(_, _, let changed): check(!changed, "a shifted frame was accepted at once")
+    default: break
+    }
+    _ = observe("big_mid", &st)
+    _ = observe("big_shifted", &st)
+    check(st.accepted == tracker().accepted, "a shifted frame between normal frames changed the rect")
+    var other = tracker()
+    for i in 0..<5 {
+        _ = observe("big_other_theme", &other)
+        check(other.accepted == tracker().accepted, "frame \(i): a board with other colours changed the rect")
+    }
+    var moved = tracker()
+    _ = observe("big_shifted", &moved)
+    check(moved.accepted == tracker().accepted, "first sight of a moved board must stay pending")
+    _ = observe("big_shifted", &moved)
+    check(moved.accepted != tracker().accepted, "a board seen twice at a new place must be followed")
+    var noColors = tracker()
+    _ = observe("big_shifted", &noColors, colors: nil)
+    _ = observe("big_shifted", &noColors, colors: nil)
+    check(noColors.accepted != tracker().accepted, "twice-confirmed rect without colours must be accepted")
+}
+
+print("--- replay: miss, verify, keep")
+do {
+    var st = tracker()
+    var failures = 0, scanned = 0, verified = 0
+    for name in ["big_mid", "big_drag", "big_drag", "big_dots", "big_dots", "big_arrows", "big_mid", "big_drag", "big_mid"] {
+        switch observe(name, &st) {
+        case .failed: failures += 1
+        case .verified: verified += 1
+        case .scanned: scanned += 1
+        case .covered: break
+        }
+    }
+    check(failures == 0, "replay: \(failures) verification failures")
+    check(st.accepted == tracker().accepted, "replay: rect drifted")
+    print("replay: \(scanned) grid detections, \(verified) verifications")
+}
+
+print("--- relearn guard")
+do {
+    var g = RelearnGuard()
+    let a = BoardRect(x: 100, y: 100, size: 800), b = BoardRect(x: 101, y: 100, size: 800)
+    check(!g.observe(bad: true, rect: a) && !g.observe(bad: true, rect: a), "two bad frames must not relearn")
+    check(g.observe(bad: true, rect: a), "three bad frames at one rect must relearn")
+    g.reset()
+    check(!g.observe(bad: true, rect: a) && !g.observe(bad: true, rect: b) && !g.observe(bad: true, rect: a), "a changing rect must not relearn")
+    g.reset()
+    _ = g.observe(bad: true, rect: a); _ = g.observe(bad: true, rect: a)
+    check(!g.observe(bad: false, rect: a) && !g.observe(bad: true, rect: a), "a good frame resets the count")
+    check(g.observe(bad: true, rect: a, required: 1), "empty templates relearn at once")
+}
+
+print("--- stuck record resync")
+do {
+    var rec = begin()
+    for n in ["seq_1", "seq_2", "seq_3", "seq_4"] { feed(&rec, n) }
+    let f = frame("seq_lift")
+    let partial = rec.update(placement: f.placement, whiteAtBottom: whiteBottom, hintedMover: nil)
+    check(partial.change == .unchanged && rec.current?.board != f.placement, "a missing piece is ignored as partial: \(partial.change)")
+    let forced = rec.update(placement: f.placement, whiteAtBottom: whiteBottom, hintedMover: nil, forced: true)
+    check(forced.change != .unchanged && rec.current?.board == f.placement, "forced update must resync, got \(forced.change)")
+}
+
+print("--- resync keeps the game")
+do {
+    var rec = GameRecord()
+    var pos = ChessPosition.start
+    _ = rec.update(placement: pos.board, whiteAtBottom: true)
+    var played = 0
+    while played < 40, let m = pos.legalMoves().first {
+        pos = pos.applying(m)
+        _ = rec.update(placement: pos.board, whiteAtBottom: true)
+        played += 1
+    }
+    let before = rec.moves.count
+    check(before >= 30, "setup: \(before) plies")
+    let startedWith = rec.startPosition?.fen
+    var odd = pos.board
+    var swapped = 0
+    for r in 0..<8 { for f in 0..<8 where swapped < 4 && odd.squares[r][f] != nil && (r + f) % 3 == 0 {
+        odd.squares[r][f] = nil; swapped += 1
+    } }
+    let u = rec.update(placement: odd, whiteAtBottom: true)
+    check(u.change == .resync, "unreachable board: \(u.change)")
+    check(rec.moves.count == before && rec.breaks == [before], "moves kept across the break: \(rec.moves.count) of \(before), breaks \(rec.breaks)")
+    check(rec.startPosition?.fen == startedWith, "same game start after the resync")
+    let back = rec.update(placement: pos.board, whiteAtBottom: true)
+    check(rec.moves.count == before && back.change != .newGame, "returning to the old position keeps all plies: \(rec.moves.count)")
+}
+
 print(failures == 0 ? "tracking OK" : "\(failures) failures")
 exit(failures == 0 ? 0 : 1)

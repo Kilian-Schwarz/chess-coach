@@ -27,6 +27,12 @@ public sealed class Puzzle
     public List<PuzzleAttempt> Attempts { get; set; } = new();
     public bool Mastered { get; set; }
 
+    public DateTime? SourceDate { get; set; }
+    public int? SourceMove { get; set; }
+    public string? PlayedMove { get; set; }
+    public int? PlayedValue { get; set; }
+    public bool? ThemeChecked { get; set; }
+
     public static readonly double[] IntervalsDays = { 1, 3, 7, 16, 35 };
     public const int AcceptTolerance = 30;
     public const int AlternativeTolerance = 40;
@@ -36,7 +42,7 @@ public sealed class Puzzle
     [JsonIgnore] public Skill Skill => (Core.MistakeTypeExt.TryParse(MistakeType, out var m) ? m : Core.MistakeType.Other).Skill();
 
     public static Puzzle? Make(MoveReview review, EngineResult beforeResult, MistakeType? mistakeType, HintTheme? theme,
-        PlayerLevel level, DateTime? now = null, string? id = null)
+        PlayerLevel level, DateTime? now = null, string? id = null, int? moveNumber = null)
     {
         var r = review;
         bool qualifies = r.Rating is MoveRating.Mistake or MoveRating.Blunder || (level == PlayerLevel.Strong && r.Rating == MoveRating.Inaccuracy);
@@ -50,6 +56,8 @@ public sealed class Puzzle
             Id = id ?? Guid.NewGuid().ToString().ToLowerInvariant(), Fen = r.Before.Fen(r.Player), AcceptedMoves = accepted,
             BestLine = top.Pv.ToList(), Theme = (theme ?? HintTheme.ImprovePiece).Raw(),
             MistakeType = (mistakeType ?? Core.MistakeType.Other).Raw(), CreatedAt = t, DueAt = t,
+            SourceDate = t, SourceMove = moveNumber, PlayedMove = r.Played.Uci,
+            PlayedValue = Math.Abs(top.Value) >= 9_000 ? null : top.Value - r.Loss, ThemeChecked = theme != null,
         };
     }
 

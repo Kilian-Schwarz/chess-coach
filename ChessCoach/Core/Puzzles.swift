@@ -31,6 +31,11 @@ struct Puzzle: Codable, Equatable, Identifiable {
     var dueAt: Date
     var attempts: [PuzzleAttempt] = []
     var mastered: Bool = false
+    var sourceDate: Date?
+    var sourceMove: Int?
+    var playedMove: String?
+    var playedValue: Int?
+    var themeChecked: Bool?
 
     static let intervalsDays: [Double] = [1, 3, 7, 16, 35]
     static let acceptTolerance = 30
@@ -40,14 +45,16 @@ struct Puzzle: Codable, Equatable, Identifiable {
     var skill: Skill { (MistakeType(rawValue: mistakeType) ?? .other).skill }
 
     static func make(review r: MoveReview, beforeResult: EngineResult, mistakeType: MistakeType?, theme: HintTheme?,
-                     level: PlayerLevel, now: Date = Date(), id: String = UUID().uuidString.lowercased()) -> Puzzle? {
+                     level: PlayerLevel, moveNumber: Int? = nil, now: Date = Date(),
+                     id: String = UUID().uuidString.lowercased()) -> Puzzle? {
         let qualifies = r.rating == .mistake || r.rating == .blunder || (level == .strong && r.rating == .inaccuracy)
         guard qualifies, let top = beforeResult.lines.first else { return nil }
         let accepted = beforeResult.lines.filter { $0.value >= top.value - acceptTolerance && !$0.move.isEmpty }.map(\.move)
         guard !accepted.isEmpty else { return nil }
         return Puzzle(id: id, fen: r.before.fen(sideToMove: r.player), acceptedMoves: accepted, bestLine: top.pv,
                       theme: (theme ?? .improvePiece).rawValue, mistakeType: (mistakeType ?? .other).rawValue,
-                      createdAt: now, dueAt: now)
+                      createdAt: now, dueAt: now, sourceDate: now, sourceMove: moveNumber, playedMove: r.played.uci,
+                      playedValue: r.playedScore.centipawns, themeChecked: theme != nil)
     }
 
     func accepts(_ uci: String) -> Bool { acceptedMoves.contains(uci.lowercased()) }

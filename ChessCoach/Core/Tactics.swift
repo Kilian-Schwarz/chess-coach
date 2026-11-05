@@ -16,6 +16,45 @@ struct HangingPiece: Equatable {
     }
 }
 
+struct Pin: Equatable {
+    let piece: Character
+    let file: Int
+    let rank: Int
+    let pinner: Character
+    let pinnerFile: Int
+    let pinnerRank: Int
+    let target: Character
+    let targetFile: Int
+    let targetRank: Int
+
+    var absolute: Bool { Character(target.lowercased()) == "k" }
+    var square: String { UCIMove.squareName(file, rank) }
+    var pinnerSquare: String { UCIMove.squareName(pinnerFile, pinnerRank) }
+    var targetSquare: String { UCIMove.squareName(targetFile, targetRank) }
+
+    func text(_ loc: Loc = .facts) -> String {
+        let owner = Placement.color(of: piece).title(loc), enemy = Placement.color(of: pinner).title(loc)
+        let me = "\(owner) \(PieceInfo.name(piece, loc)) \(square)", by = "\(enemy) \(PieceInfo.name(pinner, loc)) \(pinnerSquare)"
+        let against = "\(owner) \(PieceInfo.name(target, loc)) \(targetSquare)"
+        return absolute
+            ? "\(me) is pinned against \(against) by \(by): it cannot leave the line without exposing the king"
+            : "\(me) is pinned against \(against) by \(by): moving it would lose the queen"
+    }
+}
+
+struct PieceAt: Equatable {
+    let piece: Character
+    let square: String
+
+    func text(_ loc: Loc = .display) -> String { "\(PieceInfo.name(piece, loc)) \(square)" }
+}
+
+struct XRay: Equatable {
+    let slider: PieceAt
+    let blocker: PieceAt
+    let target: PieceAt
+}
+
 enum PieceInfo {
     static let values: [Character: Int] = ["k": 100, "q": 9, "r": 5, "b": 3, "n": 3, "p": 1]
 
@@ -120,6 +159,107 @@ extension Placement {
             }
         } }
         return out
+    }
+
+    func pins(of color: PieceColor) -> [Pin] {
+        var out: [Pin] = []
+        let dirs: [(Int, Int)] = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        for tr in 0..<8 { for tf in 0..<8 {
+            guard let target = squares[tr][tf], Placement.color(of: target) == color else { continue }
+            let kind = Character(target.lowercased())
+            guard kind == "k" || kind == "q" else { continue }
+            for (df, dr) in dirs {
+                let diagonal = df != 0 && dr != 0
+                var f = tf + df, r = tr + dr
+                var shield: (Character, Int, Int)?
+                while (0..<8).contains(f) && (0..<8).contains(r) {
+                    if let p = squares[r][f] {
+                        if shield == nil {
+                            guard Placement.color(of: p) == color, kind == "k" || PieceInfo.value(p) < PieceInfo.value(target) else { break }
+                            shield = (p, f, r)
+                        } else {
+                            let k = Character(p.lowercased())
+                            let slides = k == "q" ? kind != "q" : (diagonal ? k == "b" : k == "r")
+                            if Placement.color(of: p) != color, slides, let s = shield {
+                                out.append(Pin(piece: s.0, file: s.1, rank: s.2, pinner: p, pinnerFile: f, pinnerRank: r,
+                                               target: target, targetFile: tf, targetRank: tr))
+                            }
+                            break
+                        }
+                    }
+                    f += df; r += dr
+                }
+            }
+        } }
+        return out
+    }
+
+    func unpinned(by move: UCIMove, color: PieceColor) -> [Pin] {
+        let after = applying(move).pins(of: color)
+        return pins(of: color).filter { pin in
+            !(pin.file == move.fromFile && pin.rank == move.fromRank) && !after.contains(pin)
+        }
+    }
+
+    func xrays(file: Int, rank: Int) -> [XRay] {
+        guard let p = piece(file, rank) else { return [] }
+        let kind = Character(p.lowercased())
+        var dirs: [(Int, Int)] = []
+        if kind == "r" || kind == "q" { dirs += [(1, 0), (-1, 0), (0, 1), (0, -1)] }
+        if kind == "b" || kind == "q" { dirs += [(1, 1), (1, -1), (-1, 1), (-1, -1)] }
+        var out: [XRay] = []
+        for (df, dr) in dirs {
+            var f = file + df, r = rank + dr
+            var blocker: (Character, Int, Int)?
+            while (0..<8).contains(f) && (0..<8).contains(r) {
+                if let q = squares[r][f] {
+                    if blocker == nil {
+                        guard Placement.color(of: q) == Placement.color(of: p) else { break }
+                        blocker = (q, f, r)
+                    } else {
+                        if Placement.color(of: q) != Placement.color(of: p), let b = blocker {
+                            out.append(XRay(slider: PieceAt(piece: p, square: UCIMove.squareName(file, rank)),
+                                            blocker: PieceAt(piece: b.0, square: UCIMove.squareName(b.1, b.2)),
+                                            target: PieceAt(piece: q, square: UCIMove.squareName(f, r))))
+                        }
+                        break
+                    }
+                }
+                f += df; r += dr
+            }
+        }
+        return out
+    }
+
+    func discoveredTargets(by move: UCIMove, color: PieceColor) -> [XRay] {
+        let after = applying(move)
+        let defenders = after.attackers(of: color.opposite)
+        var out: [XRay] = []
+        for r in 0..<8 { for f in 0..<8 {
+            guard let p = squares[r][f], Placement.color(of: p) == color, "brq".contains(Character(p.lowercased())),
+                  !(f == move.fromFile && r == move.fromRank) else { continue }
+            let known = Set(attacks(file: f, rank: r).map { $0.0 * 8 + $0.1 })
+            for (tf, tr) in after.attacks(file: f, rank: r) where !known.contains(tf * 8 + tr) {
+                guard let t = after.piece(tf, tr), Placement.color(of: t) != color else { continue }
+                guard Character(t.lowercased()) == "k" || PieceInfo.value(t) > PieceInfo.value(p) || defenders[tr][tf].isEmpty else { continue }
+                out.append(XRay(slider: PieceAt(piece: p, square: UCIMove.squareName(f, r)),
+                                blocker: PieceAt(piece: piece(move.fromFile, move.fromRank) ?? p, square: UCIMove.squareName(move.fromFile, move.fromRank)),
+                                target: PieceAt(piece: t, square: UCIMove.squareName(tf, tr))))
+            }
+        } }
+        return out
+    }
+
+    func createdPins(by move: UCIMove, against color: PieceColor) -> [Pin] {
+        let before = pins(of: color)
+        return applying(move).pins(of: color).filter { !before.contains($0) }
+    }
+
+    func material(_ color: PieceColor) -> Int {
+        squares.joined().reduce(0) { sum, p in
+            guard let p, Placement.color(of: p) == color, Character(p.lowercased()) != "k" else { return sum }
+            return sum + PieceInfo.value(p)
+        }
     }
 
     func hangingPieces(of color: PieceColor, _ loc: Loc = .display) -> [String] {

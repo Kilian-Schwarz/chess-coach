@@ -17,9 +17,13 @@ final class TrainingSession: ObservableObject {
     @Published var note: String?
     @Published var refutation: String?
     @Published var replying = false
+    @Published var failReason: String?
+    @Published var lessons: [String: PuzzleLesson] = [:]
     @Published var solved = 0
     @Published var attempted = 0
     private var ideaTask: Task<Void, Never>?
+    private var prepared = Set<String>()
+    private var upgraded = Set<String>()
     private var loadedFor: String?
     private var recorded = false
     private var nudged = false
@@ -33,6 +37,7 @@ final class TrainingSession: ObservableObject {
     var profile: PlayerProfile { store.active }
     var puzzle: Puzzle? { queue.indices.contains(index) ? queue[index] : nil }
     var position: ChessPosition? { puzzle.flatMap { ChessPosition(fen: $0.fen) } }
+    var lesson: PuzzleLesson? { puzzle.flatMap { lessons[$0.id] } }
 
     func load(force: Bool = false) {
         guard force || loadedFor != store.activeId else { return }
@@ -53,6 +58,7 @@ final class TrainingSession: ObservableObject {
         ideaText = nil
         note = nil
         refutation = nil
+        failReason = nil
         current = position
         retry = false
         replying = false
@@ -61,9 +67,49 @@ final class TrainingSession: ObservableObject {
         shownAt = Date()
         ply = 0
         ideaTask?.cancel()
+        prepareLessons()
     }
 
     var stats: PuzzleStats { PuzzleScheduler.stats(store.puzzles(for: store.activeId).puzzles) }
+    var themeProgress: [ThemeProgress] { PuzzleCoach.progress(store.puzzles(for: store.activeId).puzzles) }
+
+    private func prepareLessons() {
+        for i in [index, index + 1] where queue.indices.contains(i) {
+            let p = queue[i]
+            guard prepared.insert(p.id).inserted else { continue }
+            lessons[p.id] = PuzzleCoach.lesson(p)
+            Task { await refine(p.id) }
+        }
+    }
+
+    private func currentPuzzle(_ id: String) -> Puzzle? {
+        store.puzzles(for: store.activeId).puzzles.first { $0.id == id } ?? queue.first { $0.id == id }
+    }
+
+    private func refine(_ id: String) async {
+        guard var p = currentPuzzle(id) else { return }
+        if PuzzleCoach.needsThemeCheck(p), let result = await app.engineAnalysis(fen: p.fen, ms: 300),
+           let theme = PuzzleCoach.classify(p, result: result) {
+            applyTheme(theme, to: id)
+            guard let fresh = currentPuzzle(id) else { return }
+            p = fresh
+            lessons[id] = PuzzleCoach.lesson(p)
+        }
+        guard app.llmConfigured, upgraded.insert(id).inserted,
+              let request = PuzzleCoach.whyRequest(p, context: profile.promptContext, style: profile.nextExplanationStyle().style, language: Language.englishName),
+              let raw = try? await app.completeText(request, onText: { _ in }), let pos = ChessPosition(fen: p.fen) else { return }
+        let checked = FactCheck.clean(Coach.cleanAnswer(raw), allowed: FactCheck.allowed(positions: [pos], lines: [p.bestLine]))
+        guard let text = checked.text, !text.isEmpty, checked.removed == 0, var lesson = lessons[id] else { return }
+        lesson.why = text
+        lessons[id] = lesson
+    }
+
+    private func applyTheme(_ theme: HintTheme, to id: String) {
+        store.updatePuzzles(for: store.activeId) { set in
+            if let i = set.puzzles.firstIndex(where: { $0.id == id }) { set.puzzles[i].theme = theme.rawValue; set.puzzles[i].themeChecked = true }
+        }
+        if let i = queue.firstIndex(where: { $0.id == id }) { queue[i].theme = theme.rawValue; queue[i].themeChecked = true }
+    }
 
     private func record(_ uci: String, hintLevel level: Int) -> Bool {
         guard var p = puzzle else { return false }
@@ -106,12 +152,13 @@ final class TrainingSession: ObservableObject {
         }
         guard ok else {
             retry = true
-            await refute(pos.applying(move))
+            await refute(pos.applying(move), puzzle: p)
             replying = false
             return
         }
         retry = false
         refutation = nil
+        failReason = nil
         current = pos.applying(move)
         let followsLine = ply > 0 || move.uci == p.bestLine.first
         if followsLine, ply + 2 < TrainingSession.maxPlies, p.bestLine.indices.contains(ply + 2),
@@ -123,10 +170,12 @@ final class TrainingSession: ObservableObject {
         }
     }
 
-    private func refute(_ after: ChessPosition) async {
+    private func refute(_ after: ChessPosition, puzzle p: Puzzle) async {
         refutation = nil
+        failReason = nil
         guard ply == 0, let result = await app.engineAnalysis(fen: after.fen, ms: 300), let pv = result.lines.first?.pv, !pv.isEmpty else { return }
         refutation = after.board.describeLine(pv)
+        failReason = PuzzleCoach.failReason(p, after: after, refutation: pv)
     }
 
     private func replyAndContinue(_ reply: UCIMove) {
@@ -150,6 +199,7 @@ final class TrainingSession: ObservableObject {
         current = position
         retry = false
         refutation = nil
+        failReason = nil
         phase = .wrong
     }
 
@@ -186,11 +236,12 @@ final class TrainingSession: ObservableObject {
         }
         guard let hints else { return }
         hintLevel = hintLevel == 0 ? Curriculum.firstHintLevel : hintLevel + 1
-        if hintLevel == 3 { startIdea(hints) }
+        if hintLevel == 3 { startIdea(hints, position: pos) }
     }
 
-    private func startIdea(_ h: HintSet) {
-        ideaText = h.stage3Fallback
+    private func startIdea(_ h: HintSet, position pos: ChessPosition) {
+        let fallback = PuzzleCoach.hint3(h, position: pos)
+        ideaText = fallback
         guard app.llmConfigured else { return }
         ideaText = nil
         ideaTask?.cancel()
@@ -198,7 +249,7 @@ final class TrainingSession: ObservableObject {
             let request = Coach.hintRequest(h, context: profile.promptContext, language: Language.englishName)
             let text = try? await app.completeText(request) { _ in }
             guard !Task.isCancelled else { return }
-            if let text, !text.isEmpty, !Hints.revealsTarget(text, move: h.move) { ideaText = text } else { ideaText = h.stage3Fallback }
+            if let text, !text.isEmpty, !Hints.revealsTarget(text, move: h.move) { ideaText = text } else { ideaText = fallback }
         }
     }
 
@@ -266,12 +317,17 @@ struct TrainingView: View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Task \(session.index + 1) of \(session.queue.count)").font(.title2.bold())
+                if let p = session.puzzle { Text(PuzzleCoach.theme(p).title()).font(.caption.bold()).foregroundStyle(.tint) }
                 Text(start.turn == .white ? "Find the best move for White." : "Find the best move for Black.")
+                if let p = session.puzzle, session.phase == .asking {
+                    Text(PuzzleCoach.question(PuzzleCoach.theme(p)))
+                    Text(PuzzleCoach.source(p)).font(.callout).foregroundStyle(.secondary)
+                }
                 Text("Click or drag a piece to play your move.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
-            feedback
+            ScrollView { feedback.frame(maxWidth: .infinity, alignment: .leading) }
             Spacer(minLength: 0)
             if session.phase == .asking { actions } else {
                 Button("Next task") { session.next() }
@@ -293,18 +349,33 @@ struct TrainingView: View {
                     Label("Not quite, try again.", systemImage: "arrow.uturn.backward.circle.fill").foregroundStyle(.orange).font(.headline)
                 }
                 if let r = session.refutation { Text("After that move: \(r)").font(.callout).foregroundStyle(.secondary) }
+                if let f = session.failReason { Text(f).font(.callout) }
                 hintText
             }
         case .correct:
             VStack(alignment: .leading, spacing: 8) {
                 Label("Correct", systemImage: "checkmark.circle.fill").foregroundStyle(.green).font(.title3)
+                lessonView
                 if session.hintLevel > 0 { Text("You used a hint, so the task comes back at the same interval.").font(.callout).foregroundStyle(.secondary) }
             }
         case .wrong:
             VStack(alignment: .leading, spacing: 8) {
                 Label("Not quite", systemImage: "xmark.circle.fill").foregroundStyle(.orange).font(.title3)
                 Text("Better was: \(session.solutionText)")
+                lessonView
                 Text("The task starts again tomorrow.").font(.callout).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var lessonView: some View {
+        if let l = session.lesson {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Why it works").font(.headline)
+                if l.why.isEmpty { ProgressView().controlSize(.small) } else { Text(l.why) }
+                Text("Habit to remember").font(.headline).padding(.top, 4)
+                Text(l.habit)
             }
         }
     }
@@ -349,6 +420,7 @@ struct TrainingView: View {
             Text("Mastered: \(s.mastered) of \(s.total)")
             if let q = s.recentSuccessRate { Text("Recent success rate: \(Int((q * 100).rounded())) % (goal 70–85 %)") }
             Text("Learning pace: ×\(p.learningSpeed, specifier: "%.1f")")
+            ForEach(session.themeProgress.prefix(4), id: \.theme) { Text($0.text()) }
         }
         .font(.callout)
         .foregroundStyle(.secondary)

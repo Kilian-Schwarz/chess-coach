@@ -11,12 +11,7 @@ public class GameFlowTests
     const string Mid = "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R";
     static ChessPosition MidPos => ChessPosition.FromFen(Mid + " w KQkq - 0 1")!;
 
-    static string Describe(UnsafeSquare u) => u.Reason switch
-    {
-        UnsafeReason.Undefended => "undefended",
-        UnsafeReason.CheaperAttacker => "cheaperAttacker",
-        _ => "leavesHanging:" + u.OtherSquare,
-    };
+    static string Describe(UnsafeSquare u) => (u.Reason == UnsafeReason.Attacked ? "attacked:" : "leavesHanging:") + u.OtherSquare;
 
     [Fact]
     public void UnsafeSquaresMatchVectors()
@@ -40,13 +35,45 @@ public class GameFlowTests
         var many = bishop.UnsafeSquares(MidPos);
         Assert.Equal("Careful: 3 squares are unsafe for the Bishop, marked in red.", LiftedPiece.Summary(many, 'B'));
         var pawn = ChessPosition.FromFen("4k3/8/3p4/8/4P3/8/8/4K3 w - - 0 1")!;
-        Assert.Equal("Careful: Pawn on e5 would be undefended.", LiftedPiece.Summary(new LiftedPiece(4, 3, 'P').UnsafeSquares(pawn), 'P'));
+        Assert.Equal("Careful: Pawn on e5 could be taken by Pawn on d6.", LiftedPiece.Summary(new LiftedPiece(4, 3, 'P').UnsafeSquares(pawn), 'P'));
         Assert.Empty(new LiftedPiece(4, 3, 'P').UnsafeSquares(MidPos));
         Assert.Equal(new[] { "d2" }, new LiftedPiece(4, 0, 'K').UnsafeSquares(MidPos).Select(u => u.Square));
         Assert.Contains("leaves", LiftedPiece.Summary(new LiftedPiece(4, 0, 'K').UnsafeSquares(MidPos), 'K'));
         var black = ChessPosition.FromFen(MidPos.Fen.Replace(" w ", " b "))!;
         Assert.Empty(bishop.UnsafeSquares(black));
         Assert.Null(LiftedPiece.Summary(Array.Empty<UnsafeSquare>(), 'B'));
+    }
+
+    [Fact]
+    public void OnlyRealLossesAreMarkedAndTheAttackerIsNamed()
+    {
+        static List<UnsafeSquare> Marks(string fen, int file, int rank) =>
+            new LiftedPiece(file, rank, 'N').UnsafeSquares(ChessPosition.FromFen(fen)!);
+        Assert.Empty(Marks("4k3/8/8/8/8/2N5/8/4K3 w - - 0 1", 2, 2));
+        Assert.Empty(Marks("4k3/8/8/3p3p/3P1B2/8/PPP1NPPP/R5K1 w - - 0 1", 4, 1));
+        Assert.Equal(new[] { "e4" }, Marks("4k3/8/8/3p4/8/2N5/8/4K3 w - - 0 1", 2, 2).Select(u => u.Square));
+        var lost = Marks("4k3/8/8/3b4/8/2N5/8/4K3 w - - 0 1", 2, 2);
+        Assert.Equal(new[] { "a2", "e4" }, lost.Select(u => u.Square).OrderBy(x => x));
+        Assert.All(lost, u => Assert.Equal("d5", u.OtherSquare));
+        Assert.Equal("Careful: Knight on a2 could be taken by Bishop on d5.", lost.First(u => u.Square == "a2").Text('N', CoreLocale.English));
+    }
+
+    [Fact]
+    public void FloatingPieceOverALegalTargetIsStillALiftWhileHeld()
+    {
+        var pos = ChessPosition.FromFen("r1b1k1nr/pp2bppp/2n1q3/1B1pN3/3P4/8/PPP2PPP/RNBQR1K1 w kq - 7 9")!;
+        var lifted = pos.Board.Clone();
+        lifted.Squares[4][4] = null;
+        lifted.Squares[3][6] = 'N';
+        var piece = LiftedPiece.Detect(pos, lifted, held: true);
+        Assert.Equal("e5", piece?.Square);
+        Assert.Null(LiftedPiece.Detect(pos, lifted));
+        var targets = new HashSet<string> { "c4", "d7", "g6", "g4", "d3", "f3", "c6", "f7" };
+        Assert.All(piece!.UnsafeSquares(pos), u => Assert.Contains(u.Square, targets));
+        var wrong = pos.Board.Clone();
+        wrong.Squares[4][4] = null;
+        wrong.Squares[3][1] = 'N';
+        Assert.Equal("e5", LiftedPiece.Detect(pos, wrong, held: true)?.Square);
     }
 
     [Fact]

@@ -212,4 +212,8 @@
   <data name="welcome.gotIt" xml:space="preserve"><value>Anladım</value></data>
   <data name="welcome.switchOn" xml:space="preserve"><value>Aç</value></data>
   <data name="training.after" xml:space="preserve"><value>Sonrasında: {0}</value></data>
+  <data name="ask.hintExplained" xml:space="preserve"><value>İpucu açıklandı</value></data>
+  <data name="explain.noReliable" xml:space="preserve"><value>Güvenilir bir açıklama yok. “Tekrar açıkla”yı deneyin.</value></data>
+  <data name="puzzle.why.title" xml:space="preserve"><value>Neden işe yarıyor</value></data>
+  <data name="puzzle.habit.title" xml:space="preserve"><value>Hatırlanacak alışkanlık</value></data>
 </root>

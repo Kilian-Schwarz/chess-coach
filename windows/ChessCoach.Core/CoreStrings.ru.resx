@@ -132,12 +132,76 @@
   <data name="llm.httpError" xml:space="preserve"><value>Сервер сообщил об ошибке {0}.</value></data>
   <data name="llm.noModels" xml:space="preserve"><value>По этому адресу список моделей не найден. Для Open WebUI введи, например, https://openwebui.example.com, для vLLM — http://host:8000/v1.</value></data>
   <data name="llm.notConfigured" xml:space="preserve"><value>Чтобы получать объяснения, выбери сервер и модель в настройках.</value></data>
-  <data name="lift.undefended" xml:space="preserve"><value>Осторожно: поле {1} не защищено (фигура: {0}).</value></data>
-  <data name="lift.cheaper" xml:space="preserve"><value>Осторожно: поле {1} ({0}) атакует более слабая фигура.</value></data>
+  <data name="lift.taken" xml:space="preserve"><value>Осторожно: {0} на {1} может быть взято: {2} на {3}.</value></data>
   <data name="lift.leaves" xml:space="preserve"><value>Осторожно: после хода {0} на {1} без защиты остаётся: {2} на {3}.</value></data>
   <data name="lift.many" xml:space="preserve"><value>Осторожно: небезопасных полей: {0} (фигура: {1}), отмечены красным.</value></data>
   <data name="takeaway.mistake" xml:space="preserve"><value>Самая частая ошибка: {0} ({1}×). Пример: {2}</value></data>
   <data name="takeaway.positive" xml:space="preserve"><value>Хороших ходов подряд: {0}.</value></data>
   <data name="takeaway.habit" xml:space="preserve"><value>К следующей партии: {0}</value></data>
   <data name="llm.notFound" xml:space="preserve"><value>Сервер не нашёл адрес или модель (ошибка 404).</value></data>
+  <data name="hint.stage2.castle" xml:space="preserve"><value>Уберите короля в безопасное место: рокируйтесь.</value></data>
+  <data name="theme.promotion" xml:space="preserve"><value>Превращение пешки</value></data>
+  <data name="theme.discovered" xml:space="preserve"><value>Вскрытое нападение</value></data>
+  <data name="theme.pin" xml:space="preserve"><value>Связка</value></data>
+  <data name="theme.unpin" xml:space="preserve"><value>Снять связку</value></data>
+  <data name="theme.convert" xml:space="preserve"><value>Реализовать преимущество</value></data>
+  <data name="hint.stage1.promotion" xml:space="preserve"><value>Здесь пешка может превратиться.</value></data>
+  <data name="hint.stage1.discovered" xml:space="preserve"><value>Ищите вскрытое нападение: ход одной фигуры открывает атаку другой.</value></data>
+  <data name="hint.stage1.pin" xml:space="preserve"><value>Ищите связку: фигура не может ходить, не подставив более ценную.</value></data>
+  <data name="hint.stage1.unpin" xml:space="preserve"><value>Одна из ваших фигур связана. Найдите способ её освободить.</value></data>
+  <data name="hint.stage1.convert" xml:space="preserve"><value>У вас явное преимущество: разменивайте фигуры, атакуйте короля или выигрывайте ещё материал.</value></data>
+  <data name="hint.stage3.promotion" xml:space="preserve"><value>{0} может дойти до последней горизонтали и стать ферзём.</value></data>
+  <data name="hint.stage3.discovered" xml:space="preserve"><value>Когда {0} ходит, фигура за ней внезапно атакует что-то ценное.</value></data>
+  <data name="hint.stage3.pin" xml:space="preserve"><value>{0} может связать фигуру соперника перед более ценной.</value></data>
+  <data name="hint.stage3.unpin" xml:space="preserve"><value>Одна из ваших фигур связана и не может свободно ходить. Найдите ход, который её освободит.</value></data>
+  <data name="hint.stage3.convert" xml:space="preserve"><value>{0} помогает реализовать преимущество: разменять фигуры, пойти на короля или выиграть материал.</value></data>
+  <data name="threat.reason.lose" xml:space="preserve"><value>Вы потеряете: {0}.</value></data>
+  <data name="threat.reason.pinned" xml:space="preserve"><value>{0} окажется под боем и не сможет уйти.</value></data>
+  <data name="threat.reason.attack" xml:space="preserve"><value>Это будет атаковать: {0}.</value></data>
+  <data name="puzzle.progress" xml:space="preserve"><value>{0}: решено {1}/{2}</value></data>
+  <data name="puzzle.source.date" xml:space="preserve"><value>Из вашей партии от {0}.</value></data>
+  <data name="puzzle.source.move" xml:space="preserve"><value>Из вашей партии от {0}, ход {1}: вы сыграли {2} ({3}).</value></data>
+  <data name="puzzle.ask.mate" xml:space="preserve"><value>У короля соперника мало безопасных полей. Какие шахи могут решить партию?</value></data>
+  <data name="puzzle.ask.captureGain" xml:space="preserve"><value>Последний ход соперника оставил что-то без защиты. Что можно атаковать?</value></data>
+  <data name="puzzle.ask.fork" xml:space="preserve"><value>Две фигуры соперника стоят на полях, до которых может дойти одна фигура. Можно ли атаковать обе одним ходом?</value></data>
+  <data name="puzzle.ask.check" xml:space="preserve"><value>Какие шахи есть и что каждый из них вынуждает?</value></data>
+  <data name="puzzle.ask.promotion" xml:space="preserve"><value>Пешка близка к последней горизонтали. Что её останавливает и можно ли расчистить путь?</value></data>
+  <data name="puzzle.ask.discovered" xml:space="preserve"><value>Одна из ваших фигур стоит перед ладьёй, слоном или ферзём. Что, если она пойдёт с угрозой?</value></data>
+  <data name="puzzle.ask.pin" xml:space="preserve"><value>Стоит ли фигура соперника на одной линии с более ценной фигурой за ней?</value></data>
+  <data name="puzzle.ask.unpin" xml:space="preserve"><value>Одна из ваших фигур связана. Как её освободить?</value></data>
+  <data name="puzzle.ask.parryThreat" xml:space="preserve"><value>Чем сейчас угрожает соперник и как это остановить?</value></data>
+  <data name="puzzle.ask.castle" xml:space="preserve"><value>Ваш король всё ещё в центре. Как безопаснее всего это исправить?</value></data>
+  <data name="puzzle.ask.develop" xml:space="preserve"><value>Какая из ваших фигур всё ещё стоит дома и может вступить в игру?</value></data>
+  <data name="puzzle.ask.kingActivate" xml:space="preserve"><value>Осталось мало фигур. Где ваш король принесёт больше всего пользы?</value></data>
+  <data name="puzzle.ask.pawnMove" xml:space="preserve"><value>Какой ход пешкой отвоёвывает пространство или открывает линию для фигур?</value></data>
+  <data name="puzzle.ask.improvePiece" xml:space="preserve"><value>Какая из ваших фигур делает меньше всего? Где она была бы полезнее?</value></data>
+  <data name="puzzle.ask.convert" xml:space="preserve"><value>У вас преимущество. Как реализовать его, не дав контригры?</value></data>
+  <data name="puzzle.habit.mate" xml:space="preserve"><value>Перед каждым ходом перечислите все шахи, затем все взятия, затем все угрозы.</value></data>
+  <data name="puzzle.habit.captureGain" xml:space="preserve"><value>Перед ходом спросите себя, какие фигуры соперника не защищены или атакованы чаще, чем защищены.</value></data>
+  <data name="puzzle.habit.fork" xml:space="preserve"><value>Ищите поля, с которых одна фигура бьёт две цели, особенно конём.</value></data>
+  <data name="puzzle.habit.check" xml:space="preserve"><value>Проверяйте каждый шах. Форсирующий ход часто решает партию раньше, чем соперник успеет ответить.</value></data>
+  <data name="puzzle.habit.promotion" xml:space="preserve"><value>Посчитайте поля до превращения и кто их контролирует.</value></data>
+  <data name="puzzle.habit.discovered" xml:space="preserve"><value>Перед ходом проверьте фигуры, стоящие перед вашими дальнобойными фигурами.</value></data>
+  <data name="puzzle.habit.pin" xml:space="preserve"><value>Просматривайте линии: ищите фигуру соперника, за которой стоит более ценная.</value></data>
+  <data name="puzzle.habit.unpin" xml:space="preserve"><value>Прежде чем что-то планировать, проверьте, не связана ли одна из ваших фигур.</value></data>
+  <data name="puzzle.habit.parryThreat" xml:space="preserve"><value>Прежде чем играть по своему плану, спросите себя, что хочет сделать соперник.</value></data>
+  <data name="puzzle.habit.castle" xml:space="preserve"><value>Рано уведите короля в безопасность, затем введите в игру ладью.</value></data>
+  <data name="puzzle.habit.develop" xml:space="preserve"><value>Введите в игру все фигуры, прежде чем начинать второй план.</value></data>
+  <data name="puzzle.habit.kingActivate" xml:space="preserve"><value>В эндшпиле ведите короля к месту событий.</value></data>
+  <data name="puzzle.habit.pawnMove" xml:space="preserve"><value>Перед ходом пешкой проверьте, что он открывает для вас и для соперника.</value></data>
+  <data name="puzzle.habit.improvePiece" xml:space="preserve"><value>Найдите свою худшую фигуру и улучшите её позицию.</value></data>
+  <data name="puzzle.habit.convert" xml:space="preserve"><value>Имея преимущество, меняйте фигуры и берегите короля, а не ищите фейерверков.</value></data>
+  <data name="puzzle.why.discovered" xml:space="preserve"><value>{0} уходит с линии, и {1} атакует {2}.</value></data>
+  <data name="puzzle.why.pin" xml:space="preserve"><value>{0} теперь связан перед {1}.</value></data>
+  <data name="puzzle.why.fork" xml:space="preserve"><value>{0} одновременно атакует: {1}.</value></data>
+  <data name="puzzle.why.mate" xml:space="preserve"><value>Главный вариант: {0}. Это мат.</value></data>
+  <data name="puzzle.why.gain" xml:space="preserve"><value>Главный вариант: {0}. Вы выигрываете {1} очк. материала.</value></data>
+  <data name="puzzle.why.line" xml:space="preserve"><value>Главный вариант: {0}.</value></data>
+  <data name="puzzle.area.discovered" xml:space="preserve"><value>За ней {0} тогда атакует {1}.</value></data>
+  <data name="puzzle.area.attacks" xml:space="preserve"><value>С нового поля она атакует: {0}.</value></data>
+  <data name="puzzle.area.rank" xml:space="preserve"><value>Она идёт на горизонталь {0}.</value></data>
+  <data name="puzzle.area.file" xml:space="preserve"><value>Она идёт на вертикаль {0}.</value></data>
+  <data name="puzzle.fail.mate" xml:space="preserve"><value>Это допускает мат.</value></data>
+  <data name="puzzle.fail.loss" xml:space="preserve"><value>Это теряет {0} на {1}.</value></data>
+  <data name="puzzle.fail.miss" xml:space="preserve"><value>Это упускает идею позиции: {0}.</value></data>
 </root>
